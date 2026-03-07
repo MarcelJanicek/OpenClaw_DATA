@@ -1,0 +1,23 @@
+# OpenClaw internal state (never commit)
+.openclaw/
+
+# Sensitive / auth-like files (defense-in-depth)
+**/auth*.json
+**/credentials*
+**/*token*
+**/*secret*
+
+# Temporary/reference files
+temporary/
+
+# Large/binary downloads (keep in temporary/)
+*.pdf
+*.zip
+*.7z
+*.tar
+*.gz
+
+# OS/editor
+.DS_Store
+Thumbs.db
+*.swp

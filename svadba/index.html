@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Marcel &amp; Bibiana · 19. 9. 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lato:wght@300;400&family=Great+Vibes&family=Pinyon+Script&family=Corinthia&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ENVELOPE INTRO -->
+  <div id="env-overlay">
+    <div id="env-wrap" onclick="openEnvelope()">
+      <div id="env-body">
+        <!-- Fold lines via pseudo-elements in CSS -->
+        <div class="env-fold-tl"></div>
+        <div class="env-fold-tr"></div>
+        <div class="env-fold-b"></div>
+        <div id="env-flap"></div>
+        <div id="env-seal">
+          <div class="seal-ring-outer"></div>
+          <div class="seal-disc">
+            <div class="seal-shine"></div>
+            <div class="seal-ornament">
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <!-- Outer decorative ring -->
+                <circle cx="60" cy="60" r="57" fill="none" stroke="rgba(255,235,130,0.55)" stroke-width="1.2"/>
+                <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,235,130,0.3)" stroke-width="0.7"/>
+                <!-- Top arch flourish -->
+                <path d="M 34,28 Q 60,16 86,28" fill="none" stroke="rgba(255,235,130,0.7)" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="60" cy="14" r="3" fill="rgba(255,235,130,0.75)"/>
+                <circle cx="38" cy="24" r="1.8" fill="rgba(255,235,130,0.6)"/>
+                <circle cx="82" cy="24" r="1.8" fill="rgba(255,235,130,0.6)"/>
+                <!-- Bottom arch flourish -->
+                <path d="M 34,92 Q 60,104 86,92" fill="none" stroke="rgba(255,235,130,0.7)" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="60" cy="106" r="3" fill="rgba(255,235,130,0.75)"/>
+                <circle cx="38" cy="96" r="1.8" fill="rgba(255,235,130,0.6)"/>
+                <circle cx="82" cy="96" r="1.8" fill="rgba(255,235,130,0.6)"/>
+                <!-- Left flourish -->
+                <path d="M 18,38 Q 8,60 18,82" fill="none" stroke="rgba(255,235,130,0.65)" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="6" cy="60" r="3" fill="rgba(255,235,130,0.7)"/>
+                <!-- Right flourish -->
+                <path d="M 102,38 Q 112,60 102,82" fill="none" stroke="rgba(255,235,130,0.65)" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="114" cy="60" r="3" fill="rgba(255,235,130,0.7)"/>
+                <!-- Corner scrolls -->
+                <path d="M 28,28 Q 36,20 44,27 Q 36,27 31,34" fill="none" stroke="rgba(255,235,130,0.55)" stroke-width="1.3" stroke-linecap="round"/>
+                <path d="M 92,28 Q 84,20 76,27 Q 84,27 89,34" fill="none" stroke="rgba(255,235,130,0.55)" stroke-width="1.3" stroke-linecap="round"/>
+                <path d="M 28,92 Q 36,100 44,93 Q 36,93 31,86" fill="none" stroke="rgba(255,235,130,0.55)" stroke-width="1.3" stroke-linecap="round"/>
+                <path d="M 92,92 Q 84,100 76,93 Q 84,93 89,86" fill="none" stroke="rgba(255,235,130,0.55)" stroke-width="1.3" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="seal-monogram">M<span>&</span>B</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="env-hint">&#8212;&nbsp; klikni pre otvorenie &nbsp;&#8212;</p>
+  </div>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="#uvod" class="nav-logo">M &amp; B</a>
+      <ul class="nav-links">
+        <li><a href="#nas-pribeh">Náš príbeh</a></li>
+        <li><a href="#miesto">Miesto</a></li>
+        <li><a href="#harmonogram">Harmonogram</a></li>
+        <li><a href="#ubytovanie">Ubytovanie</a></li>
+        <li><a href="#rsvp">RSVP</a></li>
+      </ul>
+      <button class="nav-burger" onclick="toggleNav()">&#9776;</button>
+    </div>
+    <ul class="nav-mobile" id="navMobile">
+      <li><a href="#nas-pribeh" onclick="toggleNav()">Náš príbeh</a></li>
+      <li><a href="#miesto" onclick="toggleNav()">Miesto</a></li>
+      <li><a href="#harmonogram" onclick="toggleNav()">Harmonogram</a></li>
+      <li><a href="#ubytovanie" onclick="toggleNav()">Ubytovanie</a></li>
+      <li><a href="#rsvp" onclick="toggleNav()">RSVP</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="uvod" class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Svadobná pozvánka</p>
+      <h1 class="hero-names">Marcel <span class="amp">&</span> Bibiana</h1>
+      <p class="hero-date">19. septembra 2026</p>
+      <p class="hero-place">Zámok Nimerice · Česká republika</p>
+      <div class="countdown" id="countdown">
+        <div class="cd-item"><span id="cd-days">--</span><label>dní</label></div>
+        <div class="cd-sep">·</div>
+        <div class="cd-item"><span id="cd-hours">--</span><label>hodín</label></div>
+        <div class="cd-sep">·</div>
+        <div class="cd-item"><span id="cd-minutes">--</span><label>minút</label></div>
+        <div class="cd-sep">·</div>
+        <div class="cd-item"><span id="cd-seconds">--</span><label>sekúnd</label></div>
+      </div>
+      <a href="#rsvp" class="btn-primary">Potvrdiť účasť</a>
+    </div>
+    <div class="hero-scroll">↓</div>
+  </section>
+
+  <div class="divider"><span>✦</span></div>
+
+  <section id="nas-pribeh" class="section">
+    <div class="container narrow">
+      <p class="section-eyebrow">Ako to začalo</p>
+      <h2 class="section-title">Náš príbeh</h2>
+      <div class="story-grid">
+        <div class="story-item"><div class="story-year">2021</div><h3>Prvé stretnutie</h3><p>Náhoda? Osud? Stretli sme sa a niečo sa zmenilo. Čo začalo ako priateľstvo, sa rýchlo zmenilo na niečo hlbšie.</p></div>
+        <div class="story-item"><div class="story-year">2023</div><h3>Spoločné dobrodružstvá</h3><p>Cestovali sme, smiali sme sa, zažili sme toho veľa. Každý moment potvrdil, že sme na správnom mieste.</p></div>
+        <div class="story-item"><div class="story-year">2025</div><h3>Zásnuby</h3><p>Jedna otázka, jedna odpoveď. Áno. Teraz sa tešíme na ďalšiu kapitolu — tú najdôležitejšiu.</p></div>
+        <div class="story-item"><div class="story-year">2026</div><h3>Svadobný deň</h3><p>19. septembra 2026 povieme svoje áno na zámku Nimerice, obklopení tými, ktorých milujeme.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span>✦</span></div>
+
+  <section id="miesto" class="section section-alt">
+    <div class="container">
+      <p class="section-eyebrow">Kde nás nájdete</p>
+      <h2 class="section-title">Miesto svadby</h2>
+      <div class="venue-grid">
+        <div class="venue-info">
+          <h3>Zámok Nimerice</h3>
+          <p>Nimerice 1<br>277 14 Dřínov<br>Česká republika</p><br>
+          <p>Elegantný historický zámok obklopený prírodou v Stredočeskom kraji. Ideálne miesto pre romantickú svadobnú slávnosť s výhľadom na zámocký park.</p><br>
+          <a href="https://www.google.com/maps/search/Zamek+Nimerice" target="_blank" class="btn-outline">Zobraziť na mape ↗</a>
+        </div>
+        <div class="venue-map">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2559.5!2d14.4!3d50.35!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470bed7b8d3b6c1b%3A0x400af0f6611460!2sNimerice%2C%20Czech%20Republic!5e0!3m2!1ssk!2ssk!4v1234567890" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span>✦</span></div>
+
+  <section id="harmonogram" class="section">
+    <div class="container narrow">
+      <p class="section-eyebrow">Plán dňa</p>
+      <h2 class="section-title">Harmonogram</h2>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-time">13:00</div><div class="tl-dot"></div><div class="tl-content"><h3>Príchod hostí</h3><p>Privítanie a aperitív v zámockom parku</p></div></div>
+        <div class="tl-item"><div class="tl-time">14:00</div><div class="tl-dot"></div><div class="tl-content"><h3>Svadobný obrad</h3><p>Slávnostný civilný obrad v priestoroch zámku</p></div></div>
+        <div class="tl-item"><div class="tl-time">15:00</div><div class="tl-dot"></div><div class="tl-content"><h3>Svadobné fotografie</h3><p>Spoločné fotografie v zámockom parku</p></div></div>
+        <div class="tl-item"><div class="tl-time">16:00</div><div class="tl-dot"></div><div class="tl-content"><h3>Svadobná hostina</h3><p>Slávnostná večera, príhovory a prípitky</p></div></div>
+        <div class="tl-item"><div class="tl-time">19:00</div><div class="tl-dot"></div><div class="tl-content"><h3>Prvý tanec &amp; párty</h3><p>Tanec, hudba a oslavy do noci</p></div></div>
+        <div class="tl-item"><div class="tl-time">24:00</div><div class="tl-dot"></div><div class="tl-content"><h3>Polnočná polievka</h3><p>Tradičná polievka pre všetkých hostí</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span>✦</span></div>
+
+  <section id="ubytovanie" class="section section-alt">
+    <div class="container narrow">
+      <p class="section-eyebrow">Kde sa ubytovať</p>
+      <h2 class="section-title">Ubytovanie</h2>
+      <p class="section-lead">Pre pohodlie našich hostí sme pripravili niekoľko možností ubytovania v okolí zámku Nimerice.</p>
+      <div class="accom-grid">
+        <div class="accom-card"><div class="accom-badge">Odporúčané</div><h3>Zámok Nimerice</h3><p>Ubytovanie priamo na mieste svadby. Limitovaný počet izieb.</p><p class="accom-note">Kontaktujte nás pre rezerváciu.</p></div>
+        <div class="accom-card"><h3>Okolité penzióny</h3><p>V okolí sa nachádza niekoľko penzión a hotelov, 10–20 minút jazdy.</p><p class="accom-note">Odporúčame Mělník alebo Mladá Boleslav.</p></div>
+        <div class="accom-card"><h3>Praha</h3><p>Praha je vzdialená cca 50 km. Zabezpečujeme transfer pre hostí.</p><p class="accom-note">Info o transfere čoskoro.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span>✦</span></div>
+
+  <section id="rsvp" class="section">
+    <div class="container narrow">
+      <p class="section-eyebrow">Potvrďte účasť</p>
+      <h2 class="section-title">RSVP</h2>
+      <p class="section-lead">Prosíme o potvrdenie účasti do <strong>30. júna 2026</strong>.</p>
+      <form id="rsvpForm" class="rsvp-form" onsubmit="submitRSVP(event)">
+        <div class="form-row">
+          <div class="form-group"><label>Meno a priezvisko *</label><input type="text" name="meno" required placeholder="Vaše celé meno"></div>
+          <div class="form-group"><label>E-mail *</label><input type="email" name="email" required placeholder="vas@email.com"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Telefón</label><input type="tel" name="telefon" placeholder="+421 xxx xxx xxx"></div>
+          <div class="form-group"><label>Účasť *</label>
+            <select name="ucast" required>
+              <option value="">— Vyberte —</option>
+              <option value="ano">Áno, prídem s radosťou</option>
+              <option value="nie">Žiaľ, nemôžem sa zúčastniť</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Stravovanie — obmedzenia alebo alergie</label>
+          <div class="checkbox-group">
+            <label class="checkbox-label"><input type="checkbox" name="jedlo" value="bezlepkove"> Bezlepková diéta</label>
+            <label class="checkbox-label"><input type="checkbox" name="jedlo" value="vegetarian"> Vegetarián</label>
+            <label class="checkbox-label"><input type="checkbox" name="jedlo" value="vegan"> Vegán</label>
+            <label class="checkbox-label"><input type="checkbox" name="jedlo" value="bezlaktoz"> Bez laktózy</label>
+            <label class="checkbox-label"><input type="checkbox" name="jedlo" value="halal"> Halal</label>
+            <label class="checkbox-label"><input type="checkbox" name="jedlo" value="bezny"> Žiadne obmedzenia</label>
+          </div>
+        </div>
+        <div class="form-group"><label>Iné požiadavky na stravu</label><textarea name="alergie" rows="3" placeholder="Akékoľvek ďalšie požiadavky..."></textarea></div>
+        <div class="form-group"><label>Správa pre novomanželov</label><textarea name="sprava" rows="3" placeholder="Napíšte nám niečo pekné ✨"></textarea></div>
+        <button type="submit" class="btn-submit">Odoslať potvrdenie</button>
+      </form>
+      <div id="rsvpSuccess" style="display:none;" class="rsvp-success">
+        <div class="success-icon">✦</div>
+        <h3>Ďakujeme!</h3>
+        <p>Vaša odpoveď bola prijatá. Tešíme sa na vás!</p>
+        <p class="success-sub">Marcel &amp; Bibiana</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-names">Marcel &amp; Bibiana</div>
+    <div class="footer-date">19. september 2026 · Zámok Nimerice</div>
+    <div class="footer-div">✦</div>
+    <p class="footer-note">S láskou vytvorené pre váš špeciálny deň</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
