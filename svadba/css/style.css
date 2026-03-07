@@ -43,7 +43,6 @@ body {
 }
 #env-overlay.fade-out { opacity: 0; pointer-events: none; }
 
-/* Wrapper */
 #env-wrap {
   width: min(420px, 88vw);
   height: min(420px, 88vw);
@@ -53,156 +52,138 @@ body {
 }
 #env-wrap:hover { transform: translateY(-7px); }
 
-/* Envelope body — square, eucalyptus green */
+/* Envelope body — sage paper with embossed florals */
 #env-body {
   position: relative;
   width: 100%; height: 100%;
-  background: #7FA888;
   border-radius: 3px;
-  box-shadow:
-    0 20px 60px rgba(30,60,40,0.3),
-    0 6px 20px rgba(30,60,40,0.18),
-    inset 0 1px 0 rgba(255,255,255,0.15);
   overflow: hidden;
+  background: #8BB091;
+  box-shadow:
+    0 18px 60px rgba(30,60,40,0.26),
+    0 6px 18px rgba(30,60,40,0.16),
+    inset 0 1px 0 rgba(255,255,255,0.18);
 }
 
-/* ---- Fold lines via clip-path divs ---- */
-
-/* Left triangle fold */
-.env-fold-tl {
-  position: absolute; inset: 0;
-  background: linear-gradient(to right, #618B70, #7FA888);
-  clip-path: polygon(0 0, 0 100%, 50% 50%);
-}
-
-/* Right triangle fold */
-.env-fold-tr {
-  position: absolute; inset: 0;
-  background: linear-gradient(to left, #618B70, #7FA888);
-  clip-path: polygon(100% 0, 100% 100%, 50% 50%);
-}
-
-/* Bottom triangle fold */
-.env-fold-b {
-  position: absolute; inset: 0;
-  background: linear-gradient(to top, #4E7260, #7FA888);
-  clip-path: polygon(0 100%, 100% 100%, 50% 50%);
-}
-
-/* Subtle diagonal crease highlight lines */
-#env-body::before {
+/* Paper grain */
+#env-body::after {
   content: '';
   position: absolute; inset: 0;
-  background:
-    linear-gradient(to bottom right, rgba(255,255,255,0.07) 49.5%, transparent 50%),
-    linear-gradient(to bottom left, rgba(255,255,255,0.07) 49.5%, transparent 50%);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E");
+  mix-blend-mode: soft-light;
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Emboss floral pattern (soft relief) */
+#env-body::before {
+  content: '';
+  position: absolute; inset: -10px;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round' opacity='.20'%3E%3Cpath d='M35 60c10-10 22-10 32 0 10 10 10 22 0 32-10 10-22 10-32 0-10-10-10-22 0-32z'/%3E%3Cpath d='M160 40c14 2 24 10 30 22'/%3E%3Cpath d='M146 58c10-12 26-10 36 2'/%3E%3Cpath d='M60 170c16-22 44-22 60 0'/%3E%3Cpath d='M68 192c18-14 36-14 54 0'/%3E%3Cpath d='M170 170c10-18 24-26 42-22'/%3E%3Cpath d='M176 194c14-10 26-10 36 0'/%3E%3Cpath d='M30 120c18-6 30 0 36 18'/%3E%3Cpath d='M26 140c18 0 30 10 36 30'/%3E%3C/g%3E%3C/svg%3E"),
+    linear-gradient(to bottom right, rgba(255,255,255,0.14), rgba(0,0,0,0.10));
+  background-size: 240px 240px, 100% 100%;
+  background-repeat: repeat, no-repeat;
+  filter: drop-shadow(0 2px 0 rgba(255,255,255,0.12)) drop-shadow(0 -2px 0 rgba(0,0,0,0.10));
+  opacity: 0.9;
   pointer-events: none;
   z-index: 1;
 }
 
+/* Folds */
+.env-fold-tl, .env-fold-tr, .env-fold-b { position: absolute; inset: 0; z-index: 3; }
+.env-fold-tl {
+  background: linear-gradient(to right, rgba(70,105,85,0.22), rgba(255,255,255,0));
+  clip-path: polygon(0 0, 0 100%, 50% 50%);
+}
+.env-fold-tr {
+  background: linear-gradient(to left, rgba(70,105,85,0.22), rgba(255,255,255,0));
+  clip-path: polygon(100% 0, 100% 100%, 50% 50%);
+}
+.env-fold-b {
+  background: linear-gradient(to top, rgba(55,85,70,0.28), rgba(255,255,255,0));
+  clip-path: polygon(0 100%, 100% 100%, 50% 50%);
+}
+
 /* Top flap */
 #env-flap {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(160deg, #96BFA0 0%, #7FA888 60%, #6B9A78 100%);
+  position: absolute; inset: 0;
+  background: linear-gradient(160deg, #9AC4A2 0%, #8BB091 55%, #789E7F 100%);
   clip-path: polygon(0 0, 100% 0, 50% 54%);
   transform-origin: top center;
   transition: transform 1.15s cubic-bezier(0.42, 0, 0.15, 1);
-  z-index: 3;
-  box-shadow: inset 0 -2px 8px rgba(0,0,0,0.08);
+  z-index: 5;
+  box-shadow: inset 0 -2px 10px rgba(0,0,0,0.10);
 }
 #env-flap::after {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.1) 0%, transparent 60%);
+  background: linear-gradient(to bottom, rgba(255,255,255,0.18) 0%, transparent 65%);
 }
-.opening #env-flap {
-  transform: perspective(900px) rotateX(-182deg);
+.opening #env-flap { transform: perspective(900px) rotateX(-182deg); }
+
+/* Center message like reference */
+.env-message {
+  position: absolute;
+  left: 50%;
+  top: 72%;
+  transform: translate(-50%, -50%);
+  z-index: 6;
+  font-family: 'Pinyon Script', 'Great Vibes', cursive;
+  font-size: clamp(1.35rem, 4.6vw, 1.9rem);
+  color: rgba(50, 70, 55, 0.55);
+  text-align: center;
+  line-height: 1.1;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.25);
+  pointer-events: none;
 }
 
-/* ---- WAX SEAL ---- */
+/* Ivory wax seal */
 #env-seal {
   position: absolute;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 4;
+  z-index: 7;
   transition: opacity 0.4s ease 0.25s, transform 0.4s ease 0.25s;
 }
-.opening #env-seal {
-  opacity: 0;
-  transform: translate(-50%, -50%) scale(0.7);
-}
+.opening #env-seal { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
 
-/* Outer wax bleed ring — slight imperfection = realism */
-.seal-ring-outer {
-  position: absolute;
-  width: 148px; height: 148px;
-  top: -4px; left: -4px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 45% 40%, #C8980E, #9A7208, #7A5A06);
-  opacity: 0.35;
-  filter: blur(4px);
-}
-
-/* Main seal disc */
 .seal-disc {
-  position: relative;
-  width: 140px; height: 140px;
+  width: 132px; height: 132px;
   border-radius: 50%;
-  background: radial-gradient(circle at 38% 32%,
-    #EEC84A 0%,
-    #D4AF37 20%,
-    #C09820 45%,
-    #A07C10 70%,
-    #7A5C08 100%
-  );
+  background: radial-gradient(circle at 35% 30%, #FFFDF8 0%, #F4EFE4 55%, #E6DDCF 100%);
   box-shadow:
-    0 8px 32px rgba(50,35,0,0.55),
-    0 3px 10px rgba(50,35,0,0.3),
-    inset 0 2px 6px rgba(255,235,120,0.4),
-    inset 0 -3px 8px rgba(0,0,0,0.25);
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden;
+    0 10px 26px rgba(40,40,20,0.28),
+    0 3px 10px rgba(40,40,20,0.18),
+    inset 0 2px 5px rgba(255,255,255,0.8),
+    inset 0 -3px 7px rgba(120,105,85,0.25);
+  display: grid;
+  place-items: center;
+  position: relative;
 }
-
-/* Shine reflection */
-.seal-shine {
-  position: absolute;
-  top: 10px; left: 14px;
-  width: 40px; height: 26px;
+.seal-disc::after {
+  content: '';
+  position: absolute; inset: 10px;
   border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(255,250,190,0.45) 0%, transparent 70%);
-  transform: rotate(-20deg);
-  pointer-events: none;
+  box-shadow: inset 0 1px 2px rgba(255,255,255,0.6), inset 0 -1px 2px rgba(120,105,85,0.2);
 }
 
-/* SVG ornament layer */
-.seal-ornament {
-  position: absolute; inset: 0;
-  padding: 0;
-}
-.seal-ornament svg {
-  width: 100%; height: 100%;
-}
-
-/* Monogram */
 .seal-monogram {
-  position: relative; z-index: 2;
-  font-family: 'Great Vibes', cursive;
-  font-size: 2.4rem;
-  color: rgba(255, 248, 200, 0.95);
+  font-family: 'Blosta Script', 'Pinyon Script', 'Great Vibes', cursive;
+  font-size: 2.25rem;
+  color: rgba(160,150,135,0.65);
+  /* embossed effect */
   text-shadow:
-    0 1px 5px rgba(60,40,0,0.65),
-    0 0 14px rgba(255,210,60,0.2);
-  line-height: 1;
+    0 1px 0 rgba(255,255,255,0.65),
+    0 -1px 0 rgba(120,105,85,0.28);
   letter-spacing: 0.02em;
+  line-height: 1;
 }
-.seal-monogram span {
-  font-size: 0.75em;
-  opacity: 0.85;
-}
+.seal-monogram span { font-size: 0.72em; opacity: 0.75; }
 
-/* Hint below envelope */
+/* Hint */
 .env-hint {
   margin-top: 2.4rem;
   font-family: 'Cormorant Garamond', serif;
@@ -213,16 +194,11 @@ body {
   color: rgba(80, 65, 45, 0.42);
   animation: fadeHint 3s ease-in-out infinite;
 }
-
-@keyframes fadeHint {
-  0%, 100% { opacity: 0.35; }
-  50% { opacity: 0.85; }
-}
+@keyframes fadeHint { 0%,100%{opacity:.35} 50%{opacity:.85} }
 
 @media (max-width: 480px) {
   #env-wrap { width: 85vw; height: 85vw; }
-  .seal-disc { width: 110px; height: 110px; }
-  .seal-ring-outer { width: 118px; height: 118px; }
+  .seal-disc { width: 108px; height: 108px; }
   .seal-monogram { font-size: 1.9rem; }
 }
 
