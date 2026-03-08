@@ -13,8 +13,21 @@
   --grey-light: #9A9898;
   --grey-dark: #3A3838;
   --white: #FDFAF5;
+
+  /* Accent used for the names when on light backgrounds */
+  --gold: #8b7a5b;
+
   --font-head: 'Cormorant Garamond', Georgia, serif;
   --font-body: 'Lato', sans-serif;
+  --font-script: 'SerenityDemo', 'Pinyon Script', 'Great Vibes', cursive;
+}
+
+@font-face {
+  font-family: 'SerenityDemo';
+  src: url('../fonts/Serenity-Demo.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -265,26 +278,37 @@ a { color: inherit; text-decoration: none; }
 /* ---- HERO ---- */
 .hero {
   min-height: 100vh;
-  background: linear-gradient(
-    160deg,
-    var(--olive-dark) 0%,
-    var(--olive) 40%,
-    #8A9E78 70%,
-    var(--cream-dark) 100%
-  );
+  /* Keep your existing olive/cream palette, but let the venue sketch sit on top */
+  background: radial-gradient(1200px 520px at 50% 20%, rgba(245,239,224,0.92) 0%, rgba(245,239,224,0.55) 42%, rgba(92,112,72,0.22) 100%),
+              linear-gradient(160deg, var(--olive-dark) 0%, var(--olive) 40%, #8A9E78 70%, var(--cream-dark) 100%);
   position: relative;
   display: flex; align-items: center; justify-content: center;
   text-align: center;
   overflow: hidden;
 }
+
+/* Subtle paper texture */
 .hero::before {
   content: '';
   position: absolute; inset: 0;
   background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.9;
 }
+
+/* Venue illustration as watermark */
+.hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: url('../images/venue/castle-light.webp') center 68% / min(1100px, 92vw) no-repeat;
+  opacity: 0.22;
+  filter: saturate(0.95);
+  pointer-events: none;
+}
+
 .hero-overlay {
   position: absolute; inset: 0;
-  background: rgba(0,0,0,0.15);
+  /* gentle veil so text stays readable without killing the illustration */
+  background: radial-gradient(900px 420px at 50% 35%, rgba(255,255,255,0.14) 0%, rgba(0,0,0,0.08) 60%, rgba(0,0,0,0.18) 100%);
 }
 .hero-content {
   position: relative; z-index: 2;
@@ -299,13 +323,15 @@ a { color: inherit; text-decoration: none; }
   margin-bottom: 1.5rem;
 }
 .hero-names {
-  font-family: 'Pinyon Script', 'Great Vibes', cursive;
+  font-family: var(--font-script);
   font-size: clamp(4.5rem, 10vw, 9.5rem);
   font-weight: 400;
   color: var(--white);
-  letter-spacing: 0.03em;
-  line-height: 1.05;
+  letter-spacing: 0.01em; /* scripts look best close to zero */
+  line-height: 1.03;
   margin-bottom: 1rem;
+  /* tiny shadow for readability over the illustration */
+  text-shadow: 0 2px 18px rgba(0,0,0,0.22);
 }
 .hero-names .amp {
   font-family: 'Cormorant Garamond', serif;
@@ -705,7 +731,13 @@ a { color: inherit; text-decoration: none; }
   .nav-links { display: none; }
   .nav-burger { display: block; }
 
-  .hero-names { font-size: clamp(2.5rem, 12vw, 4rem); }
+  .hero { background-attachment: scroll; }
+  .hero::after {
+    background: url('../images/venue/castle-mobile.webp') center 72% / min(720px, 96vw) no-repeat;
+    opacity: 0.24;
+  }
+
+  .hero-names { font-size: clamp(2.8rem, 12vw, 4.6rem); }
   .countdown { gap: 0.5rem; }
   .cd-item span { font-size: 2rem; }
   .cd-sep { font-size: 1.5rem; }
@@ -725,6 +757,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 @media (max-width: 480px) {
-  .hero-names { font-size: 2.8rem; }
+  .hero::after { opacity: 0.20; }
+  .hero-names { font-size: 3.1rem; }
   .cd-item span { font-size: 1.6rem; }
 }
