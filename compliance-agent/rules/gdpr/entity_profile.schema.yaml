@@ -1,11 +1,33 @@
 # Entity/Profile parameters used to evaluate conditional GDPR obligations.
 # You will fill this per assessment (case-by-case).
+#
+# NOTE: This is a lightweight, backwards-compatible "schema" expressed as YAML with defaults.
+# New fields may be added over time; existing evaluators should treat unknown fields as optional.
 
 profile:
+  # ------------------------------------------------------------
   # Role in the specific processing context
+  # ------------------------------------------------------------
   role: "controller"  # controller|processor|joint_controller
 
+  # ------------------------------------------------------------
+  # Applicability & scope (Arts. 2–3)
+  # ------------------------------------------------------------
+  # Whether the assessed context involves processing of personal data.
+  processes_personal_data: true
+
+  # Material scope exclusions (Art. 2(2))
+  processing_is_purely_personal_household: false
+  processing_for_law_enforcement: false
+
+  # Territorial scope signals (Art. 3)
+  established_in_eu: false
+  offers_goods_or_services_to_eu_data_subjects: false
+  monitors_behaviour_in_eu_data_subjects: false
+
+  # ------------------------------------------------------------
   # Processing characteristics
+  # ------------------------------------------------------------
   processes_special_categories: false
   processes_criminal_offence_data: false
   processes_children_data: false
@@ -13,18 +35,36 @@ profile:
   large_scale_processing: false
   uses_automated_decision_making_with_significant_effect: false
 
+  # Identification context (Art. 11)
+  can_identify_data_subjects: true
+
+  # Lawful basis flags (used for conditional rules)
+  relies_on_consent: false
+
+  # Children & consent (Art. 8) — only relevant for ISS offered directly to a child and relying on consent.
+  offers_information_society_services_directly_to_children: false
+  member_state_child_consent_age: 16  # range: 13–16 depending on Member State law
+
+  # ------------------------------------------------------------
   # Transfer & location
+  # ------------------------------------------------------------
   transfers_outside_eea: false
   transfer_mechanisms: [] # SCC|BCR|adequacy|derogation|other
 
+  # ------------------------------------------------------------
   # Organisational context
+  # ------------------------------------------------------------
   public_authority_or_body: false
 
+  # ------------------------------------------------------------
   # Vendors
+  # ------------------------------------------------------------
   uses_processors: true
   acts_as_processor_for_customers: true
 
+  # ------------------------------------------------------------
   # Security/ops
+  # ------------------------------------------------------------
   has_incident_response_process: true
 
   # Notes for the assessor

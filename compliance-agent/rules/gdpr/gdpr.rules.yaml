@@ -16,6 +16,126 @@ meta:
 
 rules:
   # ------------------------------------------------------------
+  # Foundations: Scope + Definitions (Art. 1–4)
+  # ------------------------------------------------------------
+  - id: "GDPR-ART1-SUBJECT-MATTER"
+    title: "Organisation documents GDPR applicability context and objectives"
+    scope:
+      applies_to: ["org"]
+      roles: ["controller", "processor", "joint_controller"]
+    requirement:
+      type: "document_required"
+      document: "GDPR_applicability_statement"
+      must_include:
+        - "statement_that_ruleset_targets_processing_of_personal_data"
+        - "high_level_summary_of_context_and_business_model"
+        - "acknowledgement_of_fundamental_rights_focus_and_free_movement_context"
+    evidence_hints:
+      required:
+        - "GDPR_applicability_statement"
+      artifacts:
+        - "GDPR_applicability_statement"
+        - "data_inventory"
+      questions:
+        - "What is the product/service and what personal data is processed?"
+        - "Who are the data subjects (customers, end-users, employees, prospects)?"
+    severity: "low"
+    sources:
+      - citation: "GDPR Art. 1"
+      - citation: "GDPR Recitals 1–4"
+
+  - id: "GDPR-ART2-MATERIAL-SCOPE"
+    title: "Material scope assessment documented (in-scope processing and exclusions)"
+    scope:
+      applies_to: ["org", "product"]
+      roles: ["controller", "processor", "joint_controller"]
+    requirement:
+      type: "decision_and_documentation"
+      must_include:
+        - "whether_processing_is_automated_or_part_of_filing_system"
+        - "whether_data_is_personal_data"
+        - "assessment_of_household_exemption_applicability"
+        - "assessment_of_law_enforcement_or_national_security_exclusions (if relevant)"
+        - "scope_conclusion_and_rationale"
+    evidence_hints:
+      required:
+        - "scope_assessment"
+      artifacts:
+        - "scope_assessment"
+        - "data_inventory"
+        - "architecture_overview"
+      checks:
+        - "Does the org process personal data by automated means or as part of a filing system?"
+        - "Are any processing activities purely personal/household?"
+    severity: "medium"
+    sources:
+      - citation: "GDPR Art. 2"
+      - citation: "GDPR Recital 18"
+
+  - id: "GDPR-ART3-TERRITORIAL-SCOPE"
+    title: "Territorial scope assessment documented (EU establishment / targeting / monitoring)"
+    scope:
+      applies_to: ["org"]
+      roles: ["controller", "processor", "joint_controller"]
+    requirement:
+      type: "decision_and_documentation"
+      must_include:
+        - "whether_established_in_eu"
+        - "whether_processing_in_context_of_eu_establishment (if applicable)"
+        - "whether_offers_goods_or_services_to_eu_data_subjects (if not established)"
+        - "whether_monitors_behaviour_in_eu_data_subjects (if not established)"
+        - "scope_conclusion_and_rationale"
+    evidence_hints:
+      required:
+        - "territorial_scope_assessment"
+      artifacts:
+        - "territorial_scope_assessment"
+        - "customer_geography_breakdown"
+        - "marketing_website_targeting_evidence"
+      questions:
+        - "Do you have an EU establishment?"
+        - "Do you target EU users (language/currency/shipping/support) or monitor behaviour?"
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 3"
+      - citation: "GDPR Recitals 22–25"
+
+  - id: "GDPR-ART4-DEFINITIONS-AND-CLASSIFICATION"
+    title: "Key GDPR definitions are operationalised (data classification and role mapping)"
+    scope:
+      applies_to: ["org", "product"]
+      roles: ["controller", "processor", "joint_controller"]
+    requirement:
+      type: "multi_obligation"
+      obligations:
+        - key: "personal_data_definition_applied"
+          description: "Organisation can identify what constitutes personal data in its context."
+        - key: "processing_operations_catalogued"
+          description: "Processing operations are described (collect, store, use, disclose, delete, etc.)."
+        - key: "role_mapping_exists"
+          description: "Controller/processor/joint-controller roles are mapped per processing purpose/workflow."
+        - key: "recipient_third_party_concepts_used"
+          description: "Distinguish recipients/third parties and document disclosures."
+        - key: "pseudonymisation_anonymisation_terms_used"
+          description: "Define and consistently apply pseudonymisation vs anonymisation (where claimed)."
+    evidence_hints:
+      required:
+        - "data_inventory"
+        - "role_matrix"
+      artifacts:
+        - "data_inventory"
+        - "ROPA"
+        - "role_matrix"
+        - "data_classification_policy"
+      checks:
+        - "Is each data field tagged as personal / special category / criminal offence / not personal?"
+        - "For each workflow, is it clear whether the org is controller or processor?"
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 4"
+      - citation: "GDPR Recitals 26, 30"
+
+  # ------------------------------------------------------------
   # Art. 5–6: Principles + Lawfulness
   # ------------------------------------------------------------
   - id: "GDPR-ART5-PRINCIPLES"
@@ -41,15 +161,22 @@ rules:
         - key: "accountability"
           description: "Ability to demonstrate compliance."
     evidence_hints:
+      required:
+        - "data_inventory"
+        - "retention_schedule"
       artifacts:
         - "data_inventory"
         - "retention_schedule"
         - "security_policy"
         - "privacy_policy"
         - "records_of_processing (ROPA)"
+      checks:
+        - "Is there a written retention schedule per data category and purpose?"
+        - "Is there an owner accountable for privacy compliance?"
     severity: "high"
     sources:
       - citation: "GDPR Art. 5"
+      - citation: "GDPR Recitals 39, 74"
 
   - id: "GDPR-ART6-LAWFUL-BASIS"
     title: "Each processing purpose has a lawful basis"
@@ -66,12 +193,15 @@ rules:
         - name: "lawful_basis" # consent, contract, legal_obligation, vital_interests, public_task, legitimate_interests
         - name: "retention"
     evidence_hints:
+      required:
+        - "ROPA"
       artifacts: ["ROPA", "data_inventory"]
       questions:
         - "List all processing purposes (analytics, marketing, customer support, model training, fraud prevention, etc.)."
     severity: "high"
     sources:
       - citation: "GDPR Art. 6"
+      - citation: "GDPR Recital 40"
 
   - id: "GDPR-ART6-LI-TEST"
     title: "Legitimate interests (if used) includes a documented balancing test"
@@ -88,32 +218,208 @@ rules:
         - "balancing_test (impact on data subjects)"
         - "mitigations/safeguards"
     evidence_hints:
+      required:
+        - "LIA"
       artifacts: ["LIA"]
     severity: "high"
     sources:
-      - citation: "GDPR Art. 6(1)(f); Recital 47"
+      - citation: "GDPR Art. 6(1)(f)"
+      - citation: "GDPR Recital 47"
+
+  # ------------------------------------------------------------
+  # Art. 7–11: Consent + sensitive data + identification context
+  # ------------------------------------------------------------
+  - id: "GDPR-ART7-CONSENT-CONDITIONS"
+    title: "Consent (if relied upon) meets GDPR Art. 7 conditions"
+    scope:
+      applies_to: ["product", "product_ui", "org"]
+      roles: ["controller"]
+      condition: "Only if entity_profile.relies_on_consent == true"
+    requirement:
+      type: "multi_obligation"
+      obligations:
+        - key: "demonstrable_consent"
+          description: "Controller can demonstrate that the data subject has consented (records/logs)."
+        - key: "withdrawal_is_as_easy_as_giving"
+          description: "Withdrawal is possible at any time and as easy as giving consent."
+        - key: "consent_is_granular_and_unbundled"
+          description: "Consent requests are specific and not bundled with unrelated terms."
+        - key: "consent_withdrawal_does_not_affect_prior_processing"
+          description: "Processing before withdrawal remains lawful; users are informed."
+    evidence_hints:
+      required:
+        - "consent_records"
+        - "consent_ui_or_flow_evidence"
+      artifacts:
+        - "consent_records"
+        - "consent_preference_center"
+        - "privacy_policy"
+        - "ROPA"
+      checks:
+        - "Is there an auditable consent log (who/when/what/version) tied to purposes?"
+        - "Can a user withdraw consent in-product without contacting support?"
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 7"
+      - citation: "GDPR Recitals 32, 42, 43"
+
+  - id: "GDPR-ART8-CHILD-CONSENT-ISS"
+    title: "Children's consent for information society services (if applicable) is handled correctly"
+    scope:
+      applies_to: ["product", "product_ui"]
+      roles: ["controller"]
+      condition: "Only if entity_profile.offers_information_society_services_directly_to_children == true and entity_profile.relies_on_consent == true"
+    requirement:
+      type: "multi_obligation"
+      obligations:
+        - key: "age_threshold_configured"
+          description: "Age threshold is set to the applicable Member State age (13–16)."
+        - key: "reasonable_efforts_to_verify_parental_authorisation"
+          description: "Where required, controller makes reasonable efforts to verify holder of parental responsibility."
+        - key: "child_friendly_information"
+          description: "Information provided to children is in clear, age-appropriate language."
+    evidence_hints:
+      required:
+        - "age_gate_or_age_assurance_design"
+      artifacts:
+        - "age_gate_or_age_assurance_design"
+        - "parental_consent_flow"
+        - "privacy_notice_child_version (if used)"
+      questions:
+        - "Do you allow sign-up or use by under-16s (or under local threshold) without parental authorisation?"
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 8"
+      - citation: "GDPR Recital 38"
+
+  - id: "GDPR-ART9-SPECIAL-CATEGORIES"
+    title: "Special category data processing has an Art. 9(2) condition and safeguards (if applicable)"
+    scope:
+      applies_to: ["product", "org"]
+      roles: ["controller", "processor"]
+      condition: "Only if entity_profile.processes_special_categories == true"
+    requirement:
+      type: "mapping_required"
+      description: "For each special category processing activity, document the Art. 9(2) condition and safeguards."
+      fields:
+        - name: "purpose"
+        - name: "special_category_data_types"
+        - name: "art9_condition" # e.g., explicit_consent, employment_law, vital_interests, substantial_public_interest, healthcare, etc.
+        - name: "additional_safeguards" # minimisation, access restriction, encryption, separation, etc.
+    evidence_hints:
+      required:
+        - "ROPA"
+        - "risk_assessment_or_DPIA"
+      artifacts:
+        - "ROPA"
+        - "DPIA"
+        - "risk_register"
+        - "security_controls"
+      checks:
+        - "Is explicit consent used where needed, and recorded separately from other consents?"
+        - "Are access controls and audit logs stronger for special category fields?"
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 9"
+      - citation: "GDPR Recitals 51, 52"
+
+  - id: "GDPR-ART10-CRIMINAL-OFFENCE-DATA"
+    title: "Criminal offence/conviction data processing is authorised and controlled (if applicable)"
+    scope:
+      applies_to: ["product", "org"]
+      roles: ["controller", "processor"]
+      condition: "Only if entity_profile.processes_criminal_offence_data == true"
+    requirement:
+      type: "decision_and_documentation"
+      must_include:
+        - "identification_of_criminal_offence_data_categories"
+        - "legal_authority_or_union_member_state_law_basis"
+        - "appropriate_safeguards_and_access_controls"
+        - "retention_limits"
+    evidence_hints:
+      required:
+        - "ROPA"
+        - "legal_basis_memo_for_art10"
+      artifacts:
+        - "ROPA"
+        - "legal_basis_memo_for_art10"
+        - "access_control_policy"
+        - "retention_schedule"
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 10"
+      - citation: "GDPR Recital 50"
+
+  - id: "GDPR-ART11-NO-IDENTIFICATION"
+    title: "Where identification is not required, organisation documents how Art. 11 is applied (if applicable)"
+    scope:
+      applies_to: ["org", "product"]
+      roles: ["controller"]
+      condition: "Only if entity_profile.can_identify_data_subjects == false"
+    requirement:
+      type: "multi_obligation"
+      obligations:
+        - key: "no_additional_data_collected_for_identification"
+          description: "Controller does not maintain or acquire additional information solely to identify data subjects for compliance."
+        - key: "ability_to_demonstrate_inability_to_identify"
+          description: "Controller can demonstrate it is not in a position to identify the data subject."
+        - key: "inform_data_subject_where_possible"
+          description: "Where possible, controller informs data subjects that it cannot identify them (including consequences for rights)."
+    evidence_hints:
+      required:
+        - "art11_rationale"
+      artifacts:
+        - "art11_rationale"
+        - "architecture_overview"
+        - "privacy_notice"
+      questions:
+        - "Do you store only aggregated/anonymised data, or do you still have identifiers (email, IP, device IDs)?"
+    severity: "medium"
+    sources:
+      - citation: "GDPR Art. 11"
+      - citation: "GDPR Recital 57"
 
   # ------------------------------------------------------------
   # Transparency: Art. 12–14
   # ------------------------------------------------------------
   - id: "GDPR-ART12-TRANSPARENCY"
-    title: "Information to data subjects is concise, transparent, intelligible"
+    title: "Data subject communications and rights handling meet Art. 12 (clarity, facilitation, timelines, fees)"
     scope:
-      applies_to: ["privacy_notice", "product_ui"]
+      applies_to: ["privacy_notice", "product_ui", "org"]
       roles: ["controller"]
     requirement:
-      type: "quality_requirement"
-      must_be:
-        - "clear_language"
-        - "easily_accessible"
-        - "free_of_charge"
+      type: "multi_obligation"
+      obligations:
+        - key: "clear_and_accessible_information"
+          description: "Information is concise, transparent, intelligible, easily accessible, and in clear language."
+        - key: "rights_facilitation"
+          description: "Controller facilitates the exercise of data subject rights (incl. electronic means where appropriate)."
+        - key: "identity_verification_is_proportionate"
+          description: "Identity verification is reasonable and proportionate to the risk."
+        - key: "timelines_managed"
+          description: "Responses without undue delay and within 1 month; extensions (up to 2 months) are tracked and communicated with reasons."
+        - key: "free_of_charge_default"
+          description: "Information and actions are free of charge by default; any fees/refusals are limited to manifestly unfounded/excessive requests and are documented."
+        - key: "communication_of_actions_taken"
+          description: "Controller informs data subject of actions taken (or reasons for refusal) and the possibility of complaint."
     evidence_hints:
-      artifacts: ["privacy_policy", "in_product_notice"]
+      required:
+        - "DSAR_procedure"
+        - "request_intake_and_tracking_workflow"
+      artifacts:
+        - "DSAR_procedure"
+        - "ticketing_workflow"
+        - "DSAR_templates"
+        - "in_product_rights_portal (if available)"
+        - "privacy_policy"
       checks:
-        - "Is the notice reachable within 1-2 clicks from signup / footer?"
-    severity: "medium"
+        - "Is there a defined intake channel and ownership for requests?"
+        - "Is there a timer/SLAs to ensure 1-month response and extension notice?"
+        - "Is there a documented policy for manifestly unfounded/excessive requests?"
+    severity: "high"
     sources:
       - citation: "GDPR Art. 12"
+      - citation: "GDPR Recitals 58–60"
 
   - id: "GDPR-ART13-NOTICE-DIRECT"
     title: "Privacy notice covers mandatory disclosures when data collected from data subject"
@@ -136,6 +442,8 @@ rules:
         - "whether_provision_is_statutory_or_contractual"
         - "automated_decision_making_and_profiling (if applicable)"
     evidence_hints:
+      required:
+        - "privacy_policy"
       artifacts: ["privacy_policy"]
       search_terms: ["controller", "purposes", "legal basis", "recipients", "transfer", "retention", "rights", "complaint", "automated"]
     severity: "high"
@@ -156,6 +464,8 @@ rules:
         - "whether_from_public_sources"
         - "all_Art13_items"
     evidence_hints:
+      required:
+        - "privacy_policy"
       artifacts: ["privacy_policy", "data_inventory"]
     severity: "high"
     sources:
