@@ -12,10 +12,16 @@
   --grey: #6B6868;
   --grey-light: #9A9898;
   --grey-dark: #3A3838;
-  --white: #FDFAF5;
 
-  /* Accent used for the names when on light backgrounds */
+  /* Ivory / paper base (match invite aesthetic) */
+  --ivory: #fbf8f2;
+  --ivory-2: #f5efe0;
+
+  /* Golden-brown ink */
   --gold: #8b7a5b;
+  --gold-soft: rgba(139, 122, 91, 0.55);
+
+  --white: #FDFAF5;
 
   --font-head: 'Cormorant Garamond', Georgia, serif;
   --font-body: 'Lato', sans-serif;
@@ -35,7 +41,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-  background: var(--white);
+  background: var(--ivory);
   color: var(--grey-dark);
   font-family: var(--font-body);
   font-weight: 300;
@@ -278,9 +284,8 @@ a { color: inherit; text-decoration: none; }
 /* ---- HERO ---- */
 .hero {
   min-height: 100vh;
-  /* Keep your existing olive/cream palette, but let the venue sketch sit on top */
-  background: radial-gradient(1200px 520px at 50% 20%, rgba(245,239,224,0.92) 0%, rgba(245,239,224,0.55) 42%, rgba(92,112,72,0.22) 100%),
-              linear-gradient(160deg, var(--olive-dark) 0%, var(--olive) 40%, #8A9E78 70%, var(--cream-dark) 100%);
+  /* Ivory paper background (like the invite) */
+  background: radial-gradient(1200px 520px at 50% 18%, rgba(255,255,255,0.78) 0%, rgba(251,248,242,0.96) 45%, rgba(245,239,224,0.96) 100%);
   position: relative;
   display: flex; align-items: center; justify-content: center;
   text-align: center;
@@ -307,8 +312,8 @@ a { color: inherit; text-decoration: none; }
 
 .hero-overlay {
   position: absolute; inset: 0;
-  /* gentle veil so text stays readable without killing the illustration */
-  background: radial-gradient(900px 420px at 50% 35%, rgba(255,255,255,0.14) 0%, rgba(0,0,0,0.08) 60%, rgba(0,0,0,0.18) 100%);
+  /* very subtle shading to keep the sketch soft */
+  background: radial-gradient(900px 420px at 50% 30%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.10) 55%, rgba(0,0,0,0.03) 100%);
 }
 .hero-content {
   position: relative; z-index: 2;
@@ -319,25 +324,24 @@ a { color: inherit; text-decoration: none; }
   font-size: 0.75rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.7);
+  color: rgba(58, 56, 56, 0.45);
   margin-bottom: 1.5rem;
 }
 .hero-names {
   font-family: var(--font-script);
   font-size: clamp(4.5rem, 10vw, 9.5rem);
   font-weight: 400;
-  color: var(--white);
-  letter-spacing: 0.01em; /* scripts look best close to zero */
+  color: var(--gold);
+  letter-spacing: 0.01em;
   line-height: 1.03;
   margin-bottom: 1rem;
-  /* tiny shadow for readability over the illustration */
-  text-shadow: 0 2px 18px rgba(0,0,0,0.22);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.65);
 }
 .hero-names .amp {
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
   font-weight: 300;
-  color: rgba(255,255,255,0.6);
+  color: rgba(139, 122, 91, 0.45);
   margin: 0 0.2em;
   font-size: 0.45em;
   vertical-align: middle;
@@ -346,7 +350,7 @@ a { color: inherit; text-decoration: none; }
   font-family: var(--font-head);
   font-size: 1.4rem;
   font-weight: 300;
-  color: var(--cream);
+  color: rgba(58, 56, 56, 0.55);
   letter-spacing: 0.15em;
   margin-bottom: 0.4rem;
 }
@@ -354,7 +358,7 @@ a { color: inherit; text-decoration: none; }
   font-size: 0.85rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.65);
+  color: rgba(58, 56, 56, 0.40);
   margin-bottom: 3rem;
 }
 
@@ -371,7 +375,7 @@ a { color: inherit; text-decoration: none; }
   font-family: var(--font-head);
   font-size: 3rem;
   font-weight: 300;
-  color: var(--white);
+  color: rgba(58, 56, 56, 0.72);
   line-height: 1;
   min-width: 3rem;
   text-align: center;
@@ -380,19 +384,19 @@ a { color: inherit; text-decoration: none; }
   font-size: 0.65rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.6);
+  color: rgba(58, 56, 56, 0.42);
   margin-top: 0.3rem;
 }
 .cd-sep {
   font-family: var(--font-head);
   font-size: 2rem;
-  color: rgba(255,255,255,0.3);
+  color: rgba(58, 56, 56, 0.22);
   margin-bottom: 1.2rem;
 }
 
 .hero-scroll {
   position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
-  color: rgba(255,255,255,0.4);
+  color: rgba(58, 56, 56, 0.22);
   font-size: 1.5rem;
   animation: bounce 2s infinite;
 }
@@ -406,8 +410,8 @@ a { color: inherit; text-decoration: none; }
   display: inline-block;
   padding: 0.9rem 2.8rem;
   background: transparent;
-  border: 1px solid rgba(255,255,255,0.6);
-  color: var(--white);
+  border: 1px solid rgba(139, 122, 91, 0.45);
+  color: rgba(58, 56, 56, 0.72);
   font-family: var(--font-body);
   font-size: 0.75rem;
   font-weight: 400;
@@ -417,8 +421,8 @@ a { color: inherit; text-decoration: none; }
   cursor: pointer;
 }
 .btn-primary:hover {
-  background: rgba(255,255,255,0.15);
-  border-color: var(--white);
+  background: rgba(139, 122, 91, 0.08);
+  border-color: rgba(139, 122, 91, 0.65);
 }
 .btn-outline {
   display: inline-block;
