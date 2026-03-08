@@ -1,0 +1,416 @@
+meta:
+  ruleset_id: "gdpr"
+  version: "0.1"
+  status: "draft"
+  evaluation_profile_schema: "rules/gdpr/entity_profile.schema.yaml"
+  jurisdiction: ["EU"]
+  source:
+    - name: "GDPR (Regulation (EU) 2016/679)"
+      url: "https://eur-lex.europa.eu/eli/reg/2016/679/oj"
+  notes:
+    - "This ruleset is designed for SaaS/AI products. Some obligations vary depending on whether you are controller/processor/joint controller."
+
+# Conventions
+# - status: PASS/FAIL/PARTIAL/UNKNOWN
+# - evidence artifacts can be: privacy_policy, DPIA, ROPA, DPA templates, incident_response_plan, security_controls, vendor_register, training_records
+
+rules:
+  # ------------------------------------------------------------
+  # Art. 5–6: Principles + Lawfulness
+  # ------------------------------------------------------------
+  - id: "GDPR-ART5-PRINCIPLES"
+    title: "Processing aligns with GDPR Art. 5 principles"
+    scope:
+      applies_to: ["product", "org"]
+      roles: ["controller", "processor"]
+    requirement:
+      type: "multi_obligation"
+      obligations:
+        - key: "lawfulness_fairness_transparency"
+          description: "Demonstrate lawful, fair and transparent processing."
+        - key: "purpose_limitation"
+          description: "Define purposes and avoid incompatible reuse."
+        - key: "data_minimisation"
+          description: "Collect/process only what is necessary."
+        - key: "accuracy"
+          description: "Keep personal data accurate and up to date."
+        - key: "storage_limitation"
+          description: "Retention periods defined; no indefinite storage."
+        - key: "integrity_confidentiality"
+          description: "Appropriate security measures for confidentiality/integrity."
+        - key: "accountability"
+          description: "Ability to demonstrate compliance."
+    evidence_hints:
+      artifacts:
+        - "data_inventory"
+        - "retention_schedule"
+        - "security_policy"
+        - "privacy_policy"
+        - "records_of_processing (ROPA)"
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 5"
+
+  - id: "GDPR-ART6-LAWFUL-BASIS"
+    title: "Each processing purpose has a lawful basis"
+    scope:
+      applies_to: ["product"]
+      roles: ["controller"]
+    requirement:
+      type: "mapping_required"
+      description: "For each purpose of processing, define and document a lawful basis."
+      fields:
+        - name: "purpose"
+        - name: "data_categories"
+        - name: "data_subject_categories"
+        - name: "lawful_basis" # consent, contract, legal_obligation, vital_interests, public_task, legitimate_interests
+        - name: "retention"
+    evidence_hints:
+      artifacts: ["ROPA", "data_inventory"]
+      questions:
+        - "List all processing purposes (analytics, marketing, customer support, model training, fraud prevention, etc.)."
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 6"
+
+  - id: "GDPR-ART6-LI-TEST"
+    title: "Legitimate interests (if used) includes a documented balancing test"
+    scope:
+      applies_to: ["product"]
+      roles: ["controller"]
+      condition: "Only if lawful_basis includes legitimate_interests"
+    requirement:
+      type: "document_required"
+      document: "legitimate_interests_assessment (LIA)"
+      must_include:
+        - "interest_pursued"
+        - "necessity_assessment"
+        - "balancing_test (impact on data subjects)"
+        - "mitigations/safeguards"
+    evidence_hints:
+      artifacts: ["LIA"]
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 6(1)(f); Recital 47"
+
+  # ------------------------------------------------------------
+  # Transparency: Art. 12–14
+  # ------------------------------------------------------------
+  - id: "GDPR-ART12-TRANSPARENCY"
+    title: "Information to data subjects is concise, transparent, intelligible"
+    scope:
+      applies_to: ["privacy_notice", "product_ui"]
+      roles: ["controller"]
+    requirement:
+      type: "quality_requirement"
+      must_be:
+        - "clear_language"
+        - "easily_accessible"
+        - "free_of_charge"
+    evidence_hints:
+      artifacts: ["privacy_policy", "in_product_notice"]
+      checks:
+        - "Is the notice reachable within 1-2 clicks from signup / footer?"
+    severity: "medium"
+    sources:
+      - citation: "GDPR Art. 12"
+
+  - id: "GDPR-ART13-NOTICE-DIRECT"
+    title: "Privacy notice covers mandatory disclosures when data collected from data subject"
+    scope:
+      applies_to: ["privacy_notice"]
+      roles: ["controller"]
+    requirement:
+      type: "section_presence"
+      must_include_sections:
+        - "controller_identity_and_contact"
+        - "dpo_contact (if applicable)"
+        - "purposes_and_legal_bases"
+        - "legitimate_interests (if applicable)"
+        - "recipients_or_categories"
+        - "international_transfers_and_safeguards (if applicable)"
+        - "retention_periods"
+        - "data_subject_rights"
+        - "right_to_withdraw_consent (if applicable)"
+        - "right_to_lodge_complaint"
+        - "whether_provision_is_statutory_or_contractual"
+        - "automated_decision_making_and_profiling (if applicable)"
+    evidence_hints:
+      artifacts: ["privacy_policy"]
+      search_terms: ["controller", "purposes", "legal basis", "recipients", "transfer", "retention", "rights", "complaint", "automated"]
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 13"
+
+  - id: "GDPR-ART14-NOTICE-INDIRECT"
+    title: "Privacy notice covers mandatory disclosures when data not obtained directly"
+    scope:
+      applies_to: ["privacy_notice"]
+      roles: ["controller"]
+      condition: "Only if you obtain personal data from third parties"
+    requirement:
+      type: "section_presence"
+      must_include_sections:
+        - "categories_of_personal_data"
+        - "source_of_data"
+        - "whether_from_public_sources"
+        - "all_Art13_items"
+    evidence_hints:
+      artifacts: ["privacy_policy", "data_inventory"]
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 14"
+
+  # ------------------------------------------------------------
+  # Data subject rights: Art. 15–22
+  # ------------------------------------------------------------
+  - id: "GDPR-ART15-ACCESS"
+    title: "Right of access process exists and can be fulfilled"
+    scope:
+      applies_to: ["org", "product"]
+      roles: ["controller"]
+    requirement:
+      type: "process_required"
+      must_include:
+        - "identity_verification"
+        - "ability_to_provide_copy_of_data"
+        - "ability_to_provide_processing_info"
+        - "one_month_deadline_tracking"
+    evidence_hints:
+      artifacts: ["DSAR_procedure", "ticketing_workflow"]
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 15; Art. 12(3)"
+
+  - id: "GDPR-ART16-RECTIFICATION"
+    title: "Right to rectification supported"
+    scope:
+      applies_to: ["org", "product"]
+      roles: ["controller"]
+    requirement:
+      type: "process_required"
+      must_include: ["correction_workflow", "propagation_to_downstream_systems"]
+    evidence_hints:
+      artifacts: ["DSAR_procedure"]
+    severity: "medium"
+    sources:
+      - citation: "GDPR Art. 16"
+
+  - id: "GDPR-ART17-ERASURE"
+    title: "Right to erasure supported (where applicable)"
+    scope:
+      applies_to: ["org", "product"]
+      roles: ["controller"]
+    requirement:
+      type: "process_required"
+      must_include:
+        - "deletion_workflow"
+        - "exceptions_handling (legal obligations, defence of claims)"
+        - "deletion_in_backups_policy"
+    evidence_hints:
+      artifacts: ["DSAR_procedure", "retention_schedule"]
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 17"
+
+  - id: "GDPR-ART18-RESTRICTION"
+    title: "Right to restriction of processing supported"
+    scope:
+      applies_to: ["org", "product"]
+      roles: ["controller"]
+    requirement:
+      type: "process_required"
+      must_include: ["restriction_flagging", "downstream_notification"]
+    severity: "medium"
+    sources:
+      - citation: "GDPR Art. 18"
+
+  - id: "GDPR-ART20-PORTABILITY"
+    title: "Data portability for applicable processing supported"
+    scope:
+      applies_to: ["product"]
+      roles: ["controller"]
+      condition: "Only for consent/contract processing carried out by automated means"
+    requirement:
+      type: "capability_required"
+      must_include:
+        - "export_in_structured_common_machine_readable_format"
+        - "ability_to_transmit_to_another_controller (where feasible)"
+    evidence_hints:
+      artifacts: ["product_export_feature", "DSAR_procedure"]
+    severity: "medium"
+    sources:
+      - citation: "GDPR Art. 20"
+
+  - id: "GDPR-ART21-OBJECT"
+    title: "Right to object supported (incl. direct marketing)"
+    scope:
+      applies_to: ["org", "product", "marketing"]
+      roles: ["controller"]
+    requirement:
+      type: "process_required"
+      must_include:
+        - "objection_intake"
+        - "direct_marketing_opt_out_immediate"
+        - "legitimate_interests_override_assessment"
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 21"
+
+  - id: "GDPR-ART22-ADM"
+    title: "Automated decision-making/profiling safeguards (if applicable)"
+    scope:
+      applies_to: ["product"]
+      roles: ["controller"]
+      condition: "Only if decisions with legal/similar significant effects are made solely by automated means"
+    requirement:
+      type: "safeguards_required"
+      must_include:
+        - "inform_users"
+        - "right_to_human_intervention"
+        - "ability_to_contest"
+        - "explain_logic_and_consequences_at_high_level"
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 22"
+
+  # ------------------------------------------------------------
+  # Security + breaches: Art. 32–34
+  # ------------------------------------------------------------
+  - id: "GDPR-ART32-SECURITY"
+    title: "Appropriate technical and organisational measures (TOMs) implemented"
+    scope:
+      applies_to: ["org", "product"]
+      roles: ["controller", "processor"]
+    requirement:
+      type: "control_set"
+      controls:
+        - "access_control_and_least_privilege"
+        - "encryption_in_transit"
+        - "encryption_at_rest (risk-based)"
+        - "confidentiality_integrity_availability_resilience"
+        - "backup_and_recovery"
+        - "regular_testing_and_assessment"
+    evidence_hints:
+      artifacts: ["security_policy", "risk_assessment", "pen_test_reports", "access_reviews"]
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 32"
+
+  - id: "GDPR-ART33-BREACH-SUPERVISORY"
+    title: "Breach notification to supervisory authority within 72 hours (when required)"
+    scope:
+      applies_to: ["org"]
+      roles: ["controller"]
+    requirement:
+      type: "process_required"
+      must_include:
+        - "breach_detection_and_triage"
+        - "72h_timer"
+        - "notification_template (nature, categories, approx numbers, contact, consequences, measures)"
+        - "breach_register"
+    evidence_hints:
+      artifacts: ["incident_response_plan", "breach_register", "tabletop_exercises"]
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 33"
+
+  - id: "GDPR-ART34-BREACH-DATA-SUBJECT"
+    title: "Breach communication to data subjects when high risk"
+    scope:
+      applies_to: ["org"]
+      roles: ["controller"]
+    requirement:
+      type: "process_required"
+      must_include:
+        - "high_risk_assessment"
+        - "communication_template"
+        - "exceptions_handling (e.g., encryption/mitigation)"
+    evidence_hints:
+      artifacts: ["incident_response_plan"]
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 34"
+
+  # ------------------------------------------------------------
+  # Governance & documentation: Art. 24–31, 35–37
+  # ------------------------------------------------------------
+  - id: "GDPR-ART30-ROPA"
+    title: "Records of processing activities (ROPA) maintained (where required)"
+    scope:
+      applies_to: ["org"]
+      roles: ["controller", "processor"]
+    requirement:
+      type: "document_required"
+      document: "ROPA"
+      must_include:
+        - "purposes"
+        - "categories_of_data_subjects_and_data"
+        - "categories_of_recipients"
+        - "transfers"
+        - "retention"
+        - "security_measures"
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 30"
+
+  - id: "GDPR-ART28-DPA"
+    title: "Processor agreements (DPA) include Art. 28 mandatory clauses"
+    scope:
+      applies_to: ["contracts"]
+      roles: ["controller"]
+      condition: "Only if you use processors"
+    requirement:
+      type: "clause_presence"
+      must_include_clauses:
+        - "processing_on_documented_instructions"
+        - "confidentiality"
+        - "security_measures"
+        - "subprocessor_conditions"
+        - "assistance_with_rights"
+        - "assistance_with_security_DPIA"
+        - "deletion_or_return_end_of_services"
+        - "audits_and_information"
+    evidence_hints:
+      artifacts: ["DPA_template", "vendor_contracts"]
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 28"
+
+  - id: "GDPR-ART35-DPIA"
+    title: "DPIA performed for high-risk processing (including some AI uses)"
+    scope:
+      applies_to: ["product"]
+      roles: ["controller"]
+    requirement:
+      type: "process_required"
+      must_include:
+        - "screening_for_high_risk"
+        - "DPIA_template"
+        - "assessment_of_necessity_proportionality"
+        - "risk_assessment"
+        - "mitigation_measures"
+    evidence_hints:
+      artifacts: ["DPIA", "risk_register"]
+      questions:
+        - "Do you do large-scale profiling, special category data, systematic monitoring, or new technologies impacting individuals?"
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 35"
+
+  - id: "GDPR-ART37-DPO"
+    title: "DPO appointed where required"
+    scope:
+      applies_to: ["org"]
+      roles: ["controller", "processor"]
+    requirement:
+      type: "decision_and_documentation"
+      must_include:
+        - "assessment_of_DPO_requirement"
+        - "appointment_details_if_required"
+        - "public_contact_details"
+    evidence_hints:
+      artifacts: ["DPO_assessment", "privacy_notice"]
+    severity: "medium"
+    sources:
+      - citation: "GDPR Art. 37"

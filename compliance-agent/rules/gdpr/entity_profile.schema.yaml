@@ -1,0 +1,31 @@
+# Entity/Profile parameters used to evaluate conditional GDPR obligations.
+# You will fill this per assessment (case-by-case).
+
+profile:
+  # Role in the specific processing context
+  role: "controller"  # controller|processor|joint_controller
+
+  # Processing characteristics
+  processes_special_categories: false
+  processes_criminal_offence_data: false
+  processes_children_data: false
+  does_systematic_monitoring: false
+  large_scale_processing: false
+  uses_automated_decision_making_with_significant_effect: false
+
+  # Transfer & location
+  transfers_outside_eea: false
+  transfer_mechanisms: [] # SCC|BCR|adequacy|derogation|other
+
+  # Organisational context
+  public_authority_or_body: false
+
+  # Vendors
+  uses_processors: true
+  acts_as_processor_for_customers: true
+
+  # Security/ops
+  has_incident_response_process: true
+
+  # Notes for the assessor
+  notes: ""

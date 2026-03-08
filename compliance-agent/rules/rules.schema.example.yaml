@@ -1,0 +1,44 @@
+# Example rule set (YAML)
+# Goal: machine-readable + auditable + easy to review.
+
+meta:
+  ruleset_id: "example-2026-03-08"
+  owner: "Marcel"
+  jurisdiction: "TBD"
+  domain: "TBD" # e.g., privacy, AML, marketing claims, HR, product safety
+  version: "0.1"
+
+rules:
+  - id: "PRIV-001"
+    title: "Provide a privacy contact"
+    scope:
+      applies_to_docs: ["privacy_policy", "website_footer"]
+      jurisdiction: ["EU"]
+    requirement:
+      type: "presence"
+      must_include_any:
+        - "privacy@"
+        - "dpo@"
+        - "Data Protection Officer"
+    evidence_hints:
+      search_terms: ["contact", "privacy", "DPO", "email"]
+    severity: "medium"
+    remediation:
+      suggestion: "Add a dedicated privacy contact email and/or DPO contact section."
+    sources:
+      - file: "docs/sources/GDPR.txt"
+        citation: "Art. 13(1)(a) (example)"
+
+  - id: "WEB-SEC-001"
+    title: "No hardcoded secrets"
+    scope:
+      applies_to_docs: ["codebase"]
+      jurisdiction: ["ALL"]
+    requirement:
+      type: "forbidden_pattern"
+      forbidden_regex:
+        - "AKIA[0-9A-Z]{16}" # AWS access key pattern example
+        - "-----BEGIN( RSA)? PRIVATE KEY-----"
+    severity: "high"
+    remediation:
+      suggestion: "Remove secrets, rotate credentials, use environment variables or secret manager."

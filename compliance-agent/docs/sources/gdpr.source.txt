@@ -1,0 +1,5 @@
+GDPR source (official):
+- Title: Regulation (EU) 2016/679 (General Data Protection Regulation)
+- EUR-Lex ELI: https://eur-lex.europa.eu/eli/reg/2016/679/oj
+
+Note: We will cite Articles/Recitals by number in the ruleset.
