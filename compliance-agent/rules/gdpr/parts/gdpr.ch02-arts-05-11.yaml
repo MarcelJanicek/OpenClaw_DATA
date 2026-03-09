@@ -1,0 +1,272 @@
+meta:
+  ruleset_id: gdpr
+  version: '0.1'
+  status: draft
+  evaluation_profile_schema: rules/gdpr/entity_profile.schema.yaml
+  jurisdiction:
+  - EU
+  source:
+  - name: GDPR (Regulation (EU) 2016/679)
+    url: https://eur-lex.europa.eu/eli/reg/2016/679/oj
+  notes:
+  - This ruleset is designed for SaaS/AI products. Some obligations vary depending on whether you are controller/processor/joint controller.
+rules:
+- id: GDPR-ART5-PRINCIPLES
+  title: Processing aligns with GDPR Art. 5 principles
+  scope:
+    applies_to:
+    - product
+    - org
+    roles:
+    - controller
+    - processor
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: lawfulness_fairness_transparency
+      description: Demonstrate lawful, fair and transparent processing.
+    - key: purpose_limitation
+      description: Define purposes and avoid incompatible reuse.
+    - key: data_minimisation
+      description: Collect/process only what is necessary.
+    - key: accuracy
+      description: Keep personal data accurate and up to date.
+    - key: storage_limitation
+      description: Retention periods defined; no indefinite storage.
+    - key: integrity_confidentiality
+      description: Appropriate security measures for confidentiality/integrity.
+    - key: accountability
+      description: Ability to demonstrate compliance.
+  evidence_hints:
+    required:
+    - data_inventory
+    - retention_schedule
+    artifacts:
+    - data_inventory
+    - retention_schedule
+    - security_policy
+    - privacy_policy
+    - records_of_processing (ROPA)
+    checks:
+    - Is there a written retention schedule per data category and purpose?
+    - Is there an owner accountable for privacy compliance?
+  severity: high
+  sources:
+  - citation: GDPR Art. 5
+  - citation: GDPR Recitals 39, 74
+- id: GDPR-ART6-LAWFUL-BASIS
+  title: Each processing purpose has a lawful basis
+  scope:
+    applies_to:
+    - product
+    roles:
+    - controller
+  requirement:
+    type: mapping_required
+    description: For each purpose of processing, define and document a lawful basis.
+    fields:
+    - name: purpose
+    - name: data_categories
+    - name: data_subject_categories
+    - name: lawful_basis
+    - name: retention
+  evidence_hints:
+    required:
+    - ROPA
+    artifacts:
+    - ROPA
+    - data_inventory
+    questions:
+    - List all processing purposes (analytics, marketing, customer support, model training, fraud prevention, etc.).
+  severity: high
+  sources:
+  - citation: GDPR Art. 6
+  - citation: GDPR Recital 40
+- id: GDPR-ART6-LI-TEST
+  title: Legitimate interests (if used) includes a documented balancing test
+  scope:
+    applies_to:
+    - product
+    roles:
+    - controller
+    condition: Only if lawful_basis includes legitimate_interests
+  requirement:
+    type: document_required
+    document: legitimate_interests_assessment (LIA)
+    must_include:
+    - interest_pursued
+    - necessity_assessment
+    - balancing_test (impact on data subjects)
+    - mitigations/safeguards
+  evidence_hints:
+    required:
+    - LIA
+    artifacts:
+    - LIA
+  severity: high
+  sources:
+  - citation: GDPR Art. 6(1)(f)
+  - citation: GDPR Recital 47
+- id: GDPR-ART7-CONSENT-CONDITIONS
+  title: Consent (if relied upon) meets GDPR Art. 7 conditions
+  scope:
+    applies_to:
+    - product
+    - product_ui
+    - org
+    roles:
+    - controller
+    condition: Only if entity_profile.relies_on_consent == true
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: demonstrable_consent
+      description: Controller can demonstrate that the data subject has consented (records/logs).
+    - key: withdrawal_is_as_easy_as_giving
+      description: Withdrawal is possible at any time and as easy as giving consent.
+    - key: consent_is_granular_and_unbundled
+      description: Consent requests are specific and not bundled with unrelated terms.
+    - key: consent_withdrawal_does_not_affect_prior_processing
+      description: Processing before withdrawal remains lawful; users are informed.
+  evidence_hints:
+    required:
+    - consent_records
+    - consent_ui_or_flow_evidence
+    artifacts:
+    - consent_records
+    - consent_preference_center
+    - privacy_policy
+    - ROPA
+    checks:
+    - Is there an auditable consent log (who/when/what/version) tied to purposes?
+    - Can a user withdraw consent in-product without contacting support?
+  severity: high
+  sources:
+  - citation: GDPR Art. 7
+  - citation: GDPR Recitals 32, 42, 43
+- id: GDPR-ART8-CHILD-CONSENT-ISS
+  title: Children's consent for information society services (if applicable) is handled correctly
+  scope:
+    applies_to:
+    - product
+    - product_ui
+    roles:
+    - controller
+    condition: Only if entity_profile.offers_information_society_services_directly_to_children == true and entity_profile.relies_on_consent == true
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: age_threshold_configured
+      description: Age threshold is set to the applicable Member State age (13–16).
+    - key: reasonable_efforts_to_verify_parental_authorisation
+      description: Where required, controller makes reasonable efforts to verify holder of parental responsibility.
+    - key: child_friendly_information
+      description: Information provided to children is in clear, age-appropriate language.
+  evidence_hints:
+    required:
+    - age_gate_or_age_assurance_design
+    artifacts:
+    - age_gate_or_age_assurance_design
+    - parental_consent_flow
+    - privacy_notice_child_version (if used)
+    questions:
+    - Do you allow sign-up or use by under-16s (or under local threshold) without parental authorisation?
+  severity: high
+  sources:
+  - citation: GDPR Art. 8
+  - citation: GDPR Recital 38
+- id: GDPR-ART9-SPECIAL-CATEGORIES
+  title: Special category data processing has an Art. 9(2) condition and safeguards (if applicable)
+  scope:
+    applies_to:
+    - product
+    - org
+    roles:
+    - controller
+    - processor
+    condition: Only if entity_profile.processes_special_categories == true
+  requirement:
+    type: mapping_required
+    description: For each special category processing activity, document the Art. 9(2) condition and safeguards.
+    fields:
+    - name: purpose
+    - name: special_category_data_types
+    - name: art9_condition
+    - name: additional_safeguards
+  evidence_hints:
+    required:
+    - ROPA
+    - risk_assessment_or_DPIA
+    artifacts:
+    - ROPA
+    - DPIA
+    - risk_register
+    - security_controls
+    checks:
+    - Is explicit consent used where needed, and recorded separately from other consents?
+    - Are access controls and audit logs stronger for special category fields?
+  severity: high
+  sources:
+  - citation: GDPR Art. 9
+  - citation: GDPR Recitals 51, 52
+- id: GDPR-ART10-CRIMINAL-OFFENCE-DATA
+  title: Criminal offence/conviction data processing is authorised and controlled (if applicable)
+  scope:
+    applies_to:
+    - product
+    - org
+    roles:
+    - controller
+    - processor
+    condition: Only if entity_profile.processes_criminal_offence_data == true
+  requirement:
+    type: decision_and_documentation
+    must_include:
+    - identification_of_criminal_offence_data_categories
+    - legal_authority_or_union_member_state_law_basis
+    - appropriate_safeguards_and_access_controls
+    - retention_limits
+  evidence_hints:
+    required:
+    - ROPA
+    - legal_basis_memo_for_art10
+    artifacts:
+    - ROPA
+    - legal_basis_memo_for_art10
+    - access_control_policy
+    - retention_schedule
+  severity: high
+  sources:
+  - citation: GDPR Art. 10
+  - citation: GDPR Recital 50
+- id: GDPR-ART11-NO-IDENTIFICATION
+  title: Where identification is not required, organisation documents how Art. 11 is applied (if applicable)
+  scope:
+    applies_to:
+    - org
+    - product
+    roles:
+    - controller
+    condition: Only if entity_profile.can_identify_data_subjects == false
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: no_additional_data_collected_for_identification
+      description: Controller does not maintain or acquire additional information solely to identify data subjects for compliance.
+    - key: ability_to_demonstrate_inability_to_identify
+      description: Controller can demonstrate it is not in a position to identify the data subject.
+    - key: inform_data_subject_where_possible
+      description: Where possible, controller informs data subjects that it cannot identify them (including consequences for rights).
+  evidence_hints:
+    required:
+    - art11_rationale
+    artifacts:
+    - art11_rationale
+    - architecture_overview
+    - privacy_notice
+    questions:
+    - Do you store only aggregated/anonymised data, or do you still have identifiers (email, IP, device IDs)?
+  severity: medium
+  sources:
+  - citation: GDPR Art. 11
+  - citation: GDPR Recital 57

@@ -1,0 +1,144 @@
+meta:
+  ruleset_id: gdpr
+  version: '0.1'
+  status: draft
+  evaluation_profile_schema: rules/gdpr/entity_profile.schema.yaml
+  jurisdiction:
+  - EU
+  source:
+  - name: GDPR (Regulation (EU) 2016/679)
+    url: https://eur-lex.europa.eu/eli/reg/2016/679/oj
+  notes:
+  - This ruleset is designed for SaaS/AI products. Some obligations vary depending on whether you are controller/processor/joint controller.
+rules:
+- id: GDPR-ART1-SUBJECT-MATTER
+  title: Organisation documents GDPR applicability context and objectives
+  scope:
+    applies_to:
+    - org
+    roles:
+    - controller
+    - processor
+    - joint_controller
+  requirement:
+    type: document_required
+    document: GDPR_applicability_statement
+    must_include:
+    - statement_that_ruleset_targets_processing_of_personal_data
+    - high_level_summary_of_context_and_business_model
+    - acknowledgement_of_fundamental_rights_focus_and_free_movement_context
+  evidence_hints:
+    required:
+    - GDPR_applicability_statement
+    artifacts:
+    - GDPR_applicability_statement
+    - data_inventory
+    questions:
+    - What is the product/service and what personal data is processed?
+    - Who are the data subjects (customers, end-users, employees, prospects)?
+  severity: low
+  sources:
+  - citation: GDPR Art. 1
+  - citation: GDPR Recitals 1–4
+- id: GDPR-ART2-MATERIAL-SCOPE
+  title: Material scope assessment documented (in-scope processing and exclusions)
+  scope:
+    applies_to:
+    - org
+    - product
+    roles:
+    - controller
+    - processor
+    - joint_controller
+  requirement:
+    type: decision_and_documentation
+    must_include:
+    - whether_processing_is_automated_or_part_of_filing_system
+    - whether_data_is_personal_data
+    - assessment_of_household_exemption_applicability
+    - assessment_of_law_enforcement_or_national_security_exclusions (if relevant)
+    - scope_conclusion_and_rationale
+  evidence_hints:
+    required:
+    - scope_assessment
+    artifacts:
+    - scope_assessment
+    - data_inventory
+    - architecture_overview
+    checks:
+    - Does the org process personal data by automated means or as part of a filing system?
+    - Are any processing activities purely personal/household?
+  severity: medium
+  sources:
+  - citation: GDPR Art. 2
+  - citation: GDPR Recital 18
+- id: GDPR-ART3-TERRITORIAL-SCOPE
+  title: Territorial scope assessment documented (EU establishment / targeting / monitoring)
+  scope:
+    applies_to:
+    - org
+    roles:
+    - controller
+    - processor
+    - joint_controller
+  requirement:
+    type: decision_and_documentation
+    must_include:
+    - whether_established_in_eu
+    - whether_processing_in_context_of_eu_establishment (if applicable)
+    - whether_offers_goods_or_services_to_eu_data_subjects (if not established)
+    - whether_monitors_behaviour_in_eu_data_subjects (if not established)
+    - scope_conclusion_and_rationale
+  evidence_hints:
+    required:
+    - territorial_scope_assessment
+    artifacts:
+    - territorial_scope_assessment
+    - customer_geography_breakdown
+    - marketing_website_targeting_evidence
+    questions:
+    - Do you have an EU establishment?
+    - Do you target EU users (language/currency/shipping/support) or monitor behaviour?
+  severity: high
+  sources:
+  - citation: GDPR Art. 3
+  - citation: GDPR Recitals 22–25
+- id: GDPR-ART4-DEFINITIONS-AND-CLASSIFICATION
+  title: Key GDPR definitions are operationalised (data classification and role mapping)
+  scope:
+    applies_to:
+    - org
+    - product
+    roles:
+    - controller
+    - processor
+    - joint_controller
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: personal_data_definition_applied
+      description: Organisation can identify what constitutes personal data in its context.
+    - key: processing_operations_catalogued
+      description: Processing operations are described (collect, store, use, disclose, delete, etc.).
+    - key: role_mapping_exists
+      description: Controller/processor/joint-controller roles are mapped per processing purpose/workflow.
+    - key: recipient_third_party_concepts_used
+      description: Distinguish recipients/third parties and document disclosures.
+    - key: pseudonymisation_anonymisation_terms_used
+      description: Define and consistently apply pseudonymisation vs anonymisation (where claimed).
+  evidence_hints:
+    required:
+    - data_inventory
+    - role_matrix
+    artifacts:
+    - data_inventory
+    - ROPA
+    - role_matrix
+    - data_classification_policy
+    checks:
+    - Is each data field tagged as personal / special category / criminal offence / not personal?
+    - For each workflow, is it clear whether the org is controller or processor?
+  severity: high
+  sources:
+  - citation: GDPR Art. 4
+  - citation: GDPR Recitals 26, 30

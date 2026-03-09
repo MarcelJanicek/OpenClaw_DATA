@@ -15,47 +15,49 @@ Status: in progress
 
 ## Milestones
 
-Rule of thumb: each milestone should fit in **<= 20 minutes** (one cron run).
+Target: finish the remaining GDPR coverage within ~**8 hours** using 20-minute cron slices.
+Rule of thumb: each milestone should fit in **<= 20 minutes** and change only one chapter part file.
 
-A) Core scope + transparency + rights (already done)
-1) Foundations: Art. 1–12 (+ key recitals) + definitions constraints ✅ (completed 2026-03-08)
-2) Notices: Art. 13–14 ✅ (completed 2026-03-09)
-3) Rights: Art. 15–22 (+ Art. 12 timelines/fees) ✅ (completed 2026-03-09)
+### Completed
+1) Ch I–IV: Arts. 1–22 ✅ (completed 2026-03-09)
+   - Includes foundations, transparency (Arts. 12–14), and rights (Arts. 15–22)
 
-B) Controller/processor obligations (split)
-4) Controller responsibility (Art. 24)
-5) Data protection by design/default (Art. 25)
-6) Joint controllers (Art. 26)
-7) EU representative (Art. 27)
-8) Processor clauses (Art. 28)
-9) Processor acting on instructions (Art. 29)
+### Remaining (chapter-by-chapter)
+2) **Chapter V (Arts. 23–31)** — controller/processor obligations
+   2.1) Art. 23 (restrictions) — tag as conditional + evidence needed
+   2.2) Art. 24–25 (controller responsibility; DP by design/default)
+   2.3) Art. 26–27 (joint controllers; EU representative)
+   2.4) Art. 28–29 (processor clauses; acting on instructions)
+   2.5) Art. 30–31 (ROPA; cooperation with SA)
 
-C) Security & breaches (split)
-10) Security of processing (Art. 32)
-11) Breach notification to SA (Art. 33)
-12) Breach communication to data subjects (Art. 34)
+3) **Chapter VI (Arts. 32–34)** — security & breaches
+   3.1) Art. 32 (security of processing)
+   3.2) Art. 33 (breach notification to SA)
+   3.3) Art. 34 (breach communication to data subjects)
 
-D) Accountability docs & org (split)
-13) ROPA (Art. 30)
-14) DPIA (Art. 35)
-15) Prior consultation (Art. 36)
-16) DPO designation (Art. 37)
-17) DPO position/tasks (Arts. 38–39)
+4) **Chapter VII (Arts. 35–43)** — DPIA/DPO/certification
+   4.1) Arts. 35–36 (DPIA; prior consultation)
+   4.2) Arts. 37–39 (DPO designation/position/tasks)
+   4.3) Arts. 40–43 (codes of conduct; certification) — tag + evidence
 
-E) Transfers (split)
-18) Transfers principle (Art. 44)
-19) Adequacy (Art. 45)
-20) Safeguards (Arts. 46–47)
-21) Derogations (Art. 49)
+5) **Chapter VIII (Arts. 44–50)** — transfers
+   5.1) Arts. 44–46 (principle; adequacy; safeguards overview)
+   5.2) Arts. 47–49 (BCR; derogations)
+   5.3) Art. 50 (international cooperation) — tag + evidence
 
-F) Authorities / enforcement / remedies (product-check focus; mostly evidence/tagging)
-22) Supervisory authorities basics (Arts. 51–59)
-23) Cooperation/consistency (Arts. 60–76)
-24) Remedies/liability (Arts. 77–82)
-25) Penalties (Arts. 83–84)
+6) **Chapters IX–X (Arts. 51–76)** — supervisory authorities & consistency
+   6.1) Arts. 51–59 (SA establishment/powers) — tag + evidence
+   6.2) Arts. 60–67 (cooperation/one-stop-shop) — tag + evidence
+   6.3) Arts. 68–76 (EDPB/consistency mechanisms) — tag + evidence
 
-G) Special processing + derogations
-26) Special cases/derogations (Arts. 85–99)
+7) **Chapter XI (Arts. 77–84)** — remedies/liability/penalties
+   7.1) Arts. 77–82 (complaints; judicial remedies; liability) — tag + evidence
+   7.2) Arts. 83–84 (penalties) — tag + evidence
+
+8) **Chapters XII–XV (Arts. 85–99)** — derogations/special cases
+   8.1) Arts. 85–91 (freedom of expression; access to documents; national IDs; employment) — conditional
+   8.2) Arts. 92–96 (delegation; committee procedure; repeals; relationship to earlier directive)
+   8.3) Arts. 97–99 (reports; entry into force; addresses) — tag
 
 ## Changelog
 - 2026-03-09: Milestone 3 complete — expanded rights rules for Arts. 15–22 with Art. 12-aligned intake/timelines/verification/fees; added granular access response requirements (content/copy/rights-of-others), restriction workflow details, Art. 19 recipient notification rule, and Art. 22 safeguards/exception documentation; extended entity_profile with portability/ADM/recipient-sharing flags.

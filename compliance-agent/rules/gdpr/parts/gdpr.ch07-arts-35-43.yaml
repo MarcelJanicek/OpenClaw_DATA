@@ -1,0 +1,58 @@
+meta:
+  ruleset_id: gdpr
+  version: '0.1'
+  status: draft
+  evaluation_profile_schema: rules/gdpr/entity_profile.schema.yaml
+  jurisdiction:
+  - EU
+  source:
+  - name: GDPR (Regulation (EU) 2016/679)
+    url: https://eur-lex.europa.eu/eli/reg/2016/679/oj
+  notes:
+  - This ruleset is designed for SaaS/AI products. Some obligations vary depending on whether you are controller/processor/joint controller.
+rules:
+- id: GDPR-ART35-DPIA
+  title: DPIA performed for high-risk processing (including some AI uses)
+  scope:
+    applies_to:
+    - product
+    roles:
+    - controller
+  requirement:
+    type: process_required
+    must_include:
+    - screening_for_high_risk
+    - DPIA_template
+    - assessment_of_necessity_proportionality
+    - risk_assessment
+    - mitigation_measures
+  evidence_hints:
+    artifacts:
+    - DPIA
+    - risk_register
+    questions:
+    - Do you do large-scale profiling, special category data, systematic monitoring, or new technologies impacting individuals?
+  severity: high
+  sources:
+  - citation: GDPR Art. 35
+- id: GDPR-ART37-DPO
+  title: DPO appointed where required
+  scope:
+    applies_to:
+    - org
+    roles:
+    - controller
+    - processor
+  requirement:
+    type: decision_and_documentation
+    must_include:
+    - assessment_of_DPO_requirement
+    - appointment_details_if_required
+    - public_contact_details
+  evidence_hints:
+    artifacts:
+    - DPO_assessment
+    - privacy_notice
+  severity: medium
+  sources:
+  - citation: GDPR Art. 37

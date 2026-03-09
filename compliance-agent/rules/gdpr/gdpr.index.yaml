@@ -6,10 +6,19 @@ meta:
   - EU
   evaluation_profile_schema: rules/gdpr/entity_profile.schema.yaml
 includes:
-- parts/gdpr.10-foundations-1-14.yaml
-- parts/gdpr.20-rights-15-22.yaml
-- parts/gdpr.30-obligations-24-39.yaml
-- parts/gdpr.40-security-32-34.yaml
-- parts/gdpr.50-transfers-44-49.yaml
-- parts/gdpr.60-enforcement-51-99.yaml
-- parts/gdpr.90-misc-unmapped.yaml
+- parts/gdpr.ch01-arts-01-04.yaml
+- parts/gdpr.ch02-arts-05-11.yaml
+- parts/gdpr.ch03-arts-12-14.yaml
+- parts/gdpr.ch04-arts-15-22.yaml
+- parts/gdpr.ch05-arts-23-31.yaml
+- parts/gdpr.ch06-arts-32-34.yaml
+- parts/gdpr.ch07-arts-35-43.yaml
+- parts/gdpr.ch08-arts-44-50.yaml
+- parts/gdpr.ch09-arts-51-59.yaml
+- parts/gdpr.ch10-arts-60-76.yaml
+- parts/gdpr.ch11-arts-77-84.yaml
+- parts/gdpr.ch12-arts-85-91.yaml
+- parts/gdpr.ch13-arts-92-93.yaml
+- parts/gdpr.ch14-arts-94-96.yaml
+- parts/gdpr.ch15-arts-97-99.yaml
+- parts/gdpr.misc-unmapped.yaml

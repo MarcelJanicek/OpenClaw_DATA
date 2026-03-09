@@ -1,0 +1,81 @@
+meta:
+  ruleset_id: gdpr
+  version: '0.1'
+  status: draft
+  evaluation_profile_schema: rules/gdpr/entity_profile.schema.yaml
+  jurisdiction:
+  - EU
+  source:
+  - name: GDPR (Regulation (EU) 2016/679)
+    url: https://eur-lex.europa.eu/eli/reg/2016/679/oj
+  notes:
+  - This ruleset is designed for SaaS/AI products. Some obligations vary depending on whether you are controller/processor/joint controller.
+rules:
+- id: GDPR-ART32-SECURITY
+  title: Appropriate technical and organisational measures (TOMs) implemented
+  scope:
+    applies_to:
+    - org
+    - product
+    roles:
+    - controller
+    - processor
+  requirement:
+    type: control_set
+    controls:
+    - access_control_and_least_privilege
+    - encryption_in_transit
+    - encryption_at_rest (risk-based)
+    - confidentiality_integrity_availability_resilience
+    - backup_and_recovery
+    - regular_testing_and_assessment
+  evidence_hints:
+    artifacts:
+    - security_policy
+    - risk_assessment
+    - pen_test_reports
+    - access_reviews
+  severity: high
+  sources:
+  - citation: GDPR Art. 32
+- id: GDPR-ART33-BREACH-SUPERVISORY
+  title: Breach notification to supervisory authority within 72 hours (when required)
+  scope:
+    applies_to:
+    - org
+    roles:
+    - controller
+  requirement:
+    type: process_required
+    must_include:
+    - breach_detection_and_triage
+    - 72h_timer
+    - notification_template (nature, categories, approx numbers, contact, consequences, measures)
+    - breach_register
+  evidence_hints:
+    artifacts:
+    - incident_response_plan
+    - breach_register
+    - tabletop_exercises
+  severity: high
+  sources:
+  - citation: GDPR Art. 33
+- id: GDPR-ART34-BREACH-DATA-SUBJECT
+  title: Breach communication to data subjects when high risk
+  scope:
+    applies_to:
+    - org
+    roles:
+    - controller
+  requirement:
+    type: process_required
+    must_include:
+    - high_risk_assessment
+    - communication_template
+    - exceptions_handling (e.g., encryption/mitigation)
+  evidence_hints:
+    artifacts:
+    - incident_response_plan
+  severity: high
+  sources:
+  - citation: GDPR Art. 34
