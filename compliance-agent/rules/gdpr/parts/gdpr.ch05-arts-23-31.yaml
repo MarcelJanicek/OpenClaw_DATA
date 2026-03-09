@@ -301,7 +301,7 @@ rules:
     - contracts
     roles:
     - controller
-    condition: Only if you use processors
+    condition: Only if entity_profile.uses_processors is true
   requirement:
     type: clause_presence
     must_include_clauses:
@@ -325,3 +325,54 @@ rules:
   sources:
   - citation: GDPR Art. 28(3)
   - citation: GDPR Art. 28(4)
+
+- id: GDPR-ART29-PROCESSOR-ON-INSTRUCTIONS
+  title: Persons acting under the authority of a controller/processor process personal data only on instructions (unless required by law)
+  scope:
+    applies_to:
+    - org
+    - system
+    roles:
+    - controller
+    - processor
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: documented_instructions_and_policies
+      description: Documented instructions/policies define who may access/process personal data, for which purposes, and under what conditions (including prohibited uses).
+    - key: role_based_access_and_least_privilege
+      description: Access to personal data is provisioned using least privilege (RBAC/ABAC), with joiner/mover/leaver processes and periodic access reviews.
+    - key: confidentiality_commitments
+      description: Staff/contractors with access to personal data are bound by confidentiality obligations (contractual terms, policies, NDAs) and understand them.
+    - key: training_and_awareness
+      description: Privacy/security training covers instruction-only processing, acceptable use, incident reporting, and sanctions for misuse; completion is tracked.
+    - key: law_required_processing_exception
+      description: Where processing is required by Union/Member State law (instruction exception), the legal basis is identified and documented and processing is limited to what that law requires.
+    - key: monitoring_and_enforcement
+      description: Technical/organisational controls detect and respond to unauthorized processing (e.g., audit logs, monitoring/alerts, investigations, disciplinary process).
+  evidence_hints:
+    required:
+    - access_control_policy_and_rbac_role_definitions
+    - confidentiality_terms_for_staff_and_contractors
+    - privacy_security_training_materials_and_completion_records
+    - joiner_mover_leaver_process_and_periodic_access_review_records (redacted)
+    - audit_logging_or_monitoring_evidence_for_personal_data_access (redacted)
+    artifacts:
+    - access_control_policy_and_rbac_role_definitions
+    - acceptable_use_policy
+    - confidentiality_terms_for_staff_and_contractors
+    - privacy_security_training_materials_and_completion_records
+    - joiner_mover_leaver_process_and_periodic_access_review_records (redacted)
+    - audit_logging_or_monitoring_evidence_for_personal_data_access (redacted)
+    - incident_or_investigation_playbooks_for_access_misuse
+    questions:
+    - How do you ensure employees/contractors only access/process personal data on documented instructions (and not for curiosity/side purposes)?
+    - What access controls and reviews prevent or detect unauthorized processing?
+    - If processing is required by law contrary to typical instructions, where is that legal requirement documented?
+    checks:
+    - Confirm access to personal data is limited to authorized personnel with defined roles and regularly reviewed.
+    - Confirm there are enforceable confidentiality/training requirements and monitoring for misuse.
+  severity: high
+  sources:
+  - citation: GDPR Art. 29
+  - citation: GDPR Recital 81

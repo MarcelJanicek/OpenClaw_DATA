@@ -21,3 +21,7 @@ temporary/
 .DS_Store
 Thumbs.db
 *.swp
+
+# Local ad-hoc assets (not part of repo)
+extracted/
+wedding-assets/
