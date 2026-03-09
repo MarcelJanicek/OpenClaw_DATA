@@ -24,6 +24,8 @@ rules:
     obligations:
     - key: legal_basis_identified
       description: The specific Union/Member State law relied upon is identified, version-controlled, and mapped to the restricted GDPR rights/obligations ("provided for by law").
+    - key: rights_obligations_restricted_catalogued
+      description: For each restriction, the exact GDPR rights/obligations affected (e.g., Arts. 12–22, 34) are enumerated, with an implementation description (what is withheld/redacted/delayed, and in what circumstances).
     - key: art23_purpose_mapped
       description: Each restriction use-case is mapped to one or more permitted Art. 23(1) purposes (e.g., national security; defence; public security; prevention/investigation/detection/prosecution of criminal offences; other important public interest objectives; protection of judicial independence/proceedings; enforcement of civil law claims), and the mapping is documented.
     - key: necessity_proportionality_and_essence_assessed
@@ -44,6 +46,7 @@ rules:
     required:
     - copies_of_applicable_member_state_or_union_law
     - art23_legal_basis_register_or_legal_memo
+    - restriction_rights_mapping_matrix (rights/obligations affected per restriction use-case)
     - legal_review_or_counsel_signoff_for_art23_restrictions
     - necessity_and_proportionality_assessment_for_art23_restrictions
     - restriction_decision_log_or_case_file_examples (redacted)
@@ -52,6 +55,7 @@ rules:
     artifacts:
     - copies_of_applicable_member_state_or_union_law
     - art23_legal_basis_register_or_legal_memo
+    - restriction_rights_mapping_matrix (rights/obligations affected per restriction use-case)
     - legal_review_or_counsel_signoff_for_art23_restrictions
     - necessity_and_proportionality_assessment_for_art23_restrictions
     - restricted_dsar_handling_procedure
