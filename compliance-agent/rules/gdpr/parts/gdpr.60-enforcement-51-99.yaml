@@ -1,0 +1,13 @@
+meta:
+  ruleset_id: gdpr
+  version: '0.1'
+  status: draft
+  evaluation_profile_schema: rules/gdpr/entity_profile.schema.yaml
+  jurisdiction:
+  - EU
+  source:
+  - name: GDPR (Regulation (EU) 2016/679)
+    url: https://eur-lex.europa.eu/eli/reg/2016/679/oj
+  notes:
+  - This ruleset is designed for SaaS/AI products. Some obligations vary depending on whether you are controller/processor/joint controller.
+rules: []

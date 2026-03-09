@@ -12,14 +12,12 @@ Goal: build a **thorough, reviewable** GDPR ruleset for an AI compliance agent.
   - citeable (article/recital)
 
 ## Iteration loop
-1) **Pick a GDPR slice** (e.g., Art. 5–6, Art. 12–14, security, breaches, DPA, international transfers)
-2) I propose rules in `rules/gdpr/gdpr.rules.yaml` with:
-   - stable IDs
-   - acceptance criteria
-   - evidence hints
-   - severity
-3) You review and approve/adjust (we keep diffs small)
-4) We add automated checks where feasible (presence/section checks)
+1) **Pick a GDPR slice** (small milestone)
+2) Add/update rules in the appropriate **part file** under `rules/gdpr/parts/`.
+3) Update `rules/gdpr/gdpr.index.yaml` if a new part file is added.
+4) Run merge script to regenerate the single-file ruleset:
+   - `python3 scripts/gdpr_merge.py`
+5) Commit and push.
 
 ## Definition of “complete”
 A ruleset is "complete" when:

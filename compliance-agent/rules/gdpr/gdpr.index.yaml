@@ -1,0 +1,15 @@
+meta:
+  ruleset_id: gdpr
+  version: '0.1'
+  status: draft
+  jurisdiction:
+  - EU
+  evaluation_profile_schema: rules/gdpr/entity_profile.schema.yaml
+includes:
+- parts/gdpr.10-foundations-1-14.yaml
+- parts/gdpr.20-rights-15-22.yaml
+- parts/gdpr.30-obligations-24-39.yaml
+- parts/gdpr.40-security-32-34.yaml
+- parts/gdpr.50-transfers-44-49.yaml
+- parts/gdpr.60-enforcement-51-99.yaml
+- parts/gdpr.90-misc-unmapped.yaml
