@@ -380,3 +380,48 @@ rules:
   sources:
   - citation: GDPR Art. 29
   - citation: GDPR Recital 81
+
+- id: GDPR-ART31-COOPERATION-WITH-SA
+  title: Controller/processor cooperates with the supervisory authority on request
+  scope:
+    applies_to:
+    - org
+    roles:
+    - controller
+    - processor
+    - joint_controller
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: sa_contact_and_ownership
+      description: A clear internal owner and contact channel exist to receive, triage, and respond to supervisory authority (SA) requests (including deadlines, escalation, and legal review).
+    - key: timely_response_and_information_provision
+      description: Processes and resourcing exist to provide requested information and access in a timely manner and in an accurate, complete, and consistent way (including compiling evidence from systems/vendors as needed).
+    - key: cooperation_in_investigations_and_audits
+      description: Procedures support cooperation with SA investigations (e.g., handling interviews, on-site/remote audits, technical demonstrations, and secure data room access) while protecting unrelated confidentiality.
+    - key: recordkeeping_of_sa_interactions
+      description: SA communications and responses are logged (case file) including what was requested, what was provided, and decisions/rationale (with privileged/legal material tracked appropriately).
+    - key: lessons_learned_and_remediation
+      description: Outcomes from SA interactions (findings, guidance, corrective measures) are tracked to remediation and control improvements.
+  evidence_hints:
+    required:
+    - procedure_for_handling_supervisory_authority_requests
+    - designated_sa_contact_role_or_responsibility_matrix
+    - log_or_ticket_history_of_sa_requests_and_responses (redacted)
+    - evidence_pack_index_for_regulator_requests (e.g., dsar_security_ropa_vendor)
+    artifacts:
+    - procedure_for_handling_supervisory_authority_requests
+    - designated_sa_contact_role_or_responsibility_matrix
+    - log_or_ticket_history_of_sa_requests_and_responses (redacted)
+    - secure_data_room_or_evidence_repository_structure
+    - remediation_tracker_for_regulatory_findings (redacted)
+    questions:
+    - If a supervisory authority contacted you tomorrow, who receives it and how do you coordinate a response across legal, security, and engineering?
+    - How do you ensure completeness and timeliness of responses (including collecting evidence from processors/sub-processors)?
+    - How do you track outcomes and ensure corrective actions are implemented?
+    checks:
+    - Confirm there is an operational playbook (not ad-hoc email) and evidence of prior or dry-run execution.
+  severity: high
+  sources:
+  - citation: GDPR Art. 31
+  - citation: GDPR Recital 82
