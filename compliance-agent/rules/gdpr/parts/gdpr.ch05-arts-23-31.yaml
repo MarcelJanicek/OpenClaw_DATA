@@ -25,7 +25,7 @@ rules:
     - key: legal_basis_identified
       description: The specific Union/Member State law relied upon is identified, version-controlled, and mapped to the restricted GDPR rights/obligations ("provided for by law").
     - key: art23_purpose_mapped
-      description: Each restriction use-case is mapped to one or more permitted Art. 23(1) purposes, and the mapping is documented.
+      description: Each restriction use-case is mapped to one or more permitted Art. 23(1) purposes (e.g., national security; defence; public security; prevention/investigation/detection/prosecution of criminal offences; other important public interest objectives; protection of judicial independence/proceedings; enforcement of civil law claims), and the mapping is documented.
     - key: necessity_proportionality_and_essence_assessed
       description: Necessity and proportionality of the restriction are assessed and documented, and the restriction is designed to respect the essence of fundamental rights and freedoms.
     - key: scope_and_duration_defined
@@ -33,7 +33,7 @@ rules:
     - key: safeguards_documented
       description: Safeguards and governance are documented (including access controls, audit logging, authorized personnel, and review/oversight) to prevent abuse.
     - key: art23_2_elements_addressed
-      description: Where applicable, the restriction framework addresses the elements listed in Art. 23(2) (e.g., purposes, categories of data, scope, safeguards, storage periods, risks, right to be informed).
+      description: "Where applicable, the restriction framework addresses the elements listed in Art. 23(2) (in particular: purposes of processing/categories of processing; categories of personal data; scope of restrictions; safeguards to prevent abuse or unlawful access/transfer; controller categories; storage periods; risks to rights/freedoms; and whether/how data subjects are informed)."
     - key: dsar_process_integration
       description: DSAR/rights-handling procedures and tooling implement the restriction controls (including criteria, approvals, and redaction/withholding steps) consistently.
     - key: data_subject_informed_or_documented_exception
