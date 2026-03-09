@@ -24,14 +24,18 @@ rules:
     obligations:
     - key: legal_basis_identified
       description: The specific Union/Member State law relied upon is identified, version-controlled, and mapped to the restricted GDPR rights/obligations ("provided for by law").
-    - key: necessity_proportionality_assessed
-      description: Necessity and proportionality of the restriction are assessed and documented for the relevant purpose(s) in Art. 23(1).
+    - key: art23_purpose_mapped
+      description: Each restriction use-case is mapped to one or more permitted Art. 23(1) purposes, and the mapping is documented.
+    - key: necessity_proportionality_and_essence_assessed
+      description: Necessity and proportionality of the restriction are assessed and documented, and the restriction is designed to respect the essence of fundamental rights and freedoms.
     - key: scope_and_duration_defined
       description: Scope of the restriction (data, rights/obligations, affected data subjects, and duration) is defined and implemented to be no broader than necessary.
     - key: safeguards_documented
       description: Safeguards and governance are documented (including access controls, audit logging, authorized personnel, and review/oversight) to prevent abuse.
-    - key: elements_in_law_or_documented
+    - key: art23_2_elements_addressed
       description: Where applicable, the restriction framework addresses the elements listed in Art. 23(2) (e.g., purposes, categories of data, scope, safeguards, storage periods, risks, right to be informed).
+    - key: dsar_process_integration
+      description: DSAR/rights-handling procedures and tooling implement the restriction controls (including criteria, approvals, and redaction/withholding steps) consistently.
     - key: data_subject_informed_or_documented_exception
       description: Where the underlying law requires it and it is not prejudicial to the restriction purpose, data subjects are informed about the restriction; if not informing (or delaying informing), the rationale and legal basis are documented.
     - key: review_and_recordkeeping
