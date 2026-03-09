@@ -11,6 +11,45 @@ meta:
   notes:
   - This ruleset is designed for SaaS/AI products. Some obligations vary depending on whether you are controller/processor/joint controller.
 rules:
+- id: GDPR-ART23-RESTRICTIONS
+  title: Restrictions of data subject rights/obligations are only applied where a valid Art. 23 legal basis exists and safeguards are documented
+  scope:
+    applies_to:
+    - org
+    roles:
+    - controller
+    condition: Only if you rely on Union or Member State law to restrict GDPR obligations/rights under Art. 23
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: legal_basis_identified
+      description: The specific Union/Member State law relied upon is identified, version-controlled, and mapped to the restricted GDPR rights/obligations.
+    - key: necessity_proportionality_assessed
+      description: Necessity and proportionality of the restriction are assessed and documented for the relevant purpose(s) in Art. 23(1).
+    - key: scope_and_duration_defined
+      description: Scope of the restriction (data, rights/obligations, affected data subjects, and duration) is defined and implemented to be no broader than necessary.
+    - key: safeguards_documented
+      description: Safeguards and governance are documented (including access controls, audit logging, authorized personnel, and review/oversight) to prevent abuse.
+    - key: elements_in_law_or_documented
+      description: Where applicable, the restriction framework addresses the elements listed in Art. 23(2) (e.g., purposes, categories of data, scope, safeguards, storage periods, risks, right to be informed).
+    - key: review_and_recordkeeping
+      description: Decisions to apply a restriction are logged; restrictions are periodically reviewed and lifted when no longer necessary.
+  evidence_hints:
+    required:
+    - art23_legal_basis_register_or_legal_memo
+    - restriction_decision_log_or_case_file_examples (redacted)
+    artifacts:
+    - art23_legal_basis_register_or_legal_memo
+    - copies_of_applicable_member_state_or_union_law
+    - restricted_dsar_handling_procedure
+    - restriction_decision_log_or_case_file_examples (redacted)
+    questions:
+    - What exact statute(s) are you relying on, and which GDPR rights/obligations are restricted as a result?
+    - How do you ensure restrictions are targeted, time-bound, and reviewed?
+  severity: high
+  sources:
+  - citation: GDPR Art. 23
+  - citation: GDPR Recital 73
 - id: GDPR-ART30-ROPA
   title: Records of processing activities (ROPA) maintained (where required)
   scope:
@@ -29,6 +68,16 @@ rules:
     - transfers
     - retention
     - security_measures
+  evidence_hints:
+    required:
+    - ROPA
+    - ropa_maintenance_owner_and_update_process
+    artifacts:
+    - ROPA
+    - ropa_maintenance_owner_and_update_process
+    - sample_ropa_entries (redacted)
+    checks:
+    - Confirm ROPA includes all fields required by Art. 30(1) (controllers) and/or Art. 30(2) (processors), as applicable.
   severity: high
   sources:
   - citation: GDPR Art. 30
@@ -52,9 +101,14 @@ rules:
     - deletion_or_return_end_of_services
     - audits_and_information
   evidence_hints:
+    required:
+    - DPA_template
+    - vendor_contracts_or_processor_register
     artifacts:
     - DPA_template
     - vendor_contracts
+    - processor_register
   severity: high
   sources:
-  - citation: GDPR Art. 28
+  - citation: GDPR Art. 28(3)
+  - citation: GDPR Art. 28(4)
