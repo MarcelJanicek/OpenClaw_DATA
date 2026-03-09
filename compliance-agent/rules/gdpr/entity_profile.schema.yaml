@@ -38,9 +38,12 @@ profile:
   # Identification context (Art. 11)
   can_identify_data_subjects: true
 
-  # Lawful basis flags (used for conditional rules)
+  # Lawful basis / legal mechanism flags (used for conditional rules)
   relies_on_consent: false
   relies_on_contract: false
+
+  # Art. 23 (restrictions) — true if you rely on Union/Member State law to restrict GDPR obligations/rights.
+  relies_on_art23_restrictions: false
 
   # Used for Art. 20 portability conditions (Art. 20(1))
   processing_carried_out_by_automated_means: true

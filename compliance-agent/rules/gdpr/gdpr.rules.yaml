@@ -968,7 +968,7 @@ rules:
     - org
     roles:
     - controller
-    condition: Only if you rely on Union or Member State law to restrict GDPR obligations/rights under Art. 23
+    condition: Only if entity_profile.relies_on_art23_restrictions is true (i.e., you rely on Union/Member State law to restrict GDPR obligations/rights under Art. 23)
   requirement:
     type: multi_obligation
     obligations:
@@ -982,6 +982,8 @@ rules:
       description: Safeguards and governance are documented (including access controls, audit logging, authorized personnel, and review/oversight) to prevent abuse.
     - key: elements_in_law_or_documented
       description: Where applicable, the restriction framework addresses the elements listed in Art. 23(2) (e.g., purposes, categories of data, scope, safeguards, storage periods, risks, right to be informed).
+    - key: data_subject_informed_or_documented_exception
+      description: Where the underlying law requires it and it is not prejudicial to the restriction purpose, data subjects are informed about the restriction; if not informing (or delaying informing), the rationale and legal basis are documented.
     - key: review_and_recordkeeping
       description: Decisions to apply a restriction are logged; restrictions are periodically reviewed and lifted when no longer necessary.
   evidence_hints:
@@ -990,6 +992,7 @@ rules:
     - art23_legal_basis_register_or_legal_memo
     - necessity_and_proportionality_assessment_for_art23_restrictions
     - restriction_decision_log_or_case_file_examples (redacted)
+    - data_subject_notification_template_or_documented_reason_for_not_informing
     - restriction_review_schedule_and_lift_criteria
     artifacts:
     - copies_of_applicable_member_state_or_union_law
@@ -998,6 +1001,7 @@ rules:
     - restricted_dsar_handling_procedure
     - access_control_and_audit_logging_evidence_for_restriction_handling
     - restriction_decision_log_or_case_file_examples (redacted)
+    - data_subject_notification_template_or_documented_reason_for_not_informing
     - restriction_review_schedule_and_lift_criteria
     questions:
     - What exact statute(s) are you relying on, and which GDPR rights/obligations are restricted as a result?
