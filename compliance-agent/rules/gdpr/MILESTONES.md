@@ -14,16 +14,48 @@ Status: in progress
   - sources (article/recital citations)
 
 ## Milestones
+
+Rule of thumb: each milestone should fit in **<= 20 minutes** (one cron run).
+
+A) Core scope + transparency + rights (already done)
 1) Foundations: Art. 1–12 (+ key recitals) + definitions constraints ✅ (completed 2026-03-08)
 2) Notices: Art. 13–14 ✅ (completed 2026-03-09)
 3) Rights: Art. 15–22 (+ Art. 12 timelines/fees) ✅ (completed 2026-03-09)
-4) Governance roles: Art. 24–29, 26–28
-5) Security & breaches: Art. 32–34
-6) Accountability docs: Art. 30, 35–39
-7) Transfers: Art. 44–49
-8) Supervisory authorities & cooperation: Art. 51–76 (encode what the product can check)
-9) Remedies & liability & penalties: Art. 77–84 (encode obligations/expectations)
-10) Sector-specific/derogations: Art. 85–99 (tag as conditional/needs legal input)
+
+B) Controller/processor obligations (split)
+4) Controller responsibility (Art. 24)
+5) Data protection by design/default (Art. 25)
+6) Joint controllers (Art. 26)
+7) EU representative (Art. 27)
+8) Processor clauses (Art. 28)
+9) Processor acting on instructions (Art. 29)
+
+C) Security & breaches (split)
+10) Security of processing (Art. 32)
+11) Breach notification to SA (Art. 33)
+12) Breach communication to data subjects (Art. 34)
+
+D) Accountability docs & org (split)
+13) ROPA (Art. 30)
+14) DPIA (Art. 35)
+15) Prior consultation (Art. 36)
+16) DPO designation (Art. 37)
+17) DPO position/tasks (Arts. 38–39)
+
+E) Transfers (split)
+18) Transfers principle (Art. 44)
+19) Adequacy (Art. 45)
+20) Safeguards (Arts. 46–47)
+21) Derogations (Art. 49)
+
+F) Authorities / enforcement / remedies (product-check focus; mostly evidence/tagging)
+22) Supervisory authorities basics (Arts. 51–59)
+23) Cooperation/consistency (Arts. 60–76)
+24) Remedies/liability (Arts. 77–82)
+25) Penalties (Arts. 83–84)
+
+G) Special processing + derogations
+26) Special cases/derogations (Arts. 85–99)
 
 ## Changelog
 - 2026-03-09: Milestone 3 complete — expanded rights rules for Arts. 15–22 with Art. 12-aligned intake/timelines/verification/fees; added granular access response requirements (content/copy/rights-of-others), restriction workflow details, Art. 19 recipient notification rule, and Art. 22 safeguards/exception documentation; extended entity_profile with portability/ADM/recipient-sharing flags.
