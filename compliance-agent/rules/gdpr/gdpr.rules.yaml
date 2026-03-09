@@ -990,6 +990,8 @@ rules:
       description: 'Where applicable, the restriction framework addresses the elements listed in Art. 23(2) (in particular: purposes of processing/categories of processing; categories of personal data; scope of restrictions; safeguards to prevent abuse or unlawful access/transfer; controller categories; storage periods; risks to rights/freedoms; and whether/how data subjects are informed).'
     - key: dsar_process_integration
       description: DSAR/rights-handling procedures and tooling implement the restriction controls (including criteria, approvals, and redaction/withholding steps) consistently.
+    - key: dsar_response_templates
+      description: Where informing is permitted and not prejudicial, DSAR/right-response templates include a clear explanation that a restriction has been applied, the relevant legal basis, and what (if anything) the data subject can do next (e.g., complain to the supervisory authority), consistent with Art. 23 and applicable Member State/Union law.
     - key: data_subject_informed_or_documented_exception
       description: Where the underlying law requires it and it is not prejudicial to the restriction purpose, data subjects are informed about the restriction; if not informing (or delaying informing), the rationale and legal basis are documented.
     - key: review_and_recordkeeping
@@ -1003,6 +1005,7 @@ rules:
     - necessity_and_proportionality_assessment_for_art23_restrictions
     - art23_restriction_policy_and_approval_workflow
     - restriction_decision_log_or_case_file_examples (redacted)
+    - restricted_dsar_response_template_or_playbook
     - data_subject_notification_template_or_documented_reason_for_not_informing
     - restriction_review_schedule_and_lift_criteria
     artifacts:
@@ -1013,6 +1016,7 @@ rules:
     - necessity_and_proportionality_assessment_for_art23_restrictions
     - art23_restriction_policy_and_approval_workflow
     - restricted_dsar_handling_procedure
+    - restricted_dsar_response_template_or_playbook
     - access_control_and_audit_logging_evidence_for_restriction_handling
     - restriction_decision_log_or_case_file_examples (redacted)
     - data_subject_notification_template_or_documented_reason_for_not_informing
@@ -1023,6 +1027,7 @@ rules:
     - How do you ensure restrictions are targeted, time-bound, access-controlled, logged, and periodically reviewed/lifted?
     checks:
     - Confirm the restriction framework covers the elements in Art. 23(2) as applicable (purposes, categories of data, scope, safeguards, storage periods, risks, and right to be informed).
+    - Confirm DSAR response templates/playbooks reflect when and how a restriction may be disclosed to the data subject (or why it is withheld/delayed).
   severity: high
   sources:
   - citation: GDPR Art. 23(1)
