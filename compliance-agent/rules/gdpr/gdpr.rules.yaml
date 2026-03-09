@@ -1426,32 +1426,70 @@ rules:
   - citation: GDPR Art. 31
   - citation: GDPR Recital 82
 - id: GDPR-ART32-SECURITY
-  title: Appropriate technical and organisational measures (TOMs) implemented
+  title: Appropriate technical and organisational measures (TOMs) are implemented and kept effective (risk-based)
   scope:
     applies_to:
     - org
     - product
+    - system
+    - processing_activity
     roles:
     - controller
     - processor
   requirement:
-    type: control_set
-    controls:
-    - access_control_and_least_privilege
-    - encryption_in_transit
-    - encryption_at_rest (risk-based)
-    - confidentiality_integrity_availability_resilience
-    - backup_and_recovery
-    - regular_testing_and_assessment
+    type: multi_obligation
+    obligations:
+    - key: risk_based_security_program
+      description: Security measures are selected and maintained based on the risks to the rights and freedoms of natural persons, taking into account the state of the art, implementation costs, and the nature/scope/context/purposes of processing.
+    - key: confidentiality_integrity_availability_resilience
+      description: Measures exist to ensure ongoing confidentiality, integrity, availability, and resilience of processing systems and services (including hardening, secure configuration, and change control).
+    - key: access_control_and_least_privilege
+      description: Access to personal data and production systems is restricted to authorized personnel using least privilege (RBAC/ABAC), with joiner/mover/leaver controls, MFA where appropriate, and periodic access reviews.
+    - key: encryption_and_pseudonymisation_where_appropriate
+      description: Encryption and/or pseudonymisation are implemented where appropriate to the risks (e.g., TLS in transit; encryption at rest for sensitive/high-risk datasets; tokenisation/pseudonymisation for analytics).
+    - key: restore_availability_and_access
+      description: The organisation can restore availability and access to personal data in a timely manner after an incident (e.g., backups, tested restore procedures, disaster recovery/business continuity plans).
+    - key: regular_testing_assessment_evaluation
+      description: There is an ongoing process for regularly testing, assessing, and evaluating the effectiveness of TOMs (e.g., vulnerability management, security testing, audits, penetration tests, control monitoring), and findings are tracked to remediation.
+    - key: processor_controller_alignment
+      description: Where acting as a processor, security obligations and TOMs are aligned with controller instructions and contractual requirements (e.g., DPA security annex), and evidence can be provided to controllers.
   evidence_hints:
+    required:
+    - information_security_policy_and_standards (including access control, cryptography, vulnerability management)
+    - risk_assessment_or_threat_model_covering_personal_data_processing
+    - technical_and_organisational_measures_register_or_security_control_matrix
+    - access_control_design_and_mfa_configuration_evidence
+    - periodic_access_review_records (redacted)
+    - encryption_configuration_evidence (e.g., TLS settings, KMS usage, database/storage encryption)
+    - backup_and_restore_procedures_and_restore_test_results (redacted)
+    - vulnerability_management_and_patch_process_evidence (e.g., scans, SLAs, tickets) (redacted)
+    - security_testing_reports (e.g., pen tests, audits) and remediation tracker (redacted)
     artifacts:
-    - security_policy
-    - risk_assessment
-    - pen_test_reports
-    - access_reviews
+    - information_security_policy_and_standards (including access control, cryptography, vulnerability management)
+    - risk_assessment_or_threat_model_covering_personal_data_processing
+    - technical_and_organisational_measures_register_or_security_control_matrix
+    - access_control_design_and_mfa_configuration_evidence
+    - periodic_access_review_records (redacted)
+    - encryption_configuration_evidence (e.g., TLS settings, KMS usage, database/storage encryption)
+    - backup_and_restore_procedures_and_restore_test_results (redacted)
+    - business_continuity_or_disaster_recovery_plan (as applicable)
+    - vulnerability_management_and_patch_process_evidence (e.g., scans, SLAs, tickets) (redacted)
+    - security_testing_reports (e.g., pen tests, audits) and remediation tracker (redacted)
+    questions:
+    - How did you determine which TOMs are “appropriate” for your processing and risk profile (state of the art, costs, and risks)?
+    - What controls exist for access restriction and authentication to personal data systems (RBAC/MFA/access reviews)?
+    - How do you ensure you can restore availability/access after incidents, and how often do you test restores?
+    - What is your cadence for testing/evaluating controls (vuln scanning, pen tests, audits), and how are findings remediated?
+    checks:
+    - Confirm the organisation has a documented, risk-based TOMs baseline and can map key controls to the risks of its processing.
+    - Confirm regular testing/assessment is evidenced and remediation is tracked to closure.
   severity: high
   sources:
-  - citation: GDPR Art. 32
+  - citation: GDPR Art. 32(1)
+  - citation: GDPR Art. 32(2)
+  - citation: GDPR Art. 32(3)
+  - citation: GDPR Recital 83
+  - citation: GDPR Recital 84
 - id: GDPR-ART33-BREACH-SUPERVISORY
   title: Breach notification to supervisory authority within 72 hours (when required)
   scope:
@@ -1467,13 +1505,32 @@ rules:
     - notification_template (nature, categories, approx numbers, contact, consequences, measures)
     - breach_register
   evidence_hints:
+    required:
+    - incident_response_plan_or_breach_response_playbook
+    - breach_register (incl. timestamps: awareness/containment/assessment/notification)
+    - supervisory_authority_notification_template (Art33(3) fields)
+    - evidence_of_72h_notification_timer_and_escalation (e.g., ticket workflow/SLAs) (redacted)
+    - tabletop_or_simulation_exercise_results_for_breach_notification (redacted)
     artifacts:
-    - incident_response_plan
-    - breach_register
-    - tabletop_exercises
+    - incident_response_plan_or_breach_response_playbook
+    - breach_register (incl. timestamps: awareness/containment/assessment/notification)
+    - supervisory_authority_notification_template (Art33(3) fields)
+    - evidence_of_72h_notification_timer_and_escalation (e.g., ticket workflow/SLAs) (redacted)
+    - tabletop_or_simulation_exercise_results_for_breach_notification (redacted)
+    questions:
+    - How do you determine when a personal data breach is “unlikely to result in a risk” (and thus not notified) and how is that decision documented?
+    - How do you ensure you can notify the supervisory authority within 72 hours of becoming aware?
+    - What information do you include in the notification and how do you update it if not all details are known initially?
+    checks:
+    - Confirm there is a breach register and evidence of decisions/timelines (including cases where notification was not made).
+    - Confirm the notification template covers Art. 33(3)(a)–(d) items.
   severity: high
   sources:
-  - citation: GDPR Art. 33
+  - citation: GDPR Art. 33(1)
+  - citation: GDPR Art. 33(3)
+  - citation: GDPR Art. 33(5)
+  - citation: GDPR Recital 85
+  - citation: GDPR Recital 87
 - id: GDPR-ART34-BREACH-DATA-SUBJECT
   title: Breach communication to data subjects when high risk
   scope:
@@ -1488,11 +1545,32 @@ rules:
     - communication_template
     - exceptions_handling (e.g., encryption/mitigation)
   evidence_hints:
+    required:
+    - incident_response_plan_or_breach_response_playbook
+    - high_risk_assessment_methodology_and_decision_records (redacted)
+    - data_subject_breach_communication_template (plain language; includes required items)
+    - evidence_of_exceptions_analysis (e.g., encryption/mitigation/public_communication) (redacted)
+    - sample_breach_communications_or_dry_run_outputs (redacted)
     artifacts:
-    - incident_response_plan
+    - incident_response_plan_or_breach_response_playbook
+    - high_risk_assessment_methodology_and_decision_records (redacted)
+    - data_subject_breach_communication_template (plain language; includes required items)
+    - evidence_of_exceptions_analysis (e.g., encryption/mitigation/public_communication) (redacted)
+    - sample_breach_communications_or_dry_run_outputs (redacted)
+    questions:
+    - How do you assess whether a breach is likely to result in a “high risk” to individuals, and who signs off?
+    - How do you draft and deliver communications without undue delay (channels, localization, customer coordination)?
+    - When do you rely on Art. 34(3) exceptions and how is that documented?
+    checks:
+    - Confirm the communication template includes Art. 34(2)(a)–(c) items and is understandable.
+    - Confirm exceptions (Art. 34(3)) are documented where communications are not sent.
   severity: high
   sources:
-  - citation: GDPR Art. 34
+  - citation: GDPR Art. 34(1)
+  - citation: GDPR Art. 34(2)
+  - citation: GDPR Art. 34(3)
+  - citation: GDPR Recital 86
+  - citation: GDPR Recital 88
 - id: GDPR-ART35-DPIA
   title: DPIA performed for high-risk processing (including some AI uses)
   scope:
