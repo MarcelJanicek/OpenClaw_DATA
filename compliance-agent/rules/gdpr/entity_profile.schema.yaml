@@ -45,6 +45,17 @@ profile:
   # Art. 23 (restrictions) — true if you rely on Union/Member State law to restrict GDPR obligations/rights.
   relies_on_art23_restrictions: false
 
+  # Art. 26 — true if (for the assessed processing activity) you jointly determine purposes/means with another controller.
+  has_joint_controller_arrangements: false
+
+  # Art. 27 — whether an Art. 27(2) exception is assessed to apply (e.g., processing is occasional, low risk, and not large scale special categories/criminal data).
+  # If true, keep documentation of the exception assessment.
+  eu_representative_exception_applies: false
+
+  # Used to assess Art. 27(2) exception (non-exhaustive signals)
+  processing_is_occasional: false
+  is_unlikely_to_result_in_risk_to_rights_and_freedoms: false
+
   # Used for Art. 20 portability conditions (Art. 20(1))
   processing_carried_out_by_automated_means: true
 

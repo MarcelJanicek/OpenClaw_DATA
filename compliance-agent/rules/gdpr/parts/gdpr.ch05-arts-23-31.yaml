@@ -167,6 +167,102 @@ rules:
   - citation: GDPR Art. 25(3)
   - citation: GDPR Recital 78
 
+- id: GDPR-ART26-JOINT-CONTROLLERS
+  title: Joint controllers determine and document respective responsibilities and make the essence of the arrangement available to data subjects
+  scope:
+    applies_to:
+    - org
+    - processing_activity
+    roles:
+    - joint_controller
+    - controller
+    condition: Only if entity_profile.has_joint_controller_arrangements is true (i.e., you jointly determine purposes/means with another controller for the processing activity)
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: arrangement_in_place
+      description: A joint controller arrangement exists in writing (or other documented form) that transparently sets out respective responsibilities for GDPR compliance, in particular for exercising data subject rights and providing required information.
+    - key: contact_point_defined
+      description: The arrangement designates (where appropriate) a single contact point for data subjects, without prejudice to data subjects' ability to exercise their rights against each controller.
+    - key: substance_made_available
+      description: The essence of the joint controller arrangement is made available to data subjects (e.g., via privacy notice), including how responsibilities are allocated.
+    - key: dsr_operationalized
+      description: Operational processes (tickets/workflows, escalation paths, SLAs) implement the agreed split of responsibilities for DSAR handling (intake, identity verification, response compilation, deadlines, and coordination between controllers).
+    - key: accountability_evidence
+      description: Evidence is maintained that the arrangement is implemented in practice (not only contractual) (e.g., logs of cross-controller coordination on DSARs/incidents, ownership of notice updates).
+  evidence_hints:
+    required:
+    - joint_controller_arrangement_or_contract_addendum
+    - documentation_of_responsibility_split_for_notices_and_dsar_handling
+    - privacy_notice_excerpt_describing_joint_controller_essence_and_contact_point
+    - sample_dsar_or_rights_cases_involving_joint_controllers (redacted)
+    artifacts:
+    - joint_controller_arrangement_or_contract_addendum
+    - documentation_of_responsibility_split_for_notices_and_dsar_handling
+    - privacy_notice_excerpt_describing_joint_controller_essence_and_contact_point
+    - dsar_workflow_or_sla_showing_cross_controller_coordination
+    - sample_dsar_or_rights_cases_involving_joint_controllers (redacted)
+    questions:
+    - For which processing activities are you a joint controller, and with whom?
+    - How are responsibilities split for notices and data subject rights (who does what, by when)?
+    - Where can a data subject see the essence of the arrangement, and who is the contact point?
+    checks:
+    - Confirm the arrangement covers responsibilities for providing information under Arts. 13/14 and for handling data subject rights requests.
+    - Confirm that data subjects can still exercise rights against each controller (the arrangement cannot remove this).
+  severity: high
+  sources:
+  - citation: GDPR Art. 26(1)
+  - citation: GDPR Art. 26(2)
+  - citation: GDPR Art. 26(3)
+  - citation: GDPR Recital 79
+
+- id: GDPR-ART27-EU-REPRESENTATIVE
+  title: Non-EU controller/processor subject to GDPR (Art. 3(2)) designates an EU representative unless an exception applies
+  scope:
+    applies_to:
+    - org
+    roles:
+    - controller
+    - processor
+    condition: Only if entity_profile.established_in_eu is false AND (entity_profile.offers_goods_or_services_to_eu_data_subjects is true OR entity_profile.monitors_behaviour_in_eu_data_subjects is true) AND entity_profile.eu_representative_exception_applies is false
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: representative_designated
+      description: An EU representative is designated in writing in one of the Member States where the data subjects whose personal data are processed are located.
+    - key: mandate_and_availability
+      description: The representative is mandated to be addressed (in addition to or instead of the controller/processor) by supervisory authorities and data subjects on all issues related to processing, and processes exist to ensure the representative can relay requests and support responses.
+    - key: contact_details_published
+      description: The representative's contact details are included in privacy notices and made easily accessible to data subjects.
+    - key: integration_with_sa_and_dsar_processes
+      description: Incident/DSAR workflows include steps to coordinate with the representative (routing, timelines, escalation, recordkeeping).
+    - key: documentation_of_exception_if_any
+      description: If the organization claims an exception (Art. 27(2)), the exception criteria are assessed and documented and periodically reviewed.
+  evidence_hints:
+    required:
+    - eu_representative_designation_agreement_or_mandate
+    - eu_representative_contact_details_in_privacy_notice
+    - documented_workflow_for_handling_dsar_and_sa_requests_via_representative
+    - assessment_of_art27_exception_criteria_if_relied_on
+    artifacts:
+    - eu_representative_designation_agreement_or_mandate
+    - eu_representative_contact_details_in_privacy_notice
+    - documented_workflow_for_handling_dsar_and_sa_requests_via_representative
+    - assessment_of_art27_exception_criteria_if_relied_on
+    questions:
+    - Are you established outside the EU but offering goods/services to, or monitoring, people in the EU?
+    - Which Member State is your representative located in, and how are requests routed between you and the representative?
+    - If you do not have a representative, which Art. 27(2) exception do you rely on and what evidence supports it?
+    checks:
+    - Confirm the designation is in writing and the representative is located in an EU Member State where affected data subjects are located.
+  severity: high
+  sources:
+  - citation: GDPR Art. 27(1)
+  - citation: GDPR Art. 27(2)
+  - citation: GDPR Art. 27(3)
+  - citation: GDPR Art. 27(4)
+  - citation: GDPR Recital 80
+
 - id: GDPR-ART30-ROPA
   title: Records of processing activities (ROPA) maintained (where required)
   scope:
