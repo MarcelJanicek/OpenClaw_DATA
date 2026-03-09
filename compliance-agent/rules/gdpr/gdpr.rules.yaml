@@ -986,19 +986,29 @@ rules:
       description: Decisions to apply a restriction are logged; restrictions are periodically reviewed and lifted when no longer necessary.
   evidence_hints:
     required:
-    - art23_legal_basis_register_or_legal_memo
-    - restriction_decision_log_or_case_file_examples (redacted)
-    artifacts:
-    - art23_legal_basis_register_or_legal_memo
     - copies_of_applicable_member_state_or_union_law
-    - restricted_dsar_handling_procedure
+    - art23_legal_basis_register_or_legal_memo
+    - necessity_and_proportionality_assessment_for_art23_restrictions
     - restriction_decision_log_or_case_file_examples (redacted)
+    - restriction_review_schedule_and_lift_criteria
+    artifacts:
+    - copies_of_applicable_member_state_or_union_law
+    - art23_legal_basis_register_or_legal_memo
+    - necessity_and_proportionality_assessment_for_art23_restrictions
+    - restricted_dsar_handling_procedure
+    - access_control_and_audit_logging_evidence_for_restriction_handling
+    - restriction_decision_log_or_case_file_examples (redacted)
+    - restriction_review_schedule_and_lift_criteria
     questions:
     - What exact statute(s) are you relying on, and which GDPR rights/obligations are restricted as a result?
-    - How do you ensure restrictions are targeted, time-bound, and reviewed?
+    - Which Art. 23(1) purpose(s) apply, and how is necessity/proportionality demonstrated?
+    - How do you ensure restrictions are targeted, time-bound, access-controlled, logged, and periodically reviewed/lifted?
+    checks:
+    - Confirm the restriction framework covers the elements in Art. 23(2) as applicable (purposes, categories of data, scope, safeguards, storage periods, risks, and right to be informed).
   severity: high
   sources:
-  - citation: GDPR Art. 23
+  - citation: GDPR Art. 23(1)
+  - citation: GDPR Art. 23(2)
   - citation: GDPR Recital 73
 - id: GDPR-ART30-ROPA
   title: Records of processing activities (ROPA) maintained (where required)
