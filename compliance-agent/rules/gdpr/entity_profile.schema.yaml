@@ -40,6 +40,17 @@ profile:
 
   # Lawful basis flags (used for conditional rules)
   relies_on_consent: false
+  relies_on_contract: false
+
+  # Used for Art. 20 portability conditions (Art. 20(1))
+  processing_carried_out_by_automated_means: true
+
+  # Rights/recipients context (Art. 19)
+  shares_personal_data_with_recipients: false
+
+  # Art. 22 specific trigger (solely automated decisions with legal/similarly significant effects)
+  # Prefer this over the older `uses_automated_decision_making_with_significant_effect` flag.
+  uses_solely_automated_decision_making_with_significant_effect: false
 
   # ------------------------------------------------------------
   # Collection sources (Arts. 13–14)

@@ -580,117 +580,321 @@ rules:
   # ------------------------------------------------------------
   # Data subject rights: Art. 15–22
   # ------------------------------------------------------------
-  - id: "GDPR-ART15-ACCESS"
-    title: "Right of access process exists and can be fulfilled"
+  - id: "GDPR-ART15-ACCESS-INTAKE"
+    title: "Right of access (Art. 15) intake, identity verification, and timelines are operational"
     scope:
       applies_to: ["org", "product"]
       roles: ["controller"]
     requirement:
       type: "process_required"
       must_include:
-        - "identity_verification"
-        - "ability_to_provide_copy_of_data"
-        - "ability_to_provide_processing_info"
-        - "one_month_deadline_tracking"
+        - "intake_channels_and_authentication_or_identity_verification_steps"
+        - "reasonable_identity_verification (risk-based; no excessive data collection)"
+        - "one_month_deadline_tracking_and_extension_notice (up to 2 months with reasons)"
+        - "policy_for_refusal_or_fee_only_for_manifestly_unfounded_or_excessive_requests"
+        - "communication_templates_in_clear_language"
     evidence_hints:
-      artifacts: ["DSAR_procedure", "ticketing_workflow"]
+      required:
+        - "DSAR_procedure"
+        - "request_intake_and_tracking_workflow"
+      artifacts:
+        - "DSAR_procedure"
+        - "ticketing_workflow"
+        - "DSAR_templates"
+        - "identity_verification_guidance"
+      checks:
+        - "Show how a request is received, authenticated/verified, assigned, and tracked to closure."
+        - "Show how extensions and refusals/fees are documented and communicated."
     severity: "high"
     sources:
-      - citation: "GDPR Art. 15; Art. 12(3)"
+      - citation: "GDPR Art. 12(2)–(6)"
+      - citation: "GDPR Art. 15"
+      - citation: "GDPR Recitals 59–60"
 
-  - id: "GDPR-ART16-RECTIFICATION"
-    title: "Right to rectification supported"
+  - id: "GDPR-ART15-ACCESS-RESPONSE-CONTENT"
+    title: "Access responses include required processing information"
     scope:
-      applies_to: ["org", "product"]
+      applies_to: ["org"]
       roles: ["controller"]
     requirement:
-      type: "process_required"
-      must_include: ["correction_workflow", "propagation_to_downstream_systems"]
+      type: "multi_obligation"
+      obligations:
+        - key: "confirm_processing_and_provide_categories"
+          description: "Confirm whether personal data are processed and provide the categories of personal data concerned."
+        - key: "provide_purposes_and_recipients"
+          description: "Provide purposes of processing and recipients/categories of recipients (including transfers where applicable)."
+        - key: "provide_retention_and_rights"
+          description: "Provide envisaged retention period (or criteria) and the existence of rights (rectification/erasure/restriction/object/complaint)."
+        - key: "source_and_automated_info"
+          description: "Where data not collected from the data subject: provide available information as to source; where applicable: meaningful information about logic involved and significance/consequences of automated decision-making (at least in those cases)."
     evidence_hints:
-      artifacts: ["DSAR_procedure"]
-    severity: "medium"
-    sources:
-      - citation: "GDPR Art. 16"
-
-  - id: "GDPR-ART17-ERASURE"
-    title: "Right to erasure supported (where applicable)"
-    scope:
-      applies_to: ["org", "product"]
-      roles: ["controller"]
-    requirement:
-      type: "process_required"
-      must_include:
-        - "deletion_workflow"
-        - "exceptions_handling (legal obligations, defence of claims)"
-        - "deletion_in_backups_policy"
-    evidence_hints:
-      artifacts: ["DSAR_procedure", "retention_schedule"]
+      required:
+        - "DSAR_response_template_access"
+        - "ROPA"
+      artifacts:
+        - "DSAR_response_template_access"
+        - "DSAR_completed_examples (redacted)"
+        - "ROPA"
+        - "privacy_policy"
+      questions:
+        - "Does the access response template cover every item listed in Art. 15(1)(a)-(h)?"
     severity: "high"
     sources:
-      - citation: "GDPR Art. 17"
+      - citation: "GDPR Art. 15(1)"
+      - citation: "GDPR Art. 12(1)"
+      - citation: "GDPR Recital 63"
 
-  - id: "GDPR-ART18-RESTRICTION"
-    title: "Right to restriction of processing supported"
+  - id: "GDPR-ART15-ACCESS-COPY"
+    title: "Access responses can provide a copy of personal data in a commonly used electronic form (where appropriate)"
     scope:
-      applies_to: ["org", "product"]
+      applies_to: ["product", "org"]
       roles: ["controller"]
-    requirement:
-      type: "process_required"
-      must_include: ["restriction_flagging", "downstream_notification"]
-    severity: "medium"
-    sources:
-      - citation: "GDPR Art. 18"
-
-  - id: "GDPR-ART20-PORTABILITY"
-    title: "Data portability for applicable processing supported"
-    scope:
-      applies_to: ["product"]
-      roles: ["controller"]
-      condition: "Only for consent/contract processing carried out by automated means"
     requirement:
       type: "capability_required"
       must_include:
-        - "export_in_structured_common_machine_readable_format"
-        - "ability_to_transmit_to_another_controller (where feasible)"
+        - "ability_to_extract_and_export_personal_data_relating_to_requester"
+        - "secure_delivery_channel_for_copy"
+        - "electronic_form_when_request_made_by_electronic_means (where appropriate)"
+        - "policy_for_additional_copies_and_any_reasonable_fee"
     evidence_hints:
-      artifacts: ["product_export_feature", "DSAR_procedure"]
+      required:
+        - "data_export_or_dsar_fulfilment_runbook"
+      artifacts:
+        - "data_export_or_dsar_fulfilment_runbook"
+        - "system_data_map (fields->systems)"
+        - "sample_export_files (redacted)"
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 15(3)"
+      - citation: "GDPR Art. 12(5)"
+      - citation: "GDPR Recital 63"
+
+  - id: "GDPR-ART15-ACCESS-RIGHTS-OF-OTHERS"
+    title: "Access copy disclosure is balanced against rights and freedoms of others"
+    scope:
+      applies_to: ["org"]
+      roles: ["controller"]
+    requirement:
+      type: "process_required"
+      must_include:
+        - "review_and_redaction_workflow_for_third_party_data_and_confidential_information"
+        - "policy_for_denial_or_partial_disclosure_when_needed_to_protect_others"
+        - "documented_rationale_for_withheld_or_redacted_information"
+    evidence_hints:
+      required:
+        - "DSAR_review_and_redaction_procedure"
+      artifacts:
+        - "DSAR_review_and_redaction_procedure"
+        - "DSAR_completed_examples (redacted)"
+    severity: "medium"
+    sources:
+      - citation: "GDPR Art. 15(4)"
+      - citation: "GDPR Recital 63"
+
+  - id: "GDPR-ART16-RECTIFICATION"
+    title: "Right to rectification is supported and changes propagate to relevant systems"
+    scope:
+      applies_to: ["org", "product"]
+      roles: ["controller"]
+    requirement:
+      type: "process_required"
+      must_include:
+        - "intake_and_identity_verification"
+        - "correction_workflow (including incomplete_data_completion_where_applicable)"
+        - "propagation_to_downstream_systems_and_records"
+        - "deadline_tracking_consistent_with_art12"
+    evidence_hints:
+      required:
+        - "DSAR_procedure"
+        - "data_systems_map"
+      artifacts:
+        - "DSAR_procedure"
+        - "data_systems_map"
+        - "ticketing_workflow"
+        - "audit_logs_or_change_records"
+    severity: "medium"
+    sources:
+      - citation: "GDPR Art. 16"
+      - citation: "GDPR Art. 12(2)–(3)"
+
+  - id: "GDPR-ART17-ERASURE"
+    title: "Right to erasure is supported with documented grounds and exception handling"
+    scope:
+      applies_to: ["org", "product"]
+      roles: ["controller"]
+    requirement:
+      type: "multi_obligation"
+      obligations:
+        - key: "erasure_workflow_exists"
+          description: "There is a workflow to erase personal data without undue delay when a ground under Art. 17(1) applies."
+        - key: "exceptions_handled"
+          description: "Requests are assessed against Art. 17(3) exceptions (e.g., legal obligation, exercise/defence of legal claims, freedom of expression/information, public interest grounds as applicable)."
+        - key: "downstream_and_backup_handling"
+          description: "Erasure is propagated to relevant systems; backup handling is defined (e.g., deletion on restore / segmented retention), and retention is documented."
+        - key: "deadline_tracking_consistent_with_art12"
+          description: "Timeline tracking and communications align with Art. 12."
+    evidence_hints:
+      required:
+        - "DSAR_procedure"
+        - "retention_schedule"
+      artifacts:
+        - "DSAR_procedure"
+        - "retention_schedule"
+        - "deletion_runbooks"
+        - "data_inventory"
+      questions:
+        - "Show how you determine whether an Art. 17(1) ground applies and whether any Art. 17(3) exception prevents erasure."
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 17"
+      - citation: "GDPR Art. 12(2)–(3)"
+      - citation: "GDPR Recital 65–66"
+
+  - id: "GDPR-ART18-RESTRICTION"
+    title: "Right to restriction of processing is supported and enforced across systems"
+    scope:
+      applies_to: ["org", "product"]
+      roles: ["controller"]
+    requirement:
+      type: "multi_obligation"
+      obligations:
+        - key: "restriction_conditions_supported"
+          description: "Restriction can be applied for Art. 18(1) cases (e.g., contested accuracy, unlawful processing objection, legal claims, pending objection)."
+        - key: "restriction_flag_and_enforcement"
+          description: "A restriction status/flag is stored and enforced so processing is limited (e.g., storage only) except as permitted."
+        - key: "unrestriction_notice"
+          description: "Data subject is informed before restriction is lifted where required."
+    evidence_hints:
+      required:
+        - "restriction_handling_procedure"
+        - "data_systems_map"
+      artifacts:
+        - "restriction_handling_procedure"
+        - "data_systems_map"
+        - "screenshots_or_config_of_restriction_flags"
+        - "DSAR_templates"
+    severity: "medium"
+    sources:
+      - citation: "GDPR Art. 18"
+      - citation: "GDPR Art. 12(2)–(3)"
+
+  - id: "GDPR-ART19-NOTIFY-RECIPIENTS"
+    title: "Recipients are notified of rectification/erasure/restriction where required (or impossibility/disproportionate effort is documented)"
+    scope:
+      applies_to: ["org"]
+      roles: ["controller"]
+      condition: "Only if entity_profile.shares_personal_data_with_recipients == true"
+    requirement:
+      type: "process_required"
+      must_include:
+        - "ability_to_identify_recipients_of_disclosures"
+        - "notification_workflow_for_art16_art17_art18"
+        - "documentation_when_notification_impossible_or_disproportionate"
+        - "ability_to_inform_data_subject_about_recipients_upon_request"
+    evidence_hints:
+      required:
+        - "recipient_register_or_disclosure_log"
+        - "recipient_notification_templates_or_runbook"
+      artifacts:
+        - "recipient_register_or_disclosure_log"
+        - "recipient_notification_templates_or_runbook"
+        - "DSAR_completed_examples (redacted)"
+    severity: "medium"
+    sources:
+      - citation: "GDPR Art. 19"
+
+  - id: "GDPR-ART20-PORTABILITY"
+    title: "Data portability is supported for applicable processing (consent/contract; automated means)"
+    scope:
+      applies_to: ["product", "org"]
+      roles: ["controller"]
+      condition: "Only if (entity_profile.relies_on_consent == true or entity_profile.relies_on_contract == true) and entity_profile.processing_carried_out_by_automated_means == true"
+    requirement:
+      type: "capability_required"
+      must_include:
+        - "export_of_data_provided_by_data_subject"
+        - "export_in_structured_commonly_used_machine_readable_format"
+        - "secure_delivery_and_authentication"
+        - "ability_to_transmit_to_another_controller_where_technically_feasible"
+    evidence_hints:
+      required:
+        - "portability_export_spec_or_feature_doc"
+        - "DSAR_procedure"
+      artifacts:
+        - "portability_export_spec_or_feature_doc"
+        - "sample_portability_export (redacted)"
+        - "DSAR_procedure"
     severity: "medium"
     sources:
       - citation: "GDPR Art. 20"
+      - citation: "GDPR Recital 68"
 
   - id: "GDPR-ART21-OBJECT"
-    title: "Right to object supported (incl. direct marketing)"
+    title: "Right to object is supported, including immediate objection to direct marketing"
     scope:
       applies_to: ["org", "product", "marketing"]
       roles: ["controller"]
     requirement:
-      type: "process_required"
-      must_include:
-        - "objection_intake"
-        - "direct_marketing_opt_out_immediate"
-        - "legitimate_interests_override_assessment"
+      type: "multi_obligation"
+      obligations:
+        - key: "objection_intake_and_timeline"
+          description: "There is an intake process for objections with Art. 12 timelines and communications."
+        - key: "direct_marketing_opt_out"
+          description: "Objection to processing for direct marketing (including profiling related to such marketing) is honoured without undue delay."
+        - key: "other_objections_assessed"
+          description: "For objections under Art. 21(1), processing stops unless controller demonstrates compelling legitimate grounds overriding interests/rights/freedoms or for legal claims."
+        - key: "inform_about_right_to_object"
+          description: "Data subjects are informed of the right to object at the latest at first communication, and it is presented clearly and separately from other information."
+    evidence_hints:
+      required:
+        - "DSAR_procedure"
+        - "marketing_opt_out_mechanism"
+      artifacts:
+        - "DSAR_procedure"
+        - "marketing_opt_out_mechanism"
+        - "legitimate_interests_assessments (LIAs)"
+        - "privacy_policy"
     severity: "high"
     sources:
       - citation: "GDPR Art. 21"
+      - citation: "GDPR Recital 69–70"
+      - citation: "GDPR Art. 12(2)–(3)"
 
   - id: "GDPR-ART22-ADM"
-    title: "Automated decision-making/profiling safeguards (if applicable)"
+    title: "Safeguards apply where solely automated decision-making (incl. profiling) produces legal or similarly significant effects"
     scope:
-      applies_to: ["product"]
+      applies_to: ["org", "product"]
       roles: ["controller"]
-      condition: "Only if decisions with legal/similar significant effects are made solely by automated means"
+      condition: "Only if entity_profile.uses_solely_automated_decision_making_with_significant_effect == true"
     requirement:
-      type: "safeguards_required"
-      must_include:
-        - "inform_users"
-        - "right_to_human_intervention"
-        - "ability_to_contest"
-        - "explain_logic_and_consequences_at_high_level"
+      type: "multi_obligation"
+      obligations:
+        - key: "identify_adm_use_cases"
+          description: "Use cases involving solely automated decisions with legal/similarly significant effects are identified and documented."
+        - key: "exception_and_basis_documented"
+          description: "If relying on Art. 22(2) exceptions (contract necessity, authorisation by law, explicit consent), the basis and conditions are documented."
+        - key: "human_intervention_and_contest"
+          description: "Provide safeguards including human intervention, ability to express viewpoint, and ability to contest the decision."
+        - key: "information_provided"
+          description: "Provide information required by Arts. 13/14 and 15 about the existence of ADM and meaningful information about logic involved as well as significance and envisaged consequences (at appropriate level)."
+        - key: "special_category_guardrails"
+          description: "Where special categories are involved, ensure additional conditions/limitations are met (as applicable)."
+    evidence_hints:
+      required:
+        - "ADM_register_or_model_decision_inventory"
+        - "ADM_safeguards_procedure"
+      artifacts:
+        - "ADM_register_or_model_decision_inventory"
+        - "ADM_safeguards_procedure"
+        - "privacy_policy"
+        - "DSAR_procedure"
+        - "user_notice_copy_for_adm"
     severity: "high"
     sources:
       - citation: "GDPR Art. 22"
-
-  # ------------------------------------------------------------
+      - citation: "GDPR Recital 71"
+      - citation: "GDPR Art. 12(1)–(3)"
+# ------------------------------------------------------------
   # Security + breaches: Art. 32–34
   # ------------------------------------------------------------
   - id: "GDPR-ART32-SECURITY"
