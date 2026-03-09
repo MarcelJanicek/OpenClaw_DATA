@@ -422,14 +422,16 @@ rules:
       - citation: "GDPR Recitals 58–60"
 
   - id: "GDPR-ART13-NOTICE-DIRECT"
-    title: "Privacy notice covers mandatory disclosures when data collected from data subject"
+    title: "Privacy notice covers mandatory disclosures when personal data is collected from the data subject"
     scope:
       applies_to: ["privacy_notice"]
       roles: ["controller"]
+      condition: "Only if entity_profile.collects_personal_data_from_data_subject == true"
     requirement:
       type: "section_presence"
       must_include_sections:
         - "controller_identity_and_contact"
+        - "representative_contact (if applicable)"
         - "dpo_contact (if applicable)"
         - "purposes_and_legal_bases"
         - "legitimate_interests (if applicable)"
@@ -438,38 +440,142 @@ rules:
         - "retention_periods"
         - "data_subject_rights"
         - "right_to_withdraw_consent (if applicable)"
+        - "right_to_object (if applicable)"
         - "right_to_lodge_complaint"
         - "whether_provision_is_statutory_or_contractual"
         - "automated_decision_making_and_profiling (if applicable)"
     evidence_hints:
       required:
         - "privacy_policy"
-      artifacts: ["privacy_policy"]
-      search_terms: ["controller", "purposes", "legal basis", "recipients", "transfer", "retention", "rights", "complaint", "automated"]
+      artifacts: ["privacy_policy", "ROPA", "data_inventory"]
+      search_terms: ["controller", "purposes", "legal basis", "recipients", "transfer", "retention", "rights", "complaint", "automated", "object"]
     severity: "high"
     sources:
       - citation: "GDPR Art. 13"
+      - citation: "GDPR Recital 60"
+
+  - id: "GDPR-ART13-TIMING-AT-COLLECTION"
+    title: "Art. 13 information is provided at the time of collection"
+    scope:
+      applies_to: ["product_ui", "privacy_notice", "org"]
+      roles: ["controller"]
+      condition: "Only if entity_profile.collects_personal_data_from_data_subject == true"
+    requirement:
+      type: "process_required"
+      must_include:
+        - "notice_presented_at_or_before_collection_points (signup/forms/checkout/support/chat/etc.)"
+        - "link_or_accessible_layered_notice_in_context"
+        - "versioning_or_change_management_for_notice_text"
+    evidence_hints:
+      required:
+        - "collection_points_inventory"
+        - "notice_at_collection_evidence"
+      artifacts:
+        - "collection_points_inventory"
+        - "notice_at_collection_evidence (screenshots/copies)"
+        - "privacy_policy"
+        - "product_copy_repository (if used)"
+      questions:
+        - "List every UI/API touchpoint where personal data is first collected; show where the notice is displayed or linked."
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 13(1)"
+      - citation: "GDPR Recital 61"
 
   - id: "GDPR-ART14-NOTICE-INDIRECT"
-    title: "Privacy notice covers mandatory disclosures when data not obtained directly"
+    title: "Privacy notice covers mandatory disclosures when personal data is not obtained from the data subject"
     scope:
       applies_to: ["privacy_notice"]
       roles: ["controller"]
-      condition: "Only if you obtain personal data from third parties"
+      condition: "Only if entity_profile.obtains_personal_data_not_from_data_subject == true"
     requirement:
       type: "section_presence"
       must_include_sections:
+        - "controller_identity_and_contact"
+        - "representative_contact (if applicable)"
+        - "dpo_contact (if applicable)"
+        - "purposes_and_legal_bases"
         - "categories_of_personal_data"
         - "source_of_data"
         - "whether_from_public_sources"
-        - "all_Art13_items"
+        - "legitimate_interests (if applicable)"
+        - "recipients_or_categories"
+        - "international_transfers_and_safeguards (if applicable)"
+        - "retention_periods"
+        - "data_subject_rights"
+        - "right_to_withdraw_consent (if applicable)"
+        - "right_to_object (if applicable)"
+        - "right_to_lodge_complaint"
+        - "automated_decision_making_and_profiling (if applicable)"
     evidence_hints:
       required:
         - "privacy_policy"
-      artifacts: ["privacy_policy", "data_inventory"]
+        - "data_inventory"
+      artifacts: ["privacy_policy", "data_inventory", "ROPA", "data_source_register (if used)"]
+      questions:
+        - "What are the sources of personal data (customers, partners, public sources, data brokers)?"
     severity: "high"
     sources:
-      - citation: "GDPR Art. 14"
+      - citation: "GDPR Art. 14(1)–(2)"
+      - citation: "GDPR Recital 61"
+
+  - id: "GDPR-ART14-TIMING"
+    title: "Art. 14 information is provided within required timelines for indirect collection"
+    scope:
+      applies_to: ["org", "product", "privacy_notice"]
+      roles: ["controller"]
+      condition: "Only if entity_profile.obtains_personal_data_not_from_data_subject == true"
+    requirement:
+      type: "multi_obligation"
+      obligations:
+        - key: "within_reasonable_period_max_one_month"
+          description: "Provide Art. 14 information within a reasonable period after obtaining the data, and at the latest within one month."
+        - key: "at_first_communication"
+          description: "If the personal data is used to communicate with the data subject, provide the information at the latest at the time of the first communication."
+        - key: "at_first_disclosure"
+          description: "If the personal data is intended to be disclosed to another recipient, provide the information at the latest when the data is first disclosed."
+    evidence_hints:
+      required:
+        - "data_source_onboarding_or_procurement_process"
+        - "notice_delivery_workflow_for_indirect_data"
+      artifacts:
+        - "data_source_onboarding_or_procurement_process"
+        - "notice_delivery_workflow_for_indirect_data"
+        - "outreach_templates"
+        - "logs_or_ticketing_evidence"
+        - "privacy_policy"
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 14(3)"
+      - citation: "GDPR Recital 61"
+
+  - id: "GDPR-ART14-EXEMPTIONS-5"
+    title: "If relying on Art. 14(5) exemptions, the organisation documents and applies them correctly"
+    scope:
+      applies_to: ["org", "privacy_notice"]
+      roles: ["controller"]
+      condition: "Only if entity_profile.obtains_personal_data_not_from_data_subject == true and entity_profile.art14_5_exemptions_relied_on is not empty"
+    requirement:
+      type: "decision_and_documentation"
+      must_include:
+        - "which_exemption_applies (Art14(5)(a)-(d))"
+        - "rationale_and_supporting_evidence"
+        - "safeguards_and_measures_to_protect_data_subject_rights"
+        - "where_disproportionate_effort_used: public_information_measures (e.g., publish notice)"
+        - "where_law_provides: citation_to_union_or_member_state_law_and_protective_measures"
+        - "where_confidentiality: description_of_professional_secrecy_basis"
+    evidence_hints:
+      required:
+        - "art14_exemptions_memo"
+      artifacts:
+        - "art14_exemptions_memo"
+        - "DPIA_or_risk_assessment (if relevant)"
+        - "public_notice_or_transparency_page (if used)"
+        - "legal_basis_register"
+    severity: "high"
+    sources:
+      - citation: "GDPR Art. 14(5)"
+      - citation: "GDPR Recital 62"
 
   # ------------------------------------------------------------
   # Data subject rights: Art. 15–22

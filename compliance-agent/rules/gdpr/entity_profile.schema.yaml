@@ -41,6 +41,26 @@ profile:
   # Lawful basis flags (used for conditional rules)
   relies_on_consent: false
 
+  # ------------------------------------------------------------
+  # Collection sources (Arts. 13–14)
+  # ------------------------------------------------------------
+  # True if you collect personal data directly from the data subject (e.g., sign-up forms, in-app input).
+  collects_personal_data_from_data_subject: true
+
+  # True if you obtain personal data from another source (e.g., customers, partners, data brokers).
+  obtains_personal_data_not_from_data_subject: false
+
+  # True if (some) personal data is obtained from publicly accessible sources.
+  obtains_personal_data_from_public_sources: false
+
+  # If you rely on an Art. 14(5) exemption, list which ones apply.
+  # Allowed values (non-exhaustive):
+  # - data_subject_already_has_information (Art. 14(5)(a))
+  # - impossible_or_disproportionate_effort (Art. 14(5)(b))
+  # - union_or_member_state_law_provides (Art. 14(5)(c))
+  # - professional_secrecy_confidentiality (Art. 14(5)(d))
+  art14_5_exemptions_relied_on: []
+
   # Children & consent (Art. 8) — only relevant for ISS offered directly to a child and relying on consent.
   offers_information_society_services_directly_to_children: false
   member_state_child_consent_age: 16  # range: 13–16 depending on Member State law
