@@ -1010,6 +1010,100 @@ rules:
   - citation: GDPR Art. 23(1)
   - citation: GDPR Art. 23(2)
   - citation: GDPR Recital 73
+- id: GDPR-ART24-CONTROLLER-ACCOUNTABILITY
+  title: Controller implements appropriate measures and can demonstrate GDPR compliance (accountability)
+  scope:
+    applies_to:
+    - org
+    roles:
+    - controller
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: measures_implemented
+      description: Appropriate technical and organisational measures are implemented to ensure and demonstrate processing is performed in accordance with the GDPR, considering nature/scope/context/purposes and risks.
+    - key: governance_assigned
+      description: Privacy governance is defined (owners/roles/responsibilities, escalation paths) and maintained for processing activities.
+    - key: policies_and_controls
+      description: Policies, procedures, and controls exist for lawful basis, transparency, rights handling, vendor/processor management, retention, security, and incident response (as applicable).
+    - key: effectiveness_reviewed
+      description: Measures are reviewed and updated where necessary (e.g., periodic audits/assessments, control testing, remediation tracking).
+    - key: ability_to_demonstrate
+      description: Evidence is maintained to demonstrate compliance to supervisory authorities on request (e.g., records, logs, assessments, decisions).
+  evidence_hints:
+    required:
+    - privacy_governance_structure_and_roles
+    - privacy_policies_and_procedures_pack
+    - privacy_risk_assessments_or_control_reviews
+    - remediation_tracker_or_audit_findings (redacted)
+    - compliance_evidence_index_or_repository_structure
+    artifacts:
+    - privacy_program_charter_or_accountability_framework
+    - privacy_governance_structure_and_roles
+    - privacy_policies_and_procedures_pack
+    - privacy_risk_assessments_or_control_reviews
+    - remediation_tracker_or_audit_findings (redacted)
+    - compliance_evidence_index_or_repository_structure
+    questions:
+    - How do you decide which organisational/technical measures are appropriate for your processing and risks?
+    - Who owns privacy compliance, and how is effectiveness of controls checked and improved over time?
+    - If a supervisory authority asked you to demonstrate compliance, what evidence pack would you provide?
+    checks:
+    - Confirm measures are risk-based and kept up to date (not a one-time policy set).
+  severity: high
+  sources:
+  - citation: GDPR Art. 24(1)
+  - citation: GDPR Art. 24(2)
+  - citation: GDPR Art. 24(3)
+  - citation: GDPR Recital 74
+  - citation: GDPR Recital 76
+- id: GDPR-ART25-DPBD-DEFAULT
+  title: Data protection by design and by default implemented (including privacy-friendly defaults)
+  scope:
+    applies_to:
+    - product
+    - system
+    roles:
+    - controller
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: dpbd_in_design_process
+      description: Data protection by design is integrated into product/system design and delivery processes (e.g., requirements, architecture, threat/privacy modeling, review gates).
+    - key: appropriate_safeguards
+      description: Appropriate safeguards are selected and implemented (e.g., pseudonymisation/encryption where suitable, access controls, logging, minimisation) considering state of the art, costs, and risks.
+    - key: data_minimisation_and_purpose_limit
+      description: Personal data collected/processed is limited to what is necessary for specified purposes, and purpose changes are controlled.
+    - key: privacy_by_default
+      description: Default settings ensure only necessary personal data is processed by default (scope, amount, retention, accessibility) and data is not made accessible to an indefinite number of persons without user intervention.
+    - key: configuration_and_documentation
+      description: Privacy-relevant configurations are documented, tested, and maintained (including default retention/access settings and any user/admin overrides).
+  evidence_hints:
+    required:
+    - secure_sdlc_or_product_development_process_with_privacy_gates
+    - privacy_design_review_records_or_architecture_decisions (redacted)
+    - default_settings_and_data_minimisation_checklist
+    - documentation_of_privacy_relevant_configurations_and_defaults
+    - test_evidence_for_privacy_defaults (e.g., retention/access settings)
+    artifacts:
+    - secure_sdlc_or_product_development_process_with_privacy_gates
+    - privacy_design_review_records_or_architecture_decisions (redacted)
+    - privacy_threat_model_or_privacy_impact_assessment_inputs (redacted)
+    - default_settings_and_data_minimisation_checklist
+    - documentation_of_privacy_relevant_configurations_and_defaults
+    - test_evidence_for_privacy_defaults (e.g., retention/access settings)
+    questions:
+    - What privacy-by-design controls exist in your SDLC (who reviews, what criteria, what artifacts)?
+    - Which privacy-friendly defaults are enforced (retention, access, sharing, telemetry) and how are they tested?
+    - How do you prevent collection/processing beyond what is necessary for the stated purposes?
+    checks:
+    - Confirm defaults limit amount, extent, retention period, and accessibility of personal data (Art. 25(2)).
+  severity: high
+  sources:
+  - citation: GDPR Art. 25(1)
+  - citation: GDPR Art. 25(2)
+  - citation: GDPR Art. 25(3)
+  - citation: GDPR Recital 78
 - id: GDPR-ART30-ROPA
   title: Records of processing activities (ROPA) maintained (where required)
   scope:
