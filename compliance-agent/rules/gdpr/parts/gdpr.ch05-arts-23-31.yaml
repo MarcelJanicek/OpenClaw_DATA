@@ -339,6 +339,55 @@ rules:
   - citation: GDPR Art. 28(3)
   - citation: GDPR Art. 28(4)
 
+- id: GDPR-ART28-PROCESSOR-SELECTION-AND-OVERSIGHT
+  title: Controller selects processors with sufficient guarantees and maintains ongoing oversight (including sub-processor controls)
+  scope:
+    applies_to:
+    - org
+    - contracts
+    roles:
+    - controller
+    condition: Only if entity_profile.uses_processors is true
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: sufficient_guarantees_assessed
+      description: Before engaging a processor, the controller assesses and documents that the processor provides sufficient guarantees to implement appropriate technical and organisational measures to meet GDPR requirements and protect data subject rights.
+    - key: written_contract_or_other_legal_act
+      description: Processing by a processor is governed by a contract or other legal act that is binding and sets out the subject-matter/duration/nature/purpose of processing, types of personal data, categories of data subjects, and controller obligations/rights.
+    - key: subprocessor_authorization_and_flowdown
+      description: A process exists to authorize sub-processors (specific or general written authorization as applicable), maintain a current sub-processor list, and ensure equivalent data protection obligations are flowed down to sub-processors.
+    - key: ongoing_vendor_monitoring
+      description: Ongoing oversight exists (e.g., periodic reviews, attestations, audit reports, or security questionnaires) to ensure processors continue to meet required measures; issues are tracked to remediation or disengagement.
+    - key: processor_register_or_inventory
+      description: An inventory/register of processors and related DPAs/sub-processor authorizations is maintained and kept up to date to support accountability and DSAR/incident response.
+  evidence_hints:
+    required:
+    - vendor_management_policy_and_due_diligence_procedure
+    - processor_due_diligence_records (e.g., questionnaires, SOC2/ISO reports) (redacted)
+    - signed_dpa_or_other_binding_instrument
+    - subprocessor_authorization_process_and_current_subprocessor_list
+    - ongoing_vendor_review_records_and_remediation_tracking (redacted)
+    artifacts:
+    - vendor_management_policy_and_due_diligence_procedure
+    - processor_due_diligence_records (e.g., questionnaires, SOC2/ISO reports) (redacted)
+    - signed_dpa_or_other_binding_instrument
+    - subprocessor_authorization_process_and_current_subprocessor_list
+    - ongoing_vendor_review_records_and_remediation_tracking (redacted)
+    - processor_register_or_inventory
+    questions:
+    - How do you decide a processor provides “sufficient guarantees” before you send it personal data?
+    - How do you approve and track sub-processors, and ensure equivalent obligations flow down?
+    - What ongoing monitoring exists to ensure processors remain compliant and secure?
+    checks:
+    - Confirm there is documented pre-engagement due diligence and ongoing oversight (not only a template DPA).
+    - Confirm sub-processor authorization and flow-down obligations are operationalized and evidenced.
+  severity: high
+  sources:
+  - citation: GDPR Art. 28(1)
+  - citation: GDPR Art. 28(2)
+  - citation: GDPR Art. 28(9)
+
 - id: GDPR-ART29-PROCESSOR-ON-INSTRUCTIONS
   title: Persons acting under the authority of a controller/processor process personal data only on instructions (unless required by law)
   scope:
