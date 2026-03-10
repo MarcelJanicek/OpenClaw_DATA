@@ -10,4 +10,152 @@ meta:
     url: https://eur-lex.europa.eu/eli/reg/2016/679/oj
   notes:
   - This ruleset is designed for SaaS/AI products. Some obligations vary depending on whether you are controller/processor/joint controller.
-rules: []
+rules:
+- id: GDPR-ART44-TRANSFERS-PRINCIPLE
+  title: Transfers of personal data to third countries/international organisations occur only under a valid GDPR transfer mechanism (Chapter V)
+  scope:
+    applies_to:
+    - org
+    - system
+    - processing_activity
+    roles:
+    - controller
+    - processor
+    - joint_controller
+    condition: Only if entity_profile.transfers_outside_eea is true
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: transfer_mapping_and_inventory
+      description: Transfers to third countries/international organisations are identified and mapped (including onward transfers, remote access/support, and sub-processors), and ownership is assigned.
+    - key: mechanism_selected_per_transfer
+      description: Each transfer is linked to at least one valid Chapter V mechanism (e.g., adequacy, Art. 46 safeguards, Art. 49 derogation) and the mechanism is documented in the vendor/transfer register.
+    - key: no_unapproved_transfers
+      description: Technical and contractual controls prevent transfers not covered by an approved mechanism (e.g., procurement/vendor onboarding gates, geo/egress controls, and contract review).
+    - key: transparency_about_transfers
+      description: Privacy notices/transfer disclosures identify third-country transfers and the mechanism/safeguards used (at the level required by Arts. 13/14 and applicable guidance).
+    - key: ongoing_review
+      description: Transfer mechanisms are periodically reviewed for continued validity (e.g., changes in vendors, sub-processors, locations, or legal basis) and updates are tracked.
+  evidence_hints:
+    required:
+    - transfer_inventory_or_data_flow_map (including third_country_locations, vendors, and onward_transfers)
+    - transfer_register_mapping_each_transfer_to_mechanism
+    - vendor_onboarding_or_contract_review_process_including_transfer_gate
+    - privacy_notice_transfer_disclosures (safeguards/mechanism summary)
+    - periodic_transfer_review_records_or_change_log (redacted)
+    artifacts:
+    - transfer_inventory_or_data_flow_map (including third_country_locations, vendors, and onward_transfers)
+    - transfer_register_mapping_each_transfer_to_mechanism
+    - vendor_onboarding_or_contract_review_process_including_transfer_gate
+    - privacy_notice_transfer_disclosures (safeguards/mechanism summary)
+    - periodic_transfer_review_records_or_change_log (redacted)
+    questions:
+    - Which processing activities involve third-country transfers or remote access from outside the EEA, including by sub-processors?
+    - For each transfer, what Chapter V mechanism do you rely on (adequacy, safeguards, or derogation), and where is it documented?
+    - How do you prevent teams from introducing a new transfer path without legal review and an approved mechanism?
+    checks:
+    - Confirm there is a complete transfer inventory (including onward transfers and support access) and each transfer maps to a Chapter V mechanism.
+    - Confirm change management ensures transfers remain covered when vendors/locations/sub-processors change.
+  severity: high
+  sources:
+  - citation: GDPR Art. 44
+  - citation: GDPR Recital 101
+
+- id: GDPR-ART45-ADEQUACY
+  title: Where relying on an adequacy decision, transfers are limited to covered countries/recipients and adequacy scope is documented
+  scope:
+    applies_to:
+    - org
+    - contracts
+    - processing_activity
+    roles:
+    - controller
+    - processor
+    - joint_controller
+    condition: Only if entity_profile.transfers_outside_eea is true AND "adequacy" is in entity_profile.transfer_mechanisms
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: adequacy_decision_identified
+      description: The applicable adequacy decision is identified (country/territory/sector/scheme), and the scope conditions are documented.
+    - key: recipients_within_scope
+      description: Transfers are limited to recipients and processing that fall within the adequacy scope (including any participation/registration requirements).
+    - key: onward_transfer_controls
+      description: Contracts and vendor due diligence address onward transfers to ensure onward transfers are also covered by a valid mechanism.
+    - key: monitoring_of_changes
+      description: A process exists to monitor changes to adequacy status (amendment, suspension, repeal, or scope changes) and to trigger migration to an alternative mechanism if needed.
+  evidence_hints:
+    required:
+    - documentation_identifying_adequacy_decision_and_scope
+    - vendor_due_diligence_showing_recipient_is_within_adequacy_scope (if_applicable)
+    - contractual_terms_or_policy_addressing_onward_transfers
+    - monitoring_log_or_owner_for_adequacy_status_changes
+    artifacts:
+    - documentation_identifying_adequacy_decision_and_scope
+    - vendor_due_diligence_showing_recipient_is_within_adequacy_scope (if_applicable)
+    - contractual_terms_or_policy_addressing_onward_transfers
+    - monitoring_log_or_owner_for_adequacy_status_changes
+    questions:
+    - Which adequacy decision do you rely on and what limitations apply (sector, scheme, conditions)?
+    - How do you ensure recipients and onward transfers remain within the adequacy scope over time?
+    checks:
+    - Confirm adequacy reliance is scoped correctly and there is monitoring for adequacy status changes.
+  severity: high
+  sources:
+  - citation: GDPR Art. 45(1)
+  - citation: GDPR Art. 45(3)
+  - citation: GDPR Recital 103
+
+- id: GDPR-ART46-APPROPRIATE-SAFEGUARDS
+  title: Where relying on appropriate safeguards (e.g., SCCs), enforceable rights and effective remedies are ensured and transfer safeguards are documented
+  scope:
+    applies_to:
+    - org
+    - contracts
+    - processing_activity
+    - vendors
+    roles:
+    - controller
+    - processor
+    - joint_controller
+    condition: Only if entity_profile.transfers_outside_eea is true AND ("SCC" is in entity_profile.transfer_mechanisms OR "BCR" is in entity_profile.transfer_mechanisms OR "other" is in entity_profile.transfer_mechanisms)
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: safeguard_selected_and_executed
+      description: The appropriate safeguard is selected per transfer and executed correctly (e.g., signed SCC module, valid BCR approval, or other Art. 46 instrument), and versions/modules are tracked.
+    - key: enforceable_rights_and_remedies
+      description: Documentation confirms that data subjects have enforceable rights and effective legal remedies in relation to the transfer mechanism.
+    - key: supplemental_measures_where_needed
+      description: Where risks to the transferred data are identified, supplementary contractual/technical/organisational measures are implemented and documented to ensure an essentially equivalent level of protection.
+    - key: onward_transfer_and_subprocessor_flowdown
+      description: Onward transfers and sub-processor engagements are controlled to ensure equivalent protections (flow-down clauses, approvals, and updated sub-processor lists).
+    - key: transparency_and_access_to_safeguards
+      description: The organisation can provide information about the safeguards used and how to obtain a copy (where required), and maintains a process to respond to data subject or regulator requests about transfer safeguards.
+  evidence_hints:
+    required:
+    - executed_transfer_safeguard_documents (e.g., signed_SCCs_or_BCR_approval)
+    - transfer_register_linking_each_transfer_to_safeguard_and_module
+    - transfer_risk_assessment_or_equivalence_assessment (redacted)
+    - documentation_of_supplementary_measures (technical_and_contractual)
+    - subprocessor_list_and_onward_transfer_controls
+    artifacts:
+    - executed_transfer_safeguard_documents (e.g., signed_SCCs_or_BCR_approval)
+    - transfer_register_linking_each_transfer_to_safeguard_and_module
+    - transfer_risk_assessment_or_equivalence_assessment (redacted)
+    - documentation_of_supplementary_measures (technical_and_contractual)
+    - subprocessor_list_and_onward_transfer_controls
+    - process_for_providing_safeguard_copies_or_summaries_to_data_subjects
+    questions:
+    - For each third-country transfer, which Art. 46 safeguard do you rely on and where is it executed/stored (SCC module, BCR, etc.)?
+    - How do you assess transfer risks and decide on supplementary measures, and how are those measures implemented and verified?
+    - How do you control onward transfers and sub-processors to ensure equivalent protection?
+    checks:
+    - Confirm the correct safeguard instrument is executed per transfer and tracked (including module/version).
+    - Confirm there is evidence of a risk/equivalence assessment and documented supplementary measures when appropriate.
+  severity: high
+  sources:
+  - citation: GDPR Art. 46(1)
+  - citation: GDPR Art. 46(2)
+  - citation: GDPR Art. 46(3)
+  - citation: GDPR Recital 108
