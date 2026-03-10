@@ -166,3 +166,111 @@ rules:
   severity: medium
   sources:
   - citation: DORA (EU) 2022/2554 — Chapter II, Article 6(3)
+- id: DORA-ART17-INCIDENT-MGMT-FRAMEWORK
+  title: ICT-related incident management process is established and maintained
+  scope:
+    applies_to:
+    - org
+    parties:
+    - financial_entity
+  requirement:
+    type: process_and_governance
+    must_include:
+    - documented_incident_management_policy_and_procedures
+    - defined_roles_and_responsibilities (incl. escalation paths)
+    - incident_lifecycle_steps (detect, triage, contain, eradicate, recover, close)
+    - integration_with_communication_and_crisis_management
+    - criteria_for_triggering_major_incident_assessment
+  evidence_hints:
+    required:
+    - incident_management_policy
+    - incident_response_procedure
+    - on_call_or_escalation_roster
+    artifacts:
+    - incident_management_policy
+    - incident_response_playbooks
+    - raci_matrix (incident mgmt)
+    - crisis_communications_plan
+    - post_incident_review_template
+  severity: high
+  sources:
+  - citation: DORA (EU) 2022/2554 — Chapter III, Article 17(1)
+- id: DORA-ART17-INCIDENT-REGISTER
+  title: ICT-related incidents are recorded in an incident register with consistent fields
+  scope:
+    applies_to:
+    - org
+    parties:
+    - financial_entity
+  requirement:
+    type: records_and_logging
+    must_include:
+    - incident_register_exists (system of record)
+    - 'minimum_fields: unique_id, start_time, end_time, affected_services, root_cause, impact_summary, actions_taken, classification, reporting_decisions'
+    - retention_and_access_controls_for_incident_records
+    - linkage_to_related_tickets_changes_and_problem_records
+  evidence_hints:
+    required:
+    - incident_register_export
+    - incident_record_samples (closed incidents)
+    artifacts:
+    - incident_tracking_system (e.g., ITSM/SIEM case mgmt)
+    - incident_register_schema_or_field_definitions
+    - retention_policy
+    - access_control_records (incident system)
+  severity: high
+  sources:
+  - citation: DORA (EU) 2022/2554 — Chapter III, Article 17(2)
+- id: DORA-ART18-CLASSIFICATION-CRITERIA
+  title: ICT-related incidents and cyber threats are classified using documented criteria aligned to DORA
+  scope:
+    applies_to:
+    - org
+    parties:
+    - financial_entity
+  requirement:
+    type: classification_and_assessment
+    must_include:
+    - documented_classification_criteria_for_incidents
+    - criteria_cover_impact_dimensions (e.g., clients affected, downtime, data loss, economic impact, reputational impact)
+    - process_to_determine_major_ict_related_incident
+    - process_to_classify_significant_cyber_threats (if monitored)
+    - mapping_of_internal_severity_levels_to_dora_reporting_categories
+  evidence_hints:
+    required:
+    - incident_classification_matrix
+    - procedure_for_major_incident_determination
+    artifacts:
+    - incident_classification_matrix
+    - major_incident_assessment_checklist
+    - examples_of_classified_incidents (with rationale)
+    - risk_acceptance_or_exceptions_log (if deviations exist)
+  severity: high
+  sources:
+  - citation: DORA (EU) 2022/2554 — Chapter III, Article 18(1)–(2)
+- id: DORA-ART18-DETECTION-AND-TRIAGE
+  title: Timely detection and triage are in place to support incident classification and escalation
+  scope:
+    applies_to:
+    - org
+    parties:
+    - financial_entity
+  requirement:
+    type: monitoring_and_response
+    must_include:
+    - monitoring_sources_defined (logs, alerts, third-party notifications)
+    - triage_sla_or_targets_for_initial_response
+    - escalation_rules_to_security_and_management
+    - evidence_of_triage_documentation_in_incident_records
+  evidence_hints:
+    required:
+    - monitoring_and_alerting_overview
+    - incident_samples_showing_timestamps (detect/ack/triage/escalate)
+    artifacts:
+    - siem_or_monitoring_configuration_summary
+    - on_call_runbook
+    - incident_timeline_exports
+    - alert_to_incident_linkage_samples
+  severity: medium
+  sources:
+  - citation: DORA (EU) 2022/2554 — Chapter III, Article 17(1) and Article 18 (classification support)
