@@ -2304,6 +2304,131 @@ rules:
   - citation: GDPR Art. 57
   - citation: GDPR Art. 58
   - citation: GDPR Art. 59
+- id: GDPR-ART60-ONE-STOP-SHOP-COOPERATION
+  title: Cross-border processing governance supports one-stop-shop (lead supervisory authority) cooperation and consistent case handling
+  scope:
+    applies_to:
+    - org
+    - processing_activity
+    roles:
+    - controller
+    - processor
+    condition: Only if the organisation engages in cross-border processing in the EEA (e.g., establishments in multiple Member States or materially affects data subjects in multiple Member States), such that a lead supervisory authority (LSA) and concerned supervisory authorities may be involved under the one-stop-shop mechanism
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: identify_lsa_and_establishments
+      description: The organisation can identify its main establishment and the likely lead supervisory authority for relevant cross-border processing, and maintains up-to-date records of EU establishments/points of contact for supervisory authority engagement.
+    - key: regulatory_inquiry_intake_and_routing
+      description: There is an operational process to intake, track, and route supervisory authority communications (including those involving concerned supervisory authorities) to appropriate internal owners (legal/privacy/security/product) with deadlines and escalation.
+    - key: timely_responses_and_evidence_pack
+      description: The organisation can provide information/evidence to supervisory authorities in a timely manner for cross-border cases (e.g., policies, ROPA excerpts, DPIA summaries, TOMs evidence, incident timelines), including version control and redaction controls.
+    - key: decision_and_measure_tracking
+      description: Where binding measures/decisions are issued (e.g., corrective measures affecting multiple Member States), the organisation tracks implementation, communicates status to the relevant authority where appropriate, and retains an audit trail of remediation.
+  evidence_hints:
+    required:
+    - register_of_eu_establishments_main_establishment_and_contact_points
+    - one_stop_shop_and_lsa_assessment_memo (how LSA is determined for key processing)
+    - supervisory_authority_inquiry_intake_and_case_management_playbook
+    - regulatory_correspondence_log (redacted)
+    - evidence_pack_index_for_regulator_requests (policies/records/DPIAs/security evidence)
+    artifacts:
+    - register_of_eu_establishments_main_establishment_and_contact_points
+    - one_stop_shop_and_lsa_assessment_memo (how LSA is determined for key processing)
+    - supervisory_authority_inquiry_intake_and_case_management_playbook
+    - regulatory_correspondence_log (redacted)
+    - tracker_for_corrective_measures_and_remediation (redacted)
+    questions:
+    - Do you have cross-border processing, and if so, which supervisory authority is likely the lead (and why)?
+    - How do you intake and manage supervisory authority requests across multiple Member States (owners, SLAs, escalation)?
+    - If an authority requests evidence about a processing activity, what standard “evidence pack” can you produce quickly?
+    checks:
+    - Confirm there is a defined internal process to handle multi-authority communications and cross-border case timelines.
+  severity: medium
+  sources:
+  - citation: GDPR Art. 60
+  - citation: GDPR Art. 56
+  - citation: GDPR Art. 4(23)
+  - citation: GDPR Recital 124
+- id: GDPR-ART61-62-MUTUAL-ASSISTANCE-JOINT-OPS
+  title: Operational readiness supports supervisory authority mutual assistance and joint operations (where applicable)
+  scope:
+    applies_to:
+    - org
+    - system
+    - processing_activity
+    roles:
+    - controller
+    - processor
+    condition: Only where supervisory authorities seek information, access, or assistance in connection with cross-border matters (including mutual assistance or joint operations)
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: facilitate_access_and_information
+      description: Processes exist to facilitate lawful supervisory authority requests (e.g., information production, access to premises/systems where required, secure transfer channels), with legal review and confidentiality controls.
+    - key: preserve_and_produce_records
+      description: Relevant records and logs are retained and can be preserved/produced for investigations (e.g., processing records, security logs, incident timelines), consistent with retention rules and legal holds.
+    - key: support_on_site_or_remote_inquiries
+      description: The organisation has a playbook to support on-site/remote inquiries (including points of contact, technical support, and information security safeguards) when supervisory authorities conduct coordinated/joint activities.
+  evidence_hints:
+    required:
+    - supervisory_authority_request_handling_playbook (access, production, secure transfer, confidentiality)
+    - secure_channel_procedure_for_regulatory_disclosures (e.g., encrypted transfer, portal)
+    - legal_hold_and_record_preservation_procedure
+    - examples_of_fulfilled_regulatory_requests (redacted)
+    artifacts:
+    - supervisory_authority_request_handling_playbook (access, production, secure transfer, confidentiality)
+    - secure_channel_procedure_for_regulatory_disclosures (e.g., encrypted transfer, portal)
+    - legal_hold_and_record_preservation_procedure
+    - examples_of_fulfilled_regulatory_requests (redacted)
+    questions:
+    - How do you handle a request for information or access from a supervisory authority (intake, validation, deadlines, secure transfer)?
+    - How do you preserve relevant records/logs when an inquiry begins (legal hold / evidence preservation)?
+    checks:
+    - Confirm request handling includes security controls (least privilege, audit logging) and confidentiality protections while still enabling cooperation.
+  severity: medium
+  sources:
+  - citation: GDPR Art. 61
+  - citation: GDPR Art. 62
+  - citation: GDPR Art. 58
+- id: GDPR-ART63-67-CONSISTENCY-AND-URGENCY
+  title: The organisation can support consistency mechanism and urgent procedure timelines in multi-authority cases (where applicable)
+  scope:
+    applies_to:
+    - org
+    - processing_activity
+    roles:
+    - controller
+    - processor
+    condition: Only where a cross-border matter triggers consistency mechanism/EDPB involvement or urgent procedures (e.g., disputed draft decisions, urgency measures)
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: fast_turnaround_for_multi_authority_cases
+      description: Internal response processes can meet compressed timelines that may arise in multi-authority/consistency or urgent procedure scenarios (e.g., rapid evidence collection, executive decision-making, and corrective action planning).
+    - key: version_controlled_positions_and_remediation_plans
+      description: Legal/position statements, factual summaries, and remediation plans provided to authorities are version-controlled, internally approved, and consistent across parallel communications.
+  evidence_hints:
+    required:
+    - regulatory_response_sla_and_escalation_matrix
+    - internal_approval_workflow_for_regulatory_submissions
+    - version_controlled_regulatory_submissions_repository (redacted)
+    artifacts:
+    - regulatory_response_sla_and_escalation_matrix
+    - internal_approval_workflow_for_regulatory_submissions
+    - version_controlled_regulatory_submissions_repository (redacted)
+    questions:
+    - What is your escalation path if authorities request an answer or remediation plan under urgent timelines?
+    checks:
+    - Confirm regulatory response governance covers both routine and urgent multi-authority scenarios.
+  severity: low
+  sources:
+  - citation: GDPR Art. 63
+  - citation: GDPR Art. 64
+  - citation: GDPR Art. 65
+  - citation: GDPR Art. 66
+  - citation: GDPR Art. 67
+  - citation: GDPR Recital 135
 - id: GDPR-ART85-91-NATIONAL-DEROGATIONS-ASSESSMENT
   title: National derogations and special-case rules (Arts. 85–91) are identified, assessed, and operationalized where applicable
   scope:
