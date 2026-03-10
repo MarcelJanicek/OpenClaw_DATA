@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="cs">
+  <head>
+    <meta charset="utf-8" />
+    <title>e-Sbírka</title>
+    <base href="/" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <script type="text/javascript" src="assets/configs/env.js"></script>
+  <link rel="stylesheet" href="styles.31e529550010932b6e86.css"><link rel="stylesheet" href="theme-blue.6492cd5c8d1bc818caec.css"><link rel="stylesheet" href="theme-green.db200fc403148fdff297.css"></head>
+  <body>
+    <esel-app></esel-app>
+  <script src="runtime-es2015.83541fd747012ba38f40.js" type="module"></script><script src="runtime-es5.83541fd747012ba38f40.js" nomodule defer></script><script src="polyfills-es5.cfcaab4b92421ead25f9.js" nomodule defer></script><script src="polyfills-es2015.2d0d98ac97eeff833865.js" type="module"></script><script src="main-es2015.a9c61b8b202dfcef4886.js" type="module"></script><script src="main-es5.a9c61b8b202dfcef4886.js" nomodule defer></script></body>
+</html>

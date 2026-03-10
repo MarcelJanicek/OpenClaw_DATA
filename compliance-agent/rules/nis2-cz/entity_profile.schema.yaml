@@ -1,0 +1,26 @@
+# NIS2-CZ Entity/Profile parameters (fill per assessment)
+# Used to decide applicability and conditional obligations.
+
+profile:
+  # Basic classification
+  sector: "unknown"          # e.g., energy|transport|health|digital_infrastructure|public_admin|other
+  subsector: ""              # optional
+
+  # Entity size / thresholds (CZ law may differ; keep explicit)
+  employees: null
+  annual_turnover_eur: null
+  balance_sheet_total_eur: null
+
+  # CZ classification outputs (set after scoping assessment)
+  in_scope_under_cz_law: null           # true|false
+  entity_class: "unknown"              # essential|important|unknown
+  regulated_service_type: "unknown"    # from vyhláška 408/2025 (placeholder)
+
+  # Regime
+  duty_regime: "unknown"               # higher|lower|unknown (vyhl. 409/410)
+
+  # Operational context
+  provides_critical_or_important_service: null
+  uses_outsourced_ict_services: true
+
+  notes: ""

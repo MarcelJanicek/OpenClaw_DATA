@@ -1,0 +1,15 @@
+meta:
+  ruleset_id: "nis2-cz"
+  version: "0.1"
+  status: "draft"
+  jurisdiction: ["CZ"]
+  evaluation_profile_schema: "rules/nis2-cz/entity_profile.schema.yaml"
+
+includes:
+  - "parts/nis2cz.00-foundations.yaml"
+  - "parts/nis2cz.01-scoping.yaml"
+  - "parts/nis2cz.02-governance.yaml"
+  - "parts/nis2cz.03-risk-measures.yaml"
+  - "parts/nis2cz.04-incidents.yaml"
+  - "parts/nis2cz.05-supply-chain.yaml"
+  - "parts/nis2cz.99-oversight-tagging.yaml"
