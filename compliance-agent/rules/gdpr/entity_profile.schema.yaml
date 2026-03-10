@@ -117,3 +117,15 @@ profile:
 
   # Notes for the assessor
   notes: ""
+
+  # ------------------------------------------------------------
+  # Codes of conduct / certification (Arts. 40–43)
+  # ------------------------------------------------------------
+  adheres_to_gdpr_code_of_conduct: false
+  relies_on_gdpr_certification: false
+
+  # True if the organisation itself is an accredited monitoring body under Art. 41.
+  is_art41_monitoring_body: false
+
+  # True if the organisation itself is an accredited certification body under Art. 43.
+  is_art43_certification_body: false

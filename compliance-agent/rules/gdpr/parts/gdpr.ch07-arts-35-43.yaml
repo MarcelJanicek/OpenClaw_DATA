@@ -257,3 +257,186 @@ rules:
   - citation: GDPR Art. 39(1)
   - citation: GDPR Art. 39(2)
   - citation: GDPR Recital 97
+
+- id: GDPR-ART40-CODES-OF-CONDUCT
+  title: Where relying on an approved code of conduct, adherence and monitoring are documented and maintained
+  scope:
+    applies_to:
+    - org
+    - processing_activity
+    - product
+    roles:
+    - controller
+    - processor
+  condition: Only if entity_profile.adheres_to_gdpr_code_of_conduct is true (i.e., you claim adherence to an approved GDPR code of conduct as a compliance or assurance mechanism)
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: code_is_approved_and_applicable
+      description: The specific code of conduct is identified (name/version/scope), approved under Art. 40 (and, where relevant, extended to transfers under Art. 40(3)), and its scope is applicable to the organisation's processing.
+    - key: adherence_commitment_and_internal_mapping
+      description: The organisation has a documented commitment to comply with the code and a mapping from code requirements to internal controls/processes (including owners and evidence locations).
+    - key: monitoring_body_and_process
+      description: The monitoring body (if applicable) is identified and engagement/monitoring processes are in place (audit cadence, reporting, issue handling, withdrawal/suspension conditions).
+    - key: changes_and_nonconformities_managed
+      description: Processes exist to manage code updates and any nonconformities (gap remediation plans, timelines, re-assessment, and communications where required).
+    - key: transparency_about_claims
+      description: Public/commercial claims of code adherence are accurate, bounded to scope, and supported by current evidence; marketing/contract materials are kept consistent with actual adherence status.
+  evidence_hints:
+    required:
+    - code_of_conduct_identification (name_version_scope_and_link)
+    - evidence_of_code_approval_status (e.g., SA/EDPB register entry)
+    - code_to_controls_mapping_and_owner_assignments
+    - monitoring_body_engagement_evidence_or_audit_reports (redacted)
+    - nonconformity_and_remediation_records (if any) (redacted)
+    - public_or_contractual_claims_about_code_adherence (and review/signoff)
+    artifacts:
+    - code_of_conduct_text_or_reference
+    - code_of_conduct_identification (name_version_scope_and_link)
+    - evidence_of_code_approval_status (e.g., SA/EDPB register entry)
+    - code_to_controls_mapping_and_owner_assignments
+    - monitoring_body_engagement_evidence_or_audit_reports (redacted)
+    - nonconformity_and_remediation_records (if any) (redacted)
+    - public_or_contractual_claims_about_code_adherence (and review/signoff)
+    questions:
+    - Which approved GDPR code of conduct do you adhere to, and what is its scope relative to your processing?
+    - How is adherence monitored (by whom, how often), and how do you handle findings/nonconformities?
+    checks:
+    - Confirm code adherence is scoped, evidenced, and kept current (not a one-time claim).
+  severity: medium
+  sources:
+  - citation: GDPR Art. 40(1)
+  - citation: GDPR Art. 40(2)
+  - citation: GDPR Art. 40(4)
+  - citation: GDPR Recital 98
+
+- id: GDPR-ART41-MONITORING-BODIES
+  title: If acting as an Art. 41 monitoring body for a code of conduct, independence and monitoring procedures are established
+  scope:
+    applies_to:
+    - org
+  roles:
+    - monitoring_body
+  condition: Only if entity_profile.is_art41_monitoring_body is true (i.e., the organisation is accredited to monitor compliance with an approved code of conduct)
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: accreditation_and_independence
+      description: Accreditation under Art. 41 is evidenced, and governance ensures appropriate independence and expertise to monitor the code.
+    - key: monitoring_procedures
+      description: Documented monitoring procedures exist (assessment criteria, audit methods, decision-making, frequency, reporting, complaints handling).
+    - key: enforcement_and_sanctions
+      description: Procedures exist to address noncompliance (corrective actions, suspension/withdrawal of adherence, escalation to supervisory authorities where appropriate).
+    - key: transparency_and_recordkeeping
+      description: Monitoring outcomes and key decisions are recorded; registers/listings of adherent entities and status are maintained where required.
+  evidence_hints:
+    required:
+    - accreditation_decision_or_certificate_as_monitoring_body
+    - monitoring_body_governance_and_independence_policy
+    - monitoring_procedures_and_assessment_criteria
+    - sample_monitoring_reports_and_noncompliance_handling_records (redacted)
+    - register_of_adherent_entities_and_status (if maintained)
+    artifacts:
+    - accreditation_decision_or_certificate_as_monitoring_body
+    - monitoring_body_governance_and_independence_policy
+    - monitoring_procedures_and_assessment_criteria
+    - complaints_and_appeals_process
+    - sample_monitoring_reports_and_noncompliance_handling_records (redacted)
+    - register_of_adherent_entities_and_status (if maintained)
+    questions:
+    - What is your accredited scope as a monitoring body, and how do you ensure independence and competence?
+    - How do you conduct monitoring and enforce consequences for noncompliance?
+  severity: medium
+  sources:
+  - citation: GDPR Art. 41(1)
+  - citation: GDPR Art. 41(2)
+  - citation: GDPR Art. 41(4)
+
+- id: GDPR-ART42-CERTIFICATION
+  title: Where relying on GDPR certification/seals/marks, certification scope, validity, and ongoing compliance are maintained
+  scope:
+    applies_to:
+    - org
+    - product
+    - system
+    - processing_activity
+  roles:
+    - controller
+    - processor
+  condition: Only if entity_profile.relies_on_gdpr_certification is true (i.e., you claim or rely on GDPR certification, seals, or marks under Art. 42)
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: certification_identified_and_valid
+      description: The certification/seal/mark is identified (scheme name/version/scope), is current/valid (not expired/withdrawn), and its scope matches the processing/products/systems claimed.
+    - key: certification_body_and_criteria
+      description: The certification body and scheme criteria are documented, and internal controls are mapped to certification requirements (including evidence locations and owners).
+    - key: ongoing_compliance_and_surveillance
+      description: Processes exist to maintain compliance (surveillance audits, change management triggers, recertification timeline) and to handle findings/nonconformities.
+    - key: accurate_public_claims
+      description: Public and contractual claims about certification are accurate, do not overstate scope, and are updated promptly if certification status changes.
+  evidence_hints:
+    required:
+    - certification_certificate_or_attestation (with scope_and_validity)
+    - certification_scheme_criteria_and_scope_statement
+    - mapping_of_certification_criteria_to_controls_and_evidence
+    - surveillance_audit_reports_and_corrective_action_records (redacted)
+    - public_or_contractual_claims_about_certification (and review/signoff)
+    artifacts:
+    - certification_certificate_or_attestation (with scope_and_validity)
+    - certification_scheme_criteria_and_scope_statement
+    - mapping_of_certification_criteria_to_controls_and_evidence
+    - surveillance_audit_reports_and_corrective_action_records (redacted)
+    - change_management_policy_linking_changes_to_recertification_review
+    - public_or_contractual_claims_about_certification (and review/signoff)
+    questions:
+    - What GDPR certification/seal/mark do you rely on, what is its scope, and is it current?
+    - How do you ensure material product/system changes trigger surveillance/recertification review?
+  severity: medium
+  sources:
+  - citation: GDPR Art. 42(1)
+  - citation: GDPR Art. 42(4)
+  - citation: GDPR Art. 42(7)
+  - citation: GDPR Recital 100
+
+- id: GDPR-ART43-CERTIFICATION-BODIES
+  title: If acting as a GDPR certification body, accreditation and certification procedures are established and maintained
+  scope:
+    applies_to:
+    - org
+  roles:
+    - certification_body
+  condition: Only if entity_profile.is_art43_certification_body is true (i.e., the organisation is accredited to issue GDPR certifications/seals/marks)
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: accreditation_status
+      description: Accreditation under Art. 43 is evidenced (by competent supervisory authority and/or national accreditation body) and kept current.
+    - key: certification_procedures
+      description: Documented certification procedures exist (application, evaluation against criteria, decision-making, issuance, surveillance, renewal/withdrawal, complaints/appeals).
+    - key: independence_and_competence
+      description: Governance ensures independence, impartiality, and competence (qualified personnel, conflict management, quality management).
+    - key: recordkeeping_and_transparency
+      description: Records of certifications issued/withdrawn and key decisions are maintained; publication/register obligations are met as applicable.
+  evidence_hints:
+    required:
+    - accreditation_certificate_or_decision_as_certification_body
+    - certification_scheme_rules_and_operating_procedures
+    - competence_and_impartiality_policies (incl_conflicts_management)
+    - sample_certification_case_files_and_surveillance_records (redacted)
+    - register_of_certifications_issued_and_status (if maintained)
+    artifacts:
+    - accreditation_certificate_or_decision_as_certification_body
+    - certification_scheme_rules_and_operating_procedures
+    - competence_and_impartiality_policies (incl_conflicts_management)
+    - complaints_and_appeals_process
+    - sample_certification_case_files_and_surveillance_records (redacted)
+    - register_of_certifications_issued_and_status (if maintained)
+    questions:
+    - What is your accredited scope as a certification body and which certification criteria do you use?
+    - How do you ensure impartiality, handle complaints/appeals, and withdraw certifications when criteria are no longer met?
+  severity: medium
+  sources:
+  - citation: GDPR Art. 43(1)
+  - citation: GDPR Art. 43(2)
+  - citation: GDPR Art. 43(5)
