@@ -1,7 +1,7 @@
 meta:
   ruleset_id: "nis2-cz"
-  version: "0.1"
-  status: "draft"
+  version: "1.0-pilot"
+  status: "complete"
   jurisdiction: ["CZ"]
   evaluation_profile_schema: "rules/nis2-cz/entity_profile.schema.yaml"
   sources:

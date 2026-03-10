@@ -1,6 +1,6 @@
 # NIS2-CZ ruleset milestones (core pilot)
 
-Status: in progress
+Status: complete
 
 ## Definition of done (pilot)
 - Covers the **core CZ KB package** (Act 264/2025 + decrees 408/409/410/334)
