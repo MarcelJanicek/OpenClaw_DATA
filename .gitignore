@@ -25,3 +25,8 @@ Thumbs.db
 # Local ad-hoc assets (not part of repo)
 extracted/
 wedding-assets/
+
+# Python cache
+**/__pycache__/
+*.pyc
+
