@@ -112,5 +112,8 @@ profile:
   # ------------------------------------------------------------
   has_incident_response_process: true
 
+  # Art. 36 prior consultation trigger — true if DPIA indicates residual high risk remains after envisaged measures.
+  residual_high_risk_after_mitigation: false
+
   # Notes for the assessor
   notes: ""

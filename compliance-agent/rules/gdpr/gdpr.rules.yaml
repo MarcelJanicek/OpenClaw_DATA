@@ -1576,47 +1576,141 @@ rules:
   - citation: GDPR Recital 86
   - citation: GDPR Recital 88
 - id: GDPR-ART35-DPIA
-  title: DPIA performed for high-risk processing (including some AI uses)
+  title: DPIA performed for high-risk processing and kept up to date
   scope:
     applies_to:
+    - processing_activity
     - product
+    - system
     roles:
     - controller
+  condition: Only if the processing is likely to result in a high risk to the rights and freedoms of natural persons (e.g., systematic monitoring; large-scale processing of sensitive data; novel/AI profiling with significant effects)
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: dpia_screening_and_trigger_criteria
+      description: DPIA trigger criteria are defined and applied before starting (or materially changing) a processing activity (including checking supervisory authority high-risk lists where applicable).
+    - key: dpia_performed_before_processing
+      description: Where required, the DPIA is performed before processing begins (or before the change goes live), and outcomes inform design decisions.
+    - key: dpia_includes_required_content
+      description: 'The DPIA documents at least: (a) a systematic description of processing operations and purposes (including legitimate interest where applicable); (b) an assessment of necessity and proportionality; (c) an assessment of risks to rights and freedoms; and (d) the measures envisaged to address risks (safeguards, security measures, mechanisms to ensure GDPR compliance).'
+    - key: stakeholder_and_dpo_involvement
+      description: Appropriate stakeholders are involved (legal, security, engineering, product), and the DPO is consulted where required/appointed; consultation inputs and sign-offs are recorded.
+    - key: mitigation_and_tracking
+      description: DPIA-identified mitigations are tracked to implementation (tickets/controls), and residual risk acceptance is documented with appropriate approval.
+    - key: kept_under_review
+      description: DPIAs are kept under review and updated where processing risks change (e.g., new data sources, new AI models, new recipients/transfers, incidents, or material product changes).
+  evidence_hints:
+    required:
+    - dpia_policy_or_standard_with_trigger_criteria (incl. when to perform, who approves)
+    - dpia_template_covering_art35_7_sections
+    - dpia_register_or_inventory
+    - completed_dpia_examples (redacted)
+    - records_of_dpo_and_stakeholder_consultation_and_signoff (redacted)
+    - mitigation_tracking_evidence (e.g., tickets/control register linking to DPIA) (redacted)
+    - residual_risk_acceptance_records (if any) (redacted)
+    artifacts:
+    - dpia_policy_or_standard_with_trigger_criteria (incl. when to perform, who approves)
+    - dpia_template_covering_art35_7_sections
+    - dpia_register_or_inventory
+    - completed_dpia_examples (redacted)
+    - records_of_dpo_and_stakeholder_consultation_and_signoff (redacted)
+    - mitigation_tracking_evidence (e.g., tickets/control register linking to DPIA) (redacted)
+    - residual_risk_acceptance_records (if any) (redacted)
+    questions:
+    - What criteria do you use to decide a DPIA is required, and do you check the relevant supervisory authority lists?
+    - Can you show an example DPIA that includes all Art. 35(7) elements and led to concrete design/control changes?
+    - How do you keep DPIAs up to date as products/models/data flows evolve?
+    checks:
+    - Confirm DPIA documentation covers Art. 35(7)(a)–(d) items and was completed before processing (or before the change went live).
+    - Confirm mitigations are tracked to implementation and residual risk acceptance is documented.
+  severity: high
+  sources:
+  - citation: GDPR Art. 35(1)
+  - citation: GDPR Art. 35(3)
+  - citation: GDPR Art. 35(7)
+  - citation: GDPR Art. 35(9)
+  - citation: GDPR Art. 35(11)
+  - citation: GDPR Recital 90
+  - citation: GDPR Recital 91
+  - citation: GDPR Recital 92
+  - citation: GDPR Recital 93
+- id: GDPR-ART36-PRIOR-CONSULTATION
+  title: Prior consultation with supervisory authority when DPIA indicates residual high risk
+  scope:
+    applies_to:
+    - processing_activity
+    - org
+    roles:
+    - controller
+  condition: Only if entity_profile.residual_high_risk_after_mitigation is true (i.e., DPIA indicates a high risk would remain in the absence of measures to mitigate, or mitigations are insufficient and residual high risk remains)
   requirement:
     type: process_required
     must_include:
-    - screening_for_high_risk
-    - DPIA_template
-    - assessment_of_necessity_proportionality
-    - risk_assessment
-    - mitigation_measures
+    - criteria_for_prior_consultation (when Art. 36 is triggered)
+    - consultation_package (DPIA, purposes, safeguards, contact details, other required information)
+    - legal_and_dpo_review_before_submission
+    - timeline_and_tracking_of_sa_interactions
+    - implementation_of_sa_advice_or_reasoned_deviation
   evidence_hints:
+    required:
+    - prior_consultation_procedure_or_playbook
+    - dpia_showing_residual_high_risk_and_decision_to_consult (redacted)
+    - supervisory_authority_submission_package_or_cover_letter (redacted)
+    - records_of_sa_feedback_and_follow_up_actions (redacted)
     artifacts:
-    - DPIA
-    - risk_register
+    - prior_consultation_procedure_or_playbook
+    - dpia_showing_residual_high_risk_and_decision_to_consult (redacted)
+    - supervisory_authority_submission_package_or_cover_letter (redacted)
+    - records_of_sa_feedback_and_follow_up_actions (redacted)
     questions:
-    - Do you do large-scale profiling, special category data, systematic monitoring, or new technologies impacting individuals?
+    - Who decides that residual high risk remains and that prior consultation is required?
+    - What materials do you submit to the supervisory authority, and how do you track and implement their advice?
+    checks:
+    - Confirm the consultation package includes the DPIA and other information required by Art. 36(3).
   severity: high
   sources:
-  - citation: GDPR Art. 35
+  - citation: GDPR Art. 36(1)
+  - citation: GDPR Art. 36(2)
+  - citation: GDPR Art. 36(3)
+  - citation: GDPR Recital 94
 - id: GDPR-ART37-DPO
-  title: DPO appointed where required
+  title: DPO appointed where required, with published contact details
   scope:
     applies_to:
     - org
     roles:
     - controller
     - processor
+  condition: Only if entity_profile.public_authority_or_body is true OR (entity_profile.does_systematic_monitoring is true AND entity_profile.large_scale_processing is true) OR ((entity_profile.processes_special_categories is true OR entity_profile.processes_criminal_offence_data is true) AND entity_profile.large_scale_processing is true)
   requirement:
     type: decision_and_documentation
     must_include:
-    - assessment_of_DPO_requirement
-    - appointment_details_if_required
-    - public_contact_details
+    - assessment_of_DPO_requirement (including rationale against Art. 37 triggers)
+    - appointment_details_if_required (name/role, reporting line, independence)
+    - public_contact_details (privacy notice and other easy-access channels)
+    - scope_of_dpo_responsibility (which entities/processing are covered)
   evidence_hints:
+    required:
+    - dpo_requirement_assessment (documented analysis)
+    - dpo_appointment_letter_or_contract (if required)
+    - org_chart_or_reporting_line_showing_dpo_independence
+    - published_dpo_contact_details (privacy_notice_or_website)
     artifacts:
-    - DPO_assessment
-    - privacy_notice
+    - dpo_requirement_assessment (documented analysis)
+    - dpo_appointment_letter_or_contract (if required)
+    - org_chart_or_reporting_line_showing_dpo_independence
+    - published_dpo_contact_details (privacy_notice_or_website)
+    questions:
+    - Do your core activities involve regular and systematic monitoring on a large scale, or large-scale special category/criminal data processing?
+    - Where are the DPO contact details published and how do requests reach the DPO?
+    checks:
+    - Confirm the organisation has documented its DPO assessment and, where required, can evidence appointment and published contact details.
   severity: medium
   sources:
-  - citation: GDPR Art. 37
+  - citation: GDPR Art. 37(1)
+  - citation: GDPR Art. 37(2)
+  - citation: GDPR Art. 37(3)
+  - citation: GDPR Art. 37(5)
+  - citation: GDPR Art. 37(7)
+  - citation: GDPR Recital 97
