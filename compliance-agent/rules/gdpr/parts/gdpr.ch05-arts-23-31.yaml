@@ -22,7 +22,7 @@ rules:
     - controller
     - processor
     - joint_controller
-    condition: Only if entity_profile.relies_on_art23_restrictions is true (i.e., you rely on Union/Member State law to restrict GDPR obligations/rights under Art. 23)
+    condition: Only if entity_profile.relies_on_art23_restrictions is true (i.e., you rely on a specific Union/Member State law to restrict GDPR obligations/rights under Art. 23)
   requirement:
     type: multi_obligation
     obligations:
@@ -39,7 +39,7 @@ rules:
     - key: safeguards_documented
       description: Safeguards and governance are documented (including access controls, audit logging, authorized personnel, and review/oversight) to prevent abuse.
     - key: art23_2_elements_addressed
-      description: "Where applicable, the restriction framework addresses the elements listed in Art. 23(2) (in particular: purposes of processing/categories of processing; categories of personal data; scope of restrictions; safeguards to prevent abuse or unlawful access/transfer; controller categories; storage periods; risks to rights/freedoms; and whether/how data subjects are informed)."
+      description: "Where relevant, the restriction framework includes the specific provisions listed in Art. 23(2), including: (a) purposes of processing/categories of processing; (b) categories of personal data; (c) scope of restrictions; (d) safeguards to prevent abuse or unlawful access/transfer; (e) controller categories; (f) storage periods and applicable safeguards; (g) risks to rights/freedoms; and (h) whether/how data subjects are informed, unless that may be prejudicial to the restriction purpose."
     - key: dsar_process_integration
       description: DSAR/rights-handling procedures and tooling implement the restriction controls (including criteria, approvals, and redaction/withholding steps) consistently.
     - key: redaction_and_disclosure_rules_defined
@@ -91,7 +91,7 @@ rules:
   severity: high
   sources:
   - citation: GDPR Art. 23(1)
-  - citation: GDPR Art. 23(2)
+  - citation: GDPR Art. 23(2)(a)-(h)
   - citation: GDPR Recital 73
 
 - id: GDPR-ART24-CONTROLLER-ACCOUNTABILITY
