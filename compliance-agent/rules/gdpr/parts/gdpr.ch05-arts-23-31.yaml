@@ -94,6 +94,50 @@ rules:
   - citation: GDPR Art. 23(2)(a)-(h)
   - citation: GDPR Recital 73
 
+- id: GDPR-ART23-RESTRICTION-LEGAL-REVIEW
+  title: Art. 23 restriction laws and safeguards are legally reviewed and kept current as laws and use-cases change
+  scope:
+    applies_to:
+    - org
+    - processing_activity
+    roles:
+    - controller
+    - processor
+    - joint_controller
+    condition: Only if entity_profile.relies_on_art23_restrictions is true (i.e., you rely on a specific Union/Member State law to restrict GDPR obligations/rights under Art. 23)
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: legal_review_per_restriction_use_case
+      description: Each restriction use-case has a documented legal review confirming the Art. 23(1) purpose(s), scope, and any specific conditions/limitations under the applicable Union/Member State law.
+    - key: art23_2_mapping_maintained
+      description: A maintained mapping exists showing how the applicable law and your implementation address relevant Art. 23(2)(a)–(h) elements (purpose/categories/scope/safeguards/controller categories/storage periods/risks/informing), and gaps are tracked to remediation.
+    - key: change_management_and_refresh
+      description: There is change management for restriction logic (code/config/policies) and a periodic refresh of legal analysis (e.g., when the law changes, when use-cases expand, or at a defined cadence).
+    - key: governance_and_approvals
+      description: The organisation defines who can approve introducing or expanding Art. 23 restrictions (e.g., legal/privacy leadership) and retains approval records.
+  evidence_hints:
+    required:
+    - art23_restriction_register_with_legal_reviews_and_approvals
+    - art23_2_elements_mapping_document (law_to_controls_and_processes)
+    - change_management_records_for_restriction_logic (tickets, PRs, policy versions) (redacted)
+    - periodic_legal_refresh_schedule_or_review_minutes (redacted)
+    artifacts:
+    - art23_restriction_register_with_legal_reviews_and_approvals
+    - art23_2_elements_mapping_document (law_to_controls_and_processes)
+    - change_management_records_for_restriction_logic (tickets, PRs, policy versions) (redacted)
+    - periodic_legal_refresh_schedule_or_review_minutes (redacted)
+    questions:
+    - Who reviews and approves each Art. 23 restriction use-case, and how do you ensure it remains lawful as laws/use-cases change?
+    - Where is the mapping between the applicable law, Art. 23(2) elements, and your implemented safeguards maintained?
+    checks:
+    - Confirm there is explicit governance and periodic refresh for restrictions (not a one-time memo).
+  severity: medium
+  sources:
+  - citation: GDPR Art. 23(1)
+  - citation: GDPR Art. 23(2)
+  - citation: GDPR Recital 73
+
 - id: GDPR-ART24-CONTROLLER-ACCOUNTABILITY
   title: Controller implements appropriate measures and can demonstrate GDPR compliance (accountability)
   scope:
