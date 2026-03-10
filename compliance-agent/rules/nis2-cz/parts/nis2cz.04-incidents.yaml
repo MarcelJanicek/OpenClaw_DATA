@@ -5,4 +5,77 @@ meta:
   jurisdiction: ["CZ"]
   evaluation_profile_schema: "rules/nis2-cz/entity_profile.schema.yaml"
 
-rules: []
+rules:
+  # Milestone 3.1 — Incident classification + register
+
+  - id: "NIS2CZ-INC-CLASSIFICATION-SCHEME"
+    title: "Incident classification and severity scheme is defined and used"
+    scope:
+      applies_to: ["org"]
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+    requirement:
+      type: "document_required"
+      document: "incident_classification_scheme"
+      must_include:
+        - "definitions (cybersecurity_event vs cybersecurity_incident)"
+        - "classification_categories (e.g., confidentiality|integrity|availability|legal|supply_chain)"
+        - "severity_levels (with criteria and escalation triggers)"
+        - "impact_assessment_fields (users/services affected, duration, data impact)"
+        - "decision_authority (who classifies/reclassifies)"
+        - "link_to_reporting_thresholds_and_timelines"
+        - "review_and_update_cycle"
+    evidence_hints:
+      required:
+        - "incident_classification_scheme"
+      artifacts:
+        - "incident_classification_scheme"
+        - "incident_response_plan"
+        - "soc_runbooks_or_playbooks"
+        - "ticketing_workflow_screenshots"
+    severity: "high"
+    sources:
+      - citation: "CZ-Act-264-2025 (incident handling duties; governance responsibility)"
+      - citation: "CZ-Decree-409-2025 (higher duties: incident handling process + classification expectations)"
+      - citation: "CZ-Decree-410-2025 (lower duties: incident handling process + classification expectations)"
+      - citation: "CZ-Decree-334-2025 (incident reporting thresholds/timelines/content — used to drive classification)"
+      - citation: "EU-NIS2-2022-2555 Art. 23 (mapping: incident reporting)"
+
+  - id: "NIS2CZ-INC-REGISTER"
+    title: "Incident register is maintained with required fields and retained"
+    scope:
+      applies_to: ["org"]
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+    requirement:
+      type: "document_required"
+      document: "incident_register"
+      must_include:
+        - "unique_incident_id"
+        - "date_time_detected_and_closed"
+        - "classification_and_severity (per approved scheme)"
+        - "affected_assets_and_services"
+        - "impact_summary (availability, integrity, confidentiality, legal/regulatory)"
+        - "actions_taken (containment/eradication/recovery)"
+        - "external_reporting_status (who/when/reference_numbers)"
+        - "evidence_and_logs_references"
+        - "root_cause_or_contributing_factors (when known)"
+        - "lessons_learned_and_followup_actions"
+        - "retention_period_and_access_controls"
+    evidence_hints:
+      required:
+        - "incident_register"
+      artifacts:
+        - "incident_register"
+        - "ticketing_export"
+        - "siem_case_management_export"
+        - "post_incident_reports"
+    severity: "high"
+    sources:
+      - citation: "CZ-Act-264-2025 (incident documentation and accountability duties)"
+      - citation: "CZ-Decree-409-2025 (higher duties: incident records/register + evidence retention)"
+      - citation: "CZ-Decree-410-2025 (lower duties: incident records/register + evidence retention)"
+      - citation: "CZ-Decree-334-2025 (incident reporting recordkeeping: proofs of submission/communication)"
+      - citation: "EU-NIS2-2022-2555 Art. 23 (mapping: reporting + documentation)"
