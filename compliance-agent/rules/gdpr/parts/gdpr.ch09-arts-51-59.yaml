@@ -10,4 +10,117 @@ meta:
     url: https://eur-lex.europa.eu/eli/reg/2016/679/oj
   notes:
   - This ruleset is designed for SaaS/AI products. Some obligations vary depending on whether you are controller/processor/joint controller.
-rules: []
+
+rules:
+- id: GDPR-ART55-56-COMPETENT-SUPERVISORY-AUTHORITY
+  title: Competent supervisory authority (and lead authority for cross-border processing) is identified and documented
+  scope:
+    applies_to:
+    - org
+    - processing_activity
+    roles:
+    - controller
+    - processor
+    - joint_controller
+  requirement:
+    type: decision_and_documentation
+    must_include:
+    - identification_of_competent_supervisory_authority_or_authorities (by_member_state)
+    - rationale_for_competence (establishment_location_or_targeting_or_other_applicability)
+    - identification_of_main_establishment_and_lead_supervisory_authority_for_cross_border_processing (if_applicable)
+    - internal_points_of_contact_and_escalation_for_sa_matters
+    - process_to_keep_authority_mapping_current (e.g., when establishment/processing scope changes)
+  evidence_hints:
+    required:
+    - supervisory_authority_mapping (competent_and_lead_sa_assessment)
+    - documentation_of_main_establishment_and_cross_border_processing_analysis (if_applicable)
+    - internal_playbook_for_regulator_inquiries_and_escalation
+    artifacts:
+    - supervisory_authority_mapping (competent_and_lead_sa_assessment)
+    - documentation_of_main_establishment_and_cross_border_processing_analysis (if_applicable)
+    - internal_playbook_for_regulator_inquiries_and_escalation
+    - org_structure_and_establishment_locations
+    questions:
+    - Which supervisory authority is competent for your processing, and do you have cross-border processing that triggers a lead supervisory authority?
+    - Where is your “main establishment” in the EU (if any), and how did you determine it?
+    checks:
+    - Confirm the mapping is reviewed when expansion into new Member States, new establishments, or material processing changes occur.
+  severity: medium
+  sources:
+  - citation: GDPR Art. 55
+  - citation: GDPR Art. 56
+
+- id: GDPR-ART58-SA-POWERS-READINESS
+  title: Organisation is prepared to respond to supervisory authority investigative and corrective powers
+  scope:
+    applies_to:
+    - org
+    roles:
+    - controller
+    - processor
+    - joint_controller
+  requirement:
+    type: process_required
+    must_include:
+    - ability_to_receive_and_authenticate_sa_requests (channels_and_identity_checks)
+    - internal_process_to_collect_information_and_evidence (systems_vendors_legal_security)
+    - procedure_for_supporting_audits_and_inspections (including_secure_access_and_confidentiality_controls)
+    - decision_workflow_for_complying_with_or_challenging_orders (legal_review_and_deadlines)
+    - recordkeeping_of_sa_requests_and_responses
+  evidence_hints:
+    required:
+    - procedure_for_handling_supervisory_authority_requests
+    - sample_evidence_pack_or_data_room_index_for_sa_requests
+    - log_or_ticket_history_of_sa_requests_and_responses (redacted)
+    artifacts:
+    - procedure_for_handling_supervisory_authority_requests
+    - sample_evidence_pack_or_data_room_index_for_sa_requests
+    - log_or_ticket_history_of_sa_requests_and_responses (redacted)
+    - roles_and_responsibility_matrix_for_regulator_response
+    questions:
+    - If the supervisory authority requested information or initiated an audit, who coordinates the response and how do you meet deadlines?
+    - How do you provide access/evidence while protecting unrelated confidential information?
+    checks:
+    - Confirm the process accounts for potential corrective measures (e.g., orders to comply, limits on processing) and includes legal review.
+  severity: medium
+  sources:
+  - citation: GDPR Art. 58(1)
+  - citation: GDPR Art. 58(2)
+  - citation: GDPR Art. 58(3)
+
+- id: GDPR-ART57-59-SA-INTERACTIONS-AWARENESS
+  title: Organisation maintains awareness of supervisory authority guidance, complaint handling, and cooperation expectations
+  scope:
+    applies_to:
+    - org
+    roles:
+    - controller
+    - processor
+    - joint_controller
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: guidance_monitoring
+      description: A process exists to monitor relevant supervisory authority guidance, recommendations, and decisions that may affect the organisation's processing (e.g., sector guidance, enforcement trends), and to update controls accordingly.
+    - key: complaint_and_inquiry_handling_alignment
+      description: Customer/support/legal workflows route data protection complaints and supervisory authority inquiries appropriately, including tracking and timely responses.
+    - key: cooperation_expectations_understood
+      description: The organisation maintains internal awareness/training that supervisory authorities may cooperate with each other (cross-border cases) and that consistency mechanisms may apply, so responses are coordinated and consistent.
+  evidence_hints:
+    required:
+    - regulatory_watch_process_or_subscription_and_internal_update_notes
+    - internal_ticket_routing_for_privacy_complaints_and_regulator_inquiries
+    - training_or_guidance_materials_for_staff_on_regulatory_interactions
+    artifacts:
+    - regulatory_watch_process_or_subscription_and_internal_update_notes
+    - internal_ticket_routing_for_privacy_complaints_and_regulator_inquiries
+    - training_or_guidance_materials_for_staff_on_regulatory_interactions
+    questions:
+    - How do you keep track of supervisory authority guidance/enforcement developments relevant to your product and update your privacy program?
+    checks:
+    - Confirm there is an owner for regulatory monitoring and a mechanism to translate guidance into control changes.
+  severity: low
+  sources:
+  - citation: GDPR Art. 57
+  - citation: GDPR Art. 58
+  - citation: GDPR Art. 59
