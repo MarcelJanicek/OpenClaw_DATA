@@ -28,7 +28,7 @@ rules:
     obligations:
     - key: legal_basis_identified
       description: The specific Union/Member State law relied upon is identified, version-controlled, and mapped to the restricted GDPR rights/obligations ("provided for by law").
-    - key: processor_instruction_or_mandate (if_applicable)
+    - key: processor_instruction_or_mandate
       description: Where the organisation acts as a processor, restrictions are applied only where required by Union/Member State law or instructed/mandated by the controller under the applicable contract/DPA and documented procedures (i.e., the processor does not unilaterally restrict data subject rights).
     - key: rights_obligations_restricted_catalogued
       description: For each restriction, the exact GDPR rights/obligations affected (e.g., Arts. 12–22, 34) are enumerated, with an implementation description (what is withheld/redacted/delayed, and in what circumstances).
@@ -58,7 +58,7 @@ rules:
     required:
     - copies_of_applicable_member_state_or_union_law
     - art23_legal_basis_register_or_legal_memo
-    - controller_instruction_or_mandate_for_art23_restrictions (if_processor)
+    - controller_instruction_or_mandate_for_art23_restrictions_if_processor
     - restriction_rights_mapping_matrix (rights/obligations affected per restriction use-case)
     - legal_review_or_counsel_signoff_for_art23_restrictions
     - necessity_and_proportionality_assessment_for_art23_restrictions
@@ -72,7 +72,7 @@ rules:
     artifacts:
     - copies_of_applicable_member_state_or_union_law
     - art23_legal_basis_register_or_legal_memo
-    - controller_instruction_or_mandate_for_art23_restrictions (if_processor)
+    - controller_instruction_or_mandate_for_art23_restrictions_if_processor
     - restriction_rights_mapping_matrix (rights/obligations affected per restriction use-case)
     - legal_review_or_counsel_signoff_for_art23_restrictions
     - necessity_and_proportionality_assessment_for_art23_restrictions
