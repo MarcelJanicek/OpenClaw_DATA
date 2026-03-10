@@ -687,6 +687,140 @@ rules:
   - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: dohled/monitoring a vyhodnocování událostí)'
   - citation: 'CZ-Decree-410-2025 (nižší povinnosti: dohled/monitoring a vyhodnocování událostí)'
   - citation: EU-NIS2-2022-2555 Art. 21(2)(f) (incident handling) [mapping]
+- id: NIS2CZ-RISK-VULN-MGMT-POLICY
+  title: Vulnerability management and patching policy is defined and approved
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: document_required
+    document: vulnerability_and_patch_management_policy
+    must_include:
+    - scope (systems, applications, cloud, third-party components)
+    - vulnerability_sources (scans, advisories, pentests, bug reports)
+    - risk_rating_method (e.g., CVSS + asset criticality/context)
+    - remediation_slas (by severity and asset criticality)
+    - emergency_patch_process (out-of-cycle)
+    - exception_process (risk acceptance, compensating controls, expiry)
+    - verification_of_remediation (re-scan/retest)
+    - integration_with_change_management
+    - metrics_and_reporting (e.g., patch compliance, MTTR)
+  evidence_hints:
+    required:
+    - vulnerability_and_patch_management_policy
+    artifacts:
+    - vulnerability_and_patch_management_policy
+    - policy_register
+    - risk_rating_methodology
+    - patching_sla_matrix
+  severity: high
+  sources:
+  - citation: CZ-Act-264-2025 (povinnost zavést a udržovat opatření kybernetické bezpečnosti)
+  - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: správa zranitelností / aktualizace)'
+  - citation: 'CZ-Decree-410-2025 (nižší povinnosti: správa zranitelností / aktualizace)'
+  - citation: EU-NIS2-2022-2555 Art. 21(2)(e) (vulnerability handling and disclosure) [mapping]
+- id: NIS2CZ-RISK-VULN-SCANNING-COVERAGE
+  title: Vulnerability scanning is performed with defined coverage and cadence
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: process_required
+    process: vulnerability_scanning
+    must_include:
+    - asset_coverage_definition (internal, external, cloud, containers where used)
+    - scan_cadence (at least monthly for critical; risk-based otherwise)
+    - authenticated_scanning_where_feasible
+    - handling_of_scan_exceptions (documented, time-bounded)
+    - triage_and_ticketing_workflow
+    - tracking_to_closure (status, due dates, owners)
+  evidence_hints:
+    required:
+    - vulnerability_scan_schedule
+    - vulnerability_scan_reports
+    - remediation_ticket_export
+    artifacts:
+    - vulnerability_scan_schedule
+    - vulnerability_scan_reports
+    - remediation_ticket_export
+    - asset_inventory
+    - scanner_configuration_export
+  severity: high
+  sources:
+  - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: pravidelné zjišťování zranitelností)'
+  - citation: 'CZ-Decree-410-2025 (nižší povinnosti: zjišťování zranitelností)'
+  - citation: EU-NIS2-2022-2555 Art. 21(2)(d)(e) (policies; vulnerability handling) [mapping]
+- id: NIS2CZ-RISK-PATCH-MGMT-COMPLIANCE
+  title: Patch management is executed, tracked, and verified for in-scope systems
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: process_required
+    process: patch_management
+    must_include:
+    - patch_intake_sources (vendor advisories, CERT/NÚKIB alerts, scanners)
+    - prioritization_criteria (severity + exploitability + asset criticality)
+    - testing_and_change_approval (where required)
+    - deployment_methods (automation where feasible)
+    - emergency_patching (fast-track approvals)
+    - verification_and_reporting (compliance %, exceptions)
+    - firmware_and_network_device_updates (where applicable)
+  evidence_hints:
+    required:
+    - patching_records
+    - patch_compliance_report
+    artifacts:
+    - patching_records
+    - patch_compliance_report
+    - change_tickets
+    - emergency_change_records
+    - endpoint_management_reports
+  severity: high
+  sources:
+  - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: aktualizace a odstraňování zranitelností)'
+  - citation: 'CZ-Decree-410-2025 (nižší povinnosti: aktualizace a odstraňování zranitelností)'
+  - citation: EU-NIS2-2022-2555 Art. 21(2)(d)(e) (policies; vulnerability handling) [mapping]
+- id: NIS2CZ-RISK-VULN-DISCLOSURE-HANDLING
+  title: A channel and process exist to receive and handle reported vulnerabilities
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: process_required
+    process: vulnerability_disclosure_handling
+    must_include:
+    - intake_channel (email/web form/security.txt or equivalent)
+    - triage_and_acknowledgement (timelines, roles)
+    - coordination_with_remediation_process
+    - communication_guidelines (internal/external; legal review where needed)
+    - recordkeeping (case register)
+  evidence_hints:
+    required:
+    - vulnerability_reporting_channel_evidence
+    - vulnerability_case_register
+    artifacts:
+    - vulnerability_reporting_channel_evidence
+    - vulnerability_case_register
+    - security_txt_file
+    - support_ticket_samples (redacted)
+  severity: medium
+  sources:
+  - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: nakládání se zranitelnostmi / hlášení)'
+  - citation: 'CZ-Decree-410-2025 (nižší povinnosti: nakládání se zranitelnostmi / hlášení)'
+  - citation: EU-NIS2-2022-2555 Art. 21(2)(e) (vulnerability handling and disclosure) [mapping]
 - id: NIS2CZ-INC-CLASSIFICATION-SCHEME
   title: Incident classification and severity scheme is defined and used
   scope:
