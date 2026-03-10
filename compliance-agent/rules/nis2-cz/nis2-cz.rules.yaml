@@ -41,4 +41,29 @@ rules:
     - org_chart
   severity: high
   sources:
-  - citation: CZ-Act-264-2025 (scope provisions)
+  - citation: CZ-Act-264-2025 §1 (předmět úpravy)
+  - citation: CZ-Act-264-2025 §2 (vymezení pojmů; aktiva/služby)
+- id: NIS2CZ-FOUNDATIONS-EVIDENCE-REGISTER
+  title: Evidence artifact taxonomy and register are maintained
+  scope:
+    applies_to:
+    - org
+  requirement:
+    type: document_required
+    document: nis2cz_evidence_register
+    must_include:
+    - artifact_taxonomy (types + definitions)
+    - artifact_naming_convention
+    - artifact_owner_per_type
+    - retention_or_location_per_type
+    - mapping_to_rules (rule_id -> evidence artifacts)
+  evidence_hints:
+    required:
+    - nis2cz_evidence_register
+    artifacts:
+    - nis2cz_evidence_register
+    - document_register
+    - records_management_policy
+  severity: medium
+  sources:
+  - citation: CZ-Act-264-2025 (governance/documentation expectations for cybersecurity measures)
