@@ -159,3 +159,161 @@ rules:
   - citation: GDPR Art. 46(2)
   - citation: GDPR Art. 46(3)
   - citation: GDPR Recital 108
+
+- id: GDPR-ART47-BCR
+  title: Where relying on Binding Corporate Rules (BCRs), BCR approval, scope, and enforceable rights/remedies are documented and implemented
+  scope:
+    applies_to:
+    - org
+    - contracts
+    - processing_activity
+    - group_entities
+    roles:
+    - controller
+    - processor
+    - joint_controller
+    condition: Only if entity_profile.transfers_outside_eea is true AND "BCR" is in entity_profile.transfer_mechanisms
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: bcrs_approved_and_in_force
+      description: Approved Binding Corporate Rules (controller or processor BCRs, as applicable) are in force, with evidence of supervisory authority approval and current version control.
+    - key: scope_and_entities_defined
+      description: The BCR scope is documented (covered group entities, categories of transfers, processing activities, and locations) and transfer register entries map to the BCR scope.
+    - key: third_party_beneficiary_rights
+      description: The BCRs provide data subjects with enforceable rights and effective remedies (third-party beneficiary rights) and the organisation has a process to operationalize those rights.
+    - key: complaint_handling_and_cooperation
+      description: Procedures exist for handling data subject complaints and cooperating with supervisory authorities regarding BCR-covered transfers, including an identified EU contact point.
+    - key: audits_and_accountability
+      description: There is an audit program and accountability mechanism for BCR compliance across group entities (training, internal audits, remediation tracking, and governance oversight).
+    - key: subcontracting_and_onward_transfers
+      description: Onward transfers and subcontracting (including sub-processors) are controlled to ensure equivalent protections and alignment with the BCR commitments.
+  evidence_hints:
+    required:
+    - bcr_approval_decision_and_bcr_text (current_version)
+    - bcr_scope_mapping_to_group_entities_and_transfers
+    - process_for_data_subject_rights_and_complaints_under_bcrs
+    - bcr_audit_program_and_recent_audit_reports (redacted)
+    - remediation_and_governance_records_for_bcr_compliance (redacted)
+    artifacts:
+    - bcr_approval_decision_and_bcr_text (current_version)
+    - bcr_scope_mapping_to_group_entities_and_transfers
+    - bcr_scope_list_of_covered_entities_and_locations
+    - process_for_data_subject_rights_and_complaints_under_bcrs
+    - bcr_audit_program_and_recent_audit_reports (redacted)
+    - remediation_and_governance_records_for_bcr_compliance (redacted)
+    questions:
+    - Are you relying on controller BCRs or processor BCRs, and which group entities/transfers are covered?
+    - How do data subjects exercise enforceable rights/remedies under the BCRs, and how are complaints handled?
+    - How do you audit BCR compliance across group entities and track remediation?
+    checks:
+    - Confirm the BCRs are approved, current, and the transfer inventory/register maps covered transfers to the BCR scope.
+    - Confirm there is evidence of audits/governance to ensure BCR commitments are implemented in practice.
+  severity: high
+  sources:
+  - citation: GDPR Art. 47(1)
+  - citation: GDPR Art. 47(2)
+  - citation: GDPR Art. 47(3)
+  - citation: GDPR Recital 110
+  - citation: GDPR Recital 111
+
+- id: GDPR-ART48-FOREIGN-DISCLOSURE-REQUESTS
+  title: Requests/orders from third-country courts/authorities to disclose personal data are handled via an EU-recognised legal basis and documented (Art. 48)
+  scope:
+    applies_to:
+    - org
+    - system
+    - legal_requests
+    roles:
+    - controller
+    - processor
+    - joint_controller
+    condition: Only if entity_profile.receives_foreign_disclosure_requests is true
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: no_disclosure_on_foreign_order_alone
+      description: Personal data is not transferred/disclosed solely on the basis of a third-country court judgment or administrative authority decision/request.
+    - key: eu_legal_basis_identified
+      description: Disclosures are made only where a valid EU-recognised legal basis applies (e.g., an international agreement such as an MLAT, or another applicable GDPR legal basis/derogation), and the basis is documented per request.
+    - key: legal_request_review_process
+      description: A documented process exists to review foreign disclosure requests (legal review, scope minimisation, conflict of law assessment, and escalation), and to challenge/seek clarification where appropriate.
+    - key: minimisation_and_security
+      description: Disclosures are limited to what is necessary, subject to access controls, logged, and securely transmitted; where feasible, transparency to affected parties is considered consistent with legal constraints.
+    - key: recordkeeping
+      description: Records are maintained for each request and disclosure decision (request details, legal basis, scope, data disclosed, recipients, and any challenges).
+  evidence_hints:
+    required:
+    - legal_request_handling_policy_and_playbook
+    - sample_request_case_files_with_legal_basis_and_decision_log (redacted)
+    - record_of_international_agreements_or_mechanisms_used (e.g., MLAT_process)
+    - disclosure_logging_and_access_control_evidence
+    artifacts:
+    - legal_request_handling_policy_and_playbook
+    - sample_request_case_files_with_legal_basis_and_decision_log (redacted)
+    - record_of_international_agreements_or_mechanisms_used (e.g., MLAT_process)
+    - disclosure_logging_and_access_control_evidence
+    - secure_transmission_procedures_for_disclosures
+    questions:
+    - Do you receive foreign government/court requests for personal data, and how are they reviewed and recorded?
+    - What EU-recognised legal basis is used for disclosures (international agreement, derogation, etc.), and who approves?
+    checks:
+    - Confirm foreign orders are not treated as sufficient on their own and each disclosure has an EU-recognised legal basis and decision record.
+  severity: high
+  sources:
+  - citation: GDPR Art. 48
+  - citation: GDPR Recital 115
+
+- id: GDPR-ART49-DEROGATIONS
+  title: Where relying on a transfer derogation (Art. 49), each transfer is assessed case-by-case, limited, and documented
+  scope:
+    applies_to:
+    - org
+    - contracts
+    - processing_activity
+    - system
+    roles:
+    - controller
+    - processor
+    - joint_controller
+    condition: Only if entity_profile.transfers_outside_eea is true AND "derogation" is in entity_profile.transfer_mechanisms
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: derogation_selected_and_conditions_met
+      description: For each transfer (or defined transfer scenario), the specific Art. 49 derogation relied upon is identified and all conditions are documented as met (e.g., explicit consent; necessity for contract; important public interest; legal claims; vital interests; register; or compelling legitimate interests under Art. 49(1) second subparagraph).
+    - key: last_resort_and_non_repetitive_for_clii
+      description: Where relying on compelling legitimate interests (Art. 49(1) second subparagraph), the transfer is not repetitive, concerns only a limited number of data subjects, is necessary for compelling legitimate interests not overridden by interests/rights, suitable safeguards are provided, and the supervisory authority is informed where required.
+    - key: transparency_and_information
+      description: Where required, data subjects are informed about the transfer and the derogation relied upon, including possible risks of transfers without appropriate safeguards.
+    - key: minimisation_and_safeguards
+      description: Transfers under derogations are scoped to the minimum necessary, protected in transit, and subject to access controls/logging; supplementary safeguards are applied where feasible.
+    - key: documentation_and_recordkeeping
+      description: A record is maintained of derogation assessments/decisions and associated transfers (including rationale, categories of data, recipients/countries, frequency, and approvals), and the transfer register is updated accordingly.
+  evidence_hints:
+    required:
+    - derogation_assessment_template_and_completed_assessments (redacted)
+    - records_of_explicit_consent_for_transfer_if_relied_upon (if_applicable)
+    - contract_necessity_analysis_for_transfer_if_relied_upon (if_applicable)
+    - public_interest_or_legal_claims_basis_documentation (if_applicable)
+    - transfer_register_entries_tagged_as_art49_derogations
+    - data_subject_information_text_about_derogation_and_risks (if_applicable)
+    artifacts:
+    - derogation_assessment_template_and_completed_assessments (redacted)
+    - records_of_explicit_consent_for_transfer_if_relied_upon (if_applicable)
+    - contract_necessity_analysis_for_transfer_if_relied_upon (if_applicable)
+    - public_interest_or_legal_claims_basis_documentation (if_applicable)
+    - transfer_register_entries_tagged_as_art49_derogations
+    - data_subject_information_text_about_derogation_and_risks (if_applicable)
+    questions:
+    - Which Art. 49 derogation(s) do you rely on for which transfers, and how do you document that all conditions are met?
+    - If relying on compelling legitimate interests, how do you ensure it is non-repetitive/limited and that the supervisory authority is informed where required?
+    checks:
+    - Confirm derogations are used as exceptions (case-by-case) with complete documentation and appropriate transparency/safeguards.
+  severity: high
+  sources:
+  - citation: GDPR Art. 49(1)
+  - citation: GDPR Art. 49(2)
+  - citation: GDPR Recital 111
+  - citation: GDPR Recital 113
+  - citation: GDPR Recital 114

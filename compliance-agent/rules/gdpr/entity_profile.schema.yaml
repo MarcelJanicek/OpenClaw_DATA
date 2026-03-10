@@ -96,6 +96,9 @@ profile:
   transfers_outside_eea: false
   transfer_mechanisms: [] # SCC|BCR|adequacy|derogation|other
 
+  # Art. 48 — true if you receive requests/orders from third-country courts/authorities to disclose personal data.
+  receives_foreign_disclosure_requests: false
+
   # ------------------------------------------------------------
   # Organisational context
   # ------------------------------------------------------------
