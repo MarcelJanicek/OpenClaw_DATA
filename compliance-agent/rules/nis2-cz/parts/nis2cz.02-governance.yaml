@@ -5,4 +5,109 @@ meta:
   jurisdiction: ["CZ"]
   evaluation_profile_schema: "rules/nis2-cz/entity_profile.schema.yaml"
 
-rules: []
+rules:
+  # Milestone 1.1 — Management responsibility + policy set
+
+  - id: "NIS2CZ-GOV-MGMT-ACCOUNTABILITY"
+    title: "Top management accountability and oversight for cybersecurity measures are established"
+    scope:
+      applies_to: ["org"]
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+    requirement:
+      type: "governance_required"
+      must_include:
+        - "assignment_of_accountability (who in top management is accountable)"
+        - "governance_forum_or_reporting_line (how cyber risk is reported to management)"
+        - "approval_of_cybersecurity_measures_and_policies (formal approval evidence)"
+        - "periodic_management_review (cadence + agenda)"
+        - "resource_commitment (budget/staffing decision trail)"
+    evidence_hints:
+      required:
+        - "board_or_management_resolution_cybersecurity"
+        - "management_review_minutes_cyber"
+      artifacts:
+        - "board_or_management_resolution_cybersecurity"
+        - "management_review_minutes_cyber"
+        - "cybersecurity_governance_charter"
+        - "risk_register_summary_for_management"
+        - "budget_approval_records"
+    severity: "high"
+    sources:
+      - citation: "CZ-Act-264-2025 (odpovědnost vedení za zavedení a udržování opatření kybernetické bezpečnosti)"
+      - citation: "CZ-Decree-409-2025 (organizační opatření – vyšší povinnosti; governance/odpovědnosti)"
+      - citation: "CZ-Decree-410-2025 (organizační opatření – nižší povinnosti; governance/odpovědnosti)"
+      - citation: "EU-NIS2-2022-2555 Art. 20 (management bodies responsibilities) [mapping]"
+
+  - id: "NIS2CZ-GOV-POLICY-FRAMEWORK"
+    title: "Cybersecurity policy framework is documented, approved, and maintained"
+    scope:
+      applies_to: ["org"]
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+    requirement:
+      type: "policy_framework_required"
+      must_include:
+        - "policy_register (list of policies/standards/procedures)"
+        - "ownership (policy owner for each document)"
+        - "versioning_and_change_control"
+        - "review_cycle (at least annual or trigger-based)"
+        - "communication_and_accessibility (how policies are published internally)"
+        - "alignment_to_applicable_duty_regime (higher|lower)"
+      minimum_policy_topics:
+        - "risk_management"
+        - "asset_management_and_classification"
+        - "access_control_and_identity"
+        - "logging_and_monitoring"
+        - "vulnerability_and_patch_management"
+        - "backup_and_resilience"
+        - "incident_handling_and_reporting"
+        - "supplier_and_third_party_management"
+        - "secure_change_management"
+    evidence_hints:
+      required:
+        - "cybersecurity_policy"
+        - "policy_register"
+      artifacts:
+        - "cybersecurity_policy"
+        - "policy_register"
+        - "document_control_procedure"
+        - "intranet_policy_portal_screenshot"
+        - "exceptions_register"
+    severity: "high"
+    sources:
+      - citation: "CZ-Act-264-2025 (povinnost zavést a dokumentovat opatření kybernetické bezpečnosti)"
+      - citation: "CZ-Decree-409-2025 (soubor opatření – vyšší povinnosti)"
+      - citation: "CZ-Decree-410-2025 (soubor opatření – nižší povinnosti)"
+      - citation: "EU-NIS2-2022-2555 Art. 21(2) (policies for risk analysis and information system security) [mapping]"
+
+  - id: "NIS2CZ-GOV-ROLES-RESPONSIBILITIES-MATRIX"
+    title: "Cybersecurity roles and responsibilities are defined and traceable to key processes"
+    scope:
+      applies_to: ["org"]
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+    requirement:
+      type: "document_required"
+      document: "cybersecurity_roles_responsibilities_matrix"
+      must_include:
+        - "process_list (e.g., incident handling, vuln mgmt, access reviews, backup, supplier onboarding)"
+        - "role_assignments (RACI or equivalent)"
+        - "approval_and_effective_date"
+        - "handover_or_backup_roles (coverage during absence)"
+    evidence_hints:
+      required:
+        - "cybersecurity_roles_responsibilities_matrix"
+      artifacts:
+        - "cybersecurity_roles_responsibilities_matrix"
+        - "job_descriptions_security"
+        - "org_chart"
+        - "on_call_roster"
+    severity: "medium"
+    sources:
+      - citation: "CZ-Decree-409-2025 (organizační opatření – role/odpovědnosti)"
+      - citation: "CZ-Decree-410-2025 (organizační opatření – role/odpovědnosti)"
+      - citation: "EU-NIS2-2022-2555 Art. 21(2) (organizational measures) [mapping]"
