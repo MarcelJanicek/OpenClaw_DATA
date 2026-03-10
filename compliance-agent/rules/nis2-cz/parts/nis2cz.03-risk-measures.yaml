@@ -155,3 +155,194 @@ rules:
       - citation: "CZ-Decree-409-2025 (higher duties: lifecycle/change controls)"
       - citation: "CZ-Decree-410-2025 (lower duties: lifecycle controls)"
       - citation: "EU-NIS2-2022-2555 Art. 21 (mapping: supply chain/change mgmt measures)"
+
+  # Milestone 2.2 — Access control + identity + logging
+
+  - id: "NIS2CZ-RISK-ACCESS-CONTROL-POLICY"
+    title: "Access control and identity management policy is defined, approved, and enforced"
+    scope:
+      applies_to: ["org"]
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+    requirement:
+      type: "document_required"
+      document: "access_control_and_identity_policy"
+      must_include:
+        - "principles (least_privilege, need_to_know, separation_of_duties)"
+        - "account_types (user|admin|service|shared) and handling rules"
+        - "authentication_requirements (password, mfa, sso where applicable)"
+        - "authorization_model (rbac/abac) and exception handling"
+        - "remote_access_requirements"
+        - "periodic_access_review_requirements"
+        - "logging_requirements_for_access_events"
+        - "review_cycle"
+    evidence_hints:
+      required:
+        - "access_control_and_identity_policy"
+      artifacts:
+        - "access_control_and_identity_policy"
+        - "policy_register"
+        - "access_control_standard"
+        - "remote_access_standard"
+    severity: "high"
+    sources:
+      - citation: "CZ-Act-264-2025 (povinnost zavést a dokumentovat opatření kybernetické bezpečnosti)"
+      - citation: "CZ-Decree-409-2025 (vyšší povinnosti: přístupová práva, autentizace, evidence)"
+      - citation: "CZ-Decree-410-2025 (nižší povinnosti: přístupová práva, autentizace, evidence)"
+      - citation: "EU-NIS2-2022-2555 Art. 21(2)(b)(d) (access control, authentication) [mapping]"
+
+  - id: "NIS2CZ-RISK-IDENTITY-JOINER-MOVER-LEAVER"
+    title: "Joiner-mover-leaver process controls user provisioning and deprovisioning"
+    scope:
+      applies_to: ["org"]
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+    requirement:
+      type: "process_required"
+      process: "identity_lifecycle_management"
+      must_include:
+        - "access_request_and_approval (manager + asset/application owner)"
+        - "role_change_handling (timeliness, approvals, documentation)"
+        - "termination_and_deprovisioning (defined SLA; immediate for high-risk roles)"
+        - "service_account_creation_controls"
+        - "recordkeeping (who approved what, when)"
+    evidence_hints:
+      required:
+        - "identity_lifecycle_procedure"
+        - "access_request_records"
+      artifacts:
+        - "identity_lifecycle_procedure"
+        - "access_request_records"
+        - "hr_termination_records (redacted)"
+        - "idm_system_logs_or_exports"
+    severity: "high"
+    sources:
+      - citation: "CZ-Decree-409-2025 (vyšší povinnosti: řízení přístupů; zřizování/rušení účtů)"
+      - citation: "CZ-Decree-410-2025 (nižší povinnosti: řízení přístupů; zřizování/rušení účtů)"
+      - citation: "EU-NIS2-2022-2555 Art. 21(2)(b) (access control) [mapping]"
+
+  - id: "NIS2CZ-RISK-ACCESS-PRIVILEGED"
+    title: "Privileged access is controlled, minimized, and monitored"
+    scope:
+      applies_to: ["org"]
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+    requirement:
+      type: "process_required"
+      process: "privileged_access_management"
+      must_include:
+        - "privileged_role_definition_and_inventory"
+        - "separate_admin_accounts_or_elevation_mechanism"
+        - "mfa_for_privileged_access"
+        - "break_glass_accounts (controls + logging + periodic test)"
+        - "session_or_command_logging for privileged actions where feasible"
+    evidence_hints:
+      required:
+        - "privileged_access_inventory"
+        - "pam_controls_evidence"
+      artifacts:
+        - "privileged_access_inventory"
+        - "pam_controls_evidence"
+        - "admin_account_list"
+        - "break_glass_procedure"
+        - "privileged_session_logs"
+    severity: "high"
+    sources:
+      - citation: "CZ-Decree-409-2025 (vyšší povinnosti: řízení privilegovaných přístupů, evidence)"
+      - citation: "CZ-Decree-410-2025 (nižší povinnosti: řízení privilegovaných přístupů, evidence)"
+      - citation: "EU-NIS2-2022-2555 Art. 21(2)(b)(d) (access control, MFA) [mapping]"
+
+  - id: "NIS2CZ-RISK-ACCESS-REVIEWS"
+    title: "Periodic access reviews are performed for critical systems and regulated services"
+    scope:
+      applies_to: ["org"]
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+    requirement:
+      type: "process_required"
+      process: "access_review"
+      must_include:
+        - "review_scope (critical systems, privileged roles, regulated services)"
+        - "review_frequency (e.g., quarterly for privileged; at least annually otherwise)"
+        - "review_method (owner attestation + removal workflow)"
+        - "tracking_of_removals_and_exceptions"
+        - "evidence_retention"
+    evidence_hints:
+      required:
+        - "access_review_records"
+      artifacts:
+        - "access_review_records"
+        - "idm_access_reports"
+        - "application_access_lists"
+        - "exceptions_register"
+    severity: "medium"
+    sources:
+      - citation: "CZ-Decree-409-2025 (vyšší povinnosti: pravidelné ověřování přístupových práv)"
+      - citation: "CZ-Decree-410-2025 (nižší povinnosti: ověřování přístupových práv)"
+      - citation: "EU-NIS2-2022-2555 Art. 21(2)(b) (access control) [mapping]"
+
+  - id: "NIS2CZ-RISK-LOGGING-BASELINE"
+    title: "Security-relevant logging is enabled and a logging baseline is defined"
+    scope:
+      applies_to: ["org"]
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+    requirement:
+      type: "document_required"
+      document: "security_logging_baseline"
+      must_include:
+        - "systems_in_scope (critical systems, regulated services, key infrastructure)"
+        - "event_types (auth events, privilege changes, admin actions, security alerts)"
+        - "log_sources_and_ownership"
+        - "time_synchronization_requirement"
+        - "log_retention_and_protection (tamper resistance, access control)"
+        - "alerting_or_monitoring_use (who reviews and when)"
+    evidence_hints:
+      required:
+        - "security_logging_baseline"
+      artifacts:
+        - "security_logging_baseline"
+        - "siem_configuration_export"
+        - "central_logging_architecture_diagram"
+        - "log_retention_settings_screenshots"
+    severity: "high"
+    sources:
+      - citation: "CZ-Decree-409-2025 (vyšší povinnosti: záznamy/monitoring bezpečnostních událostí)"
+      - citation: "CZ-Decree-410-2025 (nižší povinnosti: záznamy/monitoring bezpečnostních událostí)"
+      - citation: "EU-NIS2-2022-2555 Art. 21(2)(d)(f) (policies, monitoring, incident handling) [mapping]"
+
+  - id: "NIS2CZ-RISK-LOGGING-REVIEW"
+    title: "Log review and alert handling process is defined and evidenced"
+    scope:
+      applies_to: ["org"]
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+    requirement:
+      type: "process_required"
+      process: "log_review_and_alert_handling"
+      must_include:
+        - "roles_and_responsibilities (SOC/IT/security)"
+        - "review_frequency (continuous/weekly/daily depending on criticality)"
+        - "alert_triage_and_escalation"
+        - "correlation_with_incident_process (ticketing/incident register linkage)"
+        - "metrics (e.g., MTTD/alert volume)"
+    evidence_hints:
+      required:
+        - "log_review_procedure"
+        - "alert_or_log_review_records"
+      artifacts:
+        - "log_review_procedure"
+        - "alert_or_log_review_records"
+        - "siem_alert_queue_export"
+        - "incident_tickets_linked_to_alerts"
+    severity: "medium"
+    sources:
+      - citation: "CZ-Decree-409-2025 (vyšší povinnosti: dohled/monitoring a vyhodnocování událostí)"
+      - citation: "CZ-Decree-410-2025 (nižší povinnosti: dohled/monitoring a vyhodnocování událostí)"
+      - citation: "EU-NIS2-2022-2555 Art. 21(2)(f) (incident handling) [mapping]"
