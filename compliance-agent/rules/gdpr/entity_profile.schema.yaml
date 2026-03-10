@@ -96,8 +96,20 @@ profile:
   transfers_outside_eea: false
   transfer_mechanisms: [] # SCC|BCR|adequacy|derogation|other
 
+  # Art. 96 — true if your processing/transfer practices rely on or are constrained by international agreements concluded before GDPR entry into force.
+  has_pre_gdpr_international_agreements: false
+
   # Art. 48 — true if you receive requests/orders from third-country courts/authorities to disclose personal data.
   receives_foreign_disclosure_requests: false
+
+  # ------------------------------------------------------------
+  # ePrivacy relationship (Art. 95) — triggers for additional sector rules
+  # ------------------------------------------------------------
+  # True if you provide an electronic communications service or otherwise fall within ePrivacy confidentiality-of-communications rules.
+  provides_electronic_communications_services: false
+
+  # True if you use cookies/trackers/SDKs/pixels or similar technologies that may require ePrivacy consent/information controls.
+  uses_cookies_or_similar_tracking: false
 
   # ------------------------------------------------------------
   # Organisational context

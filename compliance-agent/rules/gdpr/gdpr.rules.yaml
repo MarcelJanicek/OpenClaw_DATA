@@ -3004,3 +3004,123 @@ rules:
   severity: low
   sources:
   - citation: GDPR Art. 93
+- id: GDPR-ART94-REPEAL-OF-DIRECTIVE-9546
+  title: GDPR governance and documentation are updated to reflect the repeal of Directive 95/46/EC (and related implementing practices)
+  scope:
+    applies_to:
+    - org
+    - product
+    - system
+    - processing_activity
+    roles:
+    - controller
+    - processor
+    - joint_controller
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: documentation_references_updated
+      description: Internal privacy documentation (policies, templates, records, training, and guidance) references the GDPR as the current framework (rather than Directive 95/46/EC), and any legacy materials are retired/archived.
+    - key: transitional_assumptions_reviewed
+      description: Transitional/legacy assumptions (e.g., prior registrations/notifications, legacy lawful-basis practices, or outdated notice wording) are reviewed and updated to align with current GDPR requirements.
+    - key: compliance_program_scope_confirmed
+      description: The organisation can demonstrate its compliance program covers GDPR obligations relevant to its role(s) and processing (e.g., transparency, rights, security, processor management), not merely “Directive-era” controls.
+  evidence_hints:
+    required:
+    - privacy_policies_and_templates_current_version (showing GDPR-aligned language)
+    - training_materials_or_internal_guidance_updated_for_gdpr (redacted)
+    - document_control_or_change_log_showing_retirement_of_legacy_directive_materials
+    artifacts:
+    - privacy_policies_and_templates_current_version (showing GDPR-aligned language)
+    - training_materials_or_internal_guidance_updated_for_gdpr (redacted)
+    - document_control_or_change_log_showing_retirement_of_legacy_directive_materials
+    questions:
+    - Do any internal templates or customer-facing documents still rely on Directive 95/46/EC language or assumptions?
+    - What changed in your controls/processes when moving from “Directive-era” practices to GDPR?
+    checks:
+    - Spot-check a few policies/templates/training slides for outdated references to Directive 95/46/EC and confirm current GDPR references.
+  severity: low
+  sources:
+  - citation: GDPR Art. 94(1)
+  - citation: GDPR Art. 94(2)
+  - citation: GDPR Recital 171
+- id: GDPR-ART95-EPRIVACY-RELATIONSHIP
+  title: ePrivacy obligations (where applicable) are assessed and complied with alongside GDPR
+  scope:
+    applies_to:
+    - org
+    - product
+    - system
+    roles:
+    - controller
+    - joint_controller
+  condition: Only if entity_profile.provides_electronic_communications_services is true or entity_profile.uses_cookies_or_similar_tracking is true (i.e., ePrivacy/"cookie" rules may apply in addition to GDPR)
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: applicability_assessed
+      description: The organisation assesses whether and how the ePrivacy Directive (and Member State implementations) applies (e.g., cookies/trackers, marketing communications, confidentiality of communications).
+    - key: cookie_and_tracker_controls
+      description: Where cookies/trackers are used beyond what is strictly necessary, consent and information controls are implemented consistent with applicable ePrivacy rules (e.g., prior consent, ability to withdraw, clear purposes/partners).
+    - key: marketing_communications_controls
+      description: Where electronic marketing is performed, opt-in/opt-out and suppression-list controls are implemented as required by applicable ePrivacy rules (and aligned with GDPR lawful basis and transparency).
+    - key: documentation_and_monitoring
+      description: Evidence of ePrivacy compliance is documented (e.g., CMP configuration, cookie inventory, marketing preference records) and kept up to date as trackers/vendors/Member State guidance changes.
+  evidence_hints:
+    required:
+    - eprivacy_applicability_assessment_or_legal_memo
+    - cookie_and_tracker_inventory (including purpose, provider, duration)
+    - consent_management_platform_configuration_or_records (redacted)
+    - marketing_preferences_and_suppression_list_controls (redacted)
+    - cookie_banner_text_and_privacy_notice_sections_covering_trackers
+    artifacts:
+    - eprivacy_applicability_assessment_or_legal_memo
+    - cookie_and_tracker_inventory (including purpose, provider, duration)
+    - consent_management_platform_configuration_or_records (redacted)
+    - marketing_preferences_and_suppression_list_controls (redacted)
+    - cookie_banner_text_and_privacy_notice_sections_covering_trackers
+    questions:
+    - Do you use cookies/SDKs/pixels or similar technologies, and which ones are strictly necessary vs. consent-based?
+    - How do you handle Member State differences in ePrivacy implementations and regulator guidance?
+    checks:
+    - Confirm there is a maintained cookie/tracker inventory and a working withdrawal mechanism.
+  severity: medium
+  sources:
+  - citation: GDPR Art. 95
+  - citation: GDPR Recital 173
+- id: GDPR-ART96-PREEXISTING-AGREEMENTS
+  title: Pre-existing international agreements affecting personal data processing are reviewed for GDPR consistency
+  scope:
+    applies_to:
+    - org
+    roles:
+    - controller
+    - processor
+    - joint_controller
+  condition: Only if entity_profile.has_pre_gdpr_international_agreements is true (i.e., your processing/transfer practices rely on or are constrained by international agreements concluded before GDPR entry into force)
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: agreements_identified
+      description: Any relevant pre-existing international agreements (and implementing measures) that affect processing or disclosures are identified and tracked (including which products/flows they touch).
+    - key: gdpr_consistency_review
+      description: The organisation performs and documents a GDPR consistency review of how the agreement impacts compliance (e.g., transfer safeguards, disclosure obligations, data subject rights limitations), and identifies remediation if conflicts exist.
+    - key: update_or_mitigation_plan
+      description: Where changes are needed (e.g., supplemental safeguards, policy/process updates, contractual updates, or escalation to legal/government channels), there is a documented plan and ownership.
+  evidence_hints:
+    required:
+    - register_of_relevant_international_agreements_and_impacted_data_flows
+    - legal_review_of_gdpr_consistency_and_required_actions (redacted)
+    - remediation_or_mitigation_plan_and_tracking (redacted)
+    artifacts:
+    - register_of_relevant_international_agreements_and_impacted_data_flows
+    - legal_review_of_gdpr_consistency_and_required_actions (redacted)
+    - remediation_or_mitigation_plan_and_tracking (redacted)
+    questions:
+    - Do any international agreements (or government frameworks) create mandatory disclosures or processing requirements that could conflict with GDPR?
+    - How are impacted teams notified and how are changes tracked to completion?
+    checks:
+    - Confirm relevant agreements are inventoried and reviewed for GDPR consistency.
+  severity: low
+  sources:
+  - citation: GDPR Art. 96
