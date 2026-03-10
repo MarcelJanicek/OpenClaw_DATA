@@ -287,36 +287,90 @@ rules:
   - citation: GDPR Recital 80
 
 - id: GDPR-ART30-ROPA
-  title: Records of processing activities (ROPA) maintained (where required)
+  title: Controller maintains records of processing activities (ROPA) containing all required Art. 30(1) elements
   scope:
     applies_to:
     - org
     roles:
     - controller
-    - processor
   requirement:
     type: document_required
     document: ROPA
     must_include:
-    - purposes
-    - categories_of_data_subjects_and_data
-    - categories_of_recipients
-    - transfers
-    - retention
-    - security_measures
+    # Art. 30(1)(a)
+    - controller_identity_and_contact_details
+    - joint_controller_identity_and_contact_details (if_applicable)
+    - controller_representative_contact_details (if_applicable)
+    - dpo_contact_details (if_applicable)
+    # Art. 30(1)(b)-(d)
+    - purposes_of_processing
+    - categories_of_data_subjects
+    - categories_of_personal_data
+    - categories_of_recipients (including_third_countries_or_international_organisations_if_applicable)
+    # Art. 30(1)(e)-(f)
+    - transfers_to_third_countries_or_international_organisations (incl_safeguards)
+    - retention_periods_or_erasure_timelines
+    # Art. 30(1)(g)
+    - technical_and_organisational_security_measures (general_description)
   evidence_hints:
     required:
     - ROPA
     - ropa_maintenance_owner_and_update_process
+    - sample_ropa_entries (redacted)
     artifacts:
     - ROPA
     - ropa_maintenance_owner_and_update_process
     - sample_ropa_entries (redacted)
+    questions:
+    - Do you maintain a controller ROPA that is complete per Art. 30(1) (contacts, purposes, categories, recipients/transfers, retention, security measures)?
+    - Who owns ROPA maintenance and how are changes to processing captured (new systems/vendors/purposes/retention changes)?
     checks:
-    - Confirm ROPA includes all fields required by Art. 30(1) (controllers) and/or Art. 30(2) (processors), as applicable.
+    - Confirm ROPA includes each Art. 30(1) element (a)–(g) and is kept up to date.
   severity: high
   sources:
-  - citation: GDPR Art. 30
+  - citation: GDPR Art. 30(1)(a)-(g)
+  - citation: GDPR Recital 82
+
+- id: GDPR-ART30-ROPA-PROCESSOR
+  title: Processor maintains records of processing activities carried out on behalf of each controller (Art. 30(2))
+  scope:
+    applies_to:
+    - org
+    roles:
+    - processor
+    condition: Only if entity_profile.acts_as_processor_for_customers is true OR entity_profile.role is processor
+  requirement:
+    type: document_required
+    document: ROPA (processor)
+    must_include:
+    # Art. 30(2)(a)
+    - processor_identity_and_contact_details
+    - processor_representative_contact_details (if_applicable)
+    - dpo_contact_details (if_applicable)
+    - categories_of_controllers_on_behalf_of_which_processing_is_carried_out
+    # Art. 30(2)(b)-(c)
+    - categories_of_processing_carried_out_for_each_controller
+    - transfers_to_third_countries_or_international_organisations (incl_safeguards_if_applicable)
+    # Art. 30(2)(d)
+    - technical_and_organisational_security_measures (general_description)
+  evidence_hints:
+    required:
+    - processor_ropa_or_processing_records (by_controller_or_service_line)
+    - processor_ropa_maintenance_owner_and_update_process
+    - sample_processor_ropa_entries (redacted)
+    artifacts:
+    - processor_ropa_or_processing_records (by_controller_or_service_line)
+    - processor_ropa_maintenance_owner_and_update_process
+    - sample_processor_ropa_entries (redacted)
+    questions:
+    - Do you (as a processor) maintain records per controller (or categories of controllers) covering your processing categories, transfers, and security measures?
+    - How do you ensure your processor ROPA stays aligned with DPAs, sub-processors, and actual system behavior?
+    checks:
+    - Confirm processor records include Art. 30(2) items (a)–(d) and can be produced to a supervisory authority on request.
+  severity: high
+  sources:
+  - citation: GDPR Art. 30(2)(a)-(d)
+  - citation: GDPR Recital 82
 - id: GDPR-ART28-DPA
   title: Processor agreements (DPA) include Art. 28 mandatory clauses
   scope:
