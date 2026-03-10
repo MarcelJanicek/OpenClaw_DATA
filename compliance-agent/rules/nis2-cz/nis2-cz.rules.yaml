@@ -67,3 +67,111 @@ rules:
   severity: medium
   sources:
   - citation: CZ-Act-264-2025 (governance/documentation expectations for cybersecurity measures)
+- id: NIS2CZ-SCOPING-IN-SCOPE-DECISION
+  title: In-scope decision under CZ Cybersecurity Act is documented and approved
+  scope:
+    applies_to:
+    - org
+  requirement:
+    type: decision_record_required
+    decision: cz_in_scope_determination
+    must_include:
+    - legal_basis_summary (why the org is / is not regulated)
+    - regulated_service_identification (if applicable)
+    - assumptions_and_data_used (size, services, sector)
+    - approval_by_responsible_person
+    - review_date_or_trigger
+  evidence_hints:
+    required:
+    - cz_in_scope_determination
+    artifacts:
+    - cz_in_scope_determination
+    - service_catalog
+    - contract_catalog
+    - company_registry_extract
+  severity: high
+  sources:
+  - citation: CZ-Act-264-2025 (scope / regulated entities)
+  - citation: 'EU-NIS2-2022-2555 (mapping: entity scope)'
+- id: NIS2CZ-SCOPING-ENTITY-CLASS-ESSENTIAL-IMPORTANT
+  title: Entity class (essential/important) is determined and recorded
+  scope:
+    applies_to:
+    - org
+  requirement:
+    type: decision_record_required
+    decision: cz_entity_classification
+    must_include:
+    - entity_class (essential|important)
+    - classification_criteria_used
+    - regulated_service_or_sector_reference
+    - any_exemptions_or_special_cases
+    - approval_by_responsible_person
+  evidence_hints:
+    required:
+    - cz_entity_classification
+    artifacts:
+    - cz_entity_classification
+    - cz_in_scope_determination
+    - sector_mapping
+  severity: high
+  sources:
+  - citation: CZ-Act-264-2025 (essential vs important entities)
+  - citation: 'EU-NIS2-2022-2555 (mapping: essential/important entities)'
+- id: NIS2CZ-SCOPING-DUTY-REGIME-HIGHER-LOWER
+  title: Applicable duty regime (higher/lower) is determined per CZ decrees
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: decision_record_required
+    decision: cz_duty_regime_determination
+    must_include:
+    - duty_regime (higher|lower)
+    - rationale_and_criteria
+    - links_to_applicable_measures_sets
+    - date_effective
+  evidence_hints:
+    required:
+    - cz_duty_regime_determination
+    artifacts:
+    - cz_duty_regime_determination
+    - control_applicability_matrix
+  severity: high
+  sources:
+  - citation: CZ-Decree-409-2025 (higher duties)
+  - citation: CZ-Decree-410-2025 (lower duties)
+  - citation: CZ-Act-264-2025 (delegation to implementing decrees)
+- id: NIS2CZ-SCOPING-REGULATED-SERVICES-REGISTER
+  title: Register of regulated services (if applicable) is maintained
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: document_required
+    document: cz_regulated_services_register
+    must_include:
+    - regulated_service_type (per CZ decree)
+    - service_owner
+    - service_description
+    - service_criticality_or_importance
+    - service_dependencies (key ICT assets/providers)
+    - link_to_service_catalog_entries
+  evidence_hints:
+    required:
+    - cz_regulated_services_register
+    artifacts:
+    - cz_regulated_services_register
+    - service_catalog
+    - asset_inventory
+    - dependency_map
+  severity: medium
+  sources:
+  - citation: CZ-Decree-408-2025 (regulated services definitions/list)
+  - citation: CZ-Act-264-2025 (regulated services / obligations trigger)
