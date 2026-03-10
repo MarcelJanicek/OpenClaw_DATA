@@ -279,3 +279,74 @@ rules:
   - citation: CZ-Decree-409-2025 (organizační opatření – role/odpovědnosti)
   - citation: CZ-Decree-410-2025 (organizační opatření – role/odpovědnosti)
   - citation: EU-NIS2-2022-2555 Art. 21(2) (organizational measures) [mapping]
+- id: NIS2CZ-GOV-TRAINING-AWARENESS
+  title: Cybersecurity training and awareness program is implemented and evidenced
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: program_required
+    program: cybersecurity_training_and_awareness
+    must_include:
+    - audience_definition (roles/groups incl. privileged users and management)
+    - mandatory_training_topics (baseline cyber hygiene + role-based)
+    - onboarding_training
+    - periodic_refresh (cadence)
+    - awareness_activities (e.g., comms, campaigns, simulations)
+    - training_completion_tracking (records + reporting)
+    - effectiveness_check (e.g., quiz/phishing simulation metrics)
+  evidence_hints:
+    required:
+    - security_training_plan
+    - security_training_records
+    artifacts:
+    - security_training_plan
+    - security_training_records
+    - learning_management_system_export
+    - awareness_campaign_materials
+    - phishing_simulation_report
+    - management_training_attendance
+  severity: medium
+  sources:
+  - citation: CZ-Act-264-2025 (povinnost zavést a udržovat opatření kybernetické bezpečnosti; personální zajištění)
+  - citation: CZ-Decree-409-2025 (organizační/personální opatření – školení a zvyšování povědomí)
+  - citation: CZ-Decree-410-2025 (organizační/personální opatření – školení a zvyšování povědomí)
+  - citation: EU-NIS2-2022-2555 Art. 20 (management bodies training/awareness) [mapping]
+  - citation: EU-NIS2-2022-2555 Art. 21(2)(g) (basic cyber hygiene and training) [mapping]
+- id: NIS2CZ-GOV-INTERNAL-AUDIT
+  title: Internal audit / self-assessment of cybersecurity measures is performed and tracked
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: process_required
+    process: cybersecurity_internal_audit
+    must_include:
+    - audit_plan_or_schedule (at least annual or risk/incident-triggered)
+    - audit_scope_definition (controls/measures covered; higher/lower regime)
+    - independence_or_objectivity (who audits whom; external support if needed)
+    - findings_classification_and_risk_rating
+    - corrective_actions_tracking (owners, due dates, status)
+    - management_reporting_of_results
+  evidence_hints:
+    required:
+    - cybersecurity_audit_plan
+    - cybersecurity_audit_report
+    artifacts:
+    - cybersecurity_audit_plan
+    - cybersecurity_audit_report
+    - corrective_actions_register
+    - management_review_minutes_cyber
+    - internal_control_testing_workpapers
+  severity: medium
+  sources:
+  - citation: CZ-Act-264-2025 (průběžné zajišťování a ověřování účinnosti opatření kybernetické bezpečnosti)
+  - citation: CZ-Decree-409-2025 (požadavky na ověřování/posuzování účinnosti opatření – vyšší povinnosti)
+  - citation: CZ-Decree-410-2025 (požadavky na ověřování/posuzování účinnosti opatření – nižší povinnosti)
+  - citation: EU-NIS2-2022-2555 Art. 21(2) (monitoring, testing and auditing) [mapping]
