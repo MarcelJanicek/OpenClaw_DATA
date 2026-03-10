@@ -2304,3 +2304,73 @@ rules:
   - citation: GDPR Art. 57
   - citation: GDPR Art. 58
   - citation: GDPR Art. 59
+- id: GDPR-ART85-91-NATIONAL-DEROGATIONS-ASSESSMENT
+  title: National derogations and special-case rules (Arts. 85–91) are identified, assessed, and operationalized where applicable
+  scope:
+    applies_to:
+    - org
+    - product
+    - system
+    - processing_activity
+    roles:
+    - controller
+    - processor
+    condition: Only if the organisation operates in a context where Member State/Union law provides GDPR derogations or additional rules under Arts. 85–91 (e.g., journalism/freedom of expression, public-record access, national ID numbers, employment, research/statistics archiving, secrecy obligations, or church rules)
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: applicability_screening
+      description: A documented screening exists to determine whether any Arts. 85–91 special-case regimes apply to the organisation’s processing (by product/region/customer segment).
+    - key: member_state_law_register
+      description: For each applicable jurisdiction, the relevant Member State/Union legal instruments are identified (citations/links), version-controlled, and mapped to the processing activities they affect.
+    - key: freedom_of_expression_balancing
+      description: Where relying on freedom of expression/information derogations (Art. 85), a documented balancing/justification exists (including criteria for when and how rights/notice obligations are restricted) and safeguards are implemented to prevent overreach.
+    - key: public_access_to_documents_rules
+      description: Where processing is linked to public access to official documents (Art. 86), rules and workflows ensure disclosures are made only as permitted by Union/Member State law, with logging and minimisation.
+    - key: national_id_safeguards
+      description: Where processing national identification numbers or other identifiers of general application (Art. 87), processing is grounded in applicable law and includes suitable safeguards (access limitation, purpose limitation, encryption where appropriate, audit logging).
+    - key: employment_processing_controls
+      description: Where processing personal data in the employment context (Art. 88), specific lawful basis/notice/retention/access controls are documented and implemented (including worker monitoring limits where applicable) consistent with Member State law and safeguards.
+    - key: research_statistics_archiving_safeguards
+      description: Where relying on research/statistics/archiving regimes (Art. 89), appropriate safeguards are implemented (e.g., pseudonymisation, data minimisation, access controls), and any restrictions of rights are justified and documented as permitted by law.
+    - key: secrecy_obligations_handling
+      description: Where subject to secrecy obligations (Art. 90) or other special regimes (Art. 91), legal constraints are mapped into procedures (e.g., DSAR redactions/withholding rules), and staff guidance/training reflects the constraints.
+    - key: review_and_change_management
+      description: The special-case legal register and implemented controls are periodically reviewed (and on material change) and updated when laws, guidance, or processing operations change.
+  evidence_hints:
+    required:
+    - legal_register_of_member_state_derogations_and_special_case_rules (Arts85-91)
+    - applicability_screening_memo_or_matrix (which articles apply where and why)
+    - documented_balancing_or_justification_for_any_art85_freedom_of_expression_derogations (if_used)
+    - procedures_or_workflows_for_public_records_disclosure_or_handling (if_applicable)
+    - national_id_processing_policy_and_safeguards (if_applicable)
+    - employment_data_processing_notice_policy_and_controls (if_applicable)
+    - research_statistics_archiving_safeguards_documentation (if_applicable)
+    - dsar_redaction_withholding_guidance_for_secrecy_or_special_regimes (if_applicable)
+    - periodic_legal_review_or_compliance_audit_records (redacted)
+    artifacts:
+    - legal_register_of_member_state_derogations_and_special_case_rules (Arts85-91)
+    - applicability_screening_memo_or_matrix (which articles apply where and why)
+    - documented_balancing_or_justification_for_any_art85_freedom_of_expression_derogations (if_used)
+    - procedures_or_workflows_for_public_records_disclosure_or_handling (if_applicable)
+    - national_id_processing_policy_and_safeguards (if_applicable)
+    - employment_data_processing_notice_policy_and_controls (if_applicable)
+    - research_statistics_archiving_safeguards_documentation (if_applicable)
+    - dsar_redaction_withholding_guidance_for_secrecy_or_special_regimes (if_applicable)
+    - periodic_legal_review_or_compliance_audit_records (redacted)
+    questions:
+    - Which Member State/Union laws modify or add requirements for your processing under Arts. 85–91, and in which jurisdictions/products do they apply?
+    - If you restrict rights/notice obligations for freedom of expression/public interest contexts, what is your documented rationale and what safeguards prevent misuse?
+    - How are these special rules reflected in DSAR handling, disclosures, retention, and access control decisions?
+    checks:
+    - Confirm there is a maintained legal register mapping Arts. 85–91 national provisions to concrete workflows/controls.
+    - Confirm any restrictions of rights/obligations are narrowly scoped, justified, and reviewed as laws/processing evolve.
+  severity: medium
+  sources:
+  - citation: GDPR Art. 85
+  - citation: GDPR Art. 86
+  - citation: GDPR Art. 87
+  - citation: GDPR Art. 88
+  - citation: GDPR Art. 89
+  - citation: GDPR Art. 90
+  - citation: GDPR Art. 91
