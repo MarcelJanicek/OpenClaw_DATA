@@ -317,3 +317,41 @@ rules:
   - citation: GDPR Recital 111
   - citation: GDPR Recital 113
   - citation: GDPR Recital 114
+
+- id: GDPR-ART50-INTERNATIONAL-COOPERATION
+  title: Supervisory authority cooperates internationally to protect personal data in cross-border contexts (Art. 50)
+  scope:
+    applies_to:
+    - org
+    roles:
+    - supervisory_authority
+    condition: Only if entity_profile.is_supervisory_authority is true
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: international_cooperation_mechanisms
+      description: International cooperation mechanisms are established and used as appropriate (e.g., information exchange, mutual assistance, and engagement with relevant international networks) to support protection of personal data.
+    - key: handling_cross_border_matters
+      description: Procedures exist for handling cross-border matters involving third countries/international organisations, including secure channels for information exchange and appropriate confidentiality controls.
+    - key: recordkeeping_and_governance
+      description: Cooperation activities are logged/recorded (requests, responses, outcomes) and governance assigns ownership for international engagement.
+  evidence_hints:
+    required:
+    - documented_international_cooperation_policy_or_procedure
+    - list_of_international_cooperation_channels_or_counterpart_contacts (as_applicable)
+    - logs_or_register_of_international_cooperation_requests_and_responses (redacted)
+    - confidentiality_and_secure_communication_controls_for_international_exchanges
+    artifacts:
+    - documented_international_cooperation_policy_or_procedure
+    - list_of_international_cooperation_channels_or_counterpart_contacts (as_applicable)
+    - logs_or_register_of_international_cooperation_requests_and_responses (redacted)
+    - confidentiality_and_secure_communication_controls_for_international_exchanges
+    questions:
+    - What mechanisms do you use to cooperate with third-country supervisory counterparts or international organisations, and who owns those relationships?
+    - How do you exchange information securely and track requests/responses for cross-border matters?
+    checks:
+    - Confirm there is a defined procedure, secure channels, and recordkeeping for international cooperation.
+  severity: low
+  sources:
+  - citation: GDPR Art. 50
+  - citation: GDPR Recital 116

@@ -122,6 +122,13 @@ profile:
   notes: ""
 
   # ------------------------------------------------------------
+  # Regulatory authority context (rare)
+  # ------------------------------------------------------------
+  # True only if the assessed entity is a supervisory authority / public body performing Art. 50 cooperation.
+  # Most organisations should leave this false.
+  is_supervisory_authority: false
+
+  # ------------------------------------------------------------
   # Codes of conduct / certification (Arts. 40–43)
   # ------------------------------------------------------------
   adheres_to_gdpr_code_of_conduct: false
