@@ -1,0 +1,92 @@
+# Not-Applicable (N/A) Mechanism Schema for NIS2-CZ Ruleset
+# 
+# This schema defines how rules or checklist items can be marked as
+# not-applicable during an assessment, with mandatory justification.
+#
+# Usage: When evaluating a rule against an entity, if the rule does not
+# apply (e.g., due to duty_regime, entity class, or factual conditions),
+# the assessor records a not_applicable entry instead of a compliance finding.
+
+not_applicable_entry:
+  type: object
+  required:
+    - rule_id
+    - status
+    - justification
+    - assessed_by
+    - assessed_date
+  properties:
+    rule_id:
+      type: string
+      description: "The rule ID being marked N/A (e.g., NIS2CZ-SUP-CONTRACT-ANNEX5-HIGHER)"
+    
+    checklist_item_id:
+      type: string
+      description: "Optional: specific checklist item within a rule (e.g., ANN5-c)"
+    
+    status:
+      type: string
+      enum: ["not_applicable"]
+      description: "Must be 'not_applicable'"
+    
+    justification:
+      type: string
+      minLength: 20
+      description: >
+        Free-text justification explaining why the rule/item does not apply.
+        Must reference the specific condition or factual basis.
+        Minimum 20 characters to prevent blank/trivial entries.
+    
+    justification_category:
+      type: string
+      enum:
+        - "entity_out_of_scope"        # Entity is not in scope under CZ law
+        - "duty_regime_mismatch"        # Rule requires higher/lower regime; entity is the other
+        - "entity_class_mismatch"       # Rule requires essential/important; entity is the other
+        - "factual_condition_not_met"   # Rule's applicability condition doesn't hold (e.g., no custom code)
+        - "service_not_provided"        # Entity doesn't provide the relevant service type
+        - "transitional_exemption"      # Temporary exemption under transitional provisions
+        - "other"                       # Other reason (must explain in justification)
+      description: "Category of the N/A reason for structured reporting"
+    
+    evidence_reference:
+      type: string
+      description: "Optional: reference to supporting evidence (e.g., entity profile, scope assessment)"
+    
+    assessed_by:
+      type: string
+      description: "Name or role of the person/agent making the determination"
+    
+    assessed_date:
+      type: string
+      format: date
+      description: "Date of the N/A determination (ISO 8601)"
+    
+    review_trigger:
+      type: string
+      description: >
+        Optional: condition that would require re-evaluation
+        (e.g., "if entity starts developing custom software" or "on next annual review")
+
+# Example:
+# - rule_id: "NIS2CZ-SUP-CONTRACT-ANNEX5-HIGHER"
+#   checklist_item_id: "ANN5-c"
+#   status: "not_applicable"
+#   justification: "Supplier does not develop, modify, or deliver any software or code. All services are purely operational/facilities management."
+#   justification_category: "factual_condition_not_met"
+#   evidence_reference: "supplier_contract_scope_description.pdf"
+#   assessed_by: "Compliance Officer"
+#   assessed_date: "2026-03-10"
+#   review_trigger: "If contract scope changes to include software development"
+
+# Integration with rules:
+# Rules can declare not_applicable_if conditions to guide assessors:
+#
+#   not_applicable_if:
+#     - condition: "duty_regime != 'higher'"
+#       category: "duty_regime_mismatch"
+#     - condition: "supplier does not develop software"
+#       category: "factual_condition_not_met"
+#
+# Checklist items with required_by_default: false already have
+# an 'applicability' field that serves as guidance for N/A determination.

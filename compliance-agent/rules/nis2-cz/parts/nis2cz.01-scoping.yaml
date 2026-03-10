@@ -1,115 +1,412 @@
 meta:
-  ruleset_id: "nis2-cz"
-  version: "0.1"
-  status: "draft"
-  jurisdiction: ["CZ"]
-  evaluation_profile_schema: "rules/nis2-cz/entity_profile.schema.yaml"
+  ruleset_id: nis2-cz
+  version: 2.0-audit
+  status: complete
+  jurisdiction:
+  - CZ
+  evaluation_profile_schema: rules/nis2-cz/entity_profile.schema.yaml
+  changelog: 'v2.0 (2026-03-10): Refactored to audit-grade with structured checklists,
 
+    acceptance criteria, deterministic logic, bilingual anchors, and red flags.
+
+    '
 rules:
-  - id: "NIS2CZ-SCOPING-IN-SCOPE-DECISION"
-    title: "In-scope decision under CZ Cybersecurity Act is documented and approved"
-    scope:
-      applies_to: ["org"]
-    requirement:
-      type: "decision_record_required"
-      decision: "cz_in_scope_determination"
-      must_include:
-        - "legal_basis_summary (why the org is / is not regulated)"
-        - "regulated_service_identification (if applicable)"
-        - "assumptions_and_data_used (size, services, sector)"
-        - "approval_by_responsible_person"
-        - "review_date_or_trigger"
-    evidence_hints:
-      required:
-        - "cz_in_scope_determination"
-      artifacts:
-        - "cz_in_scope_determination"
-        - "service_catalog"
-        - "contract_catalog"
-        - "company_registry_extract"
-    severity: "high"
-    sources:
-      - citation: "CZ-Act-264-2025 (scope / regulated entities)"
-      - citation: "EU-NIS2-2022-2555 (mapping: entity scope)"
+- id: NIS2CZ-SCOPING-IN-SCOPE-DECISION
+  title: In-scope decision under CZ Cybersecurity Act is documented and approved
+  scope:
+    applies_to:
+    - org
+  requirement:
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — every entity must document an in-scope determination.
+    checklist:
+    - id: SCOPE-INSCOPE-01
+      title_en: Legal basis summary explains why the entity is or is not regulated
+      title_cs: Shrnutí právního základu vysvětluje, proč subjekt je nebo není regulován
+      required_by_default: true
+      acceptance_criteria:
+      - Document references specific sections of CZ-Act-264-2025
+      - Conclusion (in-scope / out-of-scope) is explicitly stated
+      keywords_cs:
+      - právní základ
+      - regulovaný
+      - působnost
+      - zákon
+      keywords_en:
+      - legal basis
+      - regulated
+      - scope
+      - act
+      red_flags:
+      - No legal basis provided
+      - Conclusion ambiguous or missing
+    - id: SCOPE-INSCOPE-02
+      title_en: Regulated services are identified (if applicable)
+      title_cs: Regulované služby jsou identifikovány (pokud je to relevantní)
+      required_by_default: true
+      acceptance_criteria:
+      - Each regulated service type is identified per CZ-Decree-408-2025
+      - If none are applicable, explicit statement with reasoning
+      keywords_cs:
+      - regulované služby
+      - identifikace
+      - vyhláška 408
+      keywords_en:
+      - regulated services
+      - identification
+      - decree 408
+      red_flags:
+      - Services not analyzed against decree 408
+    - id: SCOPE-INSCOPE-03
+      title_en: Assumptions and data used for the determination are documented
+      title_cs: Předpoklady a data použitá pro rozhodnutí jsou zdokumentovány
+      required_by_default: true
+      acceptance_criteria:
+      - Data sources (size, turnover, employee count, sector data) are listed
+      - Assumptions are explicitly stated and dated
+      keywords_cs:
+      - předpoklady
+      - data
+      - zdroje
+      - velikost
+      - obrat
+      keywords_en:
+      - assumptions
+      - data
+      - sources
+      - size
+      - turnover
+      red_flags:
+      - No supporting data referenced
+      - Assumptions unstated
+    - id: SCOPE-INSCOPE-04
+      title_en: Decision is approved by a responsible person
+      title_cs: Rozhodnutí je schváleno odpovědnou osobou
+      required_by_default: true
+      acceptance_criteria:
+      - Approval signature or record with name, role, and date
+      keywords_cs:
+      - schválení
+      - odpovědná osoba
+      - podpis
+      keywords_en:
+      - approval
+      - responsible person
+      - signature
+      red_flags:
+      - No approval record
+    - id: SCOPE-INSCOPE-05
+      title_en: Review date or trigger for re-assessment is defined
+      title_cs: Datum revize nebo podmínka pro opakované posouzení je definována
+      required_by_default: true
+      acceptance_criteria:
+      - Next review date is set (at most 12 months) or trigger events listed
+      keywords_cs:
+      - revize
+      - datum
+      - opakované posouzení
+      - trigger
+      keywords_en:
+      - review date
+      - reassessment
+      - trigger
+      red_flags:
+      - No review date or trigger defined
+  evidence_hints:
+    required:
+    - artifact_id: SCOPE-IN-SCOPE-DETERMINATION
+  severity: high
+  sources:
+  - citation: CZ-Act-264-2025 (scope / regulated entities)
+  - citation: 'EU-NIS2-2022-2555 Art. 2 (mapping: entity scope)'
+- id: NIS2CZ-SCOPING-ENTITY-CLASS-ESSENTIAL-IMPORTANT
+  title: Entity class (essential/important) is determined and recorded
+  scope:
+    applies_to:
+    - org
+  requirement:
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — classification is mandatory for all in-scope entities.
+    checklist:
+    - id: SCOPE-CLASS-01
+      title_en: Entity class (essential or important) is explicitly stated
+      title_cs: Třída entity (základní nebo důležitý) je explicitně uvedena
+      required_by_default: true
+      acceptance_criteria:
+      - Document states 'essential' or 'important' with clear determination
+      keywords_cs:
+      - základní
+      - důležitý
+      - třída
+      - klasifikace
+      keywords_en:
+      - essential
+      - important
+      - class
+      - classification
+      red_flags:
+      - Classification missing or ambiguous
+    - id: SCOPE-CLASS-02
+      title_en: Classification criteria used are documented
+      title_cs: Použitá klasifikační kritéria jsou zdokumentována
+      required_by_default: true
+      acceptance_criteria:
+      - Criteria reference CZ-Act-264-2025 provisions for essential/important distinction
+      - Sector, size, and service-type criteria are evaluated
+      keywords_cs:
+      - kritéria
+      - klasifikace
+      - sektor
+      - velikost
+      keywords_en:
+      - criteria
+      - classification
+      - sector
+      - size
+      red_flags:
+      - No criteria documented
+    - id: SCOPE-CLASS-03
+      title_en: Regulated service or sector reference supports the classification
+      title_cs: Odkaz na regulovanou službu nebo sektor podporuje klasifikaci
+      required_by_default: true
+      acceptance_criteria:
+      - Specific sector/subsector and service type cited
+      keywords_cs:
+      - sektor
+      - služba
+      - odkaz
+      keywords_en:
+      - sector
+      - service
+      - reference
+      red_flags:
+      - No sector/service reference
+    - id: SCOPE-CLASS-04
+      title_en: Exemptions or special cases are documented (or explicitly stated as none)
+      title_cs: Výjimky nebo zvláštní případy jsou zdokumentovány (nebo explicitně uvedeno, že žádné nejsou)
+      required_by_default: true
+      acceptance_criteria:
+      - Any exemptions are listed with legal basis, OR
+      - Explicit statement that no exemptions apply
+      keywords_cs:
+      - výjimky
+      - zvláštní případy
+      keywords_en:
+      - exemptions
+      - special cases
+      red_flags:
+      - Exemptions section missing entirely
+    - id: SCOPE-CLASS-05
+      title_en: Classification is approved by responsible person
+      title_cs: Klasifikace je schválena odpovědnou osobou
+      required_by_default: true
+      acceptance_criteria:
+      - Approval record with name, role, date
+      keywords_cs:
+      - schválení
+      - odpovědná osoba
+      keywords_en:
+      - approval
+      - responsible person
+      red_flags:
+      - No approval
+  evidence_hints:
+    required:
+    - artifact_id: SCOPE-ENTITY-CLASSIFICATION
+  severity: high
+  sources:
+  - citation: CZ-Act-264-2025 (essential vs important entities)
+  - citation: 'EU-NIS2-2022-2555 Art. 3 (mapping: essential/important entities)'
+- id: NIS2CZ-SCOPING-DUTY-REGIME-HIGHER-LOWER
+  title: Applicable duty regime (higher/lower) is determined per CZ decrees
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — duty regime must be determined for all in-scope entities.
+    checklist:
+    - id: SCOPE-DUTY-01
+      title_en: Duty regime (higher or lower) is explicitly stated
+      title_cs: Režim povinností (vyšší nebo nižší) je explicitně uveden
+      required_by_default: true
+      acceptance_criteria:
+      - Document states 'higher' or 'lower' unambiguously
+      keywords_cs:
+      - vyšší povinnosti
+      - nižší povinnosti
+      - režim
+      keywords_en:
+      - higher duties
+      - lower duties
+      - regime
+      red_flags:
+      - Duty regime not stated
+    - id: SCOPE-DUTY-02
+      title_en: Rationale and criteria for regime selection are documented
+      title_cs: Odůvodnění a kritéria pro výběr režimu jsou zdokumentovány
+      required_by_default: true
+      acceptance_criteria:
+      - References CZ-Decree-409-2025 (higher) or CZ-Decree-410-2025 (lower)
+      - Entity class and service type support the regime choice
+      keywords_cs:
+      - odůvodnění
+      - kritéria
+      - vyhláška 409
+      - vyhláška 410
+      keywords_en:
+      - rationale
+      - criteria
+      - decree 409
+      - decree 410
+      red_flags:
+      - No rationale provided
+    - id: SCOPE-DUTY-03
+      title_en: Links to applicable measures sets are documented
+      title_cs: Odkazy na příslušné soubory opatření jsou zdokumentovány
+      required_by_default: true
+      acceptance_criteria:
+      - Applicable decree annex/measure sets are explicitly listed
+      keywords_cs:
+      - opatření
+      - soubor
+      - příloha
+      keywords_en:
+      - measures
+      - set
+      - annex
+      red_flags:
+      - No link to applicable measures
+    - id: SCOPE-DUTY-04
+      title_en: Effective date of the determination is recorded
+      title_cs: Datum účinnosti rozhodnutí je zaznamenáno
+      required_by_default: true
+      acceptance_criteria:
+      - Date the regime determination becomes effective is stated
+      keywords_cs:
+      - datum
+      - účinnost
+      keywords_en:
+      - date
+      - effective
+      red_flags:
+      - No effective date
+  evidence_hints:
+    required:
+    - artifact_id: SCOPE-DUTY-REGIME-DETERMINATION
+  severity: high
+  sources:
+  - citation: CZ-Decree-409-2025 (higher duties)
+  - citation: CZ-Decree-410-2025 (lower duties)
+  - citation: CZ-Act-264-2025 (delegation to implementing decrees)
+- id: NIS2CZ-SCOPING-REGULATED-SERVICES-REGISTER
+  title: Register of regulated services (if applicable) is maintained
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: checklist
+    logic: ALL
+    na_mechanism: 'If entity has no regulated services, a documented justification artifact (SCOPE-NA-JUSTIFICATION) referencing
+      CZ-Decree-408-2025 analysis is required.
 
-  - id: "NIS2CZ-SCOPING-ENTITY-CLASS-ESSENTIAL-IMPORTANT"
-    title: "Entity class (essential/important) is determined and recorded"
-    scope:
-      applies_to: ["org"]
-    requirement:
-      type: "decision_record_required"
-      decision: "cz_entity_classification"
-      must_include:
-        - "entity_class (essential|important)"
-        - "classification_criteria_used"
-        - "regulated_service_or_sector_reference"
-        - "any_exemptions_or_special_cases"
-        - "approval_by_responsible_person"
-    evidence_hints:
-      required:
-        - "cz_entity_classification"
-      artifacts:
-        - "cz_entity_classification"
-        - "cz_in_scope_determination"
-        - "sector_mapping"
-    severity: "high"
-    sources:
-      - citation: "CZ-Act-264-2025 (essential vs important entities)"
-      - citation: "EU-NIS2-2022-2555 (mapping: essential/important entities)"
-
-  - id: "NIS2CZ-SCOPING-DUTY-REGIME-HIGHER-LOWER"
-    title: "Applicable duty regime (higher/lower) is determined per CZ decrees"
-    scope:
-      applies_to: ["org"]
-      conditions:
-        - profile_field: "in_scope_under_cz_law"
-          equals: true
-    requirement:
-      type: "decision_record_required"
-      decision: "cz_duty_regime_determination"
-      must_include:
-        - "duty_regime (higher|lower)"
-        - "rationale_and_criteria"
-        - "links_to_applicable_measures_sets"
-        - "date_effective"
-    evidence_hints:
-      required:
-        - "cz_duty_regime_determination"
-      artifacts:
-        - "cz_duty_regime_determination"
-        - "control_applicability_matrix"
-    severity: "high"
-    sources:
-      - citation: "CZ-Decree-409-2025 (higher duties)"
-      - citation: "CZ-Decree-410-2025 (lower duties)"
-      - citation: "CZ-Act-264-2025 (delegation to implementing decrees)"
-
-  - id: "NIS2CZ-SCOPING-REGULATED-SERVICES-REGISTER"
-    title: "Register of regulated services (if applicable) is maintained"
-    scope:
-      applies_to: ["org"]
-      conditions:
-        - profile_field: "in_scope_under_cz_law"
-          equals: true
-    requirement:
-      type: "document_required"
-      document: "cz_regulated_services_register"
-      must_include:
-        - "regulated_service_type (per CZ decree)"
-        - "service_owner"
-        - "service_description"
-        - "service_criticality_or_importance"
-        - "service_dependencies (key ICT assets/providers)"
-        - "link_to_service_catalog_entries"
-    evidence_hints:
-      required:
-        - "cz_regulated_services_register"
-      artifacts:
-        - "cz_regulated_services_register"
-        - "service_catalog"
-        - "asset_inventory"
-        - "dependency_map"
-    severity: "medium"
-    sources:
-      - citation: "CZ-Decree-408-2025 (regulated services definitions/list)"
-      - citation: "CZ-Act-264-2025 (regulated services / obligations trigger)"
+      '
+    checklist:
+    - id: SCOPE-REGSVC-01
+      title_en: Regulated service type per CZ decree is recorded
+      title_cs: Typ regulované služby dle CZ vyhlášky je zaznamenán
+      required_by_default: true
+      acceptance_criteria:
+      - Each service is categorized per CZ-Decree-408-2025 regulated service types
+      keywords_cs:
+      - regulovaná služba
+      - typ
+      - vyhláška 408
+      keywords_en:
+      - regulated service
+      - type
+      - decree 408
+      red_flags:
+      - Service type not mapped to decree categories
+    - id: SCOPE-REGSVC-02
+      title_en: Service owner is assigned
+      title_cs: Vlastník služby je přiřazen
+      required_by_default: true
+      acceptance_criteria:
+      - Named owner or responsible role for each regulated service
+      keywords_cs:
+      - vlastník
+      - služba
+      - odpovědnost
+      keywords_en:
+      - owner
+      - service
+      - responsibility
+      red_flags:
+      - Services without owners
+    - id: SCOPE-REGSVC-03
+      title_en: Service description and criticality are documented
+      title_cs: Popis služby a její kritičnost jsou zdokumentovány
+      required_by_default: true
+      acceptance_criteria:
+      - Each service has a textual description
+      - Criticality or importance level is assessed
+      keywords_cs:
+      - popis
+      - kritičnost
+      - důležitost
+      keywords_en:
+      - description
+      - criticality
+      - importance
+      red_flags:
+      - No description or criticality assessment
+    - id: SCOPE-REGSVC-04
+      title_en: Service dependencies (key ICT assets/providers) are mapped
+      title_cs: Závislosti služby (klíčové ICT aktiva/dodavatelé) jsou namapovány
+      required_by_default: true
+      acceptance_criteria:
+      - Key ICT assets supporting the service are listed
+      - Third-party providers are identified
+      keywords_cs:
+      - závislosti
+      - ICT aktiva
+      - dodavatelé
+      - mapování
+      keywords_en:
+      - dependencies
+      - ICT assets
+      - providers
+      - mapping
+      red_flags:
+      - No dependency mapping
+    - id: SCOPE-REGSVC-05
+      title_en: Link to service catalog entries
+      title_cs: Odkaz na záznamy v katalogu služeb
+      required_by_default: true
+      acceptance_criteria:
+      - Each regulated service links to its entry in the service catalog
+      keywords_cs:
+      - katalog služeb
+      - odkaz
+      keywords_en:
+      - service catalog
+      - link
+      red_flags:
+      - No link to service catalog
+  evidence_hints:
+    required:
+    - artifact_id: SCOPE-REGULATED-SERVICES-REGISTER
+  severity: medium
+  sources:
+  - citation: CZ-Decree-408-2025 (regulated services definitions/list)
+  - citation: CZ-Act-264-2025 (regulated services / obligations trigger)

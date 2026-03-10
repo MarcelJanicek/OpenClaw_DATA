@@ -1,186 +1,174 @@
 meta:
-  ruleset_id: "nis2-cz"
-  version: "0.1"
-  status: "draft"
-  jurisdiction: ["CZ"]
-  evaluation_profile_schema: "rules/nis2-cz/entity_profile.schema.yaml"
-
+  ruleset_id: nis2-cz
+  version: '0.1'
+  status: draft
+  jurisdiction:
+  - CZ
+  evaluation_profile_schema: rules/nis2-cz/entity_profile.schema.yaml
 rules:
-  # Milestone 1.1 — Management responsibility + policy set
-
-  - id: "NIS2CZ-GOV-MGMT-ACCOUNTABILITY"
-    title: "Top management accountability and oversight for cybersecurity measures are established"
-    scope:
-      applies_to: ["org"]
-      conditions:
-        - profile_field: "in_scope_under_cz_law"
-          equals: true
-    requirement:
-      type: "governance_required"
-      must_include:
-        - "assignment_of_accountability (who in top management is accountable)"
-        - "governance_forum_or_reporting_line (how cyber risk is reported to management)"
-        - "approval_of_cybersecurity_measures_and_policies (formal approval evidence)"
-        - "periodic_management_review (cadence + agenda)"
-        - "resource_commitment (budget/staffing decision trail)"
-    evidence_hints:
-      required:
-        - "board_or_management_resolution_cybersecurity"
-        - "management_review_minutes_cyber"
-      artifacts:
-        - "board_or_management_resolution_cybersecurity"
-        - "management_review_minutes_cyber"
-        - "cybersecurity_governance_charter"
-        - "risk_register_summary_for_management"
-        - "budget_approval_records"
-    severity: "high"
-    sources:
-      - citation: "CZ-Act-264-2025 (odpovědnost vedení za zavedení a udržování opatření kybernetické bezpečnosti)"
-      - citation: "CZ-Decree-409-2025 (organizační opatření – vyšší povinnosti; governance/odpovědnosti)"
-      - citation: "CZ-Decree-410-2025 (organizační opatření – nižší povinnosti; governance/odpovědnosti)"
-      - citation: "EU-NIS2-2022-2555 Art. 20 (management bodies responsibilities) [mapping]"
-
-  - id: "NIS2CZ-GOV-POLICY-FRAMEWORK"
-    title: "Cybersecurity policy framework is documented, approved, and maintained"
-    scope:
-      applies_to: ["org"]
-      conditions:
-        - profile_field: "in_scope_under_cz_law"
-          equals: true
-    requirement:
-      type: "policy_framework_required"
-      must_include:
-        - "policy_register (list of policies/standards/procedures)"
-        - "ownership (policy owner for each document)"
-        - "versioning_and_change_control"
-        - "review_cycle (at least annual or trigger-based)"
-        - "communication_and_accessibility (how policies are published internally)"
-        - "alignment_to_applicable_duty_regime (higher|lower)"
-      minimum_policy_topics:
-        - "risk_management"
-        - "asset_management_and_classification"
-        - "access_control_and_identity"
-        - "logging_and_monitoring"
-        - "vulnerability_and_patch_management"
-        - "backup_and_resilience"
-        - "incident_handling_and_reporting"
-        - "supplier_and_third_party_management"
-        - "secure_change_management"
-    evidence_hints:
-      required:
-        - "cybersecurity_policy"
-        - "policy_register"
-      artifacts:
-        - "cybersecurity_policy"
-        - "policy_register"
-        - "document_control_procedure"
-        - "intranet_policy_portal_screenshot"
-        - "exceptions_register"
-    severity: "high"
-    sources:
-      - citation: "CZ-Act-264-2025 (povinnost zavést a dokumentovat opatření kybernetické bezpečnosti)"
-      - citation: "CZ-Decree-409-2025 (soubor opatření – vyšší povinnosti)"
-      - citation: "CZ-Decree-410-2025 (soubor opatření – nižší povinnosti)"
-      - citation: "EU-NIS2-2022-2555 Art. 21(2) (policies for risk analysis and information system security) [mapping]"
-
-  - id: "NIS2CZ-GOV-ROLES-RESPONSIBILITIES-MATRIX"
-    title: "Cybersecurity roles and responsibilities are defined and traceable to key processes"
-    scope:
-      applies_to: ["org"]
-      conditions:
-        - profile_field: "in_scope_under_cz_law"
-          equals: true
-    requirement:
-      type: "document_required"
-      document: "cybersecurity_roles_responsibilities_matrix"
-      must_include:
-        - "process_list (e.g., incident handling, vuln mgmt, access reviews, backup, supplier onboarding)"
-        - "role_assignments (RACI or equivalent)"
-        - "approval_and_effective_date"
-        - "handover_or_backup_roles (coverage during absence)"
-    evidence_hints:
-      required:
-        - "cybersecurity_roles_responsibilities_matrix"
-      artifacts:
-        - "cybersecurity_roles_responsibilities_matrix"
-        - "job_descriptions_security"
-        - "org_chart"
-        - "on_call_roster"
-    severity: "medium"
-    sources:
-      - citation: "CZ-Decree-409-2025 (organizační opatření – role/odpovědnosti)"
-      - citation: "CZ-Decree-410-2025 (organizační opatření – role/odpovědnosti)"
-      - citation: "EU-NIS2-2022-2555 Art. 21(2) (organizational measures) [mapping]"
-
-  # Milestone 1.2 — Roles, training, awareness, internal audit
-
-  - id: "NIS2CZ-GOV-TRAINING-AWARENESS"
-    title: "Cybersecurity training and awareness program is implemented and evidenced"
-    scope:
-      applies_to: ["org"]
-      conditions:
-        - profile_field: "in_scope_under_cz_law"
-          equals: true
-    requirement:
-      type: "program_required"
-      program: "cybersecurity_training_and_awareness"
-      must_include:
-        - "audience_definition (roles/groups incl. privileged users and management)"
-        - "mandatory_training_topics (baseline cyber hygiene + role-based)"
-        - "onboarding_training"
-        - "periodic_refresh (cadence)"
-        - "awareness_activities (e.g., comms, campaigns, simulations)"
-        - "training_completion_tracking (records + reporting)"
-        - "effectiveness_check (e.g., quiz/phishing simulation metrics)"
-    evidence_hints:
-      required:
-        - "security_training_plan"
-        - "security_training_records"
-      artifacts:
-        - "security_training_plan"
-        - "security_training_records"
-        - "learning_management_system_export"
-        - "awareness_campaign_materials"
-        - "phishing_simulation_report"
-        - "management_training_attendance"
-    severity: "medium"
-    sources:
-      - citation: "CZ-Act-264-2025 (povinnost zavést a udržovat opatření kybernetické bezpečnosti; personální zajištění)"
-      - citation: "CZ-Decree-409-2025 (organizační/personální opatření – školení a zvyšování povědomí)"
-      - citation: "CZ-Decree-410-2025 (organizační/personální opatření – školení a zvyšování povědomí)"
-      - citation: "EU-NIS2-2022-2555 Art. 20 (management bodies training/awareness) [mapping]"
-      - citation: "EU-NIS2-2022-2555 Art. 21(2)(g) (basic cyber hygiene and training) [mapping]"
-
-  - id: "NIS2CZ-GOV-INTERNAL-AUDIT"
-    title: "Internal audit / self-assessment of cybersecurity measures is performed and tracked"
-    scope:
-      applies_to: ["org"]
-      conditions:
-        - profile_field: "in_scope_under_cz_law"
-          equals: true
-    requirement:
-      type: "process_required"
-      process: "cybersecurity_internal_audit"
-      must_include:
-        - "audit_plan_or_schedule (at least annual or risk/incident-triggered)"
-        - "audit_scope_definition (controls/measures covered; higher/lower regime)"
-        - "independence_or_objectivity (who audits whom; external support if needed)"
-        - "findings_classification_and_risk_rating"
-        - "corrective_actions_tracking (owners, due dates, status)"
-        - "management_reporting_of_results"
-    evidence_hints:
-      required:
-        - "cybersecurity_audit_plan"
-        - "cybersecurity_audit_report"
-      artifacts:
-        - "cybersecurity_audit_plan"
-        - "cybersecurity_audit_report"
-        - "corrective_actions_register"
-        - "management_review_minutes_cyber"
-        - "internal_control_testing_workpapers"
-    severity: "medium"
-    sources:
-      - citation: "CZ-Act-264-2025 (průběžné zajišťování a ověřování účinnosti opatření kybernetické bezpečnosti)"
-      - citation: "CZ-Decree-409-2025 (požadavky na ověřování/posuzování účinnosti opatření – vyšší povinnosti)"
-      - citation: "CZ-Decree-410-2025 (požadavky na ověřování/posuzování účinnosti opatření – nižší povinnosti)"
-      - citation: "EU-NIS2-2022-2555 Art. 21(2) (monitoring, testing and auditing) [mapping]"
+- id: NIS2CZ-GOV-MGMT-ACCOUNTABILITY
+  title: Top management accountability and oversight for cybersecurity measures are established
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: governance_required
+    must_include:
+    - assignment_of_accountability (who in top management is accountable)
+    - governance_forum_or_reporting_line (how cyber risk is reported to management)
+    - approval_of_cybersecurity_measures_and_policies (formal approval evidence)
+    - periodic_management_review (cadence + agenda)
+    - resource_commitment (budget/staffing decision trail)
+  evidence_hints:
+    required:
+    - artifact_id: GOV-BOARD-OR-MANAGEMENT-RESOLUTION-CYBERSECUR
+    - artifact_id: GOV-MANAGEMENT-REVIEW-MINUTES-CYBER
+    optional:
+    - artifact_id: GOV-CYBERSECURITY-GOVERNANCE-CHARTER
+    - artifact_id: GOV-RISK-REGISTER-SUMMARY-FOR-MANAGEMENT
+    - artifact_id: GOV-BUDGET-APPROVAL-RECORDS
+  severity: high
+  sources:
+  - citation: CZ-Act-264-2025 (odpovědnost vedení za zavedení a udržování opatření kybernetické bezpečnosti)
+  - citation: CZ-Decree-409-2025 (organizační opatření – vyšší povinnosti; governance/odpovědnosti)
+  - citation: CZ-Decree-410-2025 (organizační opatření – nižší povinnosti; governance/odpovědnosti)
+  - citation: EU-NIS2-2022-2555 Art. 20 (management bodies responsibilities) [mapping]
+- id: NIS2CZ-GOV-POLICY-FRAMEWORK
+  title: Cybersecurity policy framework is documented, approved, and maintained
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: policy_framework_required
+    must_include:
+    - policy_register (list of policies/standards/procedures)
+    - ownership (policy owner for each document)
+    - versioning_and_change_control
+    - review_cycle (at least annual or trigger-based)
+    - communication_and_accessibility (how policies are published internally)
+    - alignment_to_applicable_duty_regime (higher|lower)
+    minimum_policy_topics:
+    - risk_management
+    - asset_management_and_classification
+    - access_control_and_identity
+    - logging_and_monitoring
+    - vulnerability_and_patch_management
+    - backup_and_resilience
+    - incident_handling_and_reporting
+    - supplier_and_third_party_management
+    - secure_change_management
+  evidence_hints:
+    required:
+    - artifact_id: GOV-CYBERSECURITY-POLICY
+    - artifact_id: GOV-POLICY-REGISTER
+    optional:
+    - artifact_id: GOV-DOCUMENT-CONTROL-PROCEDURE
+    - artifact_id: GOV-INTRANET-POLICY-PORTAL-SCREENSHOT
+    - artifact_id: GOV-EXCEPTIONS-REGISTER
+  severity: high
+  sources:
+  - citation: CZ-Act-264-2025 (povinnost zavést a dokumentovat opatření kybernetické bezpečnosti)
+  - citation: CZ-Decree-409-2025 (soubor opatření – vyšší povinnosti)
+  - citation: CZ-Decree-410-2025 (soubor opatření – nižší povinnosti)
+  - citation: EU-NIS2-2022-2555 Art. 21(2) (policies for risk analysis and information system security) [mapping]
+- id: NIS2CZ-GOV-ROLES-RESPONSIBILITIES-MATRIX
+  title: Cybersecurity roles and responsibilities are defined and traceable to key processes
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: document_required
+    document: cybersecurity_roles_responsibilities_matrix
+    must_include:
+    - process_list (e.g., incident handling, vuln mgmt, access reviews, backup, supplier onboarding)
+    - role_assignments (RACI or equivalent)
+    - approval_and_effective_date
+    - handover_or_backup_roles (coverage during absence)
+  evidence_hints:
+    required:
+    - artifact_id: GOV-CYBERSECURITY-ROLES-RESPONSIBILITIES-MATR
+    optional:
+    - artifact_id: GOV-JOB-DESCRIPTIONS-SECURITY
+    - artifact_id: GOV-ORG-CHART
+    - artifact_id: GOV-ON-CALL-ROSTER
+  severity: medium
+  sources:
+  - citation: CZ-Decree-409-2025 (organizační opatření – role/odpovědnosti)
+  - citation: CZ-Decree-410-2025 (organizační opatření – role/odpovědnosti)
+  - citation: EU-NIS2-2022-2555 Art. 21(2) (organizational measures) [mapping]
+- id: NIS2CZ-GOV-TRAINING-AWARENESS
+  title: Cybersecurity training and awareness program is implemented and evidenced
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: program_required
+    program: cybersecurity_training_and_awareness
+    must_include:
+    - audience_definition (roles/groups incl. privileged users and management)
+    - mandatory_training_topics (baseline cyber hygiene + role-based)
+    - onboarding_training
+    - periodic_refresh (cadence)
+    - awareness_activities (e.g., comms, campaigns, simulations)
+    - training_completion_tracking (records + reporting)
+    - effectiveness_check (e.g., quiz/phishing simulation metrics)
+  evidence_hints:
+    required:
+    - artifact_id: GOV-SECURITY-TRAINING-PLAN
+    - artifact_id: GOV-SECURITY-TRAINING-RECORDS
+    optional:
+    - artifact_id: GOV-LEARNING-MANAGEMENT-SYSTEM-EXPORT
+    - artifact_id: GOV-AWARENESS-CAMPAIGN-MATERIALS
+    - artifact_id: GOV-PHISHING-SIMULATION-REPORT
+    - artifact_id: GOV-MANAGEMENT-TRAINING-ATTENDANCE
+  severity: medium
+  sources:
+  - citation: CZ-Act-264-2025 (povinnost zavést a udržovat opatření kybernetické bezpečnosti; personální zajištění)
+  - citation: CZ-Decree-409-2025 (organizační/personální opatření – školení a zvyšování povědomí)
+  - citation: CZ-Decree-410-2025 (organizační/personální opatření – školení a zvyšování povědomí)
+  - citation: EU-NIS2-2022-2555 Art. 20 (management bodies training/awareness) [mapping]
+  - citation: EU-NIS2-2022-2555 Art. 21(2)(g) (basic cyber hygiene and training) [mapping]
+- id: NIS2CZ-GOV-INTERNAL-AUDIT
+  title: Internal audit / self-assessment of cybersecurity measures is performed and tracked
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: process_required
+    process: cybersecurity_internal_audit
+    must_include:
+    - audit_plan_or_schedule (at least annual or risk/incident-triggered)
+    - audit_scope_definition (controls/measures covered; higher/lower regime)
+    - independence_or_objectivity (who audits whom; external support if needed)
+    - findings_classification_and_risk_rating
+    - corrective_actions_tracking (owners, due dates, status)
+    - management_reporting_of_results
+  evidence_hints:
+    required:
+    - artifact_id: GOV-CYBERSECURITY-AUDIT-PLAN
+    - artifact_id: GOV-CYBERSECURITY-AUDIT-REPORT
+    optional:
+    - artifact_id: GOV-CORRECTIVE-ACTIONS-REGISTER
+    - artifact_id: GOV-MANAGEMENT-REVIEW-MINUTES-CYBER
+    - artifact_id: GOV-INTERNAL-CONTROL-TESTING-WORKPAPERS
+  severity: medium
+  sources:
+  - citation: CZ-Act-264-2025 (průběžné zajišťování a ověřování účinnosti opatření kybernetické bezpečnosti)
+  - citation: CZ-Decree-409-2025 (požadavky na ověřování/posuzování účinnosti opatření – vyšší povinnosti)
+  - citation: CZ-Decree-410-2025 (požadavky na ověřování/posuzování účinnosti opatření – nižší povinnosti)
+  - citation: EU-NIS2-2022-2555 Art. 21(2) (monitoring, testing and auditing) [mapping]

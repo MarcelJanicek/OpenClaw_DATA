@@ -1,10 +1,12 @@
 meta:
   ruleset_id: nis2-cz
-  version: 1.0-pilot
+  version: 2.0-refactored
   status: complete
   jurisdiction:
   - CZ
   evaluation_profile_schema: rules/nis2-cz/entity_profile.schema.yaml
+  not_applicable_schema: rules/nis2-cz/not_applicable.schema.yaml
+  evidence_catalog: rules/nis2-cz/EVIDENCE_CATALOG.yaml
   sources:
   - name: Zákon č. 264/2025 Sb., o kybernetické bezpečnosti
     ref: CZ-Act-264-2025
@@ -25,20 +27,95 @@ rules:
     applies_to:
     - org
   requirement:
-    type: document_required
-    document: nis2cz_scope_assessment
-    must_include:
-    - entity_profile (sector/subsector/size)
-    - services_provided
-    - initial_in_scope_hypothesis
-    - evidence_sources_used
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — all items mandatory for any assessed entity.
+    checklist:
+    - id: FOUND-SCOPE-01
+      title_en: Entity profile is documented (sector, subsector, size category)
+      title_cs: Profil entity je zdokumentován (sektor, podsektor, velikostní kategorie)
+      required_by_default: true
+      acceptance_criteria:
+      - Document contains sector classification per CZ-Decree-408-2025
+      - Subsector identified where applicable
+      - Size category (micro/small/medium/large) stated with supporting data
+      keywords_cs:
+      - profil
+      - sektor
+      - podsektor
+      - velikost
+      - kategorie
+      keywords_en:
+      - entity profile
+      - sector
+      - subsector
+      - size category
+      red_flags:
+      - No entity profile document exists
+      - Sector classification missing or generic
+      - Size category not substantiated with data
+    - id: FOUND-SCOPE-02
+      title_en: Services provided are enumerated and mapped to regulated service types
+      title_cs: Poskytované služby jsou vyjmenovány a namapovány na typy regulovaných služeb
+      required_by_default: true
+      acceptance_criteria:
+      - Full list of services the entity provides is documented
+      - Each service is mapped (or explicitly unmapped) to regulated service types per CZ-Decree-408-2025
+      keywords_cs:
+      - služby
+      - regulované služby
+      - mapování služeb
+      - katalog služeb
+      keywords_en:
+      - services
+      - regulated services
+      - service mapping
+      - service catalog
+      red_flags:
+      - Service list missing or incomplete
+      - No mapping to regulated service types attempted
+    - id: FOUND-SCOPE-03
+      title_en: Initial in-scope hypothesis is stated with reasoning
+      title_cs: Počáteční hypotéza o rozsahu působnosti je uvedena s odůvodněním
+      required_by_default: true
+      acceptance_criteria:
+      - Document states whether the entity is likely in scope under CZ-Act-264-2025
+      - Reasoning references specific legal provisions
+      keywords_cs:
+      - hypotéza
+      - rozsah
+      - působnost
+      - odůvodnění
+      keywords_en:
+      - hypothesis
+      - scope
+      - in-scope
+      - reasoning
+      red_flags:
+      - No in-scope hypothesis stated
+      - Hypothesis lacks legal references
+    - id: FOUND-SCOPE-04
+      title_en: Evidence sources used for the assessment are listed
+      title_cs: Zdroje důkazů použité pro hodnocení jsou uvedeny
+      required_by_default: true
+      acceptance_criteria:
+      - Document lists all data sources consulted (company register, contracts, financial statements, etc.)
+      - Sources are dated and verifiable
+      keywords_cs:
+      - zdroje
+      - důkazy
+      - podklady
+      - dokumentace
+      keywords_en:
+      - evidence sources
+      - data sources
+      - supporting documents
+      red_flags:
+      - No evidence sources listed
+      - Sources undated or unverifiable
   evidence_hints:
     required:
-    - nis2cz_scope_assessment
-    artifacts:
-    - nis2cz_scope_assessment
-    - service_catalog
-    - org_chart
+    - artifact_id: FOUND-SCOPE-ASSESSMENT
   severity: high
   sources:
   - citation: CZ-Act-264-2025 §1 (předmět úpravy)
@@ -49,21 +126,109 @@ rules:
     applies_to:
     - org
   requirement:
-    type: document_required
-    document: nis2cz_evidence_register
-    must_include:
-    - artifact_taxonomy (types + definitions)
-    - artifact_naming_convention
-    - artifact_owner_per_type
-    - retention_or_location_per_type
-    - mapping_to_rules (rule_id -> evidence artifacts)
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — all items mandatory for proper evidence management.
+    checklist:
+    - id: FOUND-EVID-01
+      title_en: Artifact taxonomy with types and definitions is documented
+      title_cs: Taxonomie artefaktů s typy a definicemi je zdokumentována
+      required_by_default: true
+      acceptance_criteria:
+      - Taxonomy defines artifact categories (policy, procedure, record, report, screenshot, export, etc.)
+      - Each category has a definition and examples
+      keywords_cs:
+      - taxonomie
+      - artefakty
+      - typy
+      - definice
+      keywords_en:
+      - taxonomy
+      - artifacts
+      - types
+      - definitions
+      red_flags:
+      - No artifact taxonomy exists
+      - Types undefined or ambiguous
+    - id: FOUND-EVID-02
+      title_en: Naming convention for artifacts is established
+      title_cs: Konvence pojmenování artefaktů je stanovena
+      required_by_default: true
+      acceptance_criteria:
+      - Naming convention is documented and includes artifact type, date, and version
+      - Convention is consistently applied across existing artifacts
+      keywords_cs:
+      - pojmenování
+      - konvence
+      - formát názvů
+      keywords_en:
+      - naming convention
+      - naming standard
+      - file naming
+      red_flags:
+      - No naming convention documented
+      - Inconsistent naming across artifacts
+    - id: FOUND-EVID-03
+      title_en: Each artifact type has an assigned owner
+      title_cs: Každý typ artefaktu má přiřazeného vlastníka
+      required_by_default: true
+      acceptance_criteria:
+      - Owner role/person is assigned per artifact type
+      - Owner is responsible for creation, review, and maintenance
+      keywords_cs:
+      - vlastník
+      - odpovědnost
+      - přiřazení
+      keywords_en:
+      - owner
+      - responsibility
+      - assignment
+      red_flags:
+      - Artifact types without owners
+    - id: FOUND-EVID-04
+      title_en: Retention period and storage location are defined per artifact type
+      title_cs: Doba uchovávání a místo uložení jsou definovány pro každý typ artefaktu
+      required_by_default: true
+      acceptance_criteria:
+      - Each artifact type has a defined retention period
+      - Storage location (system, folder, vault) is specified
+      keywords_cs:
+      - uchovávání
+      - retence
+      - uložení
+      - místo
+      keywords_en:
+      - retention
+      - storage
+      - location
+      - archival
+      red_flags:
+      - No retention periods defined
+      - Storage locations unspecified
+    - id: FOUND-EVID-05
+      title_en: Mapping from rule IDs to required evidence artifacts is maintained
+      title_cs: Mapování z ID pravidel na požadované důkazní artefakty je udržováno
+      required_by_default: true
+      acceptance_criteria:
+      - A register or matrix links each compliance rule ID to its required artifacts
+      - Matrix is current (last update within 6 months)
+      keywords_cs:
+      - mapování
+      - pravidla
+      - artefakty
+      - matice
+      keywords_en:
+      - mapping
+      - rules
+      - artifacts
+      - matrix
+      - traceability
+      red_flags:
+      - No rule-to-artifact mapping exists
+      - Mapping outdated (>6 months)
   evidence_hints:
     required:
-    - nis2cz_evidence_register
-    artifacts:
-    - nis2cz_evidence_register
-    - document_register
-    - records_management_policy
+    - artifact_id: FOUND-EVIDENCE-REGISTER
   severity: medium
   sources:
   - citation: CZ-Act-264-2025 (governance/documentation expectations for cybersecurity measures)
@@ -73,51 +238,208 @@ rules:
     applies_to:
     - org
   requirement:
-    type: decision_record_required
-    decision: cz_in_scope_determination
-    must_include:
-    - legal_basis_summary (why the org is / is not regulated)
-    - regulated_service_identification (if applicable)
-    - assumptions_and_data_used (size, services, sector)
-    - approval_by_responsible_person
-    - review_date_or_trigger
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — every entity must document an in-scope determination.
+    checklist:
+    - id: SCOPE-INSCOPE-01
+      title_en: Legal basis summary explains why the entity is or is not regulated
+      title_cs: Shrnutí právního základu vysvětluje, proč subjekt je nebo není regulován
+      required_by_default: true
+      acceptance_criteria:
+      - Document references specific sections of CZ-Act-264-2025
+      - Conclusion (in-scope / out-of-scope) is explicitly stated
+      keywords_cs:
+      - právní základ
+      - regulovaný
+      - působnost
+      - zákon
+      keywords_en:
+      - legal basis
+      - regulated
+      - scope
+      - act
+      red_flags:
+      - No legal basis provided
+      - Conclusion ambiguous or missing
+    - id: SCOPE-INSCOPE-02
+      title_en: Regulated services are identified (if applicable)
+      title_cs: Regulované služby jsou identifikovány (pokud je to relevantní)
+      required_by_default: true
+      acceptance_criteria:
+      - Each regulated service type is identified per CZ-Decree-408-2025
+      - If none are applicable, explicit statement with reasoning
+      keywords_cs:
+      - regulované služby
+      - identifikace
+      - vyhláška 408
+      keywords_en:
+      - regulated services
+      - identification
+      - decree 408
+      red_flags:
+      - Services not analyzed against decree 408
+    - id: SCOPE-INSCOPE-03
+      title_en: Assumptions and data used for the determination are documented
+      title_cs: Předpoklady a data použitá pro rozhodnutí jsou zdokumentovány
+      required_by_default: true
+      acceptance_criteria:
+      - Data sources (size, turnover, employee count, sector data) are listed
+      - Assumptions are explicitly stated and dated
+      keywords_cs:
+      - předpoklady
+      - data
+      - zdroje
+      - velikost
+      - obrat
+      keywords_en:
+      - assumptions
+      - data
+      - sources
+      - size
+      - turnover
+      red_flags:
+      - No supporting data referenced
+      - Assumptions unstated
+    - id: SCOPE-INSCOPE-04
+      title_en: Decision is approved by a responsible person
+      title_cs: Rozhodnutí je schváleno odpovědnou osobou
+      required_by_default: true
+      acceptance_criteria:
+      - Approval signature or record with name, role, and date
+      keywords_cs:
+      - schválení
+      - odpovědná osoba
+      - podpis
+      keywords_en:
+      - approval
+      - responsible person
+      - signature
+      red_flags:
+      - No approval record
+    - id: SCOPE-INSCOPE-05
+      title_en: Review date or trigger for re-assessment is defined
+      title_cs: Datum revize nebo podmínka pro opakované posouzení je definována
+      required_by_default: true
+      acceptance_criteria:
+      - Next review date is set (at most 12 months) or trigger events listed
+      keywords_cs:
+      - revize
+      - datum
+      - opakované posouzení
+      - trigger
+      keywords_en:
+      - review date
+      - reassessment
+      - trigger
+      red_flags:
+      - No review date or trigger defined
   evidence_hints:
     required:
-    - cz_in_scope_determination
-    artifacts:
-    - cz_in_scope_determination
-    - service_catalog
-    - contract_catalog
-    - company_registry_extract
+    - artifact_id: SCOPE-IN-SCOPE-DETERMINATION
   severity: high
   sources:
   - citation: CZ-Act-264-2025 (scope / regulated entities)
-  - citation: 'EU-NIS2-2022-2555 (mapping: entity scope)'
+  - citation: 'EU-NIS2-2022-2555 Art. 2 (mapping: entity scope)'
 - id: NIS2CZ-SCOPING-ENTITY-CLASS-ESSENTIAL-IMPORTANT
   title: Entity class (essential/important) is determined and recorded
   scope:
     applies_to:
     - org
   requirement:
-    type: decision_record_required
-    decision: cz_entity_classification
-    must_include:
-    - entity_class (essential|important)
-    - classification_criteria_used
-    - regulated_service_or_sector_reference
-    - any_exemptions_or_special_cases
-    - approval_by_responsible_person
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — classification is mandatory for all in-scope entities.
+    checklist:
+    - id: SCOPE-CLASS-01
+      title_en: Entity class (essential or important) is explicitly stated
+      title_cs: Třída entity (základní nebo důležitý) je explicitně uvedena
+      required_by_default: true
+      acceptance_criteria:
+      - Document states 'essential' or 'important' with clear determination
+      keywords_cs:
+      - základní
+      - důležitý
+      - třída
+      - klasifikace
+      keywords_en:
+      - essential
+      - important
+      - class
+      - classification
+      red_flags:
+      - Classification missing or ambiguous
+    - id: SCOPE-CLASS-02
+      title_en: Classification criteria used are documented
+      title_cs: Použitá klasifikační kritéria jsou zdokumentována
+      required_by_default: true
+      acceptance_criteria:
+      - Criteria reference CZ-Act-264-2025 provisions for essential/important distinction
+      - Sector, size, and service-type criteria are evaluated
+      keywords_cs:
+      - kritéria
+      - klasifikace
+      - sektor
+      - velikost
+      keywords_en:
+      - criteria
+      - classification
+      - sector
+      - size
+      red_flags:
+      - No criteria documented
+    - id: SCOPE-CLASS-03
+      title_en: Regulated service or sector reference supports the classification
+      title_cs: Odkaz na regulovanou službu nebo sektor podporuje klasifikaci
+      required_by_default: true
+      acceptance_criteria:
+      - Specific sector/subsector and service type cited
+      keywords_cs:
+      - sektor
+      - služba
+      - odkaz
+      keywords_en:
+      - sector
+      - service
+      - reference
+      red_flags:
+      - No sector/service reference
+    - id: SCOPE-CLASS-04
+      title_en: Exemptions or special cases are documented (or explicitly stated as none)
+      title_cs: Výjimky nebo zvláštní případy jsou zdokumentovány (nebo explicitně uvedeno, že žádné nejsou)
+      required_by_default: true
+      acceptance_criteria:
+      - Any exemptions are listed with legal basis, OR
+      - Explicit statement that no exemptions apply
+      keywords_cs:
+      - výjimky
+      - zvláštní případy
+      keywords_en:
+      - exemptions
+      - special cases
+      red_flags:
+      - Exemptions section missing entirely
+    - id: SCOPE-CLASS-05
+      title_en: Classification is approved by responsible person
+      title_cs: Klasifikace je schválena odpovědnou osobou
+      required_by_default: true
+      acceptance_criteria:
+      - Approval record with name, role, date
+      keywords_cs:
+      - schválení
+      - odpovědná osoba
+      keywords_en:
+      - approval
+      - responsible person
+      red_flags:
+      - No approval
   evidence_hints:
     required:
-    - cz_entity_classification
-    artifacts:
-    - cz_entity_classification
-    - cz_in_scope_determination
-    - sector_mapping
+    - artifact_id: SCOPE-ENTITY-CLASSIFICATION
   severity: high
   sources:
   - citation: CZ-Act-264-2025 (essential vs important entities)
-  - citation: 'EU-NIS2-2022-2555 (mapping: essential/important entities)'
+  - citation: 'EU-NIS2-2022-2555 Art. 3 (mapping: essential/important entities)'
 - id: NIS2CZ-SCOPING-DUTY-REGIME-HIGHER-LOWER
   title: Applicable duty regime (higher/lower) is determined per CZ decrees
   scope:
@@ -127,19 +449,78 @@ rules:
     - profile_field: in_scope_under_cz_law
       equals: true
   requirement:
-    type: decision_record_required
-    decision: cz_duty_regime_determination
-    must_include:
-    - duty_regime (higher|lower)
-    - rationale_and_criteria
-    - links_to_applicable_measures_sets
-    - date_effective
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — duty regime must be determined for all in-scope entities.
+    checklist:
+    - id: SCOPE-DUTY-01
+      title_en: Duty regime (higher or lower) is explicitly stated
+      title_cs: Režim povinností (vyšší nebo nižší) je explicitně uveden
+      required_by_default: true
+      acceptance_criteria:
+      - Document states 'higher' or 'lower' unambiguously
+      keywords_cs:
+      - vyšší povinnosti
+      - nižší povinnosti
+      - režim
+      keywords_en:
+      - higher duties
+      - lower duties
+      - regime
+      red_flags:
+      - Duty regime not stated
+    - id: SCOPE-DUTY-02
+      title_en: Rationale and criteria for regime selection are documented
+      title_cs: Odůvodnění a kritéria pro výběr režimu jsou zdokumentovány
+      required_by_default: true
+      acceptance_criteria:
+      - References CZ-Decree-409-2025 (higher) or CZ-Decree-410-2025 (lower)
+      - Entity class and service type support the regime choice
+      keywords_cs:
+      - odůvodnění
+      - kritéria
+      - vyhláška 409
+      - vyhláška 410
+      keywords_en:
+      - rationale
+      - criteria
+      - decree 409
+      - decree 410
+      red_flags:
+      - No rationale provided
+    - id: SCOPE-DUTY-03
+      title_en: Links to applicable measures sets are documented
+      title_cs: Odkazy na příslušné soubory opatření jsou zdokumentovány
+      required_by_default: true
+      acceptance_criteria:
+      - Applicable decree annex/measure sets are explicitly listed
+      keywords_cs:
+      - opatření
+      - soubor
+      - příloha
+      keywords_en:
+      - measures
+      - set
+      - annex
+      red_flags:
+      - No link to applicable measures
+    - id: SCOPE-DUTY-04
+      title_en: Effective date of the determination is recorded
+      title_cs: Datum účinnosti rozhodnutí je zaznamenáno
+      required_by_default: true
+      acceptance_criteria:
+      - Date the regime determination becomes effective is stated
+      keywords_cs:
+      - datum
+      - účinnost
+      keywords_en:
+      - date
+      - effective
+      red_flags:
+      - No effective date
   evidence_hints:
     required:
-    - cz_duty_regime_determination
-    artifacts:
-    - cz_duty_regime_determination
-    - control_applicability_matrix
+    - artifact_id: SCOPE-DUTY-REGIME-DETERMINATION
   severity: high
   sources:
   - citation: CZ-Decree-409-2025 (higher duties)
@@ -154,23 +535,98 @@ rules:
     - profile_field: in_scope_under_cz_law
       equals: true
   requirement:
-    type: document_required
-    document: cz_regulated_services_register
-    must_include:
-    - regulated_service_type (per CZ decree)
-    - service_owner
-    - service_description
-    - service_criticality_or_importance
-    - service_dependencies (key ICT assets/providers)
-    - link_to_service_catalog_entries
+    type: checklist
+    logic: ALL
+    na_mechanism: 'If entity has no regulated services, a documented justification artifact (SCOPE-NA-JUSTIFICATION) referencing
+      CZ-Decree-408-2025 analysis is required.
+
+      '
+    checklist:
+    - id: SCOPE-REGSVC-01
+      title_en: Regulated service type per CZ decree is recorded
+      title_cs: Typ regulované služby dle CZ vyhlášky je zaznamenán
+      required_by_default: true
+      acceptance_criteria:
+      - Each service is categorized per CZ-Decree-408-2025 regulated service types
+      keywords_cs:
+      - regulovaná služba
+      - typ
+      - vyhláška 408
+      keywords_en:
+      - regulated service
+      - type
+      - decree 408
+      red_flags:
+      - Service type not mapped to decree categories
+    - id: SCOPE-REGSVC-02
+      title_en: Service owner is assigned
+      title_cs: Vlastník služby je přiřazen
+      required_by_default: true
+      acceptance_criteria:
+      - Named owner or responsible role for each regulated service
+      keywords_cs:
+      - vlastník
+      - služba
+      - odpovědnost
+      keywords_en:
+      - owner
+      - service
+      - responsibility
+      red_flags:
+      - Services without owners
+    - id: SCOPE-REGSVC-03
+      title_en: Service description and criticality are documented
+      title_cs: Popis služby a její kritičnost jsou zdokumentovány
+      required_by_default: true
+      acceptance_criteria:
+      - Each service has a textual description
+      - Criticality or importance level is assessed
+      keywords_cs:
+      - popis
+      - kritičnost
+      - důležitost
+      keywords_en:
+      - description
+      - criticality
+      - importance
+      red_flags:
+      - No description or criticality assessment
+    - id: SCOPE-REGSVC-04
+      title_en: Service dependencies (key ICT assets/providers) are mapped
+      title_cs: Závislosti služby (klíčové ICT aktiva/dodavatelé) jsou namapovány
+      required_by_default: true
+      acceptance_criteria:
+      - Key ICT assets supporting the service are listed
+      - Third-party providers are identified
+      keywords_cs:
+      - závislosti
+      - ICT aktiva
+      - dodavatelé
+      - mapování
+      keywords_en:
+      - dependencies
+      - ICT assets
+      - providers
+      - mapping
+      red_flags:
+      - No dependency mapping
+    - id: SCOPE-REGSVC-05
+      title_en: Link to service catalog entries
+      title_cs: Odkaz na záznamy v katalogu služeb
+      required_by_default: true
+      acceptance_criteria:
+      - Each regulated service links to its entry in the service catalog
+      keywords_cs:
+      - katalog služeb
+      - odkaz
+      keywords_en:
+      - service catalog
+      - link
+      red_flags:
+      - No link to service catalog
   evidence_hints:
     required:
-    - cz_regulated_services_register
-    artifacts:
-    - cz_regulated_services_register
-    - service_catalog
-    - asset_inventory
-    - dependency_map
+    - artifact_id: SCOPE-REGULATED-SERVICES-REGISTER
   severity: medium
   sources:
   - citation: CZ-Decree-408-2025 (regulated services definitions/list)
@@ -193,14 +649,12 @@ rules:
     - resource_commitment (budget/staffing decision trail)
   evidence_hints:
     required:
-    - board_or_management_resolution_cybersecurity
-    - management_review_minutes_cyber
-    artifacts:
-    - board_or_management_resolution_cybersecurity
-    - management_review_minutes_cyber
-    - cybersecurity_governance_charter
-    - risk_register_summary_for_management
-    - budget_approval_records
+    - artifact_id: GOV-BOARD-OR-MANAGEMENT-RESOLUTION-CYBERSECUR
+    - artifact_id: GOV-MANAGEMENT-REVIEW-MINUTES-CYBER
+    optional:
+    - artifact_id: GOV-CYBERSECURITY-GOVERNANCE-CHARTER
+    - artifact_id: GOV-RISK-REGISTER-SUMMARY-FOR-MANAGEMENT
+    - artifact_id: GOV-BUDGET-APPROVAL-RECORDS
   severity: high
   sources:
   - citation: CZ-Act-264-2025 (odpovědnost vedení za zavedení a udržování opatření kybernetické bezpečnosti)
@@ -236,14 +690,12 @@ rules:
     - secure_change_management
   evidence_hints:
     required:
-    - cybersecurity_policy
-    - policy_register
-    artifacts:
-    - cybersecurity_policy
-    - policy_register
-    - document_control_procedure
-    - intranet_policy_portal_screenshot
-    - exceptions_register
+    - artifact_id: GOV-CYBERSECURITY-POLICY
+    - artifact_id: GOV-POLICY-REGISTER
+    optional:
+    - artifact_id: GOV-DOCUMENT-CONTROL-PROCEDURE
+    - artifact_id: GOV-INTRANET-POLICY-PORTAL-SCREENSHOT
+    - artifact_id: GOV-EXCEPTIONS-REGISTER
   severity: high
   sources:
   - citation: CZ-Act-264-2025 (povinnost zavést a dokumentovat opatření kybernetické bezpečnosti)
@@ -268,12 +720,11 @@ rules:
     - handover_or_backup_roles (coverage during absence)
   evidence_hints:
     required:
-    - cybersecurity_roles_responsibilities_matrix
-    artifacts:
-    - cybersecurity_roles_responsibilities_matrix
-    - job_descriptions_security
-    - org_chart
-    - on_call_roster
+    - artifact_id: GOV-CYBERSECURITY-ROLES-RESPONSIBILITIES-MATR
+    optional:
+    - artifact_id: GOV-JOB-DESCRIPTIONS-SECURITY
+    - artifact_id: GOV-ORG-CHART
+    - artifact_id: GOV-ON-CALL-ROSTER
   severity: medium
   sources:
   - citation: CZ-Decree-409-2025 (organizační opatření – role/odpovědnosti)
@@ -300,15 +751,13 @@ rules:
     - effectiveness_check (e.g., quiz/phishing simulation metrics)
   evidence_hints:
     required:
-    - security_training_plan
-    - security_training_records
-    artifacts:
-    - security_training_plan
-    - security_training_records
-    - learning_management_system_export
-    - awareness_campaign_materials
-    - phishing_simulation_report
-    - management_training_attendance
+    - artifact_id: GOV-SECURITY-TRAINING-PLAN
+    - artifact_id: GOV-SECURITY-TRAINING-RECORDS
+    optional:
+    - artifact_id: GOV-LEARNING-MANAGEMENT-SYSTEM-EXPORT
+    - artifact_id: GOV-AWARENESS-CAMPAIGN-MATERIALS
+    - artifact_id: GOV-PHISHING-SIMULATION-REPORT
+    - artifact_id: GOV-MANAGEMENT-TRAINING-ATTENDANCE
   severity: medium
   sources:
   - citation: CZ-Act-264-2025 (povinnost zavést a udržovat opatření kybernetické bezpečnosti; personální zajištění)
@@ -336,14 +785,12 @@ rules:
     - management_reporting_of_results
   evidence_hints:
     required:
-    - cybersecurity_audit_plan
-    - cybersecurity_audit_report
-    artifacts:
-    - cybersecurity_audit_plan
-    - cybersecurity_audit_report
-    - corrective_actions_register
-    - management_review_minutes_cyber
-    - internal_control_testing_workpapers
+    - artifact_id: GOV-CYBERSECURITY-AUDIT-PLAN
+    - artifact_id: GOV-CYBERSECURITY-AUDIT-REPORT
+    optional:
+    - artifact_id: GOV-CORRECTIVE-ACTIONS-REGISTER
+    - artifact_id: GOV-MANAGEMENT-REVIEW-MINUTES-CYBER
+    - artifact_id: GOV-INTERNAL-CONTROL-TESTING-WORKPAPERS
   severity: medium
   sources:
   - citation: CZ-Act-264-2025 (průběžné zajišťování a ověřování účinnosti opatření kybernetické bezpečnosti)
@@ -371,12 +818,11 @@ rules:
     - last_review_date
   evidence_hints:
     required:
-    - ict_asset_inventory
-    artifacts:
-    - ict_asset_inventory
-    - cmdb_export
-    - cloud_account_inventory
-    - network_diagrams
+    - artifact_id: RISK-ICT-ASSET-INVENTORY
+    optional:
+    - artifact_id: RISK-CMDB-EXPORT
+    - artifact_id: RISK-CLOUD-ACCOUNT-INVENTORY
+    - artifact_id: RISK-NETWORK-DIAGRAMS
   severity: high
   sources:
   - citation: 'CZ-Decree-409-2025 (higher duties: asset management / evidence)'
@@ -400,11 +846,10 @@ rules:
     - linkage_to_inventory_fields
   evidence_hints:
     required:
-    - asset_ownership_model
-    artifacts:
-    - asset_ownership_model
-    - ict_asset_inventory
-    - raci_matrix
+    - artifact_id: RISK-ASSET-OWNERSHIP-MODEL
+    optional:
+    - artifact_id: RISK-ICT-ASSET-INVENTORY
+    - artifact_id: RISK-RACI-MATRIX
   severity: medium
   sources:
   - citation: CZ-Act-264-2025 (governance/accountability for cybersecurity measures)
@@ -429,11 +874,10 @@ rules:
     - exceptions_process
   evidence_hints:
     required:
-    - information_and_asset_classification_policy
-    artifacts:
-    - information_and_asset_classification_policy
-    - data_handling_standard
-    - records_management_policy
+    - artifact_id: RISK-INFORMATION-AND-ASSET-CLASSIFICATION-POL
+    optional:
+    - artifact_id: RISK-DATA-HANDLING-STANDARD
+    - artifact_id: RISK-RECORDS-MANAGEMENT-POLICY
   severity: high
   sources:
   - citation: 'CZ-Decree-409-2025 (higher duties: classification/handling expectations)'
@@ -457,12 +901,11 @@ rules:
     - owner_approval_or_acknowledgement
   evidence_hints:
     required:
-    - asset_and_information_classification_register
-    artifacts:
-    - asset_and_information_classification_register
-    - ict_asset_inventory
-    - data_inventory
-    - dpa_or_gdpr_records (if applicable)
+    - artifact_id: RISK-ASSET-AND-INFORMATION-CLASSIFICATION-REG
+    optional:
+    - artifact_id: RISK-ICT-ASSET-INVENTORY
+    - artifact_id: RISK-DATA-INVENTORY
+    - artifact_id: RISK-DPA-OR-GDPR-RECORDS
   severity: medium
   sources:
   - citation: 'CZ-Decree-409-2025 (higher duties: classification applied in practice)'
@@ -487,12 +930,11 @@ rules:
     - inventory_update_step
   evidence_hints:
     required:
-    - ict_asset_lifecycle_process
-    artifacts:
-    - ict_asset_lifecycle_process
-    - procurement_policy
-    - change_tickets
-    - decommission_records
+    - artifact_id: RISK-ICT-ASSET-LIFECYCLE-PROCESS
+    optional:
+    - artifact_id: RISK-PROCUREMENT-POLICY
+    - artifact_id: RISK-CHANGE-TICKETS
+    - artifact_id: RISK-DECOMMISSION-RECORDS
   severity: medium
   sources:
   - citation: 'CZ-Decree-409-2025 (higher duties: lifecycle/change controls)'
@@ -520,12 +962,11 @@ rules:
     - review_cycle
   evidence_hints:
     required:
-    - access_control_and_identity_policy
-    artifacts:
-    - access_control_and_identity_policy
-    - policy_register
-    - access_control_standard
-    - remote_access_standard
+    - artifact_id: RISK-ACCESS-CONTROL-AND-IDENTITY-POLICY
+    optional:
+    - artifact_id: GOV-POLICY-REGISTER
+    - artifact_id: RISK-ACCESS-CONTROL-STANDARD
+    - artifact_id: RISK-REMOTE-ACCESS-STANDARD
   severity: high
   sources:
   - citation: CZ-Act-264-2025 (povinnost zavést a dokumentovat opatření kybernetické bezpečnosti)
@@ -551,13 +992,11 @@ rules:
     - recordkeeping (who approved what, when)
   evidence_hints:
     required:
-    - identity_lifecycle_procedure
-    - access_request_records
-    artifacts:
-    - identity_lifecycle_procedure
-    - access_request_records
-    - hr_termination_records (redacted)
-    - idm_system_logs_or_exports
+    - artifact_id: RISK-IDENTITY-LIFECYCLE-PROCEDURE
+    - artifact_id: RISK-ACCESS-REQUEST-RECORDS
+    optional:
+    - artifact_id: RISK-HR-TERMINATION-RECORDS
+    - artifact_id: RISK-IDM-SYSTEM-LOGS-OR-EXPORTS
   severity: high
   sources:
   - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: řízení přístupů; zřizování/rušení účtů)'
@@ -582,14 +1021,12 @@ rules:
     - session_or_command_logging for privileged actions where feasible
   evidence_hints:
     required:
-    - privileged_access_inventory
-    - pam_controls_evidence
-    artifacts:
-    - privileged_access_inventory
-    - pam_controls_evidence
-    - admin_account_list
-    - break_glass_procedure
-    - privileged_session_logs
+    - artifact_id: RISK-PRIVILEGED-ACCESS-INVENTORY
+    - artifact_id: RISK-PAM-CONTROLS-EVIDENCE
+    optional:
+    - artifact_id: RISK-ADMIN-ACCOUNT-LIST
+    - artifact_id: RISK-BREAK-GLASS-PROCEDURE
+    - artifact_id: RISK-PRIVILEGED-SESSION-LOGS
   severity: high
   sources:
   - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: řízení privilegovaných přístupů, evidence)'
@@ -614,12 +1051,11 @@ rules:
     - evidence_retention
   evidence_hints:
     required:
-    - access_review_records
-    artifacts:
-    - access_review_records
-    - idm_access_reports
-    - application_access_lists
-    - exceptions_register
+    - artifact_id: RISK-ACCESS-REVIEW-RECORDS
+    optional:
+    - artifact_id: RISK-IDM-ACCESS-REPORTS
+    - artifact_id: RISK-APPLICATION-ACCESS-LISTS
+    - artifact_id: GOV-EXCEPTIONS-REGISTER
   severity: medium
   sources:
   - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: pravidelné ověřování přístupových práv)'
@@ -645,12 +1081,11 @@ rules:
     - alerting_or_monitoring_use (who reviews and when)
   evidence_hints:
     required:
-    - security_logging_baseline
-    artifacts:
-    - security_logging_baseline
-    - siem_configuration_export
-    - central_logging_architecture_diagram
-    - log_retention_settings_screenshots
+    - artifact_id: RISK-SECURITY-LOGGING-BASELINE
+    optional:
+    - artifact_id: RISK-SIEM-CONFIGURATION-EXPORT
+    - artifact_id: RISK-CENTRAL-LOGGING-ARCHITECTURE-DIAGRAM
+    - artifact_id: RISK-LOG-RETENTION-SETTINGS-SCREENSHOTS
   severity: high
   sources:
   - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: záznamy/monitoring bezpečnostních událostí)'
@@ -675,13 +1110,11 @@ rules:
     - metrics (e.g., MTTD/alert volume)
   evidence_hints:
     required:
-    - log_review_procedure
-    - alert_or_log_review_records
-    artifacts:
-    - log_review_procedure
-    - alert_or_log_review_records
-    - siem_alert_queue_export
-    - incident_tickets_linked_to_alerts
+    - artifact_id: RISK-LOG-REVIEW-PROCEDURE
+    - artifact_id: RISK-ALERT-OR-LOG-REVIEW-RECORDS
+    optional:
+    - artifact_id: RISK-SIEM-ALERT-QUEUE-EXPORT
+    - artifact_id: RISK-INCIDENT-TICKETS-LINKED-TO-ALERTS
   severity: medium
   sources:
   - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: dohled/monitoring a vyhodnocování událostí)'
@@ -710,12 +1143,11 @@ rules:
     - metrics_and_reporting (e.g., patch compliance, MTTR)
   evidence_hints:
     required:
-    - vulnerability_and_patch_management_policy
-    artifacts:
-    - vulnerability_and_patch_management_policy
-    - policy_register
-    - risk_rating_methodology
-    - patching_sla_matrix
+    - artifact_id: RISK-VULNERABILITY-AND-PATCH-MANAGEMENT-POLIC
+    optional:
+    - artifact_id: GOV-POLICY-REGISTER
+    - artifact_id: RISK-RATING-METHODOLOGY
+    - artifact_id: RISK-PATCHING-SLA-MATRIX
   severity: high
   sources:
   - citation: CZ-Act-264-2025 (povinnost zavést a udržovat opatření kybernetické bezpečnosti)
@@ -742,15 +1174,12 @@ rules:
     - tracking_to_closure (status, due dates, owners)
   evidence_hints:
     required:
-    - vulnerability_scan_schedule
-    - vulnerability_scan_reports
-    - remediation_ticket_export
-    artifacts:
-    - vulnerability_scan_schedule
-    - vulnerability_scan_reports
-    - remediation_ticket_export
-    - asset_inventory
-    - scanner_configuration_export
+    - artifact_id: RISK-VULNERABILITY-SCAN-SCHEDULE
+    - artifact_id: RISK-VULNERABILITY-SCAN-REPORTS
+    - artifact_id: RISK-REMEDIATION-TICKET-EXPORT
+    optional:
+    - artifact_id: RISK-ASSET-INVENTORY
+    - artifact_id: RISK-SCANNER-CONFIGURATION-EXPORT
   severity: high
   sources:
   - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: pravidelné zjišťování zranitelností)'
@@ -777,14 +1206,12 @@ rules:
     - firmware_and_network_device_updates (where applicable)
   evidence_hints:
     required:
-    - patching_records
-    - patch_compliance_report
-    artifacts:
-    - patching_records
-    - patch_compliance_report
-    - change_tickets
-    - emergency_change_records
-    - endpoint_management_reports
+    - artifact_id: RISK-PATCHING-RECORDS
+    - artifact_id: RISK-PATCH-COMPLIANCE-REPORT
+    optional:
+    - artifact_id: RISK-CHANGE-TICKETS
+    - artifact_id: RISK-EMERGENCY-CHANGE-RECORDS
+    - artifact_id: RISK-ENDPOINT-MANAGEMENT-REPORTS
   severity: high
   sources:
   - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: aktualizace a odstraňování zranitelností)'
@@ -809,13 +1236,11 @@ rules:
     - recordkeeping (case register)
   evidence_hints:
     required:
-    - vulnerability_reporting_channel_evidence
-    - vulnerability_case_register
-    artifacts:
-    - vulnerability_reporting_channel_evidence
-    - vulnerability_case_register
-    - security_txt_file
-    - support_ticket_samples (redacted)
+    - artifact_id: RISK-VULNERABILITY-REPORTING-CHANNEL-EVIDENCE
+    - artifact_id: RISK-VULNERABILITY-CASE-REGISTER
+    optional:
+    - artifact_id: RISK-SECURITY-TXT-FILE
+    - artifact_id: RISK-SUPPORT-TICKET-SAMPLES
   severity: medium
   sources:
   - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: nakládání se zranitelnostmi / hlášení)'
@@ -842,12 +1267,11 @@ rules:
     - review_and_update_cycle
   evidence_hints:
     required:
-    - incident_classification_scheme
-    artifacts:
-    - incident_classification_scheme
-    - incident_response_plan
-    - soc_runbooks_or_playbooks
-    - ticketing_workflow_screenshots
+    - artifact_id: INC-INCIDENT-CLASSIFICATION-SCHEME
+    optional:
+    - artifact_id: INC-INCIDENT-RESPONSE-PLAN
+    - artifact_id: INC-SOC-RUNBOOKS-OR-PLAYBOOKS
+    - artifact_id: INC-TICKETING-WORKFLOW-SCREENSHOTS
   severity: high
   sources:
   - citation: CZ-Act-264-2025 (incident handling duties; governance responsibility)
@@ -880,12 +1304,11 @@ rules:
     - retention_period_and_access_controls
   evidence_hints:
     required:
-    - incident_register
-    artifacts:
-    - incident_register
-    - ticketing_export
-    - siem_case_management_export
-    - post_incident_reports
+    - artifact_id: INC-INCIDENT-REGISTER
+    optional:
+    - artifact_id: INC-TICKETING-EXPORT
+    - artifact_id: INC-SIEM-CASE-MANAGEMENT-EXPORT
+    - artifact_id: INC-POST-INCIDENT-REPORTS
   severity: high
   sources:
   - citation: CZ-Act-264-2025 (incident documentation and accountability duties)
@@ -980,7 +1403,8 @@ rules:
   sources:
   - citation: CZ-Decree-409-2025 §9(1)(g), §9(2)(c)-(d)
 - id: NIS2CZ-SUP-CONTRACT-ANNEX5-HIGHER
-  title: 'Contracts with significant suppliers contain required security clauses per Příloha č. 5 of Vyhl. 409/2025 (higher regime)
+  title: 'Contracts with significant suppliers contain required security clauses per Příloha č. 5 of Vyhl. 409/2025 (higher
+    regime)
 
     '
   scope:
@@ -992,7 +1416,8 @@ rules:
   requirement:
     type: annex_checklist
     logic: ALL_RELEVANT
-    note: 'Each item must be present in the contract unless marked not applicable (with documented justification). All items are required_by_default unless applicability specifies a condition.
+    note: 'Each item must be present in the contract unless marked not applicable (with documented justification). All items
+      are required_by_default unless applicability specifies a condition.
 
       '
     checklist:
@@ -1101,7 +1526,8 @@ rules:
       - Subcontracting permitted without restriction or notification
       - No obligation for subdodavatelé to comply with security requirements
     - id: ANN5-f
-      title_cs: Ustanovení o povinnosti dodavatele dodržovat bezpečnostní politiky povinné osoby nebo o odsouhlasení bezpečnostních politik dodavatele
+      title_cs: Ustanovení o povinnosti dodavatele dodržovat bezpečnostní politiky povinné osoby nebo o odsouhlasení bezpečnostních
+        politik dodavatele
       title_en: Security policy alignment clause – supplier must follow or agree to customer security policies
       required_by_default: true
       acceptance_criteria:
@@ -1164,7 +1590,8 @@ rules:
       - 'ANN5-i-2: Supplier reports on its own risk management and residual risks related to contract'
       - 'ANN5-i-3: Supplier notifies customer of significant change of control (ownership/assets used for contract)'
       - 'ANN5-i-4: Supplier notifies customer of foreign authority requests for data (unless prohibited by law)'
-      - 'ANN5-i-5: Supplier discloses natural persons with access to customer confidential information (security roles, pentesters, admins)'
+      - 'ANN5-i-5: Supplier discloses natural persons with access to customer confidential information (security roles, pentesters,
+        admins)'
       keywords_cs:
       - informovat
       - hlášení
@@ -1311,7 +1738,8 @@ rules:
       - No data disposal obligations
       - Supplier retains data indefinitely after contract end
     - id: ANN5-p
-      title_cs: Ustanovení o právu jednostranně odstoupit od smlouvy bez výpovědní doby při významné změně kontroly nad dodavatelem nebo aktiv
+      title_cs: Ustanovení o právu jednostranně odstoupit od smlouvy bez výpovědní doby při významné změně kontroly nad dodavatelem
+        nebo aktiv
       title_en: Unilateral termination right on significant ownership or asset control change
       required_by_default: true
       acceptance_criteria:
@@ -1395,7 +1823,8 @@ rules:
   requirement:
     type: annex_checklist
     logic: ALL_RELEVANT
-    note: 'Each item must be addressed in contracts where relevant. Applicability is determined per contract context. Document justification for any item marked not applicable.
+    note: 'Each item must be addressed in contracts where relevant. Applicability is determined per contract context. Document
+      justification for any item marked not applicable.
 
       '
     checklist:
@@ -1556,7 +1985,8 @@ rules:
       red_flags:
       - No contract confidentiality obligations
     - id: ANN2-i
-      title_cs: Ustanovení o povinnosti dodavatele dodržovat bezpečnostní politiky povinné osoby nebo o odsouhlasení bezpečnostních politik dodavatele
+      title_cs: Ustanovení o povinnosti dodavatele dodržovat bezpečnostní politiky povinné osoby nebo o odsouhlasení bezpečnostních
+        politik dodavatele
       title_en: Security policy compliance / alignment clause
       required_by_default: true
       acceptance_criteria:

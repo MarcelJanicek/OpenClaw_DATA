@@ -1,68 +1,224 @@
 meta:
-  ruleset_id: "nis2-cz"
-  version: "1.0-pilot"
-  status: "complete"
-  jurisdiction: ["CZ"]
-  evaluation_profile_schema: "rules/nis2-cz/entity_profile.schema.yaml"
-  sources:
-    - name: "Zákon č. 264/2025 Sb., o kybernetické bezpečnosti"
-      ref: "CZ-Act-264-2025"
-    - name: "Vyhláška č. 408/2025 Sb., o regulovaných službách"
-      ref: "CZ-Decree-408-2025"
-    - name: "Vyhláška č. 409/2025 Sb. (vyšší povinnosti)"
-      ref: "CZ-Decree-409-2025"
-    - name: "Vyhláška č. 410/2025 Sb. (nižší povinnosti)"
-      ref: "CZ-Decree-410-2025"
-    - name: "Vyhláška č. 334/2025 Sb. (Portál NÚKIB + úkony)"
-      ref: "CZ-Decree-334-2025"
-    - name: "NIS2 Directive (EU) 2022/2555 (reference only)"
-      ref: "EU-NIS2-2022-2555"
+  ruleset_id: nis2-cz
+  version: 2.0-audit
+  status: complete
+  jurisdiction:
+  - CZ
+  evaluation_profile_schema: rules/nis2-cz/entity_profile.schema.yaml
+  changelog: 'v2.0 (2026-03-10): Refactored to audit-grade with structured checklists,
 
+    acceptance criteria, deterministic logic, bilingual anchors, and red flags.
+
+    '
 rules:
-  - id: "NIS2CZ-FOUNDATIONS-SCOPE"
-    title: "Assessment scope and entity profile are documented"
-    scope:
-      applies_to: ["org"]
-    requirement:
-      type: "document_required"
-      document: "nis2cz_scope_assessment"
-      must_include:
-        - "entity_profile (sector/subsector/size)"
-        - "services_provided"
-        - "initial_in_scope_hypothesis"
-        - "evidence_sources_used"
-    evidence_hints:
-      required:
-        - "nis2cz_scope_assessment"
-      artifacts:
-        - "nis2cz_scope_assessment"
-        - "service_catalog"
-        - "org_chart"
-    severity: "high"
-    sources:
-      - citation: "CZ-Act-264-2025 §1 (předmět úpravy)"
-      - citation: "CZ-Act-264-2025 §2 (vymezení pojmů; aktiva/služby)"
-
-  - id: "NIS2CZ-FOUNDATIONS-EVIDENCE-REGISTER"
-    title: "Evidence artifact taxonomy and register are maintained"
-    scope:
-      applies_to: ["org"]
-    requirement:
-      type: "document_required"
-      document: "nis2cz_evidence_register"
-      must_include:
-        - "artifact_taxonomy (types + definitions)"
-        - "artifact_naming_convention"
-        - "artifact_owner_per_type"
-        - "retention_or_location_per_type"
-        - "mapping_to_rules (rule_id -> evidence artifacts)"
-    evidence_hints:
-      required:
-        - "nis2cz_evidence_register"
-      artifacts:
-        - "nis2cz_evidence_register"
-        - "document_register"
-        - "records_management_policy"
-    severity: "medium"
-    sources:
-      - citation: "CZ-Act-264-2025 (governance/documentation expectations for cybersecurity measures)"
+- id: NIS2CZ-FOUNDATIONS-SCOPE
+  title: Assessment scope and entity profile are documented
+  scope:
+    applies_to:
+    - org
+  requirement:
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — all items mandatory for any assessed entity.
+    checklist:
+    - id: FOUND-SCOPE-01
+      title_en: Entity profile is documented (sector, subsector, size category)
+      title_cs: Profil entity je zdokumentován (sektor, podsektor, velikostní kategorie)
+      required_by_default: true
+      acceptance_criteria:
+      - Document contains sector classification per CZ-Decree-408-2025
+      - Subsector identified where applicable
+      - Size category (micro/small/medium/large) stated with supporting data
+      keywords_cs:
+      - profil
+      - sektor
+      - podsektor
+      - velikost
+      - kategorie
+      keywords_en:
+      - entity profile
+      - sector
+      - subsector
+      - size category
+      red_flags:
+      - No entity profile document exists
+      - Sector classification missing or generic
+      - Size category not substantiated with data
+    - id: FOUND-SCOPE-02
+      title_en: Services provided are enumerated and mapped to regulated service types
+      title_cs: Poskytované služby jsou vyjmenovány a namapovány na typy regulovaných služeb
+      required_by_default: true
+      acceptance_criteria:
+      - Full list of services the entity provides is documented
+      - Each service is mapped (or explicitly unmapped) to regulated service types per CZ-Decree-408-2025
+      keywords_cs:
+      - služby
+      - regulované služby
+      - mapování služeb
+      - katalog služeb
+      keywords_en:
+      - services
+      - regulated services
+      - service mapping
+      - service catalog
+      red_flags:
+      - Service list missing or incomplete
+      - No mapping to regulated service types attempted
+    - id: FOUND-SCOPE-03
+      title_en: Initial in-scope hypothesis is stated with reasoning
+      title_cs: Počáteční hypotéza o rozsahu působnosti je uvedena s odůvodněním
+      required_by_default: true
+      acceptance_criteria:
+      - Document states whether the entity is likely in scope under CZ-Act-264-2025
+      - Reasoning references specific legal provisions
+      keywords_cs:
+      - hypotéza
+      - rozsah
+      - působnost
+      - odůvodnění
+      keywords_en:
+      - hypothesis
+      - scope
+      - in-scope
+      - reasoning
+      red_flags:
+      - No in-scope hypothesis stated
+      - Hypothesis lacks legal references
+    - id: FOUND-SCOPE-04
+      title_en: Evidence sources used for the assessment are listed
+      title_cs: Zdroje důkazů použité pro hodnocení jsou uvedeny
+      required_by_default: true
+      acceptance_criteria:
+      - Document lists all data sources consulted (company register, contracts, financial statements, etc.)
+      - Sources are dated and verifiable
+      keywords_cs:
+      - zdroje
+      - důkazy
+      - podklady
+      - dokumentace
+      keywords_en:
+      - evidence sources
+      - data sources
+      - supporting documents
+      red_flags:
+      - No evidence sources listed
+      - Sources undated or unverifiable
+  evidence_hints:
+    required:
+    - artifact_id: FOUND-SCOPE-ASSESSMENT
+  severity: high
+  sources:
+  - citation: CZ-Act-264-2025 §1 (předmět úpravy)
+  - citation: CZ-Act-264-2025 §2 (vymezení pojmů; aktiva/služby)
+- id: NIS2CZ-FOUNDATIONS-EVIDENCE-REGISTER
+  title: Evidence artifact taxonomy and register are maintained
+  scope:
+    applies_to:
+    - org
+  requirement:
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — all items mandatory for proper evidence management.
+    checklist:
+    - id: FOUND-EVID-01
+      title_en: Artifact taxonomy with types and definitions is documented
+      title_cs: Taxonomie artefaktů s typy a definicemi je zdokumentována
+      required_by_default: true
+      acceptance_criteria:
+      - Taxonomy defines artifact categories (policy, procedure, record, report, screenshot, export, etc.)
+      - Each category has a definition and examples
+      keywords_cs:
+      - taxonomie
+      - artefakty
+      - typy
+      - definice
+      keywords_en:
+      - taxonomy
+      - artifacts
+      - types
+      - definitions
+      red_flags:
+      - No artifact taxonomy exists
+      - Types undefined or ambiguous
+    - id: FOUND-EVID-02
+      title_en: Naming convention for artifacts is established
+      title_cs: Konvence pojmenování artefaktů je stanovena
+      required_by_default: true
+      acceptance_criteria:
+      - Naming convention is documented and includes artifact type, date, and version
+      - Convention is consistently applied across existing artifacts
+      keywords_cs:
+      - pojmenování
+      - konvence
+      - formát názvů
+      keywords_en:
+      - naming convention
+      - naming standard
+      - file naming
+      red_flags:
+      - No naming convention documented
+      - Inconsistent naming across artifacts
+    - id: FOUND-EVID-03
+      title_en: Each artifact type has an assigned owner
+      title_cs: Každý typ artefaktu má přiřazeného vlastníka
+      required_by_default: true
+      acceptance_criteria:
+      - Owner role/person is assigned per artifact type
+      - Owner is responsible for creation, review, and maintenance
+      keywords_cs:
+      - vlastník
+      - odpovědnost
+      - přiřazení
+      keywords_en:
+      - owner
+      - responsibility
+      - assignment
+      red_flags:
+      - Artifact types without owners
+    - id: FOUND-EVID-04
+      title_en: Retention period and storage location are defined per artifact type
+      title_cs: Doba uchovávání a místo uložení jsou definovány pro každý typ artefaktu
+      required_by_default: true
+      acceptance_criteria:
+      - Each artifact type has a defined retention period
+      - Storage location (system, folder, vault) is specified
+      keywords_cs:
+      - uchovávání
+      - retence
+      - uložení
+      - místo
+      keywords_en:
+      - retention
+      - storage
+      - location
+      - archival
+      red_flags:
+      - No retention periods defined
+      - Storage locations unspecified
+    - id: FOUND-EVID-05
+      title_en: Mapping from rule IDs to required evidence artifacts is maintained
+      title_cs: Mapování z ID pravidel na požadované důkazní artefakty je udržováno
+      required_by_default: true
+      acceptance_criteria:
+      - A register or matrix links each compliance rule ID to its required artifacts
+      - Matrix is current (last update within 6 months)
+      keywords_cs:
+      - mapování
+      - pravidla
+      - artefakty
+      - matice
+      keywords_en:
+      - mapping
+      - rules
+      - artifacts
+      - matrix
+      - traceability
+      red_flags:
+      - No rule-to-artifact mapping exists
+      - Mapping outdated (>6 months)
+  evidence_hints:
+    required:
+    - artifact_id: FOUND-EVIDENCE-REGISTER
+  severity: medium
+  sources:
+  - citation: CZ-Act-264-2025 (governance/documentation expectations for cybersecurity measures)

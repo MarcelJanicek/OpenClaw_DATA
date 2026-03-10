@@ -1,484 +1,457 @@
 meta:
-  ruleset_id: "nis2-cz"
-  version: "0.1"
-  status: "draft"
-  jurisdiction: ["CZ"]
-  evaluation_profile_schema: "rules/nis2-cz/entity_profile.schema.yaml"
-
+  ruleset_id: nis2-cz
+  version: '0.1'
+  status: draft
+  jurisdiction:
+  - CZ
+  evaluation_profile_schema: rules/nis2-cz/entity_profile.schema.yaml
 rules:
-  # Milestone 2.1 — Asset management + classification
-
-  - id: "NIS2CZ-RISK-ASSET-INVENTORY"
-    title: "Comprehensive ICT asset inventory is maintained and kept current"
-    scope:
-      applies_to: ["org"]
-      conditions:
-        - profile_field: "in_scope_under_cz_law"
-          equals: true
-    requirement:
-      type: "document_required"
-      document: "ict_asset_inventory"
-      must_include:
-        - "asset_identifier"
-        - "asset_type (hardware|software|service|cloud|network|data_store)"
-        - "asset_owner"
-        - "asset_location_or_environment (onprem|cloud|saas)"
-        - "asset_criticality"
-        - "links_to_regulated_services (if applicable)"
-        - "last_review_date"
-    evidence_hints:
-      required:
-        - "ict_asset_inventory"
-      artifacts:
-        - "ict_asset_inventory"
-        - "cmdb_export"
-        - "cloud_account_inventory"
-        - "network_diagrams"
-    severity: "high"
-    sources:
-      - citation: "CZ-Decree-409-2025 (higher duties: asset management / evidence)"
-      - citation: "CZ-Decree-410-2025 (lower duties: asset management / evidence)"
-      - citation: "EU-NIS2-2022-2555 Art. 21 (mapping: risk-management measures)"
-
-  - id: "NIS2CZ-RISK-ASSET-OWNERSHIP"
-    title: "Asset ownership and responsibility is assigned for ICT assets"
-    scope:
-      applies_to: ["org"]
-      conditions:
-        - profile_field: "in_scope_under_cz_law"
-          equals: true
-    requirement:
-      type: "document_required"
-      document: "asset_ownership_model"
-      must_include:
-        - "roles_and_responsibilities (owner|custodian|administrator)"
-        - "assignment_method (how owners are set/updated)"
-        - "accountability_for_risk_acceptance"
-        - "linkage_to_inventory_fields"
-    evidence_hints:
-      required:
-        - "asset_ownership_model"
-      artifacts:
-        - "asset_ownership_model"
-        - "ict_asset_inventory"
-        - "raci_matrix"
-    severity: "medium"
-    sources:
-      - citation: "CZ-Act-264-2025 (governance/accountability for cybersecurity measures)"
-      - citation: "CZ-Decree-409-2025 (organizational measures)"
-      - citation: "EU-NIS2-2022-2555 Art. 20–21 (mapping: governance + measures)"
-
-  - id: "NIS2CZ-RISK-ASSET-CLASSIFICATION-SCHEME"
-    title: "Information and asset classification scheme is defined and approved"
-    scope:
-      applies_to: ["org"]
-      conditions:
-        - profile_field: "in_scope_under_cz_law"
-          equals: true
-    requirement:
-      type: "document_required"
-      document: "information_and_asset_classification_policy"
-      must_include:
-        - "classification_levels"
-        - "classification_criteria (confidentiality|integrity|availability|legal)"
-        - "labeling_and_handling_rules"
-        - "review_cycle"
-        - "exceptions_process"
-    evidence_hints:
-      required:
-        - "information_and_asset_classification_policy"
-      artifacts:
-        - "information_and_asset_classification_policy"
-        - "data_handling_standard"
-        - "records_management_policy"
-    severity: "high"
-    sources:
-      - citation: "CZ-Decree-409-2025 (higher duties: classification/handling expectations)"
-      - citation: "CZ-Decree-410-2025 (lower duties: baseline classification/handling)"
-      - citation: "EU-NIS2-2022-2555 Art. 21 (mapping: policies/procedures; asset mgmt)"
-
-  - id: "NIS2CZ-RISK-ASSET-CLASSIFICATION-REGISTER"
-    title: "Assets and key information types are classified according to the approved scheme"
-    scope:
-      applies_to: ["org"]
-      conditions:
-        - profile_field: "in_scope_under_cz_law"
-          equals: true
-    requirement:
-      type: "document_required"
-      document: "asset_and_information_classification_register"
-      must_include:
-        - "reference_to_classification_scheme"
-        - "classification_per_asset_or_information_type"
-        - "handling_requirements_per_class"
-        - "owner_approval_or_acknowledgement"
-    evidence_hints:
-      required:
-        - "asset_and_information_classification_register"
-      artifacts:
-        - "asset_and_information_classification_register"
-        - "ict_asset_inventory"
-        - "data_inventory"
-        - "dpa_or_gdpr_records (if applicable)"
-    severity: "medium"
-    sources:
-      - citation: "CZ-Decree-409-2025 (higher duties: classification applied in practice)"
-      - citation: "CZ-Decree-410-2025 (lower duties: classification applied in practice)"
-      - citation: "EU-NIS2-2022-2555 Art. 21 (mapping: asset management and policies)"
-
-  - id: "NIS2CZ-RISK-ASSET-LIFECYCLE"
-    title: "ICT asset lifecycle processes (acquire/change/decommission) are defined and followed"
-    scope:
-      applies_to: ["org"]
-      conditions:
-        - profile_field: "in_scope_under_cz_law"
-          equals: true
-    requirement:
-      type: "document_required"
-      document: "ict_asset_lifecycle_process"
-      must_include:
-        - "procurement_or_onboarding_controls"
-        - "configuration_baseline_or_hardening_reference"
-        - "change_tracking_or_change_approval"
-        - "secure_decommissioning_and_data_disposal"
-        - "inventory_update_step"
-    evidence_hints:
-      required:
-        - "ict_asset_lifecycle_process"
-      artifacts:
-        - "ict_asset_lifecycle_process"
-        - "procurement_policy"
-        - "change_tickets"
-        - "decommission_records"
-    severity: "medium"
-    sources:
-      - citation: "CZ-Decree-409-2025 (higher duties: lifecycle/change controls)"
-      - citation: "CZ-Decree-410-2025 (lower duties: lifecycle controls)"
-      - citation: "EU-NIS2-2022-2555 Art. 21 (mapping: supply chain/change mgmt measures)"
-
-  # Milestone 2.2 — Access control + identity + logging
-
-  - id: "NIS2CZ-RISK-ACCESS-CONTROL-POLICY"
-    title: "Access control and identity management policy is defined, approved, and enforced"
-    scope:
-      applies_to: ["org"]
-      conditions:
-        - profile_field: "in_scope_under_cz_law"
-          equals: true
-    requirement:
-      type: "document_required"
-      document: "access_control_and_identity_policy"
-      must_include:
-        - "principles (least_privilege, need_to_know, separation_of_duties)"
-        - "account_types (user|admin|service|shared) and handling rules"
-        - "authentication_requirements (password, mfa, sso where applicable)"
-        - "authorization_model (rbac/abac) and exception handling"
-        - "remote_access_requirements"
-        - "periodic_access_review_requirements"
-        - "logging_requirements_for_access_events"
-        - "review_cycle"
-    evidence_hints:
-      required:
-        - "access_control_and_identity_policy"
-      artifacts:
-        - "access_control_and_identity_policy"
-        - "policy_register"
-        - "access_control_standard"
-        - "remote_access_standard"
-    severity: "high"
-    sources:
-      - citation: "CZ-Act-264-2025 (povinnost zavést a dokumentovat opatření kybernetické bezpečnosti)"
-      - citation: "CZ-Decree-409-2025 (vyšší povinnosti: přístupová práva, autentizace, evidence)"
-      - citation: "CZ-Decree-410-2025 (nižší povinnosti: přístupová práva, autentizace, evidence)"
-      - citation: "EU-NIS2-2022-2555 Art. 21(2)(b)(d) (access control, authentication) [mapping]"
-
-  - id: "NIS2CZ-RISK-IDENTITY-JOINER-MOVER-LEAVER"
-    title: "Joiner-mover-leaver process controls user provisioning and deprovisioning"
-    scope:
-      applies_to: ["org"]
-      conditions:
-        - profile_field: "in_scope_under_cz_law"
-          equals: true
-    requirement:
-      type: "process_required"
-      process: "identity_lifecycle_management"
-      must_include:
-        - "access_request_and_approval (manager + asset/application owner)"
-        - "role_change_handling (timeliness, approvals, documentation)"
-        - "termination_and_deprovisioning (defined SLA; immediate for high-risk roles)"
-        - "service_account_creation_controls"
-        - "recordkeeping (who approved what, when)"
-    evidence_hints:
-      required:
-        - "identity_lifecycle_procedure"
-        - "access_request_records"
-      artifacts:
-        - "identity_lifecycle_procedure"
-        - "access_request_records"
-        - "hr_termination_records (redacted)"
-        - "idm_system_logs_or_exports"
-    severity: "high"
-    sources:
-      - citation: "CZ-Decree-409-2025 (vyšší povinnosti: řízení přístupů; zřizování/rušení účtů)"
-      - citation: "CZ-Decree-410-2025 (nižší povinnosti: řízení přístupů; zřizování/rušení účtů)"
-      - citation: "EU-NIS2-2022-2555 Art. 21(2)(b) (access control) [mapping]"
-
-  - id: "NIS2CZ-RISK-ACCESS-PRIVILEGED"
-    title: "Privileged access is controlled, minimized, and monitored"
-    scope:
-      applies_to: ["org"]
-      conditions:
-        - profile_field: "in_scope_under_cz_law"
-          equals: true
-    requirement:
-      type: "process_required"
-      process: "privileged_access_management"
-      must_include:
-        - "privileged_role_definition_and_inventory"
-        - "separate_admin_accounts_or_elevation_mechanism"
-        - "mfa_for_privileged_access"
-        - "break_glass_accounts (controls + logging + periodic test)"
-        - "session_or_command_logging for privileged actions where feasible"
-    evidence_hints:
-      required:
-        - "privileged_access_inventory"
-        - "pam_controls_evidence"
-      artifacts:
-        - "privileged_access_inventory"
-        - "pam_controls_evidence"
-        - "admin_account_list"
-        - "break_glass_procedure"
-        - "privileged_session_logs"
-    severity: "high"
-    sources:
-      - citation: "CZ-Decree-409-2025 (vyšší povinnosti: řízení privilegovaných přístupů, evidence)"
-      - citation: "CZ-Decree-410-2025 (nižší povinnosti: řízení privilegovaných přístupů, evidence)"
-      - citation: "EU-NIS2-2022-2555 Art. 21(2)(b)(d) (access control, MFA) [mapping]"
-
-  - id: "NIS2CZ-RISK-ACCESS-REVIEWS"
-    title: "Periodic access reviews are performed for critical systems and regulated services"
-    scope:
-      applies_to: ["org"]
-      conditions:
-        - profile_field: "in_scope_under_cz_law"
-          equals: true
-    requirement:
-      type: "process_required"
-      process: "access_review"
-      must_include:
-        - "review_scope (critical systems, privileged roles, regulated services)"
-        - "review_frequency (e.g., quarterly for privileged; at least annually otherwise)"
-        - "review_method (owner attestation + removal workflow)"
-        - "tracking_of_removals_and_exceptions"
-        - "evidence_retention"
-    evidence_hints:
-      required:
-        - "access_review_records"
-      artifacts:
-        - "access_review_records"
-        - "idm_access_reports"
-        - "application_access_lists"
-        - "exceptions_register"
-    severity: "medium"
-    sources:
-      - citation: "CZ-Decree-409-2025 (vyšší povinnosti: pravidelné ověřování přístupových práv)"
-      - citation: "CZ-Decree-410-2025 (nižší povinnosti: ověřování přístupových práv)"
-      - citation: "EU-NIS2-2022-2555 Art. 21(2)(b) (access control) [mapping]"
-
-  - id: "NIS2CZ-RISK-LOGGING-BASELINE"
-    title: "Security-relevant logging is enabled and a logging baseline is defined"
-    scope:
-      applies_to: ["org"]
-      conditions:
-        - profile_field: "in_scope_under_cz_law"
-          equals: true
-    requirement:
-      type: "document_required"
-      document: "security_logging_baseline"
-      must_include:
-        - "systems_in_scope (critical systems, regulated services, key infrastructure)"
-        - "event_types (auth events, privilege changes, admin actions, security alerts)"
-        - "log_sources_and_ownership"
-        - "time_synchronization_requirement"
-        - "log_retention_and_protection (tamper resistance, access control)"
-        - "alerting_or_monitoring_use (who reviews and when)"
-    evidence_hints:
-      required:
-        - "security_logging_baseline"
-      artifacts:
-        - "security_logging_baseline"
-        - "siem_configuration_export"
-        - "central_logging_architecture_diagram"
-        - "log_retention_settings_screenshots"
-    severity: "high"
-    sources:
-      - citation: "CZ-Decree-409-2025 (vyšší povinnosti: záznamy/monitoring bezpečnostních událostí)"
-      - citation: "CZ-Decree-410-2025 (nižší povinnosti: záznamy/monitoring bezpečnostních událostí)"
-      - citation: "EU-NIS2-2022-2555 Art. 21(2)(d)(f) (policies, monitoring, incident handling) [mapping]"
-
-  - id: "NIS2CZ-RISK-LOGGING-REVIEW"
-    title: "Log review and alert handling process is defined and evidenced"
-    scope:
-      applies_to: ["org"]
-      conditions:
-        - profile_field: "in_scope_under_cz_law"
-          equals: true
-    requirement:
-      type: "process_required"
-      process: "log_review_and_alert_handling"
-      must_include:
-        - "roles_and_responsibilities (SOC/IT/security)"
-        - "review_frequency (continuous/weekly/daily depending on criticality)"
-        - "alert_triage_and_escalation"
-        - "correlation_with_incident_process (ticketing/incident register linkage)"
-        - "metrics (e.g., MTTD/alert volume)"
-    evidence_hints:
-      required:
-        - "log_review_procedure"
-        - "alert_or_log_review_records"
-      artifacts:
-        - "log_review_procedure"
-        - "alert_or_log_review_records"
-        - "siem_alert_queue_export"
-        - "incident_tickets_linked_to_alerts"
-    severity: "medium"
-    sources:
-      - citation: "CZ-Decree-409-2025 (vyšší povinnosti: dohled/monitoring a vyhodnocování událostí)"
-      - citation: "CZ-Decree-410-2025 (nižší povinnosti: dohled/monitoring a vyhodnocování událostí)"
-      - citation: "EU-NIS2-2022-2555 Art. 21(2)(f) (incident handling) [mapping]"
-
-  # Milestone 2.3 — Vulnerability management + patching
-
-  - id: "NIS2CZ-RISK-VULN-MGMT-POLICY"
-    title: "Vulnerability management and patching policy is defined and approved"
-    scope:
-      applies_to: ["org"]
-      conditions:
-        - profile_field: "in_scope_under_cz_law"
-          equals: true
-    requirement:
-      type: "document_required"
-      document: "vulnerability_and_patch_management_policy"
-      must_include:
-        - "scope (systems, applications, cloud, third-party components)"
-        - "vulnerability_sources (scans, advisories, pentests, bug reports)"
-        - "risk_rating_method (e.g., CVSS + asset criticality/context)"
-        - "remediation_slas (by severity and asset criticality)"
-        - "emergency_patch_process (out-of-cycle)"
-        - "exception_process (risk acceptance, compensating controls, expiry)"
-        - "verification_of_remediation (re-scan/retest)"
-        - "integration_with_change_management"
-        - "metrics_and_reporting (e.g., patch compliance, MTTR)"
-    evidence_hints:
-      required:
-        - "vulnerability_and_patch_management_policy"
-      artifacts:
-        - "vulnerability_and_patch_management_policy"
-        - "policy_register"
-        - "risk_rating_methodology"
-        - "patching_sla_matrix"
-    severity: "high"
-    sources:
-      - citation: "CZ-Act-264-2025 (povinnost zavést a udržovat opatření kybernetické bezpečnosti)"
-      - citation: "CZ-Decree-409-2025 (vyšší povinnosti: správa zranitelností / aktualizace)"
-      - citation: "CZ-Decree-410-2025 (nižší povinnosti: správa zranitelností / aktualizace)"
-      - citation: "EU-NIS2-2022-2555 Art. 21(2)(e) (vulnerability handling and disclosure) [mapping]"
-
-  - id: "NIS2CZ-RISK-VULN-SCANNING-COVERAGE"
-    title: "Vulnerability scanning is performed with defined coverage and cadence"
-    scope:
-      applies_to: ["org"]
-      conditions:
-        - profile_field: "in_scope_under_cz_law"
-          equals: true
-    requirement:
-      type: "process_required"
-      process: "vulnerability_scanning"
-      must_include:
-        - "asset_coverage_definition (internal, external, cloud, containers where used)"
-        - "scan_cadence (at least monthly for critical; risk-based otherwise)"
-        - "authenticated_scanning_where_feasible"
-        - "handling_of_scan_exceptions (documented, time-bounded)"
-        - "triage_and_ticketing_workflow"
-        - "tracking_to_closure (status, due dates, owners)"
-    evidence_hints:
-      required:
-        - "vulnerability_scan_schedule"
-        - "vulnerability_scan_reports"
-        - "remediation_ticket_export"
-      artifacts:
-        - "vulnerability_scan_schedule"
-        - "vulnerability_scan_reports"
-        - "remediation_ticket_export"
-        - "asset_inventory"
-        - "scanner_configuration_export"
-    severity: "high"
-    sources:
-      - citation: "CZ-Decree-409-2025 (vyšší povinnosti: pravidelné zjišťování zranitelností)"
-      - citation: "CZ-Decree-410-2025 (nižší povinnosti: zjišťování zranitelností)"
-      - citation: "EU-NIS2-2022-2555 Art. 21(2)(d)(e) (policies; vulnerability handling) [mapping]"
-
-  - id: "NIS2CZ-RISK-PATCH-MGMT-COMPLIANCE"
-    title: "Patch management is executed, tracked, and verified for in-scope systems"
-    scope:
-      applies_to: ["org"]
-      conditions:
-        - profile_field: "in_scope_under_cz_law"
-          equals: true
-    requirement:
-      type: "process_required"
-      process: "patch_management"
-      must_include:
-        - "patch_intake_sources (vendor advisories, CERT/NÚKIB alerts, scanners)"
-        - "prioritization_criteria (severity + exploitability + asset criticality)"
-        - "testing_and_change_approval (where required)"
-        - "deployment_methods (automation where feasible)"
-        - "emergency_patching (fast-track approvals)"
-        - "verification_and_reporting (compliance %, exceptions)"
-        - "firmware_and_network_device_updates (where applicable)"
-    evidence_hints:
-      required:
-        - "patching_records"
-        - "patch_compliance_report"
-      artifacts:
-        - "patching_records"
-        - "patch_compliance_report"
-        - "change_tickets"
-        - "emergency_change_records"
-        - "endpoint_management_reports"
-    severity: "high"
-    sources:
-      - citation: "CZ-Decree-409-2025 (vyšší povinnosti: aktualizace a odstraňování zranitelností)"
-      - citation: "CZ-Decree-410-2025 (nižší povinnosti: aktualizace a odstraňování zranitelností)"
-      - citation: "EU-NIS2-2022-2555 Art. 21(2)(d)(e) (policies; vulnerability handling) [mapping]"
-
-  - id: "NIS2CZ-RISK-VULN-DISCLOSURE-HANDLING"
-    title: "A channel and process exist to receive and handle reported vulnerabilities"
-    scope:
-      applies_to: ["org"]
-      conditions:
-        - profile_field: "in_scope_under_cz_law"
-          equals: true
-    requirement:
-      type: "process_required"
-      process: "vulnerability_disclosure_handling"
-      must_include:
-        - "intake_channel (email/web form/security.txt or equivalent)"
-        - "triage_and_acknowledgement (timelines, roles)"
-        - "coordination_with_remediation_process"
-        - "communication_guidelines (internal/external; legal review where needed)"
-        - "recordkeeping (case register)"
-    evidence_hints:
-      required:
-        - "vulnerability_reporting_channel_evidence"
-        - "vulnerability_case_register"
-      artifacts:
-        - "vulnerability_reporting_channel_evidence"
-        - "vulnerability_case_register"
-        - "security_txt_file"
-        - "support_ticket_samples (redacted)"
-    severity: "medium"
-    sources:
-      - citation: "CZ-Decree-409-2025 (vyšší povinnosti: nakládání se zranitelnostmi / hlášení)"
-      - citation: "CZ-Decree-410-2025 (nižší povinnosti: nakládání se zranitelnostmi / hlášení)"
-      - citation: "EU-NIS2-2022-2555 Art. 21(2)(e) (vulnerability handling and disclosure) [mapping]"
+- id: NIS2CZ-RISK-ASSET-INVENTORY
+  title: Comprehensive ICT asset inventory is maintained and kept current
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: document_required
+    document: ict_asset_inventory
+    must_include:
+    - asset_identifier
+    - asset_type (hardware|software|service|cloud|network|data_store)
+    - asset_owner
+    - asset_location_or_environment (onprem|cloud|saas)
+    - asset_criticality
+    - links_to_regulated_services (if applicable)
+    - last_review_date
+  evidence_hints:
+    required:
+    - artifact_id: RISK-ICT-ASSET-INVENTORY
+    optional:
+    - artifact_id: RISK-CMDB-EXPORT
+    - artifact_id: RISK-CLOUD-ACCOUNT-INVENTORY
+    - artifact_id: RISK-NETWORK-DIAGRAMS
+  severity: high
+  sources:
+  - citation: 'CZ-Decree-409-2025 (higher duties: asset management / evidence)'
+  - citation: 'CZ-Decree-410-2025 (lower duties: asset management / evidence)'
+  - citation: 'EU-NIS2-2022-2555 Art. 21 (mapping: risk-management measures)'
+- id: NIS2CZ-RISK-ASSET-OWNERSHIP
+  title: Asset ownership and responsibility is assigned for ICT assets
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: document_required
+    document: asset_ownership_model
+    must_include:
+    - roles_and_responsibilities (owner|custodian|administrator)
+    - assignment_method (how owners are set/updated)
+    - accountability_for_risk_acceptance
+    - linkage_to_inventory_fields
+  evidence_hints:
+    required:
+    - artifact_id: RISK-ASSET-OWNERSHIP-MODEL
+    optional:
+    - artifact_id: RISK-ICT-ASSET-INVENTORY
+    - artifact_id: RISK-RACI-MATRIX
+  severity: medium
+  sources:
+  - citation: CZ-Act-264-2025 (governance/accountability for cybersecurity measures)
+  - citation: CZ-Decree-409-2025 (organizational measures)
+  - citation: 'EU-NIS2-2022-2555 Art. 20–21 (mapping: governance + measures)'
+- id: NIS2CZ-RISK-ASSET-CLASSIFICATION-SCHEME
+  title: Information and asset classification scheme is defined and approved
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: document_required
+    document: information_and_asset_classification_policy
+    must_include:
+    - classification_levels
+    - classification_criteria (confidentiality|integrity|availability|legal)
+    - labeling_and_handling_rules
+    - review_cycle
+    - exceptions_process
+  evidence_hints:
+    required:
+    - artifact_id: RISK-INFORMATION-AND-ASSET-CLASSIFICATION-POL
+    optional:
+    - artifact_id: RISK-DATA-HANDLING-STANDARD
+    - artifact_id: RISK-RECORDS-MANAGEMENT-POLICY
+  severity: high
+  sources:
+  - citation: 'CZ-Decree-409-2025 (higher duties: classification/handling expectations)'
+  - citation: 'CZ-Decree-410-2025 (lower duties: baseline classification/handling)'
+  - citation: 'EU-NIS2-2022-2555 Art. 21 (mapping: policies/procedures; asset mgmt)'
+- id: NIS2CZ-RISK-ASSET-CLASSIFICATION-REGISTER
+  title: Assets and key information types are classified according to the approved scheme
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: document_required
+    document: asset_and_information_classification_register
+    must_include:
+    - reference_to_classification_scheme
+    - classification_per_asset_or_information_type
+    - handling_requirements_per_class
+    - owner_approval_or_acknowledgement
+  evidence_hints:
+    required:
+    - artifact_id: RISK-ASSET-AND-INFORMATION-CLASSIFICATION-REG
+    optional:
+    - artifact_id: RISK-ICT-ASSET-INVENTORY
+    - artifact_id: RISK-DATA-INVENTORY
+    - artifact_id: RISK-DPA-OR-GDPR-RECORDS
+  severity: medium
+  sources:
+  - citation: 'CZ-Decree-409-2025 (higher duties: classification applied in practice)'
+  - citation: 'CZ-Decree-410-2025 (lower duties: classification applied in practice)'
+  - citation: 'EU-NIS2-2022-2555 Art. 21 (mapping: asset management and policies)'
+- id: NIS2CZ-RISK-ASSET-LIFECYCLE
+  title: ICT asset lifecycle processes (acquire/change/decommission) are defined and followed
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: document_required
+    document: ict_asset_lifecycle_process
+    must_include:
+    - procurement_or_onboarding_controls
+    - configuration_baseline_or_hardening_reference
+    - change_tracking_or_change_approval
+    - secure_decommissioning_and_data_disposal
+    - inventory_update_step
+  evidence_hints:
+    required:
+    - artifact_id: RISK-ICT-ASSET-LIFECYCLE-PROCESS
+    optional:
+    - artifact_id: RISK-PROCUREMENT-POLICY
+    - artifact_id: RISK-CHANGE-TICKETS
+    - artifact_id: RISK-DECOMMISSION-RECORDS
+  severity: medium
+  sources:
+  - citation: 'CZ-Decree-409-2025 (higher duties: lifecycle/change controls)'
+  - citation: 'CZ-Decree-410-2025 (lower duties: lifecycle controls)'
+  - citation: 'EU-NIS2-2022-2555 Art. 21 (mapping: supply chain/change mgmt measures)'
+- id: NIS2CZ-RISK-ACCESS-CONTROL-POLICY
+  title: Access control and identity management policy is defined, approved, and enforced
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: document_required
+    document: access_control_and_identity_policy
+    must_include:
+    - principles (least_privilege, need_to_know, separation_of_duties)
+    - account_types (user|admin|service|shared) and handling rules
+    - authentication_requirements (password, mfa, sso where applicable)
+    - authorization_model (rbac/abac) and exception handling
+    - remote_access_requirements
+    - periodic_access_review_requirements
+    - logging_requirements_for_access_events
+    - review_cycle
+  evidence_hints:
+    required:
+    - artifact_id: RISK-ACCESS-CONTROL-AND-IDENTITY-POLICY
+    optional:
+    - artifact_id: GOV-POLICY-REGISTER
+    - artifact_id: RISK-ACCESS-CONTROL-STANDARD
+    - artifact_id: RISK-REMOTE-ACCESS-STANDARD
+  severity: high
+  sources:
+  - citation: CZ-Act-264-2025 (povinnost zavést a dokumentovat opatření kybernetické bezpečnosti)
+  - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: přístupová práva, autentizace, evidence)'
+  - citation: 'CZ-Decree-410-2025 (nižší povinnosti: přístupová práva, autentizace, evidence)'
+  - citation: EU-NIS2-2022-2555 Art. 21(2)(b)(d) (access control, authentication) [mapping]
+- id: NIS2CZ-RISK-IDENTITY-JOINER-MOVER-LEAVER
+  title: Joiner-mover-leaver process controls user provisioning and deprovisioning
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: process_required
+    process: identity_lifecycle_management
+    must_include:
+    - access_request_and_approval (manager + asset/application owner)
+    - role_change_handling (timeliness, approvals, documentation)
+    - termination_and_deprovisioning (defined SLA; immediate for high-risk roles)
+    - service_account_creation_controls
+    - recordkeeping (who approved what, when)
+  evidence_hints:
+    required:
+    - artifact_id: RISK-IDENTITY-LIFECYCLE-PROCEDURE
+    - artifact_id: RISK-ACCESS-REQUEST-RECORDS
+    optional:
+    - artifact_id: RISK-HR-TERMINATION-RECORDS
+    - artifact_id: RISK-IDM-SYSTEM-LOGS-OR-EXPORTS
+  severity: high
+  sources:
+  - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: řízení přístupů; zřizování/rušení účtů)'
+  - citation: 'CZ-Decree-410-2025 (nižší povinnosti: řízení přístupů; zřizování/rušení účtů)'
+  - citation: EU-NIS2-2022-2555 Art. 21(2)(b) (access control) [mapping]
+- id: NIS2CZ-RISK-ACCESS-PRIVILEGED
+  title: Privileged access is controlled, minimized, and monitored
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: process_required
+    process: privileged_access_management
+    must_include:
+    - privileged_role_definition_and_inventory
+    - separate_admin_accounts_or_elevation_mechanism
+    - mfa_for_privileged_access
+    - break_glass_accounts (controls + logging + periodic test)
+    - session_or_command_logging for privileged actions where feasible
+  evidence_hints:
+    required:
+    - artifact_id: RISK-PRIVILEGED-ACCESS-INVENTORY
+    - artifact_id: RISK-PAM-CONTROLS-EVIDENCE
+    optional:
+    - artifact_id: RISK-ADMIN-ACCOUNT-LIST
+    - artifact_id: RISK-BREAK-GLASS-PROCEDURE
+    - artifact_id: RISK-PRIVILEGED-SESSION-LOGS
+  severity: high
+  sources:
+  - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: řízení privilegovaných přístupů, evidence)'
+  - citation: 'CZ-Decree-410-2025 (nižší povinnosti: řízení privilegovaných přístupů, evidence)'
+  - citation: EU-NIS2-2022-2555 Art. 21(2)(b)(d) (access control, MFA) [mapping]
+- id: NIS2CZ-RISK-ACCESS-REVIEWS
+  title: Periodic access reviews are performed for critical systems and regulated services
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: process_required
+    process: access_review
+    must_include:
+    - review_scope (critical systems, privileged roles, regulated services)
+    - review_frequency (e.g., quarterly for privileged; at least annually otherwise)
+    - review_method (owner attestation + removal workflow)
+    - tracking_of_removals_and_exceptions
+    - evidence_retention
+  evidence_hints:
+    required:
+    - artifact_id: RISK-ACCESS-REVIEW-RECORDS
+    optional:
+    - artifact_id: RISK-IDM-ACCESS-REPORTS
+    - artifact_id: RISK-APPLICATION-ACCESS-LISTS
+    - artifact_id: GOV-EXCEPTIONS-REGISTER
+  severity: medium
+  sources:
+  - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: pravidelné ověřování přístupových práv)'
+  - citation: 'CZ-Decree-410-2025 (nižší povinnosti: ověřování přístupových práv)'
+  - citation: EU-NIS2-2022-2555 Art. 21(2)(b) (access control) [mapping]
+- id: NIS2CZ-RISK-LOGGING-BASELINE
+  title: Security-relevant logging is enabled and a logging baseline is defined
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: document_required
+    document: security_logging_baseline
+    must_include:
+    - systems_in_scope (critical systems, regulated services, key infrastructure)
+    - event_types (auth events, privilege changes, admin actions, security alerts)
+    - log_sources_and_ownership
+    - time_synchronization_requirement
+    - log_retention_and_protection (tamper resistance, access control)
+    - alerting_or_monitoring_use (who reviews and when)
+  evidence_hints:
+    required:
+    - artifact_id: RISK-SECURITY-LOGGING-BASELINE
+    optional:
+    - artifact_id: RISK-SIEM-CONFIGURATION-EXPORT
+    - artifact_id: RISK-CENTRAL-LOGGING-ARCHITECTURE-DIAGRAM
+    - artifact_id: RISK-LOG-RETENTION-SETTINGS-SCREENSHOTS
+  severity: high
+  sources:
+  - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: záznamy/monitoring bezpečnostních událostí)'
+  - citation: 'CZ-Decree-410-2025 (nižší povinnosti: záznamy/monitoring bezpečnostních událostí)'
+  - citation: EU-NIS2-2022-2555 Art. 21(2)(d)(f) (policies, monitoring, incident handling) [mapping]
+- id: NIS2CZ-RISK-LOGGING-REVIEW
+  title: Log review and alert handling process is defined and evidenced
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: process_required
+    process: log_review_and_alert_handling
+    must_include:
+    - roles_and_responsibilities (SOC/IT/security)
+    - review_frequency (continuous/weekly/daily depending on criticality)
+    - alert_triage_and_escalation
+    - correlation_with_incident_process (ticketing/incident register linkage)
+    - metrics (e.g., MTTD/alert volume)
+  evidence_hints:
+    required:
+    - artifact_id: RISK-LOG-REVIEW-PROCEDURE
+    - artifact_id: RISK-ALERT-OR-LOG-REVIEW-RECORDS
+    optional:
+    - artifact_id: RISK-SIEM-ALERT-QUEUE-EXPORT
+    - artifact_id: RISK-INCIDENT-TICKETS-LINKED-TO-ALERTS
+  severity: medium
+  sources:
+  - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: dohled/monitoring a vyhodnocování událostí)'
+  - citation: 'CZ-Decree-410-2025 (nižší povinnosti: dohled/monitoring a vyhodnocování událostí)'
+  - citation: EU-NIS2-2022-2555 Art. 21(2)(f) (incident handling) [mapping]
+- id: NIS2CZ-RISK-VULN-MGMT-POLICY
+  title: Vulnerability management and patching policy is defined and approved
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: document_required
+    document: vulnerability_and_patch_management_policy
+    must_include:
+    - scope (systems, applications, cloud, third-party components)
+    - vulnerability_sources (scans, advisories, pentests, bug reports)
+    - risk_rating_method (e.g., CVSS + asset criticality/context)
+    - remediation_slas (by severity and asset criticality)
+    - emergency_patch_process (out-of-cycle)
+    - exception_process (risk acceptance, compensating controls, expiry)
+    - verification_of_remediation (re-scan/retest)
+    - integration_with_change_management
+    - metrics_and_reporting (e.g., patch compliance, MTTR)
+  evidence_hints:
+    required:
+    - artifact_id: RISK-VULNERABILITY-AND-PATCH-MANAGEMENT-POLIC
+    optional:
+    - artifact_id: GOV-POLICY-REGISTER
+    - artifact_id: RISK-RATING-METHODOLOGY
+    - artifact_id: RISK-PATCHING-SLA-MATRIX
+  severity: high
+  sources:
+  - citation: CZ-Act-264-2025 (povinnost zavést a udržovat opatření kybernetické bezpečnosti)
+  - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: správa zranitelností / aktualizace)'
+  - citation: 'CZ-Decree-410-2025 (nižší povinnosti: správa zranitelností / aktualizace)'
+  - citation: EU-NIS2-2022-2555 Art. 21(2)(e) (vulnerability handling and disclosure) [mapping]
+- id: NIS2CZ-RISK-VULN-SCANNING-COVERAGE
+  title: Vulnerability scanning is performed with defined coverage and cadence
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: process_required
+    process: vulnerability_scanning
+    must_include:
+    - asset_coverage_definition (internal, external, cloud, containers where used)
+    - scan_cadence (at least monthly for critical; risk-based otherwise)
+    - authenticated_scanning_where_feasible
+    - handling_of_scan_exceptions (documented, time-bounded)
+    - triage_and_ticketing_workflow
+    - tracking_to_closure (status, due dates, owners)
+  evidence_hints:
+    required:
+    - artifact_id: RISK-VULNERABILITY-SCAN-SCHEDULE
+    - artifact_id: RISK-VULNERABILITY-SCAN-REPORTS
+    - artifact_id: RISK-REMEDIATION-TICKET-EXPORT
+    optional:
+    - artifact_id: RISK-ASSET-INVENTORY
+    - artifact_id: RISK-SCANNER-CONFIGURATION-EXPORT
+  severity: high
+  sources:
+  - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: pravidelné zjišťování zranitelností)'
+  - citation: 'CZ-Decree-410-2025 (nižší povinnosti: zjišťování zranitelností)'
+  - citation: EU-NIS2-2022-2555 Art. 21(2)(d)(e) (policies; vulnerability handling) [mapping]
+- id: NIS2CZ-RISK-PATCH-MGMT-COMPLIANCE
+  title: Patch management is executed, tracked, and verified for in-scope systems
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: process_required
+    process: patch_management
+    must_include:
+    - patch_intake_sources (vendor advisories, CERT/NÚKIB alerts, scanners)
+    - prioritization_criteria (severity + exploitability + asset criticality)
+    - testing_and_change_approval (where required)
+    - deployment_methods (automation where feasible)
+    - emergency_patching (fast-track approvals)
+    - verification_and_reporting (compliance %, exceptions)
+    - firmware_and_network_device_updates (where applicable)
+  evidence_hints:
+    required:
+    - artifact_id: RISK-PATCHING-RECORDS
+    - artifact_id: RISK-PATCH-COMPLIANCE-REPORT
+    optional:
+    - artifact_id: RISK-CHANGE-TICKETS
+    - artifact_id: RISK-EMERGENCY-CHANGE-RECORDS
+    - artifact_id: RISK-ENDPOINT-MANAGEMENT-REPORTS
+  severity: high
+  sources:
+  - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: aktualizace a odstraňování zranitelností)'
+  - citation: 'CZ-Decree-410-2025 (nižší povinnosti: aktualizace a odstraňování zranitelností)'
+  - citation: EU-NIS2-2022-2555 Art. 21(2)(d)(e) (policies; vulnerability handling) [mapping]
+- id: NIS2CZ-RISK-VULN-DISCLOSURE-HANDLING
+  title: A channel and process exist to receive and handle reported vulnerabilities
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: process_required
+    process: vulnerability_disclosure_handling
+    must_include:
+    - intake_channel (email/web form/security.txt or equivalent)
+    - triage_and_acknowledgement (timelines, roles)
+    - coordination_with_remediation_process
+    - communication_guidelines (internal/external; legal review where needed)
+    - recordkeeping (case register)
+  evidence_hints:
+    required:
+    - artifact_id: RISK-VULNERABILITY-REPORTING-CHANNEL-EVIDENCE
+    - artifact_id: RISK-VULNERABILITY-CASE-REGISTER
+    optional:
+    - artifact_id: RISK-SECURITY-TXT-FILE
+    - artifact_id: RISK-SUPPORT-TICKET-SAMPLES
+  severity: medium
+  sources:
+  - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: nakládání se zranitelnostmi / hlášení)'
+  - citation: 'CZ-Decree-410-2025 (nižší povinnosti: nakládání se zranitelnostmi / hlášení)'
+  - citation: EU-NIS2-2022-2555 Art. 21(2)(e) (vulnerability handling and disclosure) [mapping]
