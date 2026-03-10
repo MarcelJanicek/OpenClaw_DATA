@@ -3124,3 +3124,75 @@ rules:
   severity: low
   sources:
   - citation: GDPR Art. 96
+- id: GDPR-ART97-98-REGULATORY-MONITORING
+  title: GDPR compliance program includes ongoing monitoring of GDPR-related reviews, guidance, and legal changes
+  scope:
+    applies_to:
+    - org
+    roles:
+    - controller
+    - processor
+    - joint_controller
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: regulatory_watch_process
+      description: The organisation maintains a documented process to monitor GDPR-related developments (e.g., EDPB guidance, supervisory authority enforcement trends, and Commission reports/reviews relevant to GDPR implementation) and assess applicability to its processing.
+    - key: change_assessment_and_implementation
+      description: Material changes in guidance/law are assessed (impact analysis), prioritised, and tracked to implementation (policy/procedure updates, product/control changes, training updates).
+    - key: ownership_and_cadence
+      description: Ownership is assigned (e.g., privacy/legal/compliance), with a defined cadence and escalation path for urgent updates.
+  evidence_hints:
+    required:
+    - regulatory_watch_log_or_tracker (sources monitored, review dates, summaries) (redacted)
+    - impact_assessments_for_material_guidance_or_legal_changes (redacted)
+    - change_management_records_linking_regulatory_updates_to_policy_or_control_changes (tickets, PRs, training updates) (redacted)
+    - assigned_owner_and_cadence_for_privacy_regulatory_monitoring
+    artifacts:
+    - regulatory_watch_log_or_tracker (sources monitored, review dates, summaries) (redacted)
+    - subscriptions_or_sources_list (e.g., EDPB, key SAs, Commission updates)
+    - impact_assessments_for_material_guidance_or_legal_changes (redacted)
+    - change_management_records_linking_regulatory_updates_to_policy_or_control_changes (tickets, PRs, training updates) (redacted)
+    questions:
+    - Which sources do you monitor for GDPR updates (EDPB, lead SA, key jurisdictions), and how often?
+    - How do you decide whether a guidance/legal change is material for your products and processing activities?
+    - Can you show an example where a regulatory update led to a concrete control/policy/training change?
+    checks:
+    - Confirm there is evidence of periodic monitoring and follow-through into change management (not just ad-hoc reading).
+  severity: low
+  sources:
+  - citation: GDPR Art. 97
+  - citation: GDPR Art. 98
+- id: GDPR-ART99-APPLICABILITY-DATE
+  title: Compliance documentation reflects GDPR entry into force and applicability date (no reliance on obsolete transitional assumptions)
+  scope:
+    applies_to:
+    - org
+    - policies
+    roles:
+    - controller
+    - processor
+    - joint_controller
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: gdpr_applicability_acknowledged
+      description: Compliance documentation and training reflect that GDPR has been applicable since 25 May 2018, and the organisation does not rely on outdated transitional assumptions for ongoing processing.
+    - key: legacy_programs_reviewed
+      description: Where legacy privacy/security programs or templates predate GDPR, they are reviewed for alignment with current GDPR requirements and updated where gaps exist.
+  evidence_hints:
+    required:
+    - privacy_compliance_program_documentation_or_policy_pack_showing_gdpr_applicability
+    - training_materials_or_internal_guidance_referencing_current_gdpr_baseline (redacted)
+    - legacy_policy_template_review_log (if_applicable) (redacted)
+    artifacts:
+    - privacy_compliance_program_documentation_or_policy_pack_showing_gdpr_applicability
+    - training_materials_or_internal_guidance_referencing_current_gdpr_baseline (redacted)
+    - legacy_policy_template_review_log (if_applicable) (redacted)
+    questions:
+    - Do any of your privacy/security templates predate GDPR, and how do you ensure they are kept current?
+    checks:
+    - Confirm key compliance documentation used in practice aligns to GDPR (and is periodically reviewed) rather than legacy directives or outdated templates.
+  severity: low
+  sources:
+  - citation: GDPR Art. 99
