@@ -2472,6 +2472,204 @@ rules:
   - citation: GDPR Art. 66
   - citation: GDPR Art. 67
   - citation: GDPR Recital 135
+- id: GDPR-ART77-RIGHT-TO-COMPLAIN
+  title: Data subjects are informed of and can exercise the right to lodge a complaint with a supervisory authority
+  scope:
+    applies_to:
+    - org
+    - product
+    - system
+    roles:
+    - controller
+    - processor
+    - joint_controller
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: information_provided
+      description: Privacy notices and DSAR/rights response templates inform data subjects of their right to lodge a complaint with a supervisory authority (SA) and how to do so (at least at a practical level, e.g., link to the relevant SA pages or instructions).
+    - key: internal_intake_and_routing
+      description: There is an internal process to intake, triage, and respond to complaints escalated via an SA (including ownership, deadlines, and legal/privacy review), and to coordinate responses across teams and processors.
+    - key: non_retaliation_and_fair_handling
+      description: Policies/processes ensure complaints are handled without retaliation and do not degrade the data subject’s service beyond what is necessary to address abuse/fraud.
+    - key: recordkeeping
+      description: Complaint-related communications (including SA correspondence) are logged, and outcomes drive remediation and control improvements.
+  evidence_hints:
+    required:
+    - privacy_notice_section_on_right_to_lodge_a_complaint (Art77)
+    - dsar_or_rights_response_templates_including_sa_complaint_language
+    - procedure_for_handling_supervisory_authority_complaints_and_correspondence
+    - sample_complaint_or_sa_correspondence_case_files (redacted)
+    - remediation_tracker_linked_to_complaint_outcomes (redacted)
+    artifacts:
+    - privacy_notice_section_on_right_to_lodge_a_complaint (Art77)
+    - dsar_or_rights_response_templates_including_sa_complaint_language
+    - procedure_for_handling_supervisory_authority_complaints_and_correspondence
+    - sample_complaint_or_sa_correspondence_case_files (redacted)
+    - remediation_tracker_linked_to_complaint_outcomes (redacted)
+    questions:
+    - Where do you tell users/data subjects how to complain to a supervisory authority?
+    - If an SA forwards you a complaint, who owns the response and how do you ensure timely, consistent replies?
+    checks:
+    - Confirm complaint-to-SA information is available to data subjects (e.g., in privacy notices and/or DSAR responses).
+    - Confirm there is an operational workflow for SA-forwarded complaints (not ad-hoc email).
+  severity: medium
+  sources:
+  - citation: GDPR Art. 77(1)
+  - citation: GDPR Recital 141
+- id: GDPR-ART78-JUDICIAL-REMEDY-AGAINST-SA
+  title: The organisation can support judicial remedy processes related to supervisory authority decisions or inaction (as applicable)
+  scope:
+    applies_to:
+    - org
+    roles:
+    - controller
+    - processor
+    - joint_controller
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: preservation_and_legal_hold
+      description: The organisation can preserve relevant records and evidence (legal hold) relating to supervisory authority proceedings (requests, submissions, decisions) for an appropriate period, with access controls.
+    - key: counsel_and_governance
+      description: Governance exists to involve legal counsel for disputes/proceedings with supervisory authorities (including escalation paths and authorization to initiate/defend actions).
+    - key: accurate_record_of_sa_interactions
+      description: A complete, timestamped record is maintained of SA communications, submissions, and decisions to support potential challenges or defenses.
+  evidence_hints:
+    required:
+    - legal_hold_and_evidence_preservation_procedure_for_regulatory_matters
+    - sa_case_file_records (requests_submissions_decisions) (redacted)
+    - escalation_matrix_for_regulatory_disputes_and_litigation
+    artifacts:
+    - legal_hold_and_evidence_preservation_procedure_for_regulatory_matters
+    - sa_case_file_records (requests_submissions_decisions) (redacted)
+    - escalation_matrix_for_regulatory_disputes_and_litigation
+    questions:
+    - If a supervisory authority decision were challenged (or SA inaction was alleged), how would you preserve records and coordinate legal response?
+    checks:
+    - Confirm SA interactions are tracked in a durable case file with timestamps and supporting evidence.
+  severity: low
+  sources:
+  - citation: GDPR Art. 78(1)
+  - citation: GDPR Art. 78(2)
+  - citation: GDPR Recital 143
+- id: GDPR-ART79-JUDICIAL-REMEDY-AGAINST-CONTROLLER-PROCESSOR
+  title: Data subjects can exercise the right to an effective judicial remedy against controller/processor; the organisation is prepared to handle such claims
+  scope:
+    applies_to:
+    - org
+    roles:
+    - controller
+    - processor
+    - joint_controller
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: claims_intake_and_routing
+      description: A process exists to intake and route legal claims (including Art. 79 claims) to appropriate legal/privacy leadership, preserving evidence and coordinating a response.
+    - key: remedy_readiness
+      description: The organisation can identify which processing operations, systems, and contracts are implicated by a claim and can produce relevant compliance evidence (ROPA, notices, DSAR logs, security evidence, contracts) in a controlled manner.
+    - key: cooperation_with_representatives
+      description: Processes exist to handle communications via a data subject’s representatives (including non-profit bodies) and to validate mandates where required.
+  evidence_hints:
+    required:
+    - procedure_for_handling_legal_claims_and_preserving_evidence (litigation_hold)
+    - compliance_evidence_index_or_data_room_structure_for_disputes (redacted)
+    - playbook_for_handling_requests_from_data_subject_representatives (mandate_validation)
+    artifacts:
+    - procedure_for_handling_legal_claims_and_preserving_evidence (litigation_hold)
+    - compliance_evidence_index_or_data_room_structure_for_disputes (redacted)
+    - playbook_for_handling_requests_from_data_subject_representatives (mandate_validation)
+    questions:
+    - If a data subject filed a claim alleging GDPR non-compliance, how would you preserve evidence and assemble a defensible compliance record?
+    checks:
+    - Confirm there is a litigation/evidence preservation pathway that covers privacy/DSAR/security artifacts.
+  severity: low
+  sources:
+  - citation: GDPR Art. 79(1)
+  - citation: GDPR Recital 143
+  - citation: GDPR Recital 145
+- id: GDPR-ART80-REPRESENTATION
+  title: Data subjects can mandate a not-for-profit body to lodge complaints and exercise rights on their behalf where permitted
+  scope:
+    applies_to:
+    - org
+    roles:
+    - controller
+    - processor
+    - joint_controller
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: representative_requests_supported
+      description: The organisation supports receiving and processing requests/complaints via not-for-profit bodies acting on behalf of data subjects (mandate handling), including identity and mandate validation steps.
+    - key: member_state_variations_tracked
+      description: Where relevant to the organisation’s establishments/target markets, Member State rules enabling actions without a mandate (Art. 80(2)) are tracked and handled via legal guidance (e.g., how to respond and what information can be provided).
+  evidence_hints:
+    required:
+    - procedure_for_handling_requests_from_data_subject_representatives (including_non_profit_bodies)
+    - mandate_validation_guidance_and_templates (redacted)
+    - legal_guidance_on_member_state_art80_variations (if_operating_in_multiple_member_states)
+    artifacts:
+    - procedure_for_handling_requests_from_data_subject_representatives (including_non_profit_bodies)
+    - mandate_validation_guidance_and_templates (redacted)
+    - legal_guidance_on_member_state_art80_variations (if_operating_in_multiple_member_states)
+    questions:
+    - How do you handle complaints/requests submitted by a non-profit body representing a data subject?
+    - If operating across the EU, how do you track whether mandate-free actions are possible in relevant Member States?
+    checks:
+    - Confirm there is a documented and repeatable way to validate and process representative-submitted requests.
+  severity: low
+  sources:
+  - citation: GDPR Art. 80(1)
+  - citation: GDPR Art. 80(2)
+  - citation: GDPR Recital 142
+- id: GDPR-ART82-LIABILITY-COMPENSATION
+  title: The organisation manages GDPR liability and compensation risk (including controller/processor allocation and claim handling)
+  scope:
+    applies_to:
+    - org
+    - contracts
+    roles:
+    - controller
+    - processor
+    - joint_controller
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: role_and_allocation_understood
+      description: The organisation can determine whether it acts as controller/processor/joint controller for key processing activities and has contractual allocation of responsibilities and indemnities where applicable.
+    - key: claim_handling_process
+      description: There is a process to handle compensation claims related to material or non-material damage (intake, investigation, documentation, legal review, settlement authority).
+    - key: evidence_to_demonstrate_non_responsibility
+      description: The organisation can evidence measures taken and, where applicable, demonstrate it is not in any way responsible for the event giving rise to the damage (including processor instruction compliance records or controller decision records).
+    - key: joint_and_several_and_recource_considered
+      description: Where multiple controllers/processors are involved, the organisation tracks joint-and-several exposure and has a mechanism to pursue recourse/claims contribution as appropriate.
+  evidence_hints:
+    required:
+    - role_mapping_and_accountability_docs (controller_vs_processor_vs_joint_controller)
+    - contracts_with_processors_or_controllers_including_responsibility_allocation (redacted)
+    - procedure_for_handling_compensation_claims_and_investigations
+    - sample_claim_case_file_or_register (redacted)
+    - evidence_pack_showing_measures_taken_and_instruction_compliance (redacted)
+    artifacts:
+    - role_mapping_and_accountability_docs (controller_vs_processor_vs_joint_controller)
+    - contracts_with_processors_or_controllers_including_responsibility_allocation (redacted)
+    - procedure_for_handling_compensation_claims_and_investigations
+    - sample_claim_case_file_or_register (redacted)
+    - evidence_pack_showing_measures_taken_and_instruction_compliance (redacted)
+    questions:
+    - If a data subject sought compensation, how would you investigate, document, and respond—and how would you evidence your role/responsibility?
+    checks:
+    - Confirm there is a claim-handling workflow and role mapping sufficient to manage Art. 82 exposures across controller/processor relationships.
+  severity: medium
+  sources:
+  - citation: GDPR Art. 82(1)
+  - citation: GDPR Art. 82(2)
+  - citation: GDPR Art. 82(3)
+  - citation: GDPR Art. 82(4)
+  - citation: GDPR Art. 82(5)
+  - citation: GDPR Recital 146
 - id: GDPR-ART85-91-NATIONAL-DEROGATIONS-ASSESSMENT
   title: National derogations and special-case rules (Arts. 85–91) are identified, assessed, and operationalized where applicable
   scope:
