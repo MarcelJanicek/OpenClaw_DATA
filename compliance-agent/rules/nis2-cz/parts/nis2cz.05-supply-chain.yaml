@@ -1,8 +1,184 @@
 meta:
   ruleset_id: "nis2-cz"
-  version: "0.1"
-  status: "draft"
+  version: "1.0-pilot"
+  status: "complete"
   jurisdiction: ["CZ"]
   evaluation_profile_schema: "rules/nis2-cz/entity_profile.schema.yaml"
 
-rules: []
+rules:
+  # ------------------------------------------------------------
+  # Supplier / third-party management (řízení dodavatelů)
+  # ------------------------------------------------------------
+  - id: "NIS2CZ-SUP-REGISTER-SIGNIFICANT-SUPPLIERS"
+    title: "Significant suppliers are identified, recorded, and notified (higher regime)"
+    scope:
+      applies_to: ["org"]
+      duty_regime: ["higher"]
+      in_scope_under_cz_law: true
+    requirement:
+      type: "process_and_register_required"
+      must_include:
+        - "criteria_for_significant_supplier"
+        - "significant_suppliers_register"
+        - "evidence_of_written_notification_to_significant_suppliers"
+    evidence_hints:
+      required:
+        - "significant_suppliers_register"
+        - "supplier_notification_records"
+      artifacts:
+        - "significant_suppliers_register"
+        - "supplier_notification_records"
+        - "supplier_management_policy"
+    severity: "high"
+    sources:
+      - citation: "CZ-Decree-409-2025 §9(1)(d)-(e), §9(3)"
+
+  - id: "NIS2CZ-SUP-RULES-COMMUNICATION"
+    title: "Supplier rules are defined, communicated, and enforced"
+    scope:
+      applies_to: ["org"]
+      in_scope_under_cz_law: true
+    requirement:
+      type: "policy_and_enforcement_required"
+      must_include:
+        - "supplier_rules_linked_to_ISMS"
+        - "supplier_acknowledgement_or_equivalent_evidence"
+        - "process_to_require_compliance"
+    evidence_hints:
+      required:
+        - "supplier_management_policy"
+        - "supplier_acknowledgement_evidence"
+      artifacts:
+        - "supplier_management_policy"
+        - "supplier_code_of_conduct"
+        - "supplier_acknowledgement_evidence"
+    severity: "high"
+    sources:
+      - citation: "CZ-Decree-409-2025 §9(1)(a)-(b)"
+
+  - id: "NIS2CZ-SUP-RISK-MGMT"
+    title: "Supplier risks are assessed and managed"
+    scope:
+      applies_to: ["org"]
+      in_scope_under_cz_law: true
+    requirement:
+      type: "risk_management_required"
+      must_include:
+        - "supplier_risk_assessment_method"
+        - "supplier_risk_assessments_per_significant_supplier"
+        - "risk_treatment_actions_and_tracking"
+    evidence_hints:
+      required:
+        - "supplier_risk_methodology"
+        - "supplier_risk_assessments"
+      artifacts:
+        - "supplier_risk_methodology"
+        - "supplier_risk_assessments"
+        - "risk_register (supplier risks)"
+    severity: "high"
+    sources:
+      - citation: "CZ-Decree-409-2025 §9(1)(c), §9(2)(a), §9(2)(d)"
+
+  - id: "NIS2CZ-SUP-CONTRACT-CLAUSES-HIGHER"
+    title: "Contracts with significant suppliers contain required security clauses (higher regime)"
+    scope:
+      applies_to: ["contracts"]
+      duty_regime: ["higher"]
+      in_scope_under_cz_law: true
+    requirement:
+      type: "clause_presence"
+      must_include_any:
+        - "information_security_confidentiality_integrity_availability"
+        - "data_use_rights"
+        - "audit_rights"
+        - "supplier_chaining_subcontractors_flowdown"
+        - "security_policies_alignment"
+        - "change_management"
+        - "incident_notification"
+        - "exit_strategy_and_termination_security"
+        - "business_continuity_with_suppliers"
+        - "sla_and_security_levels"
+    evidence_hints:
+      required:
+        - "supplier_contract_template_or_redlines"
+        - "signed_contracts_for_significant_suppliers"
+      artifacts:
+        - "supplier_contract_template_or_redlines"
+        - "signed_contracts_for_significant_suppliers"
+        - "supplier_clause_checklist"
+    severity: "high"
+    sources:
+      - citation: "CZ-Decree-409-2025 §9(1)(f)"
+      - citation: "CZ-Decree-409-2025 Příloha č. 5 (Řízení dodavatelů – smluvní ustanovení)"
+
+  - id: "NIS2CZ-SUP-CONTRACT-CLAUSES-LOWER"
+    title: "Contracts include minimum supplier security clauses (lower regime)"
+    scope:
+      applies_to: ["contracts"]
+      duty_regime: ["lower"]
+      in_scope_under_cz_law: true
+    requirement:
+      type: "clause_presence"
+      must_include_any:
+        - "information_security_confidentiality_integrity_availability"
+        - "audit_rights"
+        - "supplier_chaining"
+        - "exit_strategy"
+        - "incident_notification"
+        - "sla_and_security_levels"
+        - "secure_development_rules (if applicable)"
+    evidence_hints:
+      required:
+        - "supplier_contract_template_or_redlines"
+      artifacts:
+        - "supplier_contract_template_or_redlines"
+        - "sample_supplier_contracts"
+    severity: "medium"
+    sources:
+      - citation: "CZ-Decree-410-2025 Příloha č. 2 (Požadavky na smluvní ujednání s dodavateli)"
+
+  - id: "NIS2CZ-SUP-MONITORING"
+    title: "Supplier performance and security obligations are periodically reviewed"
+    scope:
+      applies_to: ["org"]
+      in_scope_under_cz_law: true
+    requirement:
+      type: "monitoring_required"
+      must_include:
+        - "review_cadence"
+        - "review_scope_security_and_sla"
+        - "documented_findings_and_remediation"
+    evidence_hints:
+      required:
+        - "supplier_review_records"
+      artifacts:
+        - "supplier_review_records"
+        - "supplier_scorecards"
+        - "audit_reports"
+    severity: "high"
+    sources:
+      - citation: "CZ-Decree-409-2025 §9(1)(g), §9(2)(c)-(d)"
+
+  - id: "NIS2CZ-SUP-EXIT-STRATEGY"
+    title: "Exit/transition strategy exists for significant suppliers"
+    scope:
+      applies_to: ["org", "contracts"]
+      in_scope_under_cz_law: true
+    requirement:
+      type: "document_and_contract_required"
+      must_include:
+        - "exit_strategy_document"
+        - "contractual_terms_for_termination_and_data_return"
+        - "migration_plan_for_critical_dependencies"
+    evidence_hints:
+      required:
+        - "supplier_exit_plans"
+        - "contract_exit_clauses"
+      artifacts:
+        - "supplier_exit_plans"
+        - "contract_exit_clauses"
+        - "dependency_map"
+    severity: "high"
+    sources:
+      - citation: "CZ-Decree-409-2025 Příloha č. 5 (exit strategie)"
+      - citation: "CZ-Decree-410-2025 Příloha č. 2 (exit strategie)"

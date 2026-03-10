@@ -1,0 +1,782 @@
+source_file: decree_1.docx
+paragraphs:
+- paragraph_index: 0
+  text: ''
+  style: Normal
+- paragraph_index: 1
+  text: ''
+  style: '1'
+- paragraph_index: 2
+  text: ''
+  style: '1'
+- paragraph_index: 3
+  text: '410'
+  style: '2'
+- paragraph_index: 4
+  text: VYHLÁŠKA
+  style: '3'
+- paragraph_index: 5
+  text: ze dne 26. září 2025
+  style: '4'
+- paragraph_index: 6
+  text: o bezpečnostních opatřeních poskytovatele regulované služby v režimu nižších povinností
+  style: '5'
+- paragraph_index: 7
+  text: 'Národní úřad pro kybernetickou a informační bezpečnost stanoví podle § 13 odst. 3 a § 15 odst. 3 zákona č. 264/2025 Sb., o kybernetické bezpečnosti, (dále jen „zákon“):'
+  style: '6'
+- paragraph_index: 8
+  text: ''
+  style: '1'
+- paragraph_index: 9
+  text: ČÁST PRVNÍ
+  style: '7'
+- paragraph_index: 10
+  text: ÚVODNÍ USTANOVENÍ
+  style: '8'
+- paragraph_index: 11
+  text: § 1
+  style: '9'
+- paragraph_index: 12
+  text: Předmět úpravy
+  style: '10'
+- paragraph_index: 13
+  text: Tato vyhláška zapracovává příslušný předpis Evropské unie1) a pro poskytovatele regulované služby v režimu nižších povinností (dále jen „povinná osoba“) upravuje
+  style: '11'
+- paragraph_index: 14
+  text: a)    obsah, způsob zavádění a provádění bezpečnostních opatření a
+  style: '12'
+- paragraph_index: 15
+  text: b)    stanovení významnosti dopadu kybernetického bezpečnostního incidentu.
+  style: '13'
+- paragraph_index: 16
+  text: § 2
+  style: '14'
+- paragraph_index: 17
+  text: Vymezení pojmů
+  style: '10'
+- paragraph_index: 18
+  text: Pro účely této vyhlášky se rozumí
+  style: '11'
+- paragraph_index: 19
+  text: a)    uživatelem fyzická nebo právnická osoba anebo orgán veřejné moci, který využívá aktiva,
+  style: '12'
+- paragraph_index: 20
+  text: b)    privilegovaným uživatelem uživatel nebo jiná osoba, jejíž činnost na technickém aktivu může mít významný dopad na bezpečnost regulované služby,
+  style: '15'
+- paragraph_index: 21
+  text: c)    administrátorem privilegovaný uživatel nebo osoba zajišťující správu, provoz, užívání, údržbu a bezpečnost technického aktiva,
+  style: '15'
+- paragraph_index: 22
+  text: d)    bezpečnostní politikou soubor zásad a pravidel, která určují způsob zajištění ochrany aktiv.
+  style: '13'
+- paragraph_index: 23
+  text: ČÁST DRUHÁ
+  style: '7'
+- paragraph_index: 24
+  text: BEZPEČNOSTNÍ OPATŘENÍ
+  style: '8'
+- paragraph_index: 25
+  text: § 3
+  style: '9'
+- paragraph_index: 26
+  text: Systém zajišťování minimální kybernetické bezpečnosti
+  style: '10'
+- paragraph_index: 27
+  text: (1)    Povinná osoba při zajišťování kybernetické bezpečnosti
+  style: '16'
+- paragraph_index: 28
+  text: a)    zavede a provádí bezpečnostní opatření, která jsou přiměřená bezpečnostním potřebám, a
+  style: '17'
+- paragraph_index: 29
+  text: b)    zavede a provádí alespoň bezpečnostní opatření podle odstavců 2 až 6, § 4 až 6 a § 10.
+  style: '18'
+- paragraph_index: 30
+  text: (2)    Povinná osoba
+  style: '16'
+- paragraph_index: 31
+  text: a)    stanoví přehled bezpečnostních opatření podle přílohy č. 1 k této vyhlášce, který obsahuje přehled všech bezpečnostních opatření, která
+  style: '19'
+- paragraph_index: 32
+  text: 1.    byla povinnou osobou zavedena, včetně popisu jejich zavedení,
+  style: '20'
+- paragraph_index: 33
+  text: 2.    budou povinnou osobou zavedena, včetně termínů pro jejich zavedení, priority jejich zavedení a určení osoby odpovědné za jejich zavedení, a
+  style: '21'
+- paragraph_index: 34
+  text: 3.    nebyla zavedena, včetně odůvodnění jejich nezavedení,
+  style: '22'
+- paragraph_index: 35
+  text: b)    provede a dokumentuje alespoň jednou ročně aktualizaci přehledu bezpečnostních opatření, včetně vyhodnocení účinnosti zavedených bezpečnostních opatření,
+  style: '17'
+- paragraph_index: 36
+  text: c)    uchovává jednotlivé přehledy bezpečnostních opatření a jejich aktualizace alespoň po dobu 4 let.
+  style: '18'
+- paragraph_index: 37
+  text: (3)    Povinná osoba v rámci řízení bezpečnostní politiky a bezpečnostní dokumentace
+  style: '16'
+- paragraph_index: 38
+  text: a)    stanoví bezpečnostní politiku a bezpečnostní dokumentaci k bezpečnostním opatřením požadovaným touto vyhláškou,
+  style: '17'
+- paragraph_index: 39
+  text: b)    pravidelně přezkoumává a aktualizuje pravidla a postupy stanovené v bezpečnostní politice a bezpečnostní dokumentaci a
+  style: '23'
+- paragraph_index: 40
+  text: c)    vynucuje dodržování pravidel a postupů stanovených v bezpečnostní politice a bezpečnostní dokumentaci.
+  style: '18'
+- paragraph_index: 41
+  text: (4)    Povinná osoba v rámci řízení aktiv stanoví pravidla pro používání a manipulaci technických aktiv.
+  style: '24'
+- paragraph_index: 42
+  text: (5)    Povinná osoba při uzavírání smlouvy s dodavatelem do stanoveného rozsahu podle § 12 zákona zohlední hrozby a zranitelnosti spojené s tímto dodavatelem, celkovou kvalitu produktů a postupů v oblasti kybernetické bezpečnosti tohoto dodavatele, včetně postupů bezpečného vývoje a na základě toho zajistí, aby smlouvy s tímto dodavatelem obsahovaly relevantní požadavky na smluvní ujednaní uvedené v příloze č. 2 k této vyhlášce.
+  style: '25'
+- paragraph_index: 43
+  text: (6)    Povinná osoba v souvislosti s plánovanou akvizicí, vývojem a údržbou technických aktiv stanoví bezpečnostní požadavky v oblasti kybernetické bezpečnosti a vymáhá jejich dodržování, přičemž vychází z požadavků na bezpečnostní opatření podle této vyhlášky.
+  style: '26'
+- paragraph_index: 44
+  text: § 4
+  style: '14'
+- paragraph_index: 45
+  text: Požadavky na vrcholné vedení
+  style: '10'
+- paragraph_index: 46
+  text: Statutární orgán povinné osoby nebo jiná osoba anebo skupina osob v obdobném řídícím postavení povinné osoby (dále jen „vrcholné vedení“) s ohledem na zajišťování minimální kybernetické bezpečnosti
+  style: '11'
+- paragraph_index: 47
+  text: a)    určí osobu pověřenou kybernetickou bezpečností, které svěří pravomoci potřebné k řízení a rozvoji kybernetické bezpečnosti, dohledu nad stavem kybernetické bezpečnosti a komunikaci s vrcholným vedením, přičemž pro výkon této činnosti
+  style: '27'
+- paragraph_index: 48
+  text: 1.    absolvuje bez zbytečného odkladu odborné školení podle § 5 odst. 2 písm. d), nebo
+  style: '28'
+- paragraph_index: 49
+  text: 2.    prokáže odbornou znalost v kybernetické bezpečnosti,
+  style: '29'
+- paragraph_index: 50
+  text: b)    absolvuje prokazatelně školení podle § 5 odst. 2 písm. a),
+  style: '12'
+- paragraph_index: 51
+  text: c)    zajistí dostupnost zdrojů potřebných pro zajišťování kybernetické bezpečnosti v souladu s přehledem bezpečnostních opatření,
+  style: '15'
+- paragraph_index: 52
+  text: d)    se prokazatelně seznamuje se stavem plnění bezpečnostních opatření uvedeným v přehledu bezpečnostních opatření podle § 3 odst. 2 písm. a),
+  style: '15'
+- paragraph_index: 53
+  text: e)    prosazuje neustálé zlepšování zajišťování kybernetické bezpečnosti a za tímto účelem podporuje osobu pověřenou kybernetickou bezpečností a jiné relevantní osoby a
+  style: '15'
+- paragraph_index: 54
+  text: f)    stanoví prioritu obnovy primárních aktiv.
+  style: '13'
+- paragraph_index: 55
+  text: § 5
+  style: '14'
+- paragraph_index: 56
+  text: Bezpečnost lidských zdrojů
+  style: '10'
+- paragraph_index: 57
+  text: (1)    Povinná osoba v rámci bezpečnosti lidských zdrojů
+  style: '16'
+- paragraph_index: 58
+  text: a)    stanoví politiku bezpečného chování uživatelů, v jejímž rámci zohledňuje relevantní témata uvedená v příloze č. 3 k této vyhlášce,
+  style: '17'
+- paragraph_index: 59
+  text: b)    stanoví pravidla rozvoje bezpečnostního povědomí vrcholného vedení, uživatelů, administrátorů a osoby pověřené kybernetickou bezpečností, včetně pravidel pro tvorbu hesel,
+  style: '23'
+- paragraph_index: 60
+  text: c)    zajistí kontrolu dodržování bezpečnostní politiky ze strany uživatelů, administrátorů a osoby pověřené kybernetickou bezpečností a
+  style: '23'
+- paragraph_index: 61
+  text: d)    stanoví pravidla a postupy pro řešení případů porušení bezpečnostní politiky.
+  style: '18'
+- paragraph_index: 62
+  text: (2)    Povinná osoba v souladu s pravidly rozvoje bezpečnostního povědomí zajistí
+  style: '16'
+- paragraph_index: 63
+  text: a)    poučení vrcholného vedení o jeho povinnostech a o bezpečnostní politice, zejména v oblasti zajišťování kybernetické bezpečnosti, formou vstupních a pravidelných školení,
+  style: '17'
+- paragraph_index: 64
+  text: b)    vstupní školení v oblasti kybernetické bezpečnosti,
+  style: '23'
+- paragraph_index: 65
+  text: c)    pravidelná školení v oblasti kybernetické bezpečnosti a
+  style: '23'
+- paragraph_index: 66
+  text: d)    potřebná odborná teoretická i praktická školení administrátorů a osoby pověřené kybernetickou bezpečností v souladu s jejich pracovní náplní.
+  style: '18'
+- paragraph_index: 67
+  text: (3)    Povinná osoba vede přehledy o provedených školeních a seznamy školených osob podle odstavce 2.
+  style: '16'
+- paragraph_index: 68
+  text: § 6
+  style: '14'
+- paragraph_index: 69
+  text: Řízení kontinuity činností
+  style: '10'
+- paragraph_index: 70
+  text: Povinná osoba v rámci řízení kontinuity činností
+  style: '11'
+- paragraph_index: 71
+  text: a)    stanoví prioritu technických aktiv, pořadí a postupy jejich obnovy a zohlední přitom stanovenou prioritu relevantního primárního aktiva podle § 4 písm. f),
+  style: '12'
+- paragraph_index: 72
+  text: b)    stanoví povinnosti a odpovědnost konkrétních osob za jednotlivé činnosti pro zajištění kontinuity činností a k obnově podle písmene a) a
+  style: '15'
+- paragraph_index: 73
+  text: c)    vytváří pravidelné zálohy informací, dat, konfigurací a nastavení technických aktiv nezbytných zejména pro účely obnovy regulované služby pro případ kybernetického bezpečnostního incidentu.
+  style: '13'
+- paragraph_index: 74
+  text: § 7
+  style: '14'
+- paragraph_index: 75
+  text: Řízení přístupu
+  style: '10'
+- paragraph_index: 76
+  text: (1)    Povinná osoba řídí přístup k aktivům a v rámci něj
+  style: '16'
+- paragraph_index: 77
+  text: a)    přidělí každému uživateli a administrátorovi přistupujícímu k aktivům přístupová práva a oprávnění na úroveň nezbytně nutnou k výkonu jejich práce a jedinečný identifikátor daného typu účtu, přičemž od sebe odděluje uživatelské a administrátorské účty jedné osoby,
+  style: '17'
+- paragraph_index: 78
+  text: b)    řídí identifikátory, přístupová práva a oprávnění účtů technických aktiv,
+  style: '23'
+- paragraph_index: 79
+  text: c)    zavádí bezpečnostní opatření potřebná pro bezpečné používání mobilních zařízení a jiných obdobných technických aktiv, popřípadě i bezpečnostní opatření spojená s využitím technických aktiv, která povinná osoba nemá ve své správě,
+  style: '23'
+- paragraph_index: 80
+  text: d)    provádí pravidelné přezkoumání nastavení veškerých přístupových práv a oprávnění,
+  style: '23'
+- paragraph_index: 81
+  text: e)    zajistí bezodkladné odebrání nebo změnu přístupových práv a oprávnění při změně pozice nebo zařazení uživatelů nebo administrátorů a
+  style: '23'
+- paragraph_index: 82
+  text: f)    zajistí deaktivaci účtu a bezodkladné odebrání nebo změnu přístupových práv a oprávnění při ukončení nebo změně smluvního vztahu, na jehož základě došlo ke zřízení přístupu k aktivům.
+  style: '18'
+- paragraph_index: 83
+  text: (2)    Povinná osoba v rámci zajištění fyzické bezpečnosti zamezí neoprávněnému přístupu ke svým aktivům a předchází poškození, odcizení, zneužití aktiv, neoprávněným zásahům do nich a narušení bezpečnosti poskytování regulované služby.
+  style: '16'
+- paragraph_index: 84
+  text: § 8
+  style: '14'
+- paragraph_index: 85
+  text: Řízení identit a jejich oprávnění
+  style: '10'
+- paragraph_index: 86
+  text: (1)    Povinná osoba pro řízení identit, přístupových práv a oprávnění používá nástroj, který zajišťuje
+  style: '16'
+- paragraph_index: 87
+  text: a)    řízení počtu možných neúspěšných pokusů o přihlášení,
+  style: '17'
+- paragraph_index: 88
+  text: b)    opětovné ověření identity po stanovené době nečinnosti,
+  style: '23'
+- paragraph_index: 89
+  text: c)    odolnost uložených a přenášených autentizačních údajů a
+  style: '23'
+- paragraph_index: 90
+  text: d)    řízení přístupových práv, oprávnění pro čtení a zápis informací a dat a změnu oprávnění.
+  style: '18'
+- paragraph_index: 91
+  text: (2)    Povinná osoba pro ověření identity administrátorů, uživatelů a technických aktiv využívá autentizační mechanismus, který je založený na vícefaktorové autentizaci s alespoň dvěma různými typy faktorů, nebo využívá autentizační mechanismus, který je založen na aktuálně odolné kontinuální autentizaci založené na modelu nulové důvěry.
+  style: '24'
+- paragraph_index: 92
+  text: (3)    Povinná osoba do doby využívání autentizačního mechanismu podle odstavce 2 využívá autentizaci pomocí kryptografických klíčů nebo certifikátů.
+  style: '25'
+- paragraph_index: 93
+  text: (4)    Povinná osoba do doby využívání autentizačního mechanismu podle odstavce 3 využívá nástroj založený na autentizaci pomocí identifikátoru účtu a hesla, kdy tento nástroj musí vynucovat pravidla
+  style: '26'
+- paragraph_index: 94
+  text: a)    délky hesla alespoň
+  style: '19'
+- paragraph_index: 95
+  text: 1.    12 znaků pro účty uživatelů,
+  style: '20'
+- paragraph_index: 96
+  text: 2.    17 znaků pro účty administrátorů,
+  style: '21'
+- paragraph_index: 97
+  text: 3.    22 znaků pro účty technických aktiv,
+  style: '22'
+- paragraph_index: 98
+  text: b)    bezodkladné změny výchozího hesla pro ověření identity technických aktiv, přičemž nové heslo musí být vytvořeno náhodným řetězcem složeným z malých a velkých písmen, číslic a speciálních znaků,
+  style: '17'
+- paragraph_index: 99
+  text: c)    neomezující použití malých a velkých písmen, číslic a speciálních znaků,
+  style: '23'
+- paragraph_index: 100
+  text: d)    povinné změny hesla v intervalu alespoň jednou za 18 měsíců a
+  style: '23'
+- paragraph_index: 101
+  text: e)    neumožňující uživatelům a administrátorům
+  style: '18'
+- paragraph_index: 102
+  text: 1.    zvolit si jednoduchá a často používaná hesla,
+  style: '20'
+- paragraph_index: 103
+  text: 2.    tvořit hesla na základě mnohonásobně opakujících se znaků, přihlašovacích jmen, adres elektronické pošty, názvů systémů nebo obdobným způsobem a
+  style: '21'
+- paragraph_index: 104
+  text: 3.    opětovného použití dříve používaných hesel s pamětí alespoň 12 předchozích hesel.
+  style: '22'
+- paragraph_index: 105
+  text: (5)    Povinná osoba při řízení identit dále zajistí
+  style: '16'
+- paragraph_index: 106
+  text: a)    důvěrnost při vytváření výchozích autentizačních údajů a při obnově přístupu,
+  style: '17'
+- paragraph_index: 107
+  text: b)    změnu výchozího hesla nebo hesla sloužícího k obnově přístupu po jeho prvním použití,
+  style: '23'
+- paragraph_index: 108
+  text: c)    zneplatnění hesla nebo identifikátoru sloužícího k obnově přístupu nejpozději do 24 hodin od jeho vytvoření,
+  style: '23'
+- paragraph_index: 109
+  text: d)    bezodkladnou změnu přístupového hesla v případě důvodného podezření na jeho kompromitaci a
+  style: '23'
+- paragraph_index: 110
+  text: e)    zabezpečení administrátorských účtů technických aktiv zejména určených pro případ obnovy po kybernetickém bezpečnostním incidentu a využívá tyto účty pouze v nezbytně nutných případech.
+  style: '18'
+- paragraph_index: 111
+  text: § 9
+  style: '14'
+- paragraph_index: 112
+  text: Detekce a zaznamenávání kybernetických bezpečnostních událostí
+  style: '10'
+- paragraph_index: 113
+  text: (1)    Povinná osoba při detekci kybernetických bezpečnostních událostí zajistí
+  style: '16'
+- paragraph_index: 114
+  text: a)    ověření a kontrolu přenášených dat na perimetru komunikační sítě, včetně blokování nežádoucí komunikace,
+  style: '17'
+- paragraph_index: 115
+  text: b)    použití nástroje pro nepřetržitou a automatickou ochranu před škodlivým kódem na technických aktivech, zejména na
+  style: '18'
+- paragraph_index: 116
+  text: 1.    serverech a
+  style: '20'
+- paragraph_index: 117
+  text: 2.    koncových stanicích,
+  style: '22'
+- paragraph_index: 118
+  text: c)    řízení automatického spouštění obsahu, zejména u vyměnitelných zařízení a datových nosičů,
+  style: '17'
+- paragraph_index: 119
+  text: d)    nepřetržité poskytování informací o relevantních detekovaných kybernetických bezpečnostních událostech a včasné varování relevantních osob a
+  style: '23'
+- paragraph_index: 120
+  text: e)    pravidelnou a bezodkladnou aktualizaci nástrojů pro nepřetržitou a automatickou ochranu před škodlivým kódem a dalších detekčních nástrojů a jejich pravidel.
+  style: '18'
+- paragraph_index: 121
+  text: (2)    Povinná osoba za účelem detekce kybernetických bezpečnostních událostí zaznamenává
+  style: '16'
+- paragraph_index: 122
+  text: a)    bezpečnostní a relevantní provozní události detekované podle odstavce 1 a bezpečnostní a relevantní provozní události technických aktiv na základě svých bezpečnostních potřeb a
+  style: '17'
+- paragraph_index: 123
+  text: 'b)    u událostí podle písmene a) následující informace o události:'
+  style: '18'
+- paragraph_index: 124
+  text: 1.    datum a čas, včetně specifikace časového pásma,
+  style: '20'
+- paragraph_index: 125
+  text: 2.    typ činnosti,
+  style: '21'
+- paragraph_index: 126
+  text: 3.    jednoznačnou identifikaci technického aktiva a identifikaci účtu původce a
+  style: '21'
+- paragraph_index: 127
+  text: 4.    úspěšnost nebo neúspěšnost činnosti.
+  style: '22'
+- paragraph_index: 128
+  text: (3)    Povinná osoba uchovává záznamy bezpečnostních a relevantních provozních událostí po dobu, kterou si stanoví na základě svých bezpečnostních potřeb.
+  style: '16'
+- paragraph_index: 129
+  text: § 10
+  style: '14'
+- paragraph_index: 130
+  text: Řešení kybernetických bezpečnostních incidentů
+  style: '10'
+- paragraph_index: 131
+  text: Povinná osoba při řešení kybernetických bezpečnostních událostí a kybernetických bezpečnostních incidentů
+  style: '11'
+- paragraph_index: 132
+  text: a)    zajistí, že uživatelé, administrátoři, osoby pověřené kybernetickou bezpečností a další zaměstnanci budou oznamovat neobvyklé chování technických aktiv a podezření na jakékoliv zranitelnosti,
+  style: '12'
+- paragraph_index: 133
+  text: b)    vytvoří metodiku pro posuzování kybernetických bezpečnostních událostí a kybernetických bezpečnostních incidentů, včetně posuzování významnosti dopadu kybernetického bezpečnostního incidentu v souladu s § 14,
+  style: '15'
+- paragraph_index: 134
+  text: c)    zajistí detekci kybernetických bezpečnostních událostí,
+  style: '15'
+- paragraph_index: 135
+  text: d)    zajistí posuzování kybernetických bezpečnostních událostí a kybernetických bezpečnostních incidentů v souladu s metodikou podle písmene b),
+  style: '15'
+- paragraph_index: 136
+  text: e)    zajistí hlášení kybernetického bezpečnostního incidentu s významným dopadem podle § 15 zákona,
+  style: '15'
+- paragraph_index: 137
+  text: f)    zajistí vytvoření závěrečné zprávy o vyřešení kybernetického bezpečnostního incidentu s významným dopadem podle § 16 zákona.
+  style: '13'
+- paragraph_index: 138
+  text: § 11
+  style: '14'
+- paragraph_index: 139
+  text: Bezpečnost komunikačních sítí
+  style: '10'
+- paragraph_index: 140
+  text: Povinná osoba pro ochranu bezpečnosti komunikační sítě, a to zejména jejího síťového perimetru,
+  style: '11'
+- paragraph_index: 141
+  text: a)    zajistí segmentaci komunikační sítě, včetně oddělení provozního a zálohovacího prostředí,
+  style: '12'
+- paragraph_index: 142
+  text: b)    omezí odchozí a příchozí komunikaci na perimetru komunikační sítě na dobu nezbytně nutnou pro řádné zajištění poskytování regulované služby,
+  style: '15'
+- paragraph_index: 143
+  text: c)    užívá aktuálně odolné a bezpečné komunikační protokoly,
+  style: '15'
+- paragraph_index: 144
+  text: d)    v případě užití vzdáleného připojení do interní komunikační sítě nebo vzdálené správy technických aktiv regulované služby
+  style: '13'
+- paragraph_index: 145
+  text: 1.    omezí tato připojení na nezbytně nutná,
+  style: '28'
+- paragraph_index: 146
+  text: 2.    zavede bezpečnostní opatření, která zajistí důvěrnost a integritu těchto vzdálených připojení a vzdálené správy, a
+  style: '30'
+- paragraph_index: 147
+  text: 3.    má přehled o uživatelích a administrátorech, kteří tato vzdálená připojení nebo vzdálenou správu užívají.
+  style: '29'
+- paragraph_index: 148
+  text: § 12
+  style: '14'
+- paragraph_index: 149
+  text: Aplikační bezpečnost
+  style: '10'
+- paragraph_index: 150
+  text: Povinná osoba při zajišťování aplikační bezpečnosti regulované služby
+  style: '11'
+- paragraph_index: 151
+  text: a)    zajistí bezodkladné aplikování schválených bezpečnostních aktualizací vydaných pro technická aktiva,
+  style: '12'
+- paragraph_index: 152
+  text: b)    u technických aktiv, která již nejsou výrobcem, dodavatelem nebo jinou osobou podporována
+  style: '13'
+- paragraph_index: 153
+  text: 1.    vede jejich evidenci,
+  style: '28'
+- paragraph_index: 154
+  text: 2.    zavede bezpečnostní opatření, která zaručí obdobnou nebo vyšší úroveň bezpečnosti, a
+  style: '30'
+- paragraph_index: 155
+  text: 3.    omezí jejich komunikaci v komunikační síti na nezbytně nutnou,
+  style: '29'
+- paragraph_index: 156
+  text: c)    provádí pravidelné skenování zranitelností relevantních technických aktiv a aplikuje přiměřená bezpečnostní opatření na základě zjištěných výsledků.
+  style: '27'
+- paragraph_index: 157
+  text: § 13
+  style: '14'
+- paragraph_index: 158
+  text: Kryptografické algoritmy
+  style: '10'
+- paragraph_index: 159
+  text: (1)    Povinná osoba při zajištění bezpečnosti technických aktiv a jejich komunikace
+  style: '16'
+- paragraph_index: 160
+  text: a)    používá aktuálně odolné kryptografické algoritmy,
+  style: '17'
+- paragraph_index: 161
+  text: b)    prosazuje bezpečné nakládání s kryptografickými algoritmy a
+  style: '23'
+- paragraph_index: 162
+  text: c)    zohledňuje doporučení a metodiky v oblasti kryptografických algoritmů vydané Národním úřadem pro kybernetickou a informační bezpečnost.
+  style: '18'
+- paragraph_index: 163
+  text: (2)    Povinná osoba zajišťuje bezpečnou
+  style: '16'
+- paragraph_index: 164
+  text: a)    hlasovou, audiovizuální a textovou komunikaci, a to včetně e-mailové komunikace, a
+  style: '17'
+- paragraph_index: 165
+  text: b)    nouzovou komunikaci v rámci organizace.
+  style: '18'
+- paragraph_index: 166
+  text: ČÁST TŘETÍ
+  style: '7'
+- paragraph_index: 167
+  text: STANOVENÍ VÝZNAMNOSTI DOPADU KYBERNETICKÉHO BEZPEČNOSTNÍHO INCIDENTU
+  style: '8'
+- paragraph_index: 168
+  text: § 14
+  style: '9'
+- paragraph_index: 169
+  text: (1)    Povinná osoba pro potřeby vyhodnocení významnosti dopadu kybernetického bezpečnostního incidentu na poskytování regulované služby stanoví
+  style: '16'
+- paragraph_index: 170
+  text: a)    únosnou míru újmy způsobené kybernetickým bezpečnostním incidentem, v jehož důsledku ještě není ohrožen život nebo zdraví osob nebo schopnost povinné osoby dostát svým závazkům,
+  style: '17'
+- paragraph_index: 171
+  text: b)    oblasti pro posouzení významnosti dopadu kybernetických bezpečnostních incidentů zohledňující zejména
+  style: '18'
+- paragraph_index: 172
+  text: 1.    provozní dopad kybernetického bezpečnostního incidentu na povinnou osobu a její schopnost poskytovat regulovanou službu,
+  style: '20'
+- paragraph_index: 173
+  text: 2.    množství uživatelů regulované služby a jiných orgánů a osob zasažených kybernetickým bezpečnostním incidentem,
+  style: '21'
+- paragraph_index: 174
+  text: 3.    časové, lidské a technické zdroje, které jsou potřebné k obnově poskytování zasažené regulované služby,
+  style: '21'
+- paragraph_index: 175
+  text: 4.    typ a umístění aktiv dotčených kybernetickým bezpečnostním incidentem,
+  style: '21'
+- paragraph_index: 176
+  text: 5.    citlivost informací a dat zasažených kybernetickým bezpečnostním incidentem a újmu, jakou může narušení bezpečnosti těchto informací a dat způsobit povinné osobě nebo jinému orgánu nebo osobě, a
+  style: '21'
+- paragraph_index: 177
+  text: 6.    přímou příčinu kybernetického bezpečnostního incidentu, je-li povinné osobě známo, zda se jedná o lidskou chybu, technickou závadu nebo úmyslné jednání.
+  style: '22'
+- paragraph_index: 178
+  text: (2)    Dopad kybernetického bezpečnostního incidentu na poskytování regulované služby je považován za významný, pokud
+  style: '16'
+- paragraph_index: 179
+  text: a)    přesáhne povinnou osobou stanovenou únosnou míru újmy způsobenou kybernetickým bezpečnostním incidentem podle odstavce 1 písm. a) a současně
+  style: '17'
+- paragraph_index: 180
+  text: b)    je oblast pro posouzení významnosti dopadu podle odstavce 1 písm. b) posouzena jako významná.
+  style: '18'
+- paragraph_index: 181
+  text: ČÁST ČTVRTÁ
+  style: '7'
+- paragraph_index: 182
+  text: ÚČINNOST
+  style: '8'
+- paragraph_index: 183
+  text: § 15
+  style: '9'
+- paragraph_index: 184
+  text: Účinnost
+  style: '10'
+- paragraph_index: 185
+  text: ''
+  style: '1'
+- paragraph_index: 186
+  text: Tato vyhláška nabývá účinnosti dnem 1. listopadu 2025.
+  style: '11'
+- paragraph_index: 187
+  text: ''
+  style: '1'
+- paragraph_index: 188
+  text: 'Ředitel:'
+  style: '31'
+- paragraph_index: 189
+  text: Ing. Kintr v. r.
+  style: '32'
+- paragraph_index: 190
+  text: ''
+  style: '1'
+- paragraph_index: 191
+  text: ''
+  style: '1'
+- paragraph_index: 192
+  text: Příloha č. 1
+  style: '33'
+- paragraph_index: 193
+  text: Přehled bezpečnostních opatření
+  style: '34'
+- paragraph_index: 194
+  text: Tato příloha představuje přehled bezpečnostních opatření ve formě tabulky (Tab. č. 1), která má povinné osobě sloužit jako nástroj k vyhodnocení účinnosti zavedených bezpečnostních opatření za stanovené období.
+  style: '11'
+- paragraph_index: 195
+  text: 'Tab. č. 1: Přehled bezpečnostních opatření'
+  style: '34'
+- paragraph_index: 196
+  text: ''
+  style: Normal
+- paragraph_index: 197
+  text: Přehled bezpečnostních opatření je složen ze šesti sloupců, kdy specifika jednotlivých sloupců a příklady jejich vyplnění jsou uvedeny v tabulkách níže (Tab. č. 2 až 7). V Tabulce č. 3 „Stav bezpečnostního opatření“ jsou místo příkladů uvedeny „Přípustné hodnoty“.
+  style: '11'
+- paragraph_index: 198
+  text: 'Tab. č. 2: Bezpečnostní opatření podle vyhlášky'
+  style: '34'
+- paragraph_index: 199
+  text: ''
+  style: '11'
+- paragraph_index: 200
+  text: 'Tab. č. 3: Stav bezpečnostního opatření'
+  style: '34'
+- paragraph_index: 201
+  text: ''
+  style: '11'
+- paragraph_index: 202
+  text: 'Tab. č. 4: Popis bezpečnostního opatření'
+  style: '34'
+- paragraph_index: 203
+  text: ''
+  style: '11'
+- paragraph_index: 204
+  text: 'Tab. č. 5: Termín zavedení bezpečnostního opatření'
+  style: '34'
+- paragraph_index: 205
+  text: ''
+  style: '11'
+- paragraph_index: 206
+  text: 'Tab. č. 6: Priorita zavedení bezpečnostního opatření'
+  style: '34'
+- paragraph_index: 207
+  text: ''
+  style: '11'
+- paragraph_index: 208
+  text: 'Tab. č. 7: Odpovědnost za bezpečnostní opatření'
+  style: '34'
+- paragraph_index: 209
+  text: ''
+  style: '11'
+- paragraph_index: 210
+  text: ''
+  style: '1'
+- paragraph_index: 211
+  text: Příloha č. 2
+  style: '33'
+- paragraph_index: 212
+  text: Požadavky na smluvní ujednání s dodavateli
+  style: '34'
+- paragraph_index: 213
+  text: Povinná osoba uzavírá pouze takové smlouvy, které stanoví způsoby realizace bezpečnostních opatření a určují obsah vzájemné smluvní odpovědnosti za zavedení a kontrolu bezpečnostních opatření.
+  style: '35'
+- paragraph_index: 214
+  text: 'Povinné osoby mohou uzavírat jen takové smlouvy, které budou zohledňovat následující relevantní ustanovení:'
+  style: '36'
+- paragraph_index: 215
+  text: a)    ustanovení o bezpečnosti informací z pohledu důvěrnosti (včetně ustanovení o mlčenlivosti), integrity a dostupnosti,
+  style: '12'
+- paragraph_index: 216
+  text: b)    ustanovení o auditu dodavatele související s plněním smlouvy,
+  style: '15'
+- paragraph_index: 217
+  text: c)    ustanovení o řetězení dodavatelů,
+  style: '15'
+- paragraph_index: 218
+  text: d)    ustanovení upravující tzv. exit strategii, podmínky ukončení smluvního vztahu z pohledu bezpečnosti informací,
+  style: '15'
+- paragraph_index: 219
+  text: e)    ustanovení o sankcích za porušení smluvních povinností,
+  style: '15'
+- paragraph_index: 220
+  text: f)    ustanovení o oprávnění užívat data,
+  style: '15'
+- paragraph_index: 221
+  text: g)    ustanovení o autorství programového kódu, případně o programových licencích,
+  style: '15'
+- paragraph_index: 222
+  text: h)    ustanovení o důvěrnosti smluvního vztahu,
+  style: '15'
+- paragraph_index: 223
+  text: i)    ustanovení o povinnosti dodavatele dodržovat bezpečnostní politiky povinné osoby nebo ustanovení o odsouhlasení bezpečnostních politik dodavatele (nebo odsouhlasení pro dodavatelský vztah relevantních částí bezpečnostních politik) povinnou osobou,
+  style: '15'
+- paragraph_index: 224
+  text: j)    ustanovení o řízení změn,
+  style: '15'
+- paragraph_index: 225
+  text: k)    ustanovení o kybernetických bezpečnostních incidentech souvisejících s plněním smlouvy,
+  style: '15'
+- paragraph_index: 226
+  text: l)    ustanovení upravující zajištění řízení kontinuity činností,
+  style: '15'
+- paragraph_index: 227
+  text: m)    náležitosti smlouvy o úrovni služeb (SLA) a způsobu a úrovni realizace bezpečnostních opatření,
+  style: '15'
+- paragraph_index: 228
+  text: n)    ustanovení o dodržování pravidel bezpečného vývoje.
+  style: '13'
+- paragraph_index: 229
+  text: Povinná osoba může požadovat při uzavírání smluv s dodavateli i další ujednání zohledňující specifické požadavky plynoucí ze zajištění provozních a bezpečnostních potřeb souvisejících s regulovanou službou, která nejsou uvedena v této příloze.
+  style: '37'
+- paragraph_index: 230
+  text: ''
+  style: '1'
+- paragraph_index: 231
+  text: Příloha č. 3
+  style: '33'
+- paragraph_index: 232
+  text: Témata pro rozvoj bezpečnostního povědomí
+  style: '34'
+- paragraph_index: 233
+  text: a)    Techniky zabezpečení zařízení.
+  style: '12'
+- paragraph_index: 234
+  text: b)    Firewall, antivirový program a jejich omezení.
+  style: '15'
+- paragraph_index: 235
+  text: c)    Škodlivé programy a jejich projevy.
+  style: '15'
+- paragraph_index: 236
+  text: d)    Rizika stahování programů a aplikací.
+  style: '15'
+- paragraph_index: 237
+  text: e)    Aktualizace software.
+  style: '15'
+- paragraph_index: 238
+  text: f)    Rizika povolení a zakázání spouštění maker.
+  style: '15'
+- paragraph_index: 239
+  text: g)    Rizika spustitelných souborů.
+  style: '15'
+- paragraph_index: 240
+  text: h)    Zásady zabezpečení uživatelských účtů.
+  style: '15'
+- paragraph_index: 241
+  text: i)    Používání, tvorba a správa hesel.
+  style: '15'
+- paragraph_index: 242
+  text: j)    Vícefaktorová autentizace.
+  style: '15'
+- paragraph_index: 243
+  text: k)    Techniky sociálního inženýrství.
+  style: '15'
+- paragraph_index: 244
+  text: l)    On-line identita, digitální stopa a její minimalizace.
+  style: '15'
+- paragraph_index: 245
+  text: m)    Zásady práce v počítačové síti.
+  style: '15'
+- paragraph_index: 246
+  text: n)    Používání vzdáleného připojení (VPN).
+  style: '15'
+- paragraph_index: 247
+  text: o)    Bezpečná elektronická komunikace.
+  style: '15'
+- paragraph_index: 248
+  text: p)    Bezpečnost webových stránek.
+  style: '15'
+- paragraph_index: 249
+  text: q)    Zálohování, ukládání a šifrování dat.
+  style: '15'
+- paragraph_index: 250
+  text: r)    Bezpečné používání přenosných technických nosičů dat.
+  style: '15'
+- paragraph_index: 251
+  text: s)    Využívání služeb cloud computingu.
+  style: '15'
+- paragraph_index: 252
+  text: t)    Pravidla a postupy pro oznamování neobvyklého chování technických aktiv a podezření na jakékoliv zranitelnosti.
+  style: '15'
+- paragraph_index: 253
+  text: u)    Základní postup při reakci na kybernetickou bezpečnostní událost nebo kybernetický bezpečnostní incident.
+  style: '15'
+- paragraph_index: 254
+  text: v)    Zásady bezpečného používání pracovních zařízení pro soukromé účely.
+  style: '15'
+- paragraph_index: 255
+  text: w)    Zásady bezpečného používání soukromých zařízení pro pracovní účely (tzv. BYOD).
+  style: '15'
+- paragraph_index: 256
+  text: x)    Osobní odpovědnost zaměstnance při dodržování zásad kybernetické bezpečnosti.
+  style: '15'
+- paragraph_index: 257
+  text: y)    Aktuální hrozby v kybernetické bezpečnosti.
+  style: '13'
+- paragraph_index: 258
+  text: ''
+  style: '38'
+- paragraph_index: 259
+  text: 1)    Směrnice Evropského parlamentu a Rady (EU) 2022/2555 ze dne 14. prosince 2022 o opatřeních k zajištění vysoké společné úrovně kybernetické bezpečnosti v Unii a o změně nařízení (EU) č. 910/2014 a směrnice (EU) 20/1972 a o zrušení směrnice (EU) 2016/1148 (směrnice NIS 2).
+  style: '39'
