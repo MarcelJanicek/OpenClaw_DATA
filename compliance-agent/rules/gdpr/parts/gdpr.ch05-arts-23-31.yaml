@@ -63,6 +63,7 @@ rules:
     - legal_review_or_counsel_signoff_for_art23_restrictions
     - necessity_and_proportionality_assessment_for_art23_restrictions
     - art23_restriction_policy_and_approval_workflow
+    - art23_2_elements_mapping_document (law_to_controls_and_processes)
     - redaction_and_withholding_guidelines_for_restricted_responses
     - restriction_decision_log_or_case_file_examples (redacted)
     - restricted_dsar_response_template_or_playbook
@@ -77,6 +78,7 @@ rules:
     - legal_review_or_counsel_signoff_for_art23_restrictions
     - necessity_and_proportionality_assessment_for_art23_restrictions
     - art23_restriction_policy_and_approval_workflow
+    - art23_2_elements_mapping_document (law_to_controls_and_processes)
     - restricted_dsar_handling_procedure
     - redaction_and_withholding_guidelines_for_restricted_responses
     - restricted_dsar_response_template_or_playbook
@@ -94,7 +96,7 @@ rules:
     - Confirm DSAR response templates/playbooks reflect when and how a restriction may be disclosed to the data subject (or why it is withheld/delayed).
   severity: high
   sources:
-  - citation: GDPR Art. 23(1)
+  - citation: GDPR Art. 23(1)(a)-(j)
   - citation: GDPR Art. 23(2)(a)-(h)
   - citation: GDPR Recital 73
 
