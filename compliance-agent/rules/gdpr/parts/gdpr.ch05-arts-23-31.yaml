@@ -46,6 +46,8 @@ rules:
       description: Clear redaction/withholding/disclosure rules exist for restricted responses (what is withheld, what can be partially disclosed, and how collateral data about third parties/investigations is handled), and staff are trained to apply them consistently.
     - key: dsar_response_templates
       description: Where informing is permitted and not prejudicial, DSAR/right-response templates include a clear explanation that a restriction has been applied, the relevant legal basis, and what (if anything) the data subject can do next (e.g., complain to the supervisory authority), consistent with Art. 23 and applicable Member State/Union law.
+    - key: remedies_and_redress_preserved
+      description: The restriction design preserves and operationalizes any applicable redress mechanisms (e.g., ability to lodge a complaint with a supervisory authority and seek judicial remedy), and staff guidance/templates reflect any lawful limitations on disclosures.
     - key: data_subject_informed_or_documented_exception
       description: Where the underlying law requires it and it is not prejudicial to the restriction purpose, data subjects are informed about the restriction; if not informing (or delaying informing), the rationale and legal basis are documented.
     - key: review_and_recordkeeping
@@ -61,6 +63,7 @@ rules:
     - redaction_and_withholding_guidelines_for_restricted_responses
     - restriction_decision_log_or_case_file_examples (redacted)
     - restricted_dsar_response_template_or_playbook
+    - remedies_and_redress_guidance_for_restricted_cases (e.g., complaint/judicial remedy text)
     - data_subject_notification_template_or_documented_reason_for_not_informing
     - restriction_review_schedule_and_lift_criteria
     artifacts:
@@ -73,6 +76,7 @@ rules:
     - restricted_dsar_handling_procedure
     - redaction_and_withholding_guidelines_for_restricted_responses
     - restricted_dsar_response_template_or_playbook
+    - remedies_and_redress_guidance_for_restricted_cases (e.g., complaint/judicial remedy text)
     - access_control_and_audit_logging_evidence_for_restriction_handling
     - restriction_decision_log_or_case_file_examples (redacted)
     - data_subject_notification_template_or_documented_reason_for_not_informing
