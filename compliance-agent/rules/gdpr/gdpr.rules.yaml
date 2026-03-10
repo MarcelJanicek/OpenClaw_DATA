@@ -2936,3 +2936,69 @@ rules:
   - citation: GDPR Art. 89
   - citation: GDPR Art. 90
   - citation: GDPR Art. 91
+- id: GDPR-ART92-DELEGATED-ACTS-MONITORING
+  title: Organisation monitors GDPR delegated acts and incorporates relevant updates into its compliance program
+  scope:
+    applies_to:
+    - org
+    roles:
+    - controller
+    - processor
+    - joint_controller
+  requirement:
+    type: process_required
+    must_include:
+    - regulatory_change_monitoring_for_gdpr (including delegated acts adopted by the Commission)
+    - internal_impact_assessment_workflow (legal_privacy_security_product)
+    - update_mechanism_for_policies_notices_controls_and_training
+    - recordkeeping_of_change_reviews_and_decisions
+  evidence_hints:
+    required:
+    - regulatory_watch_process_documentation (sources_cadence_owners)
+    - log_of_regulatory_updates_reviewed (including delegated/implementing acts where applicable) (redacted)
+    - impact_assessments_or_change_tickets_for_gdpr_updates (redacted)
+    - updated_policies_or_control_changes_triggered_by_regulatory_updates (diffs_or_versions)
+    artifacts:
+    - regulatory_watch_process_documentation (sources_cadence_owners)
+    - log_of_regulatory_updates_reviewed (including delegated/implementing acts where applicable) (redacted)
+    - impact_assessments_or_change_tickets_for_gdpr_updates (redacted)
+    - updated_policies_or_control_changes_triggered_by_regulatory_updates (diffs_or_versions)
+    questions:
+    - How do you monitor changes to the GDPR framework (including delegated acts) and ensure your controls stay current?
+    - Who owns assessing impact and implementing updates when new EU legal instruments are adopted?
+    checks:
+    - Confirm there is a repeatable watch-and-update process (not ad hoc) with documented owners and evidence of executed reviews.
+  severity: low
+  sources:
+  - citation: GDPR Art. 92
+- id: GDPR-ART93-IMPLEMENTING-ACTS-AWARENESS
+  title: Organisation monitors GDPR implementing acts and guidance influenced by the committee procedure and updates operational processes accordingly
+  scope:
+    applies_to:
+    - org
+    roles:
+    - controller
+    - processor
+    - joint_controller
+  requirement:
+    type: process_required
+    must_include:
+    - monitoring_of_implementing_acts_and_related_guidance
+    - operationalization_of_updates (procedures_templates_workflows)
+    - communication_of_changes_to_relevant_teams
+  evidence_hints:
+    required:
+    - regulatory_watch_sources_covering_implementing_acts_and_official_publications
+    - internal_change_communications_or_release_notes_for_compliance_updates (redacted)
+    - training_updates_or_team_briefings_triggered_by_regulatory_changes (redacted)
+    artifacts:
+    - regulatory_watch_sources_covering_implementing_acts_and_official_publications
+    - internal_change_communications_or_release_notes_for_compliance_updates (redacted)
+    - training_updates_or_team_briefings_triggered_by_regulatory_changes (redacted)
+    questions:
+    - How do you ensure operational teams learn about and implement changes resulting from new implementing acts or related official guidance?
+    checks:
+    - Confirm updates are communicated and incorporated into procedures/templates (not just tracked by legal).
+  severity: low
+  sources:
+  - citation: GDPR Art. 93
