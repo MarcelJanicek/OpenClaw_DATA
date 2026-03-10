@@ -30,11 +30,11 @@ several inconsistencies that hurt machine-readability and auditability:
 - [x] Commit
 
 ### M1 — Scope & applicability normalization (~30 min)
-- [ ] Unify scope/conditions format across all parts
+- [x] Unify scope/conditions format across all parts
 - [ ] Add `not_applicable_if:` conditions where appropriate (e.g., code ownership
       clause only when supplier develops software)
-- [ ] Validate all `duty_regime` conditions are consistent
-- [ ] Regenerate merged file + commit
+- [x] Validate all `duty_regime` conditions are consistent
+- [x] Regenerate merged file + commit
 
 ### M2 — Incident & reporting completeness (~30 min)
 - [ ] ch04 currently has only 2 rules (classification + register) — needs reporting

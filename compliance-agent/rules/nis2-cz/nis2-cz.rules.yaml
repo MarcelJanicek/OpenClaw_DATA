@@ -4094,9 +4094,11 @@ rules:
   scope:
     applies_to:
     - org
-    duty_regime:
-    - higher
-    in_scope_under_cz_law: true
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+    - profile_field: duty_regime
+      equals: higher
   requirement:
     type: process_and_register_required
     must_include:
@@ -4117,7 +4119,9 @@ rules:
   scope:
     applies_to:
     - org
-    in_scope_under_cz_law: true
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
   requirement:
     type: policy_and_enforcement_required
     must_include:
@@ -4138,7 +4142,9 @@ rules:
   scope:
     applies_to:
     - org
-    in_scope_under_cz_law: true
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
   requirement:
     type: risk_management_required
     must_include:
@@ -4159,7 +4165,9 @@ rules:
   scope:
     applies_to:
     - org
-    in_scope_under_cz_law: true
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
   requirement:
     type: monitoring_required
     must_include:
@@ -4182,9 +4190,11 @@ rules:
   scope:
     applies_to:
     - contracts
-    duty_regime:
-    - higher
-    in_scope_under_cz_law: true
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+    - profile_field: duty_regime
+      equals: higher
   requirement:
     type: annex_checklist
     logic: ALL_RELEVANT
@@ -4585,9 +4595,11 @@ rules:
   scope:
     applies_to:
     - contracts
-    duty_regime:
-    - lower
-    in_scope_under_cz_law: true
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+    - profile_field: duty_regime
+      equals: lower
   requirement:
     type: annex_checklist
     logic: ALL_RELEVANT
@@ -4873,7 +4885,9 @@ rules:
     applies_to:
     - org
     - contracts
-    in_scope_under_cz_law: true
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
   requirement:
     type: document_and_contract_required
     must_include:

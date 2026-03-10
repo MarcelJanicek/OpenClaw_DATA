@@ -1,10 +1,13 @@
 meta:
   ruleset_id: "nis2-cz"
-  version: "1.1-annex-checklist"
+  version: "2.0-audit"
   status: "complete"
   jurisdiction: ["CZ"]
   evaluation_profile_schema: "rules/nis2-cz/entity_profile.schema.yaml"
   changelog: |
+    v2.0 (2026-03-10): Normalized scope applicability to use `scope.conditions` (profile_field/equals)
+    for deterministic evaluation and consistency across all parts.
+
     v1.1 (2026-03-10): Replaced topic-list (must_include_any) approach with explicit
     annex-checklist structure derived from Příloha č. 5 (Vyhl. 409/2025) and
     Příloha č. 2 (Vyhl. 410/2025). Each checklist item is individually auditable.
@@ -18,8 +21,11 @@ rules:
     title: "Significant suppliers are identified, recorded, and notified (higher regime)"
     scope:
       applies_to: ["org"]
-      duty_regime: ["higher"]
-      in_scope_under_cz_law: true
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+        - profile_field: "duty_regime"
+          equals: "higher"
     requirement:
       type: "process_and_register_required"
       must_include:
@@ -40,7 +46,9 @@ rules:
     title: "Supplier rules are defined, communicated, and enforced"
     scope:
       applies_to: ["org"]
-      in_scope_under_cz_law: true
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
     requirement:
       type: "policy_and_enforcement_required"
       must_include:
@@ -61,7 +69,9 @@ rules:
     title: "Supplier risks are assessed and managed"
     scope:
       applies_to: ["org"]
-      in_scope_under_cz_law: true
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
     requirement:
       type: "risk_management_required"
       must_include:
@@ -82,7 +92,9 @@ rules:
     title: "Supplier performance and security obligations are periodically reviewed"
     scope:
       applies_to: ["org"]
-      in_scope_under_cz_law: true
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
     requirement:
       type: "monitoring_required"
       must_include:
@@ -109,8 +121,11 @@ rules:
       per Příloha č. 5 of Vyhl. 409/2025 (higher regime)
     scope:
       applies_to: ["contracts"]
-      duty_regime: ["higher"]
-      in_scope_under_cz_law: true
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+        - profile_field: "duty_regime"
+          equals: "higher"
     requirement:
       type: "annex_checklist"
       logic: "ALL_RELEVANT"
@@ -381,8 +396,11 @@ rules:
       of Vyhl. 410/2025 (lower regime)
     scope:
       applies_to: ["contracts"]
-      duty_regime: ["lower"]
-      in_scope_under_cz_law: true
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+        - profile_field: "duty_regime"
+          equals: "lower"
     requirement:
       type: "annex_checklist"
       logic: "ALL_RELEVANT"
@@ -581,7 +599,9 @@ rules:
     title: "Exit/transition strategy exists for significant suppliers"
     scope:
       applies_to: ["org", "contracts"]
-      in_scope_under_cz_law: true
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
     requirement:
       type: "document_and_contract_required"
       must_include:
