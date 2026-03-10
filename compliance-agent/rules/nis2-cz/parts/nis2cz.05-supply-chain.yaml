@@ -1,13 +1,18 @@
 meta:
   ruleset_id: "nis2-cz"
-  version: "1.0-pilot"
+  version: "1.1-annex-checklist"
   status: "complete"
   jurisdiction: ["CZ"]
   evaluation_profile_schema: "rules/nis2-cz/entity_profile.schema.yaml"
+  changelog: |
+    v1.1 (2026-03-10): Replaced topic-list (must_include_any) approach with explicit
+    annex-checklist structure derived from Příloha č. 5 (Vyhl. 409/2025) and
+    Příloha č. 2 (Vyhl. 410/2025). Each checklist item is individually auditable.
 
 rules:
   # ------------------------------------------------------------
   # Supplier / third-party management (řízení dodavatelů)
+  # Non-contract process rules (unchanged from v1.0)
   # ------------------------------------------------------------
   - id: "NIS2CZ-SUP-REGISTER-SIGNIFICANT-SUPPLIERS"
     title: "Significant suppliers are identified, recorded, and notified (higher regime)"
@@ -23,12 +28,10 @@ rules:
         - "evidence_of_written_notification_to_significant_suppliers"
     evidence_hints:
       required:
-        - "significant_suppliers_register"
-        - "supplier_notification_records"
-      artifacts:
-        - "significant_suppliers_register"
-        - "supplier_notification_records"
-        - "supplier_management_policy"
+        - artifact_id: "SUPP-REGISTER"
+        - artifact_id: "SUPP-NOTIFY-RECORDS"
+      optional:
+        - artifact_id: "SUPP-MGMT-POLICY"
     severity: "high"
     sources:
       - citation: "CZ-Decree-409-2025 §9(1)(d)-(e), §9(3)"
@@ -46,12 +49,10 @@ rules:
         - "process_to_require_compliance"
     evidence_hints:
       required:
-        - "supplier_management_policy"
-        - "supplier_acknowledgement_evidence"
-      artifacts:
-        - "supplier_management_policy"
-        - "supplier_code_of_conduct"
-        - "supplier_acknowledgement_evidence"
+        - artifact_id: "SUPP-MGMT-POLICY"
+        - artifact_id: "SUPP-ACK-EVIDENCE"
+      optional:
+        - artifact_id: "SUPP-CODE-OF-CONDUCT"
     severity: "high"
     sources:
       - citation: "CZ-Decree-409-2025 §9(1)(a)-(b)"
@@ -69,73 +70,13 @@ rules:
         - "risk_treatment_actions_and_tracking"
     evidence_hints:
       required:
-        - "supplier_risk_methodology"
-        - "supplier_risk_assessments"
-      artifacts:
-        - "supplier_risk_methodology"
-        - "supplier_risk_assessments"
-        - "risk_register (supplier risks)"
+        - artifact_id: "SUPP-RISK-METHOD"
+        - artifact_id: "SUPP-RISK-ASSESSMENTS"
+      optional:
+        - artifact_id: "RISK-REGISTER"
     severity: "high"
     sources:
       - citation: "CZ-Decree-409-2025 §9(1)(c), §9(2)(a), §9(2)(d)"
-
-  - id: "NIS2CZ-SUP-CONTRACT-CLAUSES-HIGHER"
-    title: "Contracts with significant suppliers contain required security clauses (higher regime)"
-    scope:
-      applies_to: ["contracts"]
-      duty_regime: ["higher"]
-      in_scope_under_cz_law: true
-    requirement:
-      type: "clause_presence"
-      must_include_any:
-        - "information_security_confidentiality_integrity_availability"
-        - "data_use_rights"
-        - "audit_rights"
-        - "supplier_chaining_subcontractors_flowdown"
-        - "security_policies_alignment"
-        - "change_management"
-        - "incident_notification"
-        - "exit_strategy_and_termination_security"
-        - "business_continuity_with_suppliers"
-        - "sla_and_security_levels"
-    evidence_hints:
-      required:
-        - "supplier_contract_template_or_redlines"
-        - "signed_contracts_for_significant_suppliers"
-      artifacts:
-        - "supplier_contract_template_or_redlines"
-        - "signed_contracts_for_significant_suppliers"
-        - "supplier_clause_checklist"
-    severity: "high"
-    sources:
-      - citation: "CZ-Decree-409-2025 §9(1)(f)"
-      - citation: "CZ-Decree-409-2025 Příloha č. 5 (Řízení dodavatelů – smluvní ustanovení)"
-
-  - id: "NIS2CZ-SUP-CONTRACT-CLAUSES-LOWER"
-    title: "Contracts include minimum supplier security clauses (lower regime)"
-    scope:
-      applies_to: ["contracts"]
-      duty_regime: ["lower"]
-      in_scope_under_cz_law: true
-    requirement:
-      type: "clause_presence"
-      must_include_any:
-        - "information_security_confidentiality_integrity_availability"
-        - "audit_rights"
-        - "supplier_chaining"
-        - "exit_strategy"
-        - "incident_notification"
-        - "sla_and_security_levels"
-        - "secure_development_rules (if applicable)"
-    evidence_hints:
-      required:
-        - "supplier_contract_template_or_redlines"
-      artifacts:
-        - "supplier_contract_template_or_redlines"
-        - "sample_supplier_contracts"
-    severity: "medium"
-    sources:
-      - citation: "CZ-Decree-410-2025 Příloha č. 2 (Požadavky na smluvní ujednání s dodavateli)"
 
   - id: "NIS2CZ-SUP-MONITORING"
     title: "Supplier performance and security obligations are periodically reviewed"
@@ -150,15 +91,492 @@ rules:
         - "documented_findings_and_remediation"
     evidence_hints:
       required:
-        - "supplier_review_records"
-      artifacts:
-        - "supplier_review_records"
-        - "supplier_scorecards"
-        - "audit_reports"
+        - artifact_id: "SUPP-REVIEW-RECORDS"
+      optional:
+        - artifact_id: "SUPP-SCORECARDS"
+        - artifact_id: "AUDIT-REPORTS"
     severity: "high"
     sources:
       - citation: "CZ-Decree-409-2025 §9(1)(g), §9(2)(c)-(d)"
 
+  # ------------------------------------------------------------
+  # Contract clause checklists — Annex-based, ALL_RELEVANT logic
+  # ------------------------------------------------------------
+
+  - id: "NIS2CZ-SUP-CONTRACT-ANNEX5-HIGHER"
+    title: >
+      Contracts with significant suppliers contain required security clauses
+      per Příloha č. 5 of Vyhl. 409/2025 (higher regime)
+    scope:
+      applies_to: ["contracts"]
+      duty_regime: ["higher"]
+      in_scope_under_cz_law: true
+    requirement:
+      type: "annex_checklist"
+      logic: "ALL_RELEVANT"
+      note: >
+        Each item must be present in the contract unless marked not applicable
+        (with documented justification). All items are required_by_default unless
+        applicability specifies a condition.
+      checklist:
+        - id: "ANN5-a"
+          title_cs: "Ustanovení o bezpečnosti informací z pohledu důvěrnosti (včetně ustanovení o mlčenlivosti), integrity a dostupnosti"
+          title_en: "Information security clause covering confidentiality (incl. NDA), integrity, and availability"
+          required_by_default: true
+          acceptance_criteria:
+            - "Contract explicitly addresses confidentiality and NDA obligations"
+            - "Integrity requirements for data and systems are stated"
+            - "Availability / service continuity obligations are stated"
+          keywords_cs: ["důvěrnost", "mlčenlivost", "integrita", "dostupnost", "bezpečnost informací"]
+          keywords_en: ["confidentiality", "NDA", "integrity", "availability", "information security"]
+          red_flags:
+            - "No mention of confidentiality or NDA"
+            - "No CIA triad requirements stated in contract"
+
+        - id: "ANN5-b"
+          title_cs: "Ustanovení o oprávnění užívat data"
+          title_en: "Data use rights clause"
+          required_by_default: true
+          acceptance_criteria:
+            - "Contract specifies who is entitled to use, process, and retain data"
+            - "Limitations on data use by supplier are explicit"
+          keywords_cs: ["oprávnění", "užívat data", "data", "zpracování"]
+          keywords_en: ["data use rights", "data processing", "data entitlement"]
+          red_flags:
+            - "Contract silent on data use rights"
+            - "Supplier granted unrestricted use of client data"
+
+        - id: "ANN5-c"
+          title_cs: "Ustanovení o autorství programového kódu, popřípadě o programových licencích"
+          title_en: "Clause on code ownership and/or software licences"
+          required_by_default: false
+          applicability: "Required when supplier develops, modifies, or delivers software/code"
+          acceptance_criteria:
+            - "IP ownership of custom code is clearly assigned"
+            - "Software licence terms are specified (type, scope, transferability)"
+          keywords_cs: ["autorství", "programový kód", "licence", "software"]
+          keywords_en: ["code ownership", "IP", "software licence", "source code"]
+          red_flags:
+            - "Custom code developed with no IP ownership clause"
+            - "Licence type unspecified for delivered software"
+
+        - id: "ANN5-d"
+          title_cs: "Ustanovení o kontrole zavedených bezpečnostních opatření (pravidla zákaznického auditu)"
+          title_en: "Audit rights clause – customer audit rules for security measures"
+          required_by_default: true
+          acceptance_criteria:
+            - "Customer has contractual right to audit supplier security measures"
+            - "Audit process, notice periods, and frequency are defined"
+          keywords_cs: ["audit", "kontrola", "bezpečnostní opatření", "zákaznický audit"]
+          keywords_en: ["audit rights", "customer audit", "security audit", "right to audit"]
+          red_flags:
+            - "No audit rights granted to customer"
+            - "Audit rights limited to certifications only without direct access"
+
+        - id: "ANN5-e"
+          title_cs: "Ustanovení upravující řetězení dodavatelů (subdodavatelé musí dodržovat ujednání v plném rozsahu)"
+          title_en: "Supplier chaining / subcontracting clause – flowdown of obligations"
+          required_by_default: true
+          acceptance_criteria:
+            - "Subcontractors are required to comply with all security obligations"
+            - "Supplier must obtain customer consent or notify before engaging subcontractors for critical services"
+            - "No subcontractor may act contrary to customer requirements"
+          keywords_cs: ["řetězení dodavatelů", "subdodavatelé", "subdodavatel", "flowdown"]
+          keywords_en: ["supplier chaining", "subcontractors", "flowdown", "back-to-back"]
+          red_flags:
+            - "Subcontracting permitted without restriction or notification"
+            - "No obligation for subdodavatelé to comply with security requirements"
+
+        - id: "ANN5-f"
+          title_cs: "Ustanovení o povinnosti dodavatele dodržovat bezpečnostní politiky povinné osoby nebo o odsouhlasení bezpečnostních politik dodavatele"
+          title_en: "Security policy alignment clause – supplier must follow or agree to customer security policies"
+          required_by_default: true
+          acceptance_criteria:
+            - "Supplier commits to comply with customer security policies, OR"
+            - "Customer has reviewed and accepted supplier security policies applicable to the contract"
+          keywords_cs: ["bezpečnostní politiky", "soulad", "odsouhlasení", "politiky dodavatele"]
+          keywords_en: ["security policies", "policy compliance", "policy alignment", "policy acceptance"]
+          red_flags:
+            - "No reference to security policies in contract"
+            - "Supplier has no obligation to align with customer security requirements"
+
+        - id: "ANN5-g"
+          title_cs: "Ustanovení o řízení změn"
+          title_en: "Change management clause"
+          required_by_default: true
+          acceptance_criteria:
+            - "Contract defines process for managing and approving changes"
+            - "Security impact assessment of changes is required"
+          keywords_cs: ["řízení změn", "změny", "schválení změn"]
+          keywords_en: ["change management", "change control", "change approval"]
+          red_flags:
+            - "No change management process defined"
+            - "Supplier can make changes without customer notification"
+
+        - id: "ANN5-h"
+          title_cs: "Ustanovení o souladu smluv s obecně závaznými právními předpisy"
+          title_en: "Legal compliance clause – contract must comply with applicable law"
+          required_by_default: true
+          acceptance_criteria:
+            - "Contract explicitly requires both parties to comply with applicable laws and regulations"
+          keywords_cs: ["právní předpisy", "soulad", "zákonnost", "regulatorní požadavky"]
+          keywords_en: ["legal compliance", "regulatory compliance", "applicable law"]
+          red_flags:
+            - "No legal compliance clause present"
+
+        - id: "ANN5-i"
+          title_cs: "Ustanovení o povinnosti dodavatele informovat povinnou osobu (5 dílčích povinností)"
+          title_en: "Supplier notification obligations (5 sub-duties)"
+          required_by_default: true
+          acceptance_criteria:
+            - "ANN5-i-1: Supplier notifies customer of cyber security incidents related to contract performance"
+            - "ANN5-i-2: Supplier reports on its own risk management and residual risks related to contract"
+            - "ANN5-i-3: Supplier notifies customer of significant change of control (ownership/assets used for contract)"
+            - "ANN5-i-4: Supplier notifies customer of foreign authority requests for data (unless prohibited by law)"
+            - "ANN5-i-5: Supplier discloses natural persons with access to customer confidential information (security roles, pentesters, admins)"
+          keywords_cs: ["informovat", "hlášení", "kybernetický incident", "změna vlastnictví", "cizozemský orgán", "fyzické osoby", "penetrační tester"]
+          keywords_en: ["notification", "incident reporting", "ownership change", "foreign authority", "personnel disclosure", "pentesters"]
+          red_flags:
+            - "No incident notification obligation"
+            - "Supplier not required to disclose ownership changes"
+            - "No obligation to report foreign government data requests"
+            - "No requirement to identify personnel accessing confidential information"
+
+        - id: "ANN5-j"
+          title_cs: "Specifikace podmínek z pohledu bezpečnosti při ukončení smlouvy (exit strategie)"
+          title_en: "Exit strategy clause – security conditions on contract termination"
+          required_by_default: true
+          acceptance_criteria:
+            - "Transition period arrangements and continuity during handover are defined"
+            - "Data migration process and timelines are specified"
+            - "Data deletion / return obligations upon termination are included"
+          keywords_cs: ["exit strategie", "ukončení smlouvy", "přechodné období", "migrace dat"]
+          keywords_en: ["exit strategy", "contract termination", "transition period", "data migration", "data return"]
+          red_flags:
+            - "No exit strategy or termination security conditions"
+            - "Data fate upon termination unspecified"
+
+        - id: "ANN5-k"
+          title_cs: "Specifikace podmínek pro řízení kontinuity činností v souvislosti s dodavateli"
+          title_en: "Business continuity clause – supplier involvement in BCP/DRP"
+          required_by_default: true
+          acceptance_criteria:
+            - "Supplier is included in customer BCM/DRP plans"
+            - "Supplier tasks during BCM activation are defined"
+            - "Recovery objectives (RTO/RPO) are agreed"
+          keywords_cs: ["kontinuita", "obnova", "BCP", "DRP", "plán kontinuity"]
+          keywords_en: ["business continuity", "BCM", "DRP", "recovery plan", "RTO", "RPO"]
+          red_flags:
+            - "No business continuity obligations for supplier"
+            - "Supplier excluded from BCP/DRP"
+
+        - id: "ANN5-l"
+          title_cs: "Specifikace náležitostí smlouvy o úrovni služeb (SLA) a způsobu a úrovni realizace bezpečnostních opatření"
+          title_en: "SLA clause – service levels and security measure implementation requirements"
+          required_by_default: true
+          acceptance_criteria:
+            - "SLA defines measurable service levels (availability, response times)"
+            - "Security measure implementation levels and verification methods are specified"
+          keywords_cs: ["SLA", "smlouva o úrovni služeb", "bezpečnostní opatření", "úroveň služeb"]
+          keywords_en: ["SLA", "service level agreement", "security measures", "service levels"]
+          red_flags:
+            - "No SLA or service level metrics"
+            - "Security implementation requirements absent from SLA"
+
+        - id: "ANN5-m"
+          title_cs: "Ustanovení o dodržování pravidel bezpečného vývoje"
+          title_en: "Secure development rules compliance clause"
+          required_by_default: false
+          applicability: "Required when supplier develops, integrates, or maintains software/code on behalf of customer"
+          acceptance_criteria:
+            - "Contract references secure development lifecycle (SDLC) requirements"
+            - "Standards or frameworks for secure development are specified (e.g. OWASP, ISO 27034)"
+          keywords_cs: ["bezpečný vývoj", "SDLC", "bezpečnost vývoje", "secure coding"]
+          keywords_en: ["secure development", "SDLC", "secure coding", "software security"]
+          red_flags:
+            - "No secure development requirements despite software delivery scope"
+
+        - id: "ANN5-n"
+          title_cs: "Specifikace podmínek pro formát předání dat a informací po vyžádání povinnou osobou"
+          title_en: "Data format and handover specification clause"
+          required_by_default: true
+          acceptance_criteria:
+            - "Data format for handover upon request is specified (e.g. structured formats, APIs)"
+            - "Timelines for data delivery are defined"
+          keywords_cs: ["formát dat", "předání dat", "export dat", "datový formát"]
+          keywords_en: ["data format", "data handover", "data export", "data delivery"]
+          red_flags:
+            - "No data format or handover conditions defined"
+
+        - id: "ANN5-o"
+          title_cs: "Pravidla pro likvidaci dat"
+          title_en: "Data disposal / destruction rules"
+          required_by_default: true
+          acceptance_criteria:
+            - "Contract specifies how and when data is destroyed after termination or upon request"
+            - "Verification/certification of data destruction is required"
+          keywords_cs: ["likvidace dat", "mazání dat", "zničení dat", "disposal"]
+          keywords_en: ["data disposal", "data destruction", "data erasure", "sanitisation"]
+          red_flags:
+            - "No data disposal obligations"
+            - "Supplier retains data indefinitely after contract end"
+
+        - id: "ANN5-p"
+          title_cs: "Ustanovení o právu jednostranně odstoupit od smlouvy bez výpovědní doby při významné změně kontroly nad dodavatelem nebo aktiv"
+          title_en: "Unilateral termination right on significant ownership or asset control change"
+          required_by_default: true
+          acceptance_criteria:
+            - "Customer has explicit right to terminate without notice period if supplier undergoes significant ownership change"
+            - "Significant change of control over key assets used in contract delivery triggers termination right"
+          keywords_cs: ["odstoupit od smlouvy", "výpovědní doba", "změna kontroly", "změna vlastnictví"]
+          keywords_en: ["termination right", "no notice period", "change of control", "ownership change"]
+          red_flags:
+            - "No termination right on supplier ownership change"
+            - "Termination requires full notice period even on hostile ownership change"
+
+        - id: "ANN5-q"
+          title_cs: "Ustanovení o sankcích za porušení povinností"
+          title_en: "Sanctions / penalties clause for breach of obligations"
+          required_by_default: true
+          acceptance_criteria:
+            - "Contract defines financial or other sanctions for breach of security or contractual obligations"
+          keywords_cs: ["sankce", "porušení povinností", "penále", "smluvní pokuta"]
+          keywords_en: ["sanctions", "penalties", "liquidated damages", "breach of contract"]
+          red_flags:
+            - "No sanctions for security obligation breaches"
+
+        - id: "ANN5-r"
+          title_cs: "Ustanovení o zpřístupnění nebo předání dat na základě žádosti cizozemského orgánu (3 podmínky)"
+          title_en: "Foreign authority data disclosure clause (3 conditions)"
+          required_by_default: true
+          acceptance_criteria:
+            - "ANN5-r-1: Supplier may disclose data only after reviewing lawfulness of the foreign authority request"
+            - "ANN5-r-2: Supplier must first exhaust efforts to prevent disclosure within legal means available"
+            - "ANN5-r-3: Any disclosure is limited to the minimum necessary scope"
+          keywords_cs: ["cizozemský orgán", "předání dat", "zákonnost", "minimální rozsah", "zpřístupnění dat"]
+          keywords_en: ["foreign authority", "data disclosure", "lawfulness review", "minimum necessary", "data transfer"]
+          red_flags:
+            - "No restrictions on supplier complying with foreign authority data requests"
+            - "No lawfulness review obligation"
+            - "No data minimisation on foreign authority disclosures"
+
+    evidence_hints:
+      required:
+        - artifact_id: "SUPP-CONTRACT-TEMPLATE"
+        - artifact_id: "SUPP-CONTRACTS-SIGNED"
+      optional:
+        - artifact_id: "SUPP-CLAUSE-CHECKLIST"
+    severity: "high"
+    sources:
+      - citation: "CZ-Decree-409-2025 §9(1)(f)"
+      - citation: "CZ-Decree-409-2025 Příloha č. 5 – Řízení dodavatelů – bezpečnostní opatření pro smluvní vztahy (items a–r)"
+
+  # ------------------------------------------------------------
+  # Decree 410/2025 – Lower regime contract clause checklist
+  # ------------------------------------------------------------
+
+  - id: "NIS2CZ-SUP-CONTRACT-ANNEX2-LOWER"
+    title: >
+      Contracts with suppliers contain required security clauses per Příloha č. 2
+      of Vyhl. 410/2025 (lower regime)
+    scope:
+      applies_to: ["contracts"]
+      duty_regime: ["lower"]
+      in_scope_under_cz_law: true
+    requirement:
+      type: "annex_checklist"
+      logic: "ALL_RELEVANT"
+      note: >
+        Each item must be addressed in contracts where relevant.
+        Applicability is determined per contract context. Document justification
+        for any item marked not applicable.
+      checklist:
+        - id: "ANN2-a"
+          title_cs: "Ustanovení o bezpečnosti informací z pohledu důvěrnosti (včetně ustanovení o mlčenlivosti), integrity a dostupnosti"
+          title_en: "Information security clause – confidentiality (incl. NDA), integrity, availability"
+          required_by_default: true
+          acceptance_criteria:
+            - "Contract addresses confidentiality and NDA"
+            - "Integrity requirements stated"
+            - "Availability / continuity obligations included"
+          keywords_cs: ["důvěrnost", "mlčenlivost", "integrita", "dostupnost", "bezpečnost informací"]
+          keywords_en: ["confidentiality", "NDA", "integrity", "availability", "information security"]
+          red_flags:
+            - "No CIA requirements in contract"
+
+        - id: "ANN2-b"
+          title_cs: "Ustanovení o auditu dodavatele související s plněním smlouvy"
+          title_en: "Supplier audit rights clause related to contract performance"
+          required_by_default: true
+          acceptance_criteria:
+            - "Customer has right to audit supplier compliance with contract obligations"
+            - "Audit scope, notice, and process defined"
+          keywords_cs: ["audit", "kontrola", "právo auditu", "plnění smlouvy"]
+          keywords_en: ["audit rights", "right to audit", "contract audit", "audit clause"]
+          red_flags:
+            - "No audit rights"
+            - "Supplier can refuse audit"
+
+        - id: "ANN2-c"
+          title_cs: "Ustanovení o řetězení dodavatelů"
+          title_en: "Supplier chaining / subcontracting clause"
+          required_by_default: true
+          acceptance_criteria:
+            - "Subcontracting is regulated (permitted only with consent or notification)"
+            - "Security obligations flow down to subcontractors"
+          keywords_cs: ["řetězení dodavatelů", "subdodavatelé", "subdodávky"]
+          keywords_en: ["supplier chaining", "subcontracting", "subcontractors", "flowdown"]
+          red_flags:
+            - "Unrestricted subcontracting without security flowdown"
+
+        - id: "ANN2-d"
+          title_cs: "Ustanovení upravující tzv. exit strategii, podmínky ukončení smluvního vztahu z pohledu bezpečnosti informací"
+          title_en: "Exit strategy clause – termination conditions from information security perspective"
+          required_by_default: true
+          acceptance_criteria:
+            - "Data return or destruction on termination is specified"
+            - "Transition/handover period and security obligations during it are defined"
+          keywords_cs: ["exit strategie", "ukončení", "bezpečnost informací", "přechod"]
+          keywords_en: ["exit strategy", "termination", "information security", "transition"]
+          red_flags:
+            - "No exit strategy"
+            - "Data fate on termination unspecified"
+
+        - id: "ANN2-e"
+          title_cs: "Ustanovení o sankcích za porušení smluvních povinností"
+          title_en: "Sanctions for breach of contractual obligations"
+          required_by_default: true
+          acceptance_criteria:
+            - "Financial or other sanctions defined for breach of security obligations"
+          keywords_cs: ["sankce", "porušení", "smluvní pokuta", "penále"]
+          keywords_en: ["sanctions", "penalties", "breach", "liquidated damages"]
+          red_flags:
+            - "No sanctions for security breaches"
+
+        - id: "ANN2-f"
+          title_cs: "Ustanovení o oprávnění užívat data"
+          title_en: "Data use rights clause"
+          required_by_default: true
+          acceptance_criteria:
+            - "Data use rights and limitations clearly defined"
+            - "Supplier cannot use data for purposes beyond contract"
+          keywords_cs: ["oprávnění", "data", "užívání dat", "zpracování"]
+          keywords_en: ["data use rights", "data processing rights", "data entitlement"]
+          red_flags:
+            - "No data use rights clause"
+
+        - id: "ANN2-g"
+          title_cs: "Ustanovení o autorství programového kódu, případně o programových licencích"
+          title_en: "Code ownership and/or software licence clause"
+          required_by_default: false
+          applicability: "Required when supplier develops or delivers software/code"
+          acceptance_criteria:
+            - "IP/code ownership is clearly assigned"
+            - "Software licence type and scope are specified"
+          keywords_cs: ["autorství", "programový kód", "licence", "software", "IP"]
+          keywords_en: ["code ownership", "software licence", "IP", "source code"]
+          red_flags:
+            - "Code ownership unresolved despite software delivery scope"
+
+        - id: "ANN2-h"
+          title_cs: "Ustanovení o důvěrnosti smluvního vztahu"
+          title_en: "Contract confidentiality clause"
+          required_by_default: true
+          acceptance_criteria:
+            - "Contract terms themselves are treated as confidential"
+            - "Obligations not to disclose contract terms to third parties stated"
+          keywords_cs: ["důvěrnost", "smlouva", "mlčenlivost", "smluvní vztah"]
+          keywords_en: ["contract confidentiality", "NDA", "non-disclosure", "contract terms confidential"]
+          red_flags:
+            - "No contract confidentiality obligations"
+
+        - id: "ANN2-i"
+          title_cs: "Ustanovení o povinnosti dodavatele dodržovat bezpečnostní politiky povinné osoby nebo o odsouhlasení bezpečnostních politik dodavatele"
+          title_en: "Security policy compliance / alignment clause"
+          required_by_default: true
+          acceptance_criteria:
+            - "Supplier required to comply with customer security policies, OR"
+            - "Supplier security policies reviewed and accepted by customer"
+          keywords_cs: ["bezpečnostní politiky", "soulad", "odsouhlasení"]
+          keywords_en: ["security policies", "policy compliance", "policy alignment"]
+          red_flags:
+            - "No security policy obligations"
+
+        - id: "ANN2-j"
+          title_cs: "Ustanovení o řízení změn"
+          title_en: "Change management clause"
+          required_by_default: true
+          acceptance_criteria:
+            - "Change management process defined in contract"
+            - "Security impact of changes must be assessed"
+          keywords_cs: ["řízení změn", "změny", "schválení"]
+          keywords_en: ["change management", "change control"]
+          red_flags:
+            - "No change management clause"
+
+        - id: "ANN2-k"
+          title_cs: "Ustanovení o kybernetických bezpečnostních incidentech souvisejících s plněním smlouvy"
+          title_en: "Cyber security incident notification clause"
+          required_by_default: true
+          acceptance_criteria:
+            - "Supplier must notify customer of security incidents related to contract performance"
+            - "Notification timelines and escalation paths are defined"
+          keywords_cs: ["kybernetický incident", "bezpečnostní incident", "hlášení", "notifikace"]
+          keywords_en: ["cyber security incident", "incident notification", "incident reporting"]
+          red_flags:
+            - "No incident notification obligation"
+
+        - id: "ANN2-l"
+          title_cs: "Ustanovení upravující zajištění řízení kontinuity činností"
+          title_en: "Business continuity management clause"
+          required_by_default: true
+          acceptance_criteria:
+            - "Supplier has business continuity obligations"
+            - "BCM/DRP requirements for supplier are included"
+          keywords_cs: ["kontinuita", "obnova", "BCP", "plán kontinuity"]
+          keywords_en: ["business continuity", "BCM", "DRP", "recovery"]
+          red_flags:
+            - "No business continuity obligations for supplier"
+
+        - id: "ANN2-m"
+          title_cs: "Náležitosti smlouvy o úrovni služeb (SLA) a způsobu a úrovni realizace bezpečnostních opatření"
+          title_en: "SLA clause – service levels and security measure implementation"
+          required_by_default: true
+          acceptance_criteria:
+            - "SLA with measurable service levels is included"
+            - "Security measure implementation levels are specified"
+          keywords_cs: ["SLA", "úroveň služeb", "bezpečnostní opatření"]
+          keywords_en: ["SLA", "service level agreement", "security measures"]
+          red_flags:
+            - "No SLA defined"
+
+        - id: "ANN2-n"
+          title_cs: "Ustanovení o dodržování pravidel bezpečného vývoje"
+          title_en: "Secure development rules compliance clause"
+          required_by_default: false
+          applicability: "Required when supplier develops or maintains software"
+          acceptance_criteria:
+            - "Secure development lifecycle requirements referenced"
+            - "Specific standards or practices (e.g. OWASP) named"
+          keywords_cs: ["bezpečný vývoj", "secure coding", "SDLC"]
+          keywords_en: ["secure development", "secure coding", "SDLC", "software security"]
+          red_flags:
+            - "No secure development requirements despite software scope"
+
+    evidence_hints:
+      required:
+        - artifact_id: "SUPP-CONTRACT-TEMPLATE"
+      optional:
+        - artifact_id: "SUPP-CONTRACTS-SIGNED"
+        - artifact_id: "SUPP-CLAUSE-CHECKLIST"
+    severity: "medium"
+    sources:
+      - citation: "CZ-Decree-410-2025 §6(5)"
+      - citation: "CZ-Decree-410-2025 Příloha č. 2 – Požadavky na smluvní ujednání s dodavateli (items a–n)"
+
+  # ------------------------------------------------------------
+  # Exit strategy (process-level, both regimes)
+  # ------------------------------------------------------------
   - id: "NIS2CZ-SUP-EXIT-STRATEGY"
     title: "Exit/transition strategy exists for significant suppliers"
     scope:
@@ -172,13 +590,11 @@ rules:
         - "migration_plan_for_critical_dependencies"
     evidence_hints:
       required:
-        - "supplier_exit_plans"
-        - "contract_exit_clauses"
-      artifacts:
-        - "supplier_exit_plans"
-        - "contract_exit_clauses"
-        - "dependency_map"
+        - artifact_id: "SUPP-EXIT-PLANS"
+        - artifact_id: "SUPP-CONTRACT-EXIT-CLAUSES"
+      optional:
+        - artifact_id: "SUPP-DEPENDENCY-MAP"
     severity: "high"
     sources:
-      - citation: "CZ-Decree-409-2025 Příloha č. 5 (exit strategie)"
-      - citation: "CZ-Decree-410-2025 Příloha č. 2 (exit strategie)"
+      - citation: "CZ-Decree-409-2025 Příloha č. 5 item j (exit strategie)"
+      - citation: "CZ-Decree-410-2025 Příloha č. 2 item d (exit strategie)"

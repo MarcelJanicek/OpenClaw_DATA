@@ -1,0 +1,224 @@
+meta:
+  ruleset_id: "nis2-cz"
+  version: "1.1"
+  description: >
+    Evidence Artifact Catalog for the NIS2-CZ ruleset.
+    Defines canonical artifact IDs referenced in evidence_hints across all rule parts.
+    Each artifact has a human-readable label, description, and the rule IDs that require it.
+  last_updated: "2026-03-10"
+
+artifacts:
+  # ------------------------------------------------------------------
+  # Supplier management – process artifacts
+  # ------------------------------------------------------------------
+  - artifact_id: "SUPP-REGISTER"
+    label: "Significant Suppliers Register"
+    label_cs: "Registr významných dodavatelů"
+    description: >
+      A maintained register listing all suppliers classified as significant,
+      including criteria used for classification and date of last review.
+    format_hints:
+      - "Spreadsheet or ISMS-integrated register"
+      - "Includes: supplier name, service scope, significance criteria met, classification date, review date"
+    referenced_by:
+      - "NIS2CZ-SUP-REGISTER-SIGNIFICANT-SUPPLIERS"
+
+  - artifact_id: "SUPP-NOTIFY-RECORDS"
+    label: "Supplier Notification Records"
+    label_cs: "Záznamy o notifikaci dodavatelů"
+    description: >
+      Evidence that significant suppliers have been notified of their status
+      and associated obligations (written form preferred).
+    format_hints:
+      - "Copies of notification letters or emails"
+      - "Supplier acknowledgement receipts"
+    referenced_by:
+      - "NIS2CZ-SUP-REGISTER-SIGNIFICANT-SUPPLIERS"
+
+  - artifact_id: "SUPP-MGMT-POLICY"
+    label: "Supplier Management Policy"
+    label_cs: "Politika řízení dodavatelů"
+    description: >
+      Documented policy defining how suppliers are identified, classified,
+      engaged, monitored, and offboarded, linked to the ISMS.
+    format_hints:
+      - "Policy document approved by management"
+      - "Version-controlled; annually reviewed"
+    referenced_by:
+      - "NIS2CZ-SUP-REGISTER-SIGNIFICANT-SUPPLIERS"
+      - "NIS2CZ-SUP-RULES-COMMUNICATION"
+
+  - artifact_id: "SUPP-ACK-EVIDENCE"
+    label: "Supplier Acknowledgement Evidence"
+    label_cs: "Doklady o akceptaci dodavatelů"
+    description: >
+      Evidence that suppliers have acknowledged and agreed to comply with
+      security rules and policies (signed agreements, portal acceptances, etc.).
+    format_hints:
+      - "Signed supplier code of conduct"
+      - "Contractual confirmation of security obligations"
+    referenced_by:
+      - "NIS2CZ-SUP-RULES-COMMUNICATION"
+
+  - artifact_id: "SUPP-CODE-OF-CONDUCT"
+    label: "Supplier Code of Conduct / Security Requirements"
+    label_cs: "Kodex chování dodavatele / bezpečnostní požadavky"
+    description: >
+      Document specifying the security, ethical, and operational requirements
+      expected of all suppliers.
+    format_hints:
+      - "Standalone document or annex to contract template"
+    referenced_by:
+      - "NIS2CZ-SUP-RULES-COMMUNICATION"
+
+  - artifact_id: "SUPP-RISK-METHOD"
+    label: "Supplier Risk Assessment Methodology"
+    label_cs: "Metodika hodnocení rizik dodavatelů"
+    description: >
+      Documented methodology for assessing risks associated with suppliers,
+      covering criteria, scoring, and classification of risk levels.
+    format_hints:
+      - "Risk methodology document"
+      - "May be part of enterprise-wide risk management framework"
+    referenced_by:
+      - "NIS2CZ-SUP-RISK-MGMT"
+
+  - artifact_id: "SUPP-RISK-ASSESSMENTS"
+    label: "Supplier Risk Assessments"
+    label_cs: "Hodnocení rizik dodavatelů"
+    description: >
+      Individual risk assessments performed for each significant supplier,
+      documenting identified risks, scores, and treatment decisions.
+    format_hints:
+      - "One assessment per significant supplier"
+      - "Dated and reviewed periodically (at least annually)"
+    referenced_by:
+      - "NIS2CZ-SUP-RISK-MGMT"
+
+  - artifact_id: "RISK-REGISTER"
+    label: "Risk Register (Supplier Risks)"
+    label_cs: "Registr rizik (rizika dodavatelů)"
+    description: >
+      Enterprise or ISMS risk register with supplier-specific risks captured,
+      including residual risk status and treatment tracking.
+    format_hints:
+      - "Risk register with supplier risk category / tag"
+    referenced_by:
+      - "NIS2CZ-SUP-RISK-MGMT"
+
+  - artifact_id: "SUPP-REVIEW-RECORDS"
+    label: "Supplier Review Records"
+    label_cs: "Záznamy z přezkumů dodavatelů"
+    description: >
+      Records of periodic reviews of supplier security performance and
+      SLA compliance, including findings and remediation actions.
+    format_hints:
+      - "Meeting minutes, scorecards, or structured review reports"
+      - "At minimum annual for significant suppliers"
+    referenced_by:
+      - "NIS2CZ-SUP-MONITORING"
+
+  - artifact_id: "SUPP-SCORECARDS"
+    label: "Supplier Scorecards"
+    label_cs: "Hodnotící karty dodavatelů"
+    description: >
+      Periodic performance scorecards for significant suppliers covering
+      security, service levels, and compliance metrics.
+    format_hints:
+      - "Spreadsheet or GRC-tool output"
+    referenced_by:
+      - "NIS2CZ-SUP-MONITORING"
+
+  - artifact_id: "AUDIT-REPORTS"
+    label: "Supplier Audit Reports"
+    label_cs: "Zprávy z auditů dodavatelů"
+    description: >
+      Reports from audits of suppliers (first-, second-, or third-party),
+      including findings, non-conformances, and remediation tracking.
+    format_hints:
+      - "Formal audit report"
+      - "Certification audit reports (e.g. ISO 27001) accepted as supplementary evidence"
+    referenced_by:
+      - "NIS2CZ-SUP-MONITORING"
+
+  # ------------------------------------------------------------------
+  # Contract artifacts
+  # ------------------------------------------------------------------
+  - artifact_id: "SUPP-CONTRACT-TEMPLATE"
+    label: "Supplier Contract Template / Security Redlines"
+    label_cs: "Vzor smlouvy s dodavatelem / bezpečnostní ustanovení"
+    description: >
+      Standard contract template or security clause addendum used when
+      contracting with suppliers, containing all required annex items.
+    format_hints:
+      - "Legal document (DOCX/PDF)"
+      - "Should reference which items are mandatory vs. conditional"
+      - "Must be version-controlled and legally reviewed"
+    referenced_by:
+      - "NIS2CZ-SUP-CONTRACT-ANNEX5-HIGHER"
+      - "NIS2CZ-SUP-CONTRACT-ANNEX2-LOWER"
+
+  - artifact_id: "SUPP-CONTRACTS-SIGNED"
+    label: "Signed Supplier Contracts"
+    label_cs: "Podepsané smlouvy s dodavateli"
+    description: >
+      Executed contracts with significant suppliers that incorporate the
+      required security clauses per applicable annex.
+    format_hints:
+      - "Signed contract copies (PDF) stored securely"
+      - "Index/register of signed contracts by supplier and date"
+    referenced_by:
+      - "NIS2CZ-SUP-CONTRACT-ANNEX5-HIGHER"
+      - "NIS2CZ-SUP-CONTRACT-ANNEX2-LOWER"
+
+  - artifact_id: "SUPP-CLAUSE-CHECKLIST"
+    label: "Supplier Contract Clause Checklist"
+    label_cs: "Kontrolní seznam smluvních ustanovení dodavatele"
+    description: >
+      Per-contract checklist confirming presence of each required annex item,
+      with applicability determination and gap notes.
+    format_hints:
+      - "Spreadsheet or structured YAML/JSON per contract"
+      - "Columns: item ID, title, applicable (Y/N), location in contract (section/page), gap notes"
+      - "Signed off by legal and security reviewer"
+    referenced_by:
+      - "NIS2CZ-SUP-CONTRACT-ANNEX5-HIGHER"
+      - "NIS2CZ-SUP-CONTRACT-ANNEX2-LOWER"
+
+  # ------------------------------------------------------------------
+  # Exit / transition artifacts
+  # ------------------------------------------------------------------
+  - artifact_id: "SUPP-EXIT-PLANS"
+    label: "Supplier Exit / Transition Plans"
+    label_cs: "Plány exit strategie pro dodavatele"
+    description: >
+      Documented exit and transition plans for significant suppliers,
+      covering migration, data return/disposal, and continuity during handover.
+    format_hints:
+      - "One plan per critical/significant supplier"
+      - "Reviewed annually and tested for critical suppliers"
+    referenced_by:
+      - "NIS2CZ-SUP-EXIT-STRATEGY"
+
+  - artifact_id: "SUPP-CONTRACT-EXIT-CLAUSES"
+    label: "Contract Exit / Termination Security Clauses"
+    label_cs: "Smluvní ustanovení o exit strategii"
+    description: >
+      Contractual provisions governing termination conditions, data return,
+      migration periods, and security obligations on contract exit.
+    format_hints:
+      - "Specific contract sections; referenced in clause checklist under ANN5-j / ANN2-d"
+    referenced_by:
+      - "NIS2CZ-SUP-EXIT-STRATEGY"
+
+  - artifact_id: "SUPP-DEPENDENCY-MAP"
+    label: "Supplier Dependency Map"
+    label_cs: "Mapa závislostí na dodavatelích"
+    description: >
+      Map of critical dependencies on significant suppliers, identifying
+      which regulated services or assets depend on which suppliers.
+    format_hints:
+      - "Diagram or structured table"
+      - "Input to BCP/DRP and exit planning"
+    referenced_by:
+      - "NIS2CZ-SUP-EXIT-STRATEGY"
