@@ -30,4 +30,4 @@ python3 scripts/gdpr_merge.py
 ## Snapshot
 
 - Total merged rules: **79**
-- Last verified build: **2026-03-10 05:48 UTC**
+- Last verified build: **2026-03-10 06:09 UTC**
