@@ -1720,3 +1720,106 @@ rules:
   - citation: GDPR Art. 37(5)
   - citation: GDPR Art. 37(7)
   - citation: GDPR Recital 97
+- id: GDPR-ART38-DPO-POSITION
+  title: DPO is involved timely, supported, and able to operate independently without conflicts
+  scope:
+    applies_to:
+    - org
+    roles:
+    - controller
+    - processor
+  condition: Only if a DPO is required/appointed for the organisation (see Art. 37 triggers)
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: timely_involvement
+      description: The DPO is involved properly and in a timely manner in all issues relating to the protection of personal data (e.g., product changes, new processing activities, DPIAs, incidents, DSAR process design).
+    - key: resources_and_access
+      description: The organisation provides the DPO with necessary resources (time, budget, tools), access to personal data processing information, and access to relevant stakeholders to perform tasks.
+    - key: independence_no_instructions
+      description: The DPO does not receive instructions regarding the exercise of tasks; the organisation avoids interference and ensures the DPO can perform duties independently.
+    - key: no_dismissal_or_penalisation
+      description: The DPO is not dismissed or penalised for performing tasks (including raising concerns), and protections are documented.
+    - key: reporting_to_highest_management
+      description: The DPO reports directly to the highest management level and has an escalation path for unresolved privacy risks.
+    - key: conflict_of_interest_managed
+      description: Conflicts of interest are identified and managed (e.g., DPO does not hold a role that determines purposes/means of processing); conflict assessment is documented and reviewed.
+    - key: contactability_for_data_subjects
+      description: Data subjects can contact the DPO on issues related to processing of their personal data and exercise of their rights; communications are routed and tracked appropriately.
+  evidence_hints:
+    required:
+    - dpo_job_description_and_reporting_line (shows direct reporting to highest management)
+    - governance_policy_or_charter_describing_dpo_independence_and_no_instruction
+    - dpo_resource_plan_or_budget_and_tooling_access_evidence
+    - meeting_invites_or_change_management_gates_showing_dpo_involvement (redacted)
+    - conflict_of_interest_assessment_for_dpo_role (and periodic review)
+    - evidence_of_dpo_contact_channel_and_routing_workflow (e.g., inbox/ticket queue) (redacted)
+    artifacts:
+    - dpo_job_description_and_reporting_line (shows direct reporting to highest management)
+    - governance_policy_or_charter_describing_dpo_independence_and_no_instruction
+    - dpo_resource_plan_or_budget_and_tooling_access_evidence
+    - meeting_invites_or_change_management_gates_showing_dpo_involvement (redacted)
+    - conflict_of_interest_assessment_for_dpo_role (and periodic review)
+    - evidence_of_dpo_contact_channel_and_routing_workflow (e.g., inbox/ticket queue) (redacted)
+    questions:
+    - How is the DPO brought into new projects/incidents/DSAR design early enough to influence outcomes?
+    - What resources and access does the DPO have (people, systems, budget), and who do they report to?
+    - How do you assess and prevent conflicts of interest for the DPO role?
+    checks:
+    - Confirm the DPO has direct reporting to highest management, documented independence, and conflict-of-interest controls.
+  severity: high
+  sources:
+  - citation: GDPR Art. 38(1)
+  - citation: GDPR Art. 38(2)
+  - citation: GDPR Art. 38(3)
+  - citation: GDPR Art. 38(4)
+  - citation: GDPR Recital 97
+- id: GDPR-ART39-DPO-TASKS
+  title: DPO performs the tasks set out in Art. 39 and evidence of performance is maintained
+  scope:
+    applies_to:
+    - org
+    roles:
+    - controller
+    - processor
+  condition: Only if a DPO is required/appointed for the organisation (see Art. 37 triggers)
+  requirement:
+    type: multi_obligation
+    obligations:
+    - key: inform_and_advise
+      description: The DPO informs and advises the organisation and employees who carry out processing of their GDPR obligations and related data protection provisions.
+    - key: monitor_compliance
+      description: The DPO monitors compliance with the GDPR and internal policies (including assignment of responsibilities, awareness-raising and training, and audits).
+    - key: advise_on_dpia
+      description: The DPO provides advice where requested as regards DPIAs and monitors DPIA performance in accordance with Art. 35.
+    - key: cooperate_with_sa
+      description: The DPO cooperates with the supervisory authority.
+    - key: act_as_contact_point
+      description: The DPO acts as the contact point for the supervisory authority on issues related to processing (including prior consultation), and for data subjects where applicable.
+    - key: task_recordkeeping
+      description: Records/evidence are maintained showing DPO activities (advice memos, training, audits, DPIA inputs, SA interactions) and follow-up actions.
+  evidence_hints:
+    required:
+    - dpo_annual_plan_or_activity_log (advice, audits, training, reviews)
+    - dpo_guidance_or_advice_examples (redacted)
+    - training_program_materials_and_completion_tracking (privacy)
+    - audit_or_compliance_monitoring_reports_and_followups (redacted)
+    - dpia_records_showing_dpo_involvement (redacted)
+    - records_of_sa_communications_or_contact_point_handling (redacted)
+    artifacts:
+    - dpo_annual_plan_or_activity_log (advice, audits, training, reviews)
+    - dpo_guidance_or_advice_examples (redacted)
+    - training_program_materials_and_completion_tracking (privacy)
+    - audit_or_compliance_monitoring_reports_and_followups (redacted)
+    - dpia_records_showing_dpo_involvement (redacted)
+    - records_of_sa_communications_or_contact_point_handling (redacted)
+    questions:
+    - What has the DPO done in the last 6–12 months (advice provided, audits, trainings, DPIA involvement), and what evidence exists?
+    - How does the DPO track issues to remediation and verify follow-through?
+    checks:
+    - Confirm there is a documented DPO activity log/plan and evidence of advice/audits/training and DPIA involvement.
+  severity: medium
+  sources:
+  - citation: GDPR Art. 39(1)
+  - citation: GDPR Art. 39(2)
+  - citation: GDPR Recital 97
