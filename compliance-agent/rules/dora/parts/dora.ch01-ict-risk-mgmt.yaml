@@ -5,4 +5,131 @@ meta:
   jurisdiction: ["EU"]
   evaluation_profile_schema: "rules/dora/entity_profile.schema.yaml"
 
-rules: []
+# Chapter II — ICT risk management (governance-focused slice)
+# Milestone 1.1: Governance & responsibility model
+
+rules:
+  - id: "DORA-ART05-MGMTBODY-ACCOUNTABILITY"
+    title: "Management body is accountable for ICT risk management and operational resilience"
+    scope:
+      applies_to: ["org"]
+      parties: ["financial_entity"]
+    requirement:
+      type: "governance"
+      must_include:
+        - "management_body_oversight_of_ict_risk"
+        - "approval_of_ict_risk_management_strategy"
+        - "periodic_review_of_ict_risk_management_framework"
+        - "allocation_of_adequate_resources (budget, staffing)"
+    evidence_hints:
+      required:
+        - "board_minutes_or_resolutions (ICT risk/operational resilience)"
+        - "ict_risk_management_strategy"
+        - "org_chart_and_role_descriptions"
+      artifacts:
+        - "board_minutes_or_resolutions"
+        - "ict_risk_management_strategy"
+        - "ict_risk_management_framework"
+        - "resource_plan_or_budget"
+        - "management_reporting_pack (ICT risk KPIs/KRIs)"
+    severity: "high"
+    sources:
+      - citation: "DORA (EU) 2022/2554 — Chapter II, Article 5(1)–(4)"
+
+  - id: "DORA-ART05-ROLES-RESPONSIBILITIES"
+    title: "ICT risk management roles, responsibilities, and segregation of duties are defined"
+    scope:
+      applies_to: ["org"]
+      parties: ["financial_entity"]
+    requirement:
+      type: "governance"
+      must_include:
+        - "documented_roles_and_responsibilities_for_ict_risk"
+        - "segregation_of_duties_between_development_operations_and_control_functions"
+        - "clear_accountabilities_for_critical_or_important_functions (if applicable)"
+    evidence_hints:
+      required:
+        - "org_chart_and_role_descriptions"
+        - "raci_or_responsibility_matrix (ICT risk)"
+      artifacts:
+        - "org_chart"
+        - "job_descriptions"
+        - "raci_matrix"
+        - "access_control_policy"
+        - "change_management_policy"
+    severity: "high"
+    sources:
+      - citation: "DORA (EU) 2022/2554 — Chapter II, Article 5(2)–(3)"
+
+  - id: "DORA-ART05-TRAINING"
+    title: "Management body maintains sufficient knowledge/skills on ICT risk and participates in relevant training"
+    scope:
+      applies_to: ["org"]
+      parties: ["financial_entity"]
+    requirement:
+      type: "governance"
+      must_include:
+        - "defined_training_plan_for_management_body_on_ict_risk"
+        - "evidence_of_completion_or_participation"
+        - "periodic_refresh"
+    evidence_hints:
+      required:
+        - "board_training_records (ICT risk/operational resilience)"
+      artifacts:
+        - "training_plan"
+        - "attendance_logs"
+        - "training_materials"
+    severity: "medium"
+    sources:
+      - citation: "DORA (EU) 2022/2554 — Chapter II, Article 5(4)"
+
+  - id: "DORA-ART06-ICTRM-FRAMEWORK"
+    title: "ICT risk management framework is established, implemented, documented, and maintained"
+    scope:
+      applies_to: ["org"]
+      parties: ["financial_entity"]
+    requirement:
+      type: "program"
+      must_include:
+        - "documented_ict_risk_management_framework"
+        - "risk_appetite_or_tolerance_for_ict_risk"
+        - "integration_with_enterprise_risk_management"
+        - "scope_covers_internal_and_outsourced_ict_services"
+    evidence_hints:
+      required:
+        - "ict_risk_management_framework"
+        - "ict_risk_policy"
+        - "risk_appetite_statement (incl. ICT)"
+      artifacts:
+        - "ict_risk_management_framework"
+        - "ict_risk_policy"
+        - "risk_appetite_statement"
+        - "outsourcing_register_or_vendor_inventory"
+    severity: "high"
+    sources:
+      - citation: "DORA (EU) 2022/2554 — Chapter II, Article 6(1)–(2)"
+
+  - id: "DORA-ART06-REPORTING-TO-MGMTBODY"
+    title: "ICT risk reporting enables management body oversight (metrics, material risks, and control effectiveness)"
+    scope:
+      applies_to: ["org"]
+      parties: ["financial_entity"]
+    requirement:
+      type: "monitoring_and_reporting"
+      must_include:
+        - "defined_reporting_frequency"
+        - "material_ict_risks_and_exposures"
+        - "status_of_key_controls_and_remediation"
+        - "outsourced_ict_service_risk_reporting (if applicable)"
+    evidence_hints:
+      required:
+        - "management_reporting_pack (ICT risk KPIs/KRIs)"
+        - "risk_register_extract (ICT)"
+      artifacts:
+        - "ict_risk_dashboard"
+        - "risk_register"
+        - "remediation_tracker"
+        - "board_or_risk_committee_packs"
+    severity: "medium"
+    sources:
+      - citation: "DORA (EU) 2022/2554 — Chapter II, Article 6(3)"
