@@ -1,8 +1,184 @@
 meta:
   ruleset_id: "nis2-cz"
-  version: "0.1"
-  status: "draft"
+  version: "2.0-audit"
+  status: "complete"
   jurisdiction: ["CZ"]
   evaluation_profile_schema: "rules/nis2-cz/entity_profile.schema.yaml"
+  changelog: |
+    v2.0 (2026-03-10): Populated oversight tagging rules. These meta-rules
+    ensure proper tagging of entity oversight regime, registration/notification
+    obligations, and supervisory authority awareness.
 
-rules: []
+rules:
+  - id: "NIS2CZ-OVERSIGHT-REGISTRATION"
+    title: "Registration or notification to NÚKIB is completed (if required)"
+    scope:
+      applies_to: ["org"]
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+    requirement:
+      type: "checklist"
+      logic: "ALL"
+      na_mechanism: >
+        If registration is not required under CZ-Act-264-2025 for the entity type,
+        document N/A justification with legal basis.
+      checklist:
+        - id: "OVER-REG-01"
+          title_en: "Entity is registered/notified to NÚKIB per CZ-Act-264-2025"
+          title_cs: "Subjekt je registrován/notifikován u NÚKIB dle zákona č. 264/2025 Sb."
+          required_by_default: true
+          acceptance_criteria:
+            - "Registration or notification submission evidence exists"
+            - "Confirmation or receipt from NÚKIB is on file"
+          keywords_cs: ["registrace", "notifikace", "NÚKIB", "povinná osoba"]
+          keywords_en: ["registration", "notification", "NÚKIB", "regulated entity"]
+          red_flags:
+            - "No registration/notification submitted"
+            - "No confirmation from NÚKIB"
+
+        - id: "OVER-REG-02"
+          title_en: "Contact details for NÚKIB communication are maintained and current"
+          title_cs: "Kontaktní údaje pro komunikaci s NÚKIB jsou udržovány a aktuální"
+          required_by_default: true
+          acceptance_criteria:
+            - "Designated contact person(s) for NÚKIB are documented"
+            - "Contact details are reviewed at least annually"
+          keywords_cs: ["kontaktní osoba", "NÚKIB", "aktuální"]
+          keywords_en: ["contact person", "NÚKIB", "current"]
+          red_flags:
+            - "No designated contact"
+            - "Contact details outdated"
+
+        - id: "OVER-REG-03"
+          title_en: "Changes to entity scope/services/classification are reported to NÚKIB timely"
+          title_cs: "Změny v rozsahu/službách/klasifikaci subjektu jsou hlášeny NÚKIB včas"
+          required_by_default: true
+          acceptance_criteria:
+            - "Process for notifying NÚKIB of material changes exists"
+            - "Timelines for notification are defined"
+          keywords_cs: ["změny", "hlášení", "NÚKIB", "lhůty"]
+          keywords_en: ["changes", "notification", "NÚKIB", "timelines"]
+          red_flags:
+            - "No change notification process"
+    evidence_hints:
+      required:
+        - artifact_id: "OVER-REGISTRATION-EVIDENCE"
+      optional:
+        - artifact_id: "OVER-NUKIB-CORRESPONDENCE"
+    severity: "high"
+    sources:
+      - citation: "CZ-Act-264-2025 (registrační/notifikační povinnosti regulovaných subjektů)"
+      - citation: "CZ-Decree-334-2025 (úkony prostřednictvím Portálu NÚKIB)"
+
+  - id: "NIS2CZ-OVERSIGHT-SUPERVISORY-READINESS"
+    title: "Entity is prepared for supervisory activities by NÚKIB"
+    scope:
+      applies_to: ["org"]
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+    requirement:
+      type: "checklist"
+      logic: "ALL"
+      na_mechanism: "Not permitted — supervisory readiness is mandatory."
+      checklist:
+        - id: "OVER-SUP-01"
+          title_en: "Evidence package can be assembled on request"
+          title_cs: "Balíček důkazů může být sestaven na vyžádání"
+          required_by_default: true
+          acceptance_criteria:
+            - "Evidence register maps all required artifacts to storage locations"
+            - "Artifacts can be retrieved within a reasonable timeframe (e.g., 5 business days)"
+          keywords_cs: ["důkazy", "balíček", "vyžádání", "NÚKIB"]
+          keywords_en: ["evidence", "package", "request", "NÚKIB"]
+          red_flags:
+            - "No evidence register"
+            - "Artifacts not retrievable"
+
+        - id: "OVER-SUP-02"
+          title_en: "Entity understands NÚKIB supervisory powers and cooperation obligations"
+          title_cs: "Subjekt rozumí dohledovým pravomocím NÚKIB a povinnostem spolupráce"
+          required_by_default: true
+          acceptance_criteria:
+            - "Management is aware of NÚKIB supervisory powers per CZ-Act-264-2025"
+            - "Internal procedure for responding to NÚKIB requests exists"
+          keywords_cs: ["dohled", "pravomoci", "spolupráce", "NÚKIB"]
+          keywords_en: ["supervision", "powers", "cooperation", "NÚKIB"]
+          red_flags:
+            - "Management unaware of supervisory regime"
+
+        - id: "OVER-SUP-03"
+          title_en: "Remediation of findings from supervisory activities is tracked"
+          title_cs: "Náprava zjištění z dohledových aktivit je sledována"
+          required_by_default: true
+          acceptance_criteria:
+            - "Corrective action tracking for NÚKIB findings uses the same process as internal audit"
+          keywords_cs: ["náprava", "zjištění", "dohled", "sledování"]
+          keywords_en: ["remediation", "findings", "supervision", "tracking"]
+          red_flags:
+            - "No tracking of supervisory findings"
+    evidence_hints:
+      required:
+        - artifact_id: "FOUND-EVIDENCE-REGISTER"
+      optional:
+        - artifact_id: "OVER-NUKIB-CORRESPONDENCE"
+        - artifact_id: "GOV-CORRECTIVE-ACTIONS-REGISTER"
+    severity: "medium"
+    sources:
+      - citation: "CZ-Act-264-2025 (pravomoci NÚKIB; povinnosti regulovaných subjektů při dohledu)"
+      - citation: "EU-NIS2-2022-2555 Art. 32-33 (mapping: supervisory measures)"
+
+  - id: "NIS2CZ-OVERSIGHT-DUTY-REGIME-TAG"
+    title: "Entity assessment output is tagged with duty regime for downstream rule filtering"
+    scope:
+      applies_to: ["org"]
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+    requirement:
+      type: "checklist"
+      logic: "ALL"
+      na_mechanism: "Not permitted — tagging is mandatory for assessments."
+      checklist:
+        - id: "OVER-TAG-01"
+          title_en: "Assessment output includes entity_class tag (essential/important)"
+          title_cs: "Výstup hodnocení obsahuje tag entity_class (základní/důležitý)"
+          required_by_default: true
+          acceptance_criteria:
+            - "entity_class field is populated in entity profile"
+          keywords_cs: ["tag", "entity_class", "základní", "důležitý"]
+          keywords_en: ["tag", "entity_class", "essential", "important"]
+          red_flags:
+            - "entity_class not tagged"
+
+        - id: "OVER-TAG-02"
+          title_en: "Assessment output includes duty_regime tag (higher/lower)"
+          title_cs: "Výstup hodnocení obsahuje tag duty_regime (vyšší/nižší)"
+          required_by_default: true
+          acceptance_criteria:
+            - "duty_regime field is populated in entity profile"
+          keywords_cs: ["tag", "duty_regime", "vyšší", "nižší"]
+          keywords_en: ["tag", "duty_regime", "higher", "lower"]
+          red_flags:
+            - "duty_regime not tagged"
+
+        - id: "OVER-TAG-03"
+          title_en: "Assessment output includes regulated_services list"
+          title_cs: "Výstup hodnocení obsahuje seznam regulovaných služeb"
+          required_by_default: true
+          acceptance_criteria:
+            - "regulated_services field is populated or explicitly empty with justification"
+          keywords_cs: ["regulované služby", "seznam"]
+          keywords_en: ["regulated services", "list"]
+          red_flags:
+            - "regulated_services field missing"
+    evidence_hints:
+      required:
+        - artifact_id: "SCOPE-ENTITY-CLASSIFICATION"
+        - artifact_id: "SCOPE-DUTY-REGIME-DETERMINATION"
+    severity: "medium"
+    sources:
+      - citation: "CZ-Act-264-2025 (entity classification and duty regime)"
+      - citation: "CZ-Decree-409-2025 (higher duties)"
+      - citation: "CZ-Decree-410-2025 (lower duties)"

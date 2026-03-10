@@ -1,78 +1,499 @@
 meta:
-  ruleset_id: nis2-cz
-  version: '0.1'
-  status: draft
-  jurisdiction:
-  - CZ
-  evaluation_profile_schema: rules/nis2-cz/entity_profile.schema.yaml
+  ruleset_id: "nis2-cz"
+  version: "2.0-audit"
+  status: "complete"
+  jurisdiction: ["CZ"]
+  evaluation_profile_schema: "rules/nis2-cz/entity_profile.schema.yaml"
+  changelog: |
+    v2.0 (2026-03-10): Full refactor to audit-grade. Added milestones 3.2
+    (reporting workflow) and 3.3 (post-incident review). All rules now have
+    structured checklists with acceptance criteria, logic, keywords, red flags.
+
 rules:
-- id: NIS2CZ-INC-CLASSIFICATION-SCHEME
-  title: Incident classification and severity scheme is defined and used
-  scope:
-    applies_to:
-    - org
-    conditions:
-    - profile_field: in_scope_under_cz_law
-      equals: true
-  requirement:
-    type: document_required
-    document: incident_classification_scheme
-    must_include:
-    - definitions (cybersecurity_event vs cybersecurity_incident)
-    - classification_categories (e.g., confidentiality|integrity|availability|legal|supply_chain)
-    - severity_levels (with criteria and escalation triggers)
-    - impact_assessment_fields (users/services affected, duration, data impact)
-    - decision_authority (who classifies/reclassifies)
-    - link_to_reporting_thresholds_and_timelines
-    - review_and_update_cycle
-  evidence_hints:
-    required:
-    - artifact_id: INC-INCIDENT-CLASSIFICATION-SCHEME
-    optional:
-    - artifact_id: INC-INCIDENT-RESPONSE-PLAN
-    - artifact_id: INC-SOC-RUNBOOKS-OR-PLAYBOOKS
-    - artifact_id: INC-TICKETING-WORKFLOW-SCREENSHOTS
-  severity: high
-  sources:
-  - citation: CZ-Act-264-2025 (incident handling duties; governance responsibility)
-  - citation: 'CZ-Decree-409-2025 (higher duties: incident handling process + classification expectations)'
-  - citation: 'CZ-Decree-410-2025 (lower duties: incident handling process + classification expectations)'
-  - citation: CZ-Decree-334-2025 (incident reporting thresholds/timelines/content — used to drive classification)
-  - citation: 'EU-NIS2-2022-2555 Art. 23 (mapping: incident reporting)'
-- id: NIS2CZ-INC-REGISTER
-  title: Incident register is maintained with required fields and retained
-  scope:
-    applies_to:
-    - org
-    conditions:
-    - profile_field: in_scope_under_cz_law
-      equals: true
-  requirement:
-    type: document_required
-    document: incident_register
-    must_include:
-    - unique_incident_id
-    - date_time_detected_and_closed
-    - classification_and_severity (per approved scheme)
-    - affected_assets_and_services
-    - impact_summary (availability, integrity, confidentiality, legal/regulatory)
-    - actions_taken (containment/eradication/recovery)
-    - external_reporting_status (who/when/reference_numbers)
-    - evidence_and_logs_references
-    - root_cause_or_contributing_factors (when known)
-    - lessons_learned_and_followup_actions
-    - retention_period_and_access_controls
-  evidence_hints:
-    required:
-    - artifact_id: INC-INCIDENT-REGISTER
-    optional:
-    - artifact_id: INC-TICKETING-EXPORT
-    - artifact_id: INC-SIEM-CASE-MANAGEMENT-EXPORT
-    - artifact_id: INC-POST-INCIDENT-REPORTS
-  severity: high
-  sources:
-  - citation: CZ-Act-264-2025 (incident documentation and accountability duties)
-  - citation: 'CZ-Decree-409-2025 (higher duties: incident records/register + evidence retention)'
-  - citation: 'CZ-Decree-410-2025 (lower duties: incident records/register + evidence retention)'
-  - citation: 'CZ-Decree-334-2025 (incident reporting recordkeeping: proofs of submission/communication)'
-  - citation: 'EU-NIS2-2022-2555 Art. 23 (mapping: reporting + documentation)'
+  # ================================================================
+  # Milestone 3.1 — Incident classification + register
+  # ================================================================
+
+  - id: "NIS2CZ-INC-CLASSIFICATION-SCHEME"
+    title: "Incident classification and severity scheme is defined and used"
+    scope:
+      applies_to: ["org"]
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+    requirement:
+      type: "checklist"
+      logic: "ALL"
+      na_mechanism: "Not permitted — incident classification is mandatory."
+      checklist:
+        - id: "INC-CLASS-01"
+          title_en: "Definitions of cybersecurity event vs cybersecurity incident are documented"
+          title_cs: "Definice kybernetické bezpečnostní události vs kybernetického bezpečnostního incidentu jsou zdokumentovány"
+          required_by_default: true
+          acceptance_criteria:
+            - "Clear written distinction between event and incident"
+          keywords_cs: ["událost", "incident", "definice", "kybernetická bezpečnost"]
+          keywords_en: ["event", "incident", "definition", "cybersecurity"]
+          red_flags:
+            - "No event/incident distinction"
+
+        - id: "INC-CLASS-02"
+          title_en: "Classification categories are defined (confidentiality, integrity, availability, legal, supply chain)"
+          title_cs: "Klasifikační kategorie jsou definovány (důvěrnost, integrita, dostupnost, právní, dodavatelský řetězec)"
+          required_by_default: true
+          acceptance_criteria:
+            - "At least CIA + legal dimensions are covered"
+          keywords_cs: ["kategorie", "důvěrnost", "integrita", "dostupnost", "právní"]
+          keywords_en: ["categories", "confidentiality", "integrity", "availability", "legal"]
+          red_flags:
+            - "Categories missing key dimensions"
+
+        - id: "INC-CLASS-03"
+          title_en: "Severity levels with criteria and escalation triggers are defined"
+          title_cs: "Úrovně závažnosti s kritérii a triggery eskalace jsou definovány"
+          required_by_default: true
+          acceptance_criteria:
+            - "At least 3 severity levels with objective criteria"
+            - "Escalation triggers per level are documented"
+          keywords_cs: ["závažnost", "úrovně", "kritéria", "eskalace"]
+          keywords_en: ["severity", "levels", "criteria", "escalation"]
+          red_flags:
+            - "Severity levels without objective criteria"
+
+        - id: "INC-CLASS-04"
+          title_en: "Impact assessment fields are defined (users/services affected, duration, data impact)"
+          title_cs: "Pole pro posouzení dopadu jsou definována (dotčení uživatelé/služby, doba trvání, dopad na data)"
+          required_by_default: true
+          acceptance_criteria:
+            - "Standard fields for impact assessment are documented"
+          keywords_cs: ["dopad", "uživatelé", "služby", "doba trvání", "data"]
+          keywords_en: ["impact", "users", "services", "duration", "data"]
+          red_flags:
+            - "No impact assessment fields"
+
+        - id: "INC-CLASS-05"
+          title_en: "Decision authority for classification and reclassification is assigned"
+          title_cs: "Rozhodovací autorita pro klasifikaci a reklasifikaci je přiřazena"
+          required_by_default: true
+          acceptance_criteria:
+            - "Named role or team authorized to classify and reclassify"
+          keywords_cs: ["autorita", "klasifikace", "reklasifikace"]
+          keywords_en: ["authority", "classification", "reclassification"]
+          red_flags:
+            - "No classification authority"
+
+        - id: "INC-CLASS-06"
+          title_en: "Link to reporting thresholds and timelines is established"
+          title_cs: "Vazba na prahové hodnoty a časové lhůty pro hlášení je stanovena"
+          required_by_default: true
+          acceptance_criteria:
+            - "Classification directly maps to CZ reporting thresholds per CZ-Decree-334-2025"
+          keywords_cs: ["prahové hodnoty", "hlášení", "lhůty", "vyhláška 334"]
+          keywords_en: ["thresholds", "reporting", "timelines", "decree 334"]
+          red_flags:
+            - "No link to reporting thresholds"
+
+        - id: "INC-CLASS-07"
+          title_en: "Review and update cycle for the scheme is defined"
+          title_cs: "Cyklus revize a aktualizace schématu je definován"
+          required_by_default: true
+          acceptance_criteria:
+            - "Review cycle documented (at least annual)"
+          keywords_cs: ["revize", "aktualizace", "cyklus"]
+          keywords_en: ["review", "update", "cycle"]
+          red_flags:
+            - "No review cycle"
+    evidence_hints:
+      required:
+        - artifact_id: "INC-CLASSIFICATION-SCHEME"
+      optional:
+        - artifact_id: "INC-RESPONSE-PLAN"
+        - artifact_id: "INC-SOC-RUNBOOKS"
+    severity: "high"
+    sources:
+      - citation: "CZ-Act-264-2025 (incident handling duties; governance responsibility)"
+      - citation: "CZ-Decree-409-2025 (higher duties: incident handling process + classification)"
+      - citation: "CZ-Decree-410-2025 (lower duties: incident handling process + classification)"
+      - citation: "CZ-Decree-334-2025 (incident reporting thresholds/timelines/content)"
+      - citation: "EU-NIS2-2022-2555 Art. 23 (mapping: incident reporting)"
+
+  - id: "NIS2CZ-INC-REGISTER"
+    title: "Incident register is maintained with required fields and retained"
+    scope:
+      applies_to: ["org"]
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+    requirement:
+      type: "checklist"
+      logic: "ALL"
+      na_mechanism: "Not permitted — incident register is mandatory."
+      checklist:
+        - id: "INC-REG-01"
+          title_en: "Each incident has a unique ID"
+          title_cs: "Každý incident má jedinečné ID"
+          required_by_default: true
+          acceptance_criteria:
+            - "Unique identifier assigned automatically or manually"
+          keywords_cs: ["ID", "jedinečný", "incident"]
+          keywords_en: ["ID", "unique", "incident"]
+          red_flags:
+            - "Duplicate or missing IDs"
+
+        - id: "INC-REG-02"
+          title_en: "Detection and closure timestamps are recorded"
+          title_cs: "Časová razítka detekce a uzavření jsou zaznamenána"
+          required_by_default: true
+          acceptance_criteria:
+            - "Date/time of detection and closure per incident"
+          keywords_cs: ["detekce", "uzavření", "časové razítko"]
+          keywords_en: ["detection", "closure", "timestamp"]
+          red_flags:
+            - "Missing timestamps"
+
+        - id: "INC-REG-03"
+          title_en: "Classification and severity per approved scheme are recorded"
+          title_cs: "Klasifikace a závažnost podle schváleného schématu jsou zaznamenány"
+          required_by_default: true
+          acceptance_criteria:
+            - "Each incident classified per the approved scheme"
+          keywords_cs: ["klasifikace", "závažnost", "schéma"]
+          keywords_en: ["classification", "severity", "scheme"]
+          red_flags:
+            - "Incidents without classification"
+
+        - id: "INC-REG-04"
+          title_en: "Affected assets and services are documented"
+          title_cs: "Dotčená aktiva a služby jsou zdokumentovány"
+          required_by_default: true
+          acceptance_criteria:
+            - "Affected assets/services listed per incident"
+          keywords_cs: ["aktiva", "služby", "dotčená"]
+          keywords_en: ["assets", "services", "affected"]
+          red_flags:
+            - "No affected assets documented"
+
+        - id: "INC-REG-05"
+          title_en: "Impact summary (availability, integrity, confidentiality, legal/regulatory) is recorded"
+          title_cs: "Shrnutí dopadu (dostupnost, integrita, důvěrnost, právní/regulatorní) je zaznamenáno"
+          required_by_default: true
+          acceptance_criteria:
+            - "Impact assessed across all relevant dimensions"
+          keywords_cs: ["dopad", "dostupnost", "integrita", "důvěrnost", "právní"]
+          keywords_en: ["impact", "availability", "integrity", "confidentiality", "legal"]
+          red_flags:
+            - "No impact summary"
+
+        - id: "INC-REG-06"
+          title_en: "Actions taken (containment, eradication, recovery) are documented"
+          title_cs: "Provedené akce (zamezení, eradikace, obnova) jsou zdokumentovány"
+          required_by_default: true
+          acceptance_criteria:
+            - "Actions at each phase are recorded"
+          keywords_cs: ["akce", "zamezení", "eradikace", "obnova"]
+          keywords_en: ["actions", "containment", "eradication", "recovery"]
+          red_flags:
+            - "No actions documented"
+
+        - id: "INC-REG-07"
+          title_en: "External reporting status (who/when/reference numbers) is tracked"
+          title_cs: "Stav externího hlášení (komu/kdy/referenční čísla) je sledován"
+          required_by_default: true
+          acceptance_criteria:
+            - "For reportable incidents: report recipient, date, and reference number"
+          keywords_cs: ["hlášení", "externí", "referenční číslo"]
+          keywords_en: ["reporting", "external", "reference number"]
+          red_flags:
+            - "Reportable incident without external reporting record"
+
+        - id: "INC-REG-08"
+          title_en: "Evidence and logs references are linked"
+          title_cs: "Odkazy na důkazy a logy jsou propojeny"
+          required_by_default: true
+          acceptance_criteria:
+            - "Each incident links to relevant evidence/log artifacts"
+          keywords_cs: ["důkazy", "logy", "odkazy"]
+          keywords_en: ["evidence", "logs", "references"]
+          red_flags:
+            - "No evidence linked"
+
+        - id: "INC-REG-09"
+          title_en: "Root cause or contributing factors are recorded (when known)"
+          title_cs: "Příčina nebo přispívající faktory jsou zaznamenány (pokud jsou známy)"
+          required_by_default: true
+          acceptance_criteria:
+            - "Root cause analysis performed or explicitly marked as unknown with justification"
+          keywords_cs: ["příčina", "přispívající faktory", "analýza"]
+          keywords_en: ["root cause", "contributing factors", "analysis"]
+          red_flags:
+            - "No root cause analysis attempted"
+
+        - id: "INC-REG-10"
+          title_en: "Lessons learned and follow-up actions are recorded"
+          title_cs: "Ponaučení a následné akce jsou zaznamenány"
+          required_by_default: true
+          acceptance_criteria:
+            - "Post-incident lessons and actions are documented"
+          keywords_cs: ["ponaučení", "následné akce"]
+          keywords_en: ["lessons learned", "follow-up actions"]
+          red_flags:
+            - "No lessons learned"
+
+        - id: "INC-REG-11"
+          title_en: "Retention period and access controls for register are defined"
+          title_cs: "Doba uchovávání a řízení přístupu k registru jsou definovány"
+          required_by_default: true
+          acceptance_criteria:
+            - "Retention period meets regulatory minimum"
+            - "Access is restricted to authorized personnel"
+          keywords_cs: ["uchovávání", "přístup", "retence"]
+          keywords_en: ["retention", "access", "period"]
+          red_flags:
+            - "No retention period defined"
+    evidence_hints:
+      required:
+        - artifact_id: "INC-REGISTER"
+      optional:
+        - artifact_id: "INC-TICKETING-EXPORT"
+        - artifact_id: "INC-POST-INCIDENT-REPORTS"
+    severity: "high"
+    sources:
+      - citation: "CZ-Act-264-2025 (incident documentation and accountability duties)"
+      - citation: "CZ-Decree-409-2025 (higher duties: incident records/register + evidence retention)"
+      - citation: "CZ-Decree-410-2025 (lower duties: incident records/register + evidence retention)"
+      - citation: "CZ-Decree-334-2025 (incident reporting recordkeeping)"
+
+  # ================================================================
+  # Milestone 3.2 — Reporting workflow + timelines + content (CZ)
+  # ================================================================
+
+  - id: "NIS2CZ-INC-REPORTING-WORKFLOW"
+    title: "Incident reporting workflow to NÚKIB via CZ portal complies with statutory timelines"
+    scope:
+      applies_to: ["org"]
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+    requirement:
+      type: "checklist"
+      logic: "ALL"
+      na_mechanism: "Not permitted — reporting workflow is mandatory for in-scope entities."
+      checklist:
+        - id: "INC-RPT-01"
+          title_en: "Reporting thresholds (what constitutes a reportable incident) are documented"
+          title_cs: "Prahové hodnoty pro hlášení (co je hlásitelný incident) jsou zdokumentovány"
+          required_by_default: true
+          acceptance_criteria:
+            - "Thresholds are derived from CZ-Decree-334-2025 and CZ-Act-264-2025"
+            - "Mapping from severity levels to reporting obligation exists"
+          keywords_cs: ["prahové hodnoty", "hlásitelný", "incident", "povinnost"]
+          keywords_en: ["thresholds", "reportable", "incident", "obligation"]
+          red_flags:
+            - "No reporting thresholds documented"
+
+        - id: "INC-RPT-02"
+          title_en: "Early warning notification timeline (within 24 hours) is defined and operationalized"
+          title_cs: "Lhůta pro včasné varování (do 24 hodin) je definována a provozována"
+          required_by_default: true
+          acceptance_criteria:
+            - "Process ensures early warning to NÚKIB within 24h of becoming aware of a significant incident"
+            - "Responsible role for submission is assigned"
+          keywords_cs: ["včasné varování", "24 hodin", "NÚKIB", "lhůta"]
+          keywords_en: ["early warning", "24 hours", "NÚKIB", "timeline"]
+          red_flags:
+            - "No early warning process"
+            - "No responsible role assigned"
+
+        - id: "INC-RPT-03"
+          title_en: "Incident notification timeline (within 72 hours) is defined and operationalized"
+          title_cs: "Lhůta pro oznámení incidentu (do 72 hodin) je definována a provozována"
+          required_by_default: true
+          acceptance_criteria:
+            - "Process ensures full incident notification to NÚKIB within 72h"
+            - "Content requirements per CZ-Decree-334-2025 are documented"
+          keywords_cs: ["oznámení", "72 hodin", "NÚKIB", "obsah"]
+          keywords_en: ["notification", "72 hours", "NÚKIB", "content"]
+          red_flags:
+            - "No 72h notification process"
+
+        - id: "INC-RPT-04"
+          title_en: "Intermediate report process (if requested by NÚKIB or on status change) exists"
+          title_cs: "Proces průběžné zprávy (na žádost NÚKIB nebo při změně stavu) existuje"
+          required_by_default: true
+          acceptance_criteria:
+            - "Process for intermediate updates is documented"
+          keywords_cs: ["průběžná zpráva", "aktualizace", "NÚKIB"]
+          keywords_en: ["intermediate report", "update", "NÚKIB"]
+          red_flags:
+            - "No intermediate reporting process"
+
+        - id: "INC-RPT-05"
+          title_en: "Final report timeline (within 1 month, or as specified) is defined"
+          title_cs: "Lhůta pro závěrečnou zprávu (do 1 měsíce, nebo dle specifikace) je definována"
+          required_by_default: true
+          acceptance_criteria:
+            - "Final report with root cause, impact, and remediation is due within specified timeframe"
+          keywords_cs: ["závěrečná zpráva", "1 měsíc", "příčina", "náprava"]
+          keywords_en: ["final report", "1 month", "root cause", "remediation"]
+          red_flags:
+            - "No final report timeline"
+
+        - id: "INC-RPT-06"
+          title_en: "CZ portal (Portál NÚKIB) access and submission process is operationally ready"
+          title_cs: "Přístup k Portálu NÚKIB a proces podání je provozně připraven"
+          required_by_default: true
+          acceptance_criteria:
+            - "Portal credentials are set up and tested"
+            - "At least 2 persons have portal access (primary + backup)"
+          keywords_cs: ["portál", "NÚKIB", "přístup", "podání"]
+          keywords_en: ["portal", "NÚKIB", "access", "submission"]
+          red_flags:
+            - "No portal access configured"
+            - "Single point of failure for portal access"
+
+        - id: "INC-RPT-07"
+          title_en: "Content requirements for each report type are documented"
+          title_cs: "Požadavky na obsah pro každý typ zprávy jsou zdokumentovány"
+          required_by_default: true
+          acceptance_criteria:
+            - "Templates or checklists exist for early warning, notification, and final report"
+            - "Content requirements align with CZ-Decree-334-2025"
+          keywords_cs: ["obsah", "šablony", "požadavky", "vyhláška 334"]
+          keywords_en: ["content", "templates", "requirements", "decree 334"]
+          red_flags:
+            - "No content templates"
+
+        - id: "INC-RPT-08"
+          title_en: "Internal escalation and approval process for external reports is defined"
+          title_cs: "Interní eskalační a schvalovací proces pro externí zprávy je definován"
+          required_by_default: true
+          acceptance_criteria:
+            - "Escalation path from SOC/CSIRT to management for report approval is documented"
+            - "Approval does not delay statutory timelines"
+          keywords_cs: ["eskalace", "schválení", "interní", "zprávy"]
+          keywords_en: ["escalation", "approval", "internal", "reports"]
+          red_flags:
+            - "No escalation process"
+            - "Approval process risks missing statutory deadlines"
+    evidence_hints:
+      required:
+        - artifact_id: "INC-REPORTING-PROCEDURE"
+        - artifact_id: "INC-REPORT-TEMPLATES"
+      optional:
+        - artifact_id: "INC-PORTAL-ACCESS-EVIDENCE"
+        - artifact_id: "INC-SUBMITTED-REPORTS"
+    severity: "high"
+    sources:
+      - citation: "CZ-Act-264-2025 (povinnost hlásit kybernetické bezpečnostní incidenty)"
+      - citation: "CZ-Decree-334-2025 (Portál NÚKIB; lhůty hlášení; obsah oznámení; úkony prostřednictvím portálu)"
+      - citation: "EU-NIS2-2022-2555 Art. 23 (mapping: incident reporting obligations)"
+
+  # ================================================================
+  # Milestone 3.3 — Post-incident review + improvements
+  # ================================================================
+
+  - id: "NIS2CZ-INC-POST-INCIDENT-REVIEW"
+    title: "Post-incident review is performed for significant incidents and improvements are tracked"
+    scope:
+      applies_to: ["org"]
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+    requirement:
+      type: "checklist"
+      logic: "ALL"
+      na_mechanism: "Not permitted — post-incident review is mandatory."
+      checklist:
+        - id: "INC-PIR-01"
+          title_en: "Trigger criteria for post-incident review are defined"
+          title_cs: "Spouštěcí kritéria pro post-incident review jsou definována"
+          required_by_default: true
+          acceptance_criteria:
+            - "Criteria define which incidents trigger a formal review (e.g., all significant/high-severity incidents)"
+          keywords_cs: ["kritéria", "post-incident", "přezkum", "trigger"]
+          keywords_en: ["criteria", "post-incident", "review", "trigger"]
+          red_flags:
+            - "No trigger criteria"
+
+        - id: "INC-PIR-02"
+          title_en: "Review is conducted within defined timeline after incident closure"
+          title_cs: "Přezkum je proveden v definované lhůtě po uzavření incidentu"
+          required_by_default: true
+          acceptance_criteria:
+            - "Timeline for review is defined (e.g., within 30 days of closure)"
+            - "Adherence is tracked"
+          keywords_cs: ["lhůta", "uzavření", "přezkum"]
+          keywords_en: ["timeline", "closure", "review"]
+          red_flags:
+            - "Reviews not conducted timely"
+
+        - id: "INC-PIR-03"
+          title_en: "Root cause analysis is performed"
+          title_cs: "Analýza příčin je provedena"
+          required_by_default: true
+          acceptance_criteria:
+            - "Structured root cause analysis method is used (5-Why, fishbone, etc.)"
+          keywords_cs: ["analýza příčin", "root cause", "5-Why"]
+          keywords_en: ["root cause analysis", "5-Why", "fishbone"]
+          red_flags:
+            - "No root cause analysis"
+
+        - id: "INC-PIR-04"
+          title_en: "Improvement actions are identified, assigned owners, and tracked"
+          title_cs: "Zlepšovací opatření jsou identifikována, přiřazena vlastníkům a sledována"
+          required_by_default: true
+          acceptance_criteria:
+            - "Actions have: description, owner, due date, status"
+            - "Actions are tracked to completion"
+          keywords_cs: ["zlepšení", "opatření", "vlastník", "sledování"]
+          keywords_en: ["improvements", "actions", "owner", "tracking"]
+          red_flags:
+            - "No improvement actions tracked"
+
+        - id: "INC-PIR-05"
+          title_en: "Lessons learned are shared with relevant teams"
+          title_cs: "Poznatky jsou sdíleny s relevantními týmy"
+          required_by_default: true
+          acceptance_criteria:
+            - "Lessons learned are communicated to relevant stakeholders"
+            - "Distribution is documented"
+          keywords_cs: ["poznatky", "sdílení", "týmy"]
+          keywords_en: ["lessons learned", "sharing", "teams"]
+          red_flags:
+            - "Lessons not shared"
+
+        - id: "INC-PIR-06"
+          title_en: "Controls, policies, or procedures are updated based on findings"
+          title_cs: "Kontroly, politiky nebo postupy jsou aktualizovány na základě zjištění"
+          required_by_default: true
+          acceptance_criteria:
+            - "Relevant documents are updated and changes are version-controlled"
+          keywords_cs: ["aktualizace", "politiky", "postupy", "zjištění"]
+          keywords_en: ["updates", "policies", "procedures", "findings"]
+          red_flags:
+            - "No updates to controls after incidents"
+
+        - id: "INC-PIR-07"
+          title_en: "Review results feed into management review and risk register"
+          title_cs: "Výsledky přezkumu jsou vstupem do přezkumu vedení a registru rizik"
+          required_by_default: true
+          acceptance_criteria:
+            - "Post-incident findings are reported to management"
+            - "Risk register is updated where applicable"
+          keywords_cs: ["vedení", "registr rizik", "výsledky"]
+          keywords_en: ["management", "risk register", "results"]
+          red_flags:
+            - "Findings not reported to management"
+    evidence_hints:
+      required:
+        - artifact_id: "INC-POST-INCIDENT-REPORTS"
+        - artifact_id: "INC-IMPROVEMENT-TRACKER"
+      optional:
+        - artifact_id: "GOV-CORRECTIVE-ACTIONS-REGISTER"
+        - artifact_id: "GOV-MGMT-REVIEW-MINUTES"
+    severity: "high"
+    sources:
+      - citation: "CZ-Act-264-2025 (povinnost průběžně zajišťovat účinnost opatření; poučení z incidentů)"
+      - citation: "CZ-Decree-409-2025 (vyšší povinnosti: poučení z incidentů, zlepšování)"
+      - citation: "CZ-Decree-410-2025 (nižší povinnosti: poučení z incidentů, zlepšování)"
+      - citation: "EU-NIS2-2022-2555 Art. 23 (mapping: final report with lessons learned)"

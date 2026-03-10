@@ -1,657 +1,1154 @@
 meta:
-  ruleset_id: nis2-cz
-  version: '2.0'
-  description: 'Evidence Artifact Catalog for the NIS2-CZ ruleset.
+  ruleset_id: "nis2-cz"
+  version: "2.0"
+  description: >
+    Evidence Artifact Catalog for the NIS2-CZ ruleset.
+    Defines canonical artifact IDs referenced in evidence_hints across all rule parts.
+    Each artifact has a human-readable label, description, and the rule IDs that require it.
+  last_updated: "2026-03-10"
 
-    Defines canonical artifact IDs referenced in evidence_hints across all rule parts (00-05).
-
-    Each artifact has a human-readable label, description, and the rule IDs that require it.'
-  last_updated: '2026-03-10'
 artifacts:
-- artifact_id: AUDIT-REPORTS
-  label: Supplier Audit Reports
-  label_cs: Zprávy z auditů dodavatelů
-  description: 'Reports from audits of suppliers (first-, second-, or third-party), including findings, non-conformances,
-    and remediation tracking.
+  # ==================================================================
+  # 00 — Foundations
+  # ==================================================================
+  - artifact_id: "FOUND-SCOPE-ASSESSMENT"
+    label: "Scope Assessment Document"
+    label_cs: "Dokument posouzení rozsahu"
+    description: >
+      Document recording entity profile, services, in-scope hypothesis,
+      and evidence sources used for initial scoping assessment.
+    format_hints:
+      - "DOCX/PDF document or structured form"
+    referenced_by:
+      - "NIS2CZ-FOUNDATIONS-SCOPE"
 
-    '
-  format_hints:
-  - Formal audit report
-  - Certification audit reports (e.g. ISO 27001) accepted as supplementary evidence
-  referenced_by:
-  - NIS2CZ-SUP-MONITORING
-- artifact_id: GOV-AWARENESS-CAMPAIGN-MATERIALS
-  label: Awareness Campaign Materials
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-GOV-TRAINING-AWARENESS
-- artifact_id: GOV-BOARD-OR-MANAGEMENT-RESOLUTION-CYBERSECUR
-  label: Board Or Management Resolution Cybersecurity
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-GOV-MGMT-ACCOUNTABILITY
-- artifact_id: GOV-BUDGET-APPROVAL-RECORDS
-  label: Budget Approval Records
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-GOV-MGMT-ACCOUNTABILITY
-- artifact_id: GOV-CORRECTIVE-ACTIONS-REGISTER
-  label: Corrective Actions Register
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-GOV-INTERNAL-AUDIT
-- artifact_id: GOV-CYBERSECURITY-AUDIT-PLAN
-  label: Cybersecurity Audit Plan
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-GOV-INTERNAL-AUDIT
-- artifact_id: GOV-CYBERSECURITY-AUDIT-REPORT
-  label: Cybersecurity Audit Report
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-GOV-INTERNAL-AUDIT
-- artifact_id: GOV-CYBERSECURITY-GOVERNANCE-CHARTER
-  label: Cybersecurity Governance Charter
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-GOV-MGMT-ACCOUNTABILITY
-- artifact_id: GOV-CYBERSECURITY-POLICY
-  label: Cybersecurity Policy
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-GOV-POLICY-FRAMEWORK
-- artifact_id: GOV-CYBERSECURITY-ROLES-RESPONSIBILITIES-MATR
-  label: Cybersecurity Roles Responsibilities Matrix
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-GOV-ROLES-RESPONSIBILITIES-MATRIX
-- artifact_id: GOV-DOCUMENT-CONTROL-PROCEDURE
-  label: Document Control Procedure
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-GOV-POLICY-FRAMEWORK
-- artifact_id: GOV-EXCEPTIONS-REGISTER
-  label: Exceptions Register
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-GOV-POLICY-FRAMEWORK
-  - NIS2CZ-RISK-ACCESS-REVIEWS
-- artifact_id: GOV-INTERNAL-CONTROL-TESTING-WORKPAPERS
-  label: Internal Control Testing Workpapers
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-GOV-INTERNAL-AUDIT
-- artifact_id: GOV-INTRANET-POLICY-PORTAL-SCREENSHOT
-  label: Intranet Policy Portal Screenshot
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-GOV-POLICY-FRAMEWORK
-- artifact_id: GOV-JOB-DESCRIPTIONS-SECURITY
-  label: Job Descriptions Security
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-GOV-ROLES-RESPONSIBILITIES-MATRIX
-- artifact_id: GOV-LEARNING-MANAGEMENT-SYSTEM-EXPORT
-  label: Learning Management System Export
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-GOV-TRAINING-AWARENESS
-- artifact_id: GOV-MANAGEMENT-REVIEW-MINUTES-CYBER
-  label: Management Review Minutes Cyber
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-GOV-INTERNAL-AUDIT
-  - NIS2CZ-GOV-MGMT-ACCOUNTABILITY
-- artifact_id: GOV-MANAGEMENT-TRAINING-ATTENDANCE
-  label: Management Training Attendance
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-GOV-TRAINING-AWARENESS
-- artifact_id: GOV-ON-CALL-ROSTER
-  label: On Call Roster
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-GOV-ROLES-RESPONSIBILITIES-MATRIX
-- artifact_id: GOV-ORG-CHART
-  label: Org Chart
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-GOV-ROLES-RESPONSIBILITIES-MATRIX
-- artifact_id: GOV-PHISHING-SIMULATION-REPORT
-  label: Phishing Simulation Report
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-GOV-TRAINING-AWARENESS
-- artifact_id: GOV-POLICY-REGISTER
-  label: Policy Register
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-GOV-POLICY-FRAMEWORK
-  - NIS2CZ-RISK-ACCESS-CONTROL-POLICY
-  - NIS2CZ-RISK-VULN-MGMT-POLICY
-- artifact_id: GOV-RISK-REGISTER-SUMMARY-FOR-MANAGEMENT
-  label: Risk Register Summary For Management
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-GOV-MGMT-ACCOUNTABILITY
-- artifact_id: GOV-SECURITY-TRAINING-PLAN
-  label: Security Training Plan
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-GOV-TRAINING-AWARENESS
-- artifact_id: GOV-SECURITY-TRAINING-RECORDS
-  label: Security Training Records
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-GOV-TRAINING-AWARENESS
-- artifact_id: INC-INCIDENT-CLASSIFICATION-SCHEME
-  label: Incident Classification Scheme
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-INC-CLASSIFICATION-SCHEME
-- artifact_id: INC-INCIDENT-REGISTER
-  label: Incident Register
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-INC-REGISTER
-- artifact_id: INC-INCIDENT-RESPONSE-PLAN
-  label: Incident Response Plan
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-INC-CLASSIFICATION-SCHEME
-- artifact_id: INC-POST-INCIDENT-REPORTS
-  label: Post Incident Reports
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-INC-REGISTER
-- artifact_id: INC-SIEM-CASE-MANAGEMENT-EXPORT
-  label: SIEM Case Management Export
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-INC-REGISTER
-- artifact_id: INC-SOC-RUNBOOKS-OR-PLAYBOOKS
-  label: SOC Runbooks Or Playbooks
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-INC-CLASSIFICATION-SCHEME
-- artifact_id: INC-TICKETING-EXPORT
-  label: Ticketing Export
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-INC-REGISTER
-- artifact_id: INC-TICKETING-WORKFLOW-SCREENSHOTS
-  label: Ticketing Workflow Screenshots
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-INC-CLASSIFICATION-SCHEME
-- artifact_id: RISK-ACCESS-CONTROL-AND-IDENTITY-POLICY
-  label: Access Control And Identity Policy
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ACCESS-CONTROL-POLICY
-- artifact_id: RISK-ACCESS-CONTROL-STANDARD
-  label: Access Control Standard
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ACCESS-CONTROL-POLICY
-- artifact_id: RISK-ACCESS-REQUEST-RECORDS
-  label: Access Request Records
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-IDENTITY-JOINER-MOVER-LEAVER
-- artifact_id: RISK-ACCESS-REVIEW-RECORDS
-  label: Access Review Records
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ACCESS-REVIEWS
-- artifact_id: RISK-ADMIN-ACCOUNT-LIST
-  label: Admin Account List
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ACCESS-PRIVILEGED
-- artifact_id: RISK-ALERT-OR-LOG-REVIEW-RECORDS
-  label: Alert Or Log Review Records
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-LOGGING-REVIEW
-- artifact_id: RISK-APPLICATION-ACCESS-LISTS
-  label: Application Access Lists
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ACCESS-REVIEWS
-- artifact_id: RISK-ASSET-AND-INFORMATION-CLASSIFICATION-REG
-  label: Asset And Information Classification Register
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ASSET-CLASSIFICATION-REGISTER
-- artifact_id: RISK-ASSET-INVENTORY
-  label: Asset Inventory
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-VULN-SCANNING-COVERAGE
-- artifact_id: RISK-ASSET-OWNERSHIP-MODEL
-  label: Asset Ownership Model
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ASSET-OWNERSHIP
-- artifact_id: RISK-BREAK-GLASS-PROCEDURE
-  label: Break Glass Procedure
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ACCESS-PRIVILEGED
-- artifact_id: RISK-CENTRAL-LOGGING-ARCHITECTURE-DIAGRAM
-  label: Central Logging Architecture Diagram
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-LOGGING-BASELINE
-- artifact_id: RISK-CHANGE-TICKETS
-  label: Change Tickets
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ASSET-LIFECYCLE
-  - NIS2CZ-RISK-PATCH-MGMT-COMPLIANCE
-- artifact_id: RISK-CLOUD-ACCOUNT-INVENTORY
-  label: Cloud Account Inventory
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ASSET-INVENTORY
-- artifact_id: RISK-CMDB-EXPORT
-  label: Cmdb Export
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ASSET-INVENTORY
-- artifact_id: RISK-DATA-HANDLING-STANDARD
-  label: Data Handling Standard
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ASSET-CLASSIFICATION-SCHEME
-- artifact_id: RISK-DATA-INVENTORY
-  label: Data Inventory
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ASSET-CLASSIFICATION-REGISTER
-- artifact_id: RISK-DECOMMISSION-RECORDS
-  label: Decommission Records
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ASSET-LIFECYCLE
-- artifact_id: RISK-DPA-OR-GDPR-RECORDS
-  label: DPA Or GDPR Records (If Applicable)
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ASSET-CLASSIFICATION-REGISTER
-- artifact_id: RISK-EMERGENCY-CHANGE-RECORDS
-  label: Emergency Change Records
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-PATCH-MGMT-COMPLIANCE
-- artifact_id: RISK-ENDPOINT-MANAGEMENT-REPORTS
-  label: Endpoint Management Reports
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-PATCH-MGMT-COMPLIANCE
-- artifact_id: RISK-HR-TERMINATION-RECORDS
-  label: Hr Termination Records (Redacted)
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-IDENTITY-JOINER-MOVER-LEAVER
-- artifact_id: RISK-ICT-ASSET-INVENTORY
-  label: ICT Asset Inventory
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ASSET-CLASSIFICATION-REGISTER
-  - NIS2CZ-RISK-ASSET-INVENTORY
-  - NIS2CZ-RISK-ASSET-OWNERSHIP
-- artifact_id: RISK-ICT-ASSET-LIFECYCLE-PROCESS
-  label: ICT Asset Lifecycle Process
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ASSET-LIFECYCLE
-- artifact_id: RISK-IDENTITY-LIFECYCLE-PROCEDURE
-  label: Identity Lifecycle Procedure
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-IDENTITY-JOINER-MOVER-LEAVER
-- artifact_id: RISK-IDM-ACCESS-REPORTS
-  label: IDM Access Reports
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ACCESS-REVIEWS
-- artifact_id: RISK-IDM-SYSTEM-LOGS-OR-EXPORTS
-  label: IDM System Logs Or Exports
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-IDENTITY-JOINER-MOVER-LEAVER
-- artifact_id: RISK-INCIDENT-TICKETS-LINKED-TO-ALERTS
-  label: Incident Tickets Linked To Alerts
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-LOGGING-REVIEW
-- artifact_id: RISK-INFORMATION-AND-ASSET-CLASSIFICATION-POL
-  label: Information And Asset Classification Policy
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ASSET-CLASSIFICATION-SCHEME
-- artifact_id: RISK-LOG-RETENTION-SETTINGS-SCREENSHOTS
-  label: Log Retention Settings Screenshots
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-LOGGING-BASELINE
-- artifact_id: RISK-LOG-REVIEW-PROCEDURE
-  label: Log Review Procedure
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-LOGGING-REVIEW
-- artifact_id: RISK-NETWORK-DIAGRAMS
-  label: Network Diagrams
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ASSET-INVENTORY
-- artifact_id: RISK-PAM-CONTROLS-EVIDENCE
-  label: PAM Controls Evidence
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ACCESS-PRIVILEGED
-- artifact_id: RISK-PATCH-COMPLIANCE-REPORT
-  label: Patch Compliance Report
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-PATCH-MGMT-COMPLIANCE
-- artifact_id: RISK-PATCHING-RECORDS
-  label: Patching Records
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-PATCH-MGMT-COMPLIANCE
-- artifact_id: RISK-PATCHING-SLA-MATRIX
-  label: Patching SLA Matrix
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-VULN-MGMT-POLICY
-- artifact_id: RISK-PRIVILEGED-ACCESS-INVENTORY
-  label: Privileged Access Inventory
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ACCESS-PRIVILEGED
-- artifact_id: RISK-PRIVILEGED-SESSION-LOGS
-  label: Privileged Session Logs
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ACCESS-PRIVILEGED
-- artifact_id: RISK-PROCUREMENT-POLICY
-  label: Procurement Policy
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ASSET-LIFECYCLE
-- artifact_id: RISK-RACI-MATRIX
-  label: Raci Matrix
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ASSET-OWNERSHIP
-- artifact_id: RISK-RATING-METHODOLOGY
-  label: Risk Rating Methodology
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-VULN-MGMT-POLICY
-- artifact_id: RISK-RECORDS-MANAGEMENT-POLICY
-  label: Records Management Policy
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ASSET-CLASSIFICATION-SCHEME
-- artifact_id: RISK-REGISTER
-  label: Risk Register (Supplier Risks)
-  label_cs: Registr rizik (rizika dodavatelů)
-  description: 'Enterprise or ISMS risk register with supplier-specific risks captured, including residual risk status and
-    treatment tracking.
+  - artifact_id: "FOUND-SERVICE-CATALOG"
+    label: "Service Catalog"
+    label_cs: "Katalog služeb"
+    description: >
+      Full catalog of services the entity provides, used as input
+      for scoping and regulated service identification.
+    format_hints:
+      - "Spreadsheet or CMDB export"
+    referenced_by:
+      - "NIS2CZ-FOUNDATIONS-SCOPE"
+      - "NIS2CZ-SCOPING-REGULATED-SERVICES-REGISTER"
 
-    '
-  format_hints:
-  - Risk register with supplier risk category / tag
-  referenced_by:
-  - NIS2CZ-SUP-RISK-MGMT
-- artifact_id: RISK-REMEDIATION-TICKET-EXPORT
-  label: Remediation Ticket Export
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-VULN-SCANNING-COVERAGE
-- artifact_id: RISK-REMOTE-ACCESS-STANDARD
-  label: Remote Access Standard
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-ACCESS-CONTROL-POLICY
-- artifact_id: RISK-SCANNER-CONFIGURATION-EXPORT
-  label: Scanner Configuration Export
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-VULN-SCANNING-COVERAGE
-- artifact_id: RISK-SECURITY-LOGGING-BASELINE
-  label: Security Logging Baseline
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-LOGGING-BASELINE
-- artifact_id: RISK-SECURITY-TXT-FILE
-  label: Security Txt File
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-VULN-DISCLOSURE-HANDLING
-- artifact_id: RISK-SIEM-ALERT-QUEUE-EXPORT
-  label: SIEM Alert Queue Export
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-LOGGING-REVIEW
-- artifact_id: RISK-SIEM-CONFIGURATION-EXPORT
-  label: SIEM Configuration Export
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-LOGGING-BASELINE
-- artifact_id: RISK-SUPPORT-TICKET-SAMPLES
-  label: Support Ticket Samples (Redacted)
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-VULN-DISCLOSURE-HANDLING
-- artifact_id: RISK-VULNERABILITY-AND-PATCH-MANAGEMENT-POLIC
-  label: Vulnerability And Patch Management Policy
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-VULN-MGMT-POLICY
-- artifact_id: RISK-VULNERABILITY-CASE-REGISTER
-  label: Vulnerability Case Register
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-VULN-DISCLOSURE-HANDLING
-- artifact_id: RISK-VULNERABILITY-REPORTING-CHANNEL-EVIDENCE
-  label: Vulnerability Reporting Channel Evidence
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-VULN-DISCLOSURE-HANDLING
-- artifact_id: RISK-VULNERABILITY-SCAN-REPORTS
-  label: Vulnerability Scan Reports
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-VULN-SCANNING-COVERAGE
-- artifact_id: RISK-VULNERABILITY-SCAN-SCHEDULE
-  label: Vulnerability Scan Schedule
-  description: Evidence artifact for NIS2-CZ compliance.
-  referenced_by:
-  - NIS2CZ-RISK-VULN-SCANNING-COVERAGE
-- artifact_id: SUPP-ACK-EVIDENCE
-  label: Supplier Acknowledgement Evidence
-  label_cs: Doklady o akceptaci dodavatelů
-  description: 'Evidence that suppliers have acknowledged and agreed to comply with security rules and policies (signed agreements,
-    portal acceptances, etc.).
+  - artifact_id: "FOUND-ORG-CHART"
+    label: "Organization Chart"
+    label_cs: "Organizační schéma"
+    description: >
+      Current organizational chart showing reporting lines and
+      cybersecurity-relevant roles.
+    format_hints:
+      - "Diagram (PDF/PNG) or structured document"
+    referenced_by:
+      - "NIS2CZ-FOUNDATIONS-SCOPE"
+      - "NIS2CZ-GOV-ROLES-RESPONSIBILITIES-MATRIX"
 
-    '
-  format_hints:
-  - Signed supplier code of conduct
-  - Contractual confirmation of security obligations
-  referenced_by:
-  - NIS2CZ-SUP-RULES-COMMUNICATION
-- artifact_id: SUPP-CLAUSE-CHECKLIST
-  label: Supplier Contract Clause Checklist
-  label_cs: Kontrolní seznam smluvních ustanovení dodavatele
-  description: 'Per-contract checklist confirming presence of each required annex item, with applicability determination and
-    gap notes.
+  - artifact_id: "FOUND-EVIDENCE-REGISTER"
+    label: "Evidence Artifact Register"
+    label_cs: "Registr důkazních artefaktů"
+    description: >
+      Master register of all compliance evidence artifacts with taxonomy,
+      naming convention, owners, retention, and rule-to-artifact mapping.
+    format_hints:
+      - "Spreadsheet or structured database export"
+    referenced_by:
+      - "NIS2CZ-FOUNDATIONS-EVIDENCE-REGISTER"
+      - "NIS2CZ-OVERSIGHT-SUPERVISORY-READINESS"
 
-    '
-  format_hints:
-  - Spreadsheet or structured YAML/JSON per contract
-  - 'Columns: item ID, title, applicable (Y/N), location in contract (section/page), gap notes'
-  - Signed off by legal and security reviewer
-  referenced_by:
-  - NIS2CZ-SUP-CONTRACT-ANNEX5-HIGHER
-  - NIS2CZ-SUP-CONTRACT-ANNEX2-LOWER
-- artifact_id: SUPP-CODE-OF-CONDUCT
-  label: Supplier Code of Conduct / Security Requirements
-  label_cs: Kodex chování dodavatele / bezpečnostní požadavky
-  description: 'Document specifying the security, ethical, and operational requirements expected of all suppliers.
+  - artifact_id: "FOUND-DOCUMENT-REGISTER"
+    label: "Document Register"
+    label_cs: "Registr dokumentů"
+    description: >
+      General document register for the organization's management system.
+    format_hints:
+      - "Spreadsheet or DMS export"
+    referenced_by:
+      - "NIS2CZ-FOUNDATIONS-EVIDENCE-REGISTER"
 
-    '
-  format_hints:
-  - Standalone document or annex to contract template
-  referenced_by:
-  - NIS2CZ-SUP-RULES-COMMUNICATION
-- artifact_id: SUPP-CONTRACT-EXIT-CLAUSES
-  label: Contract Exit / Termination Security Clauses
-  label_cs: Smluvní ustanovení o exit strategii
-  description: 'Contractual provisions governing termination conditions, data return, migration periods, and security obligations
-    on contract exit.
+  - artifact_id: "FOUND-RECORDS-MGMT-POLICY"
+    label: "Records Management Policy"
+    label_cs: "Politika správy záznamů"
+    description: >
+      Policy governing record creation, retention, and disposal.
+    format_hints:
+      - "Policy document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-FOUNDATIONS-EVIDENCE-REGISTER"
 
-    '
-  format_hints:
-  - Specific contract sections; referenced in clause checklist under ANN5-j / ANN2-d
-  referenced_by:
-  - NIS2CZ-SUP-EXIT-STRATEGY
-- artifact_id: SUPP-CONTRACT-TEMPLATE
-  label: Supplier Contract Template / Security Redlines
-  label_cs: Vzor smlouvy s dodavatelem / bezpečnostní ustanovení
-  description: 'Standard contract template or security clause addendum used when contracting with suppliers, containing all
-    required annex items.
+  # ==================================================================
+  # 01 — Scoping
+  # ==================================================================
+  - artifact_id: "SCOPE-IN-SCOPE-DETERMINATION"
+    label: "In-Scope Determination Record"
+    label_cs: "Záznam o určení působnosti"
+    description: >
+      Formal decision record documenting whether the entity is in scope
+      under CZ Cybersecurity Act with legal basis and approval.
+    format_hints:
+      - "Decision record (signed DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-SCOPING-IN-SCOPE-DECISION"
+      - "NIS2CZ-SCOPING-ENTITY-CLASS-ESSENTIAL-IMPORTANT"
 
-    '
-  format_hints:
-  - Legal document (DOCX/PDF)
-  - Should reference which items are mandatory vs. conditional
-  - Must be version-controlled and legally reviewed
-  referenced_by:
-  - NIS2CZ-SUP-CONTRACT-ANNEX5-HIGHER
-  - NIS2CZ-SUP-CONTRACT-ANNEX2-LOWER
-- artifact_id: SUPP-CONTRACTS-SIGNED
-  label: Signed Supplier Contracts
-  label_cs: Podepsané smlouvy s dodavateli
-  description: 'Executed contracts with significant suppliers that incorporate the required security clauses per applicable
-    annex.
+  - artifact_id: "SCOPE-CONTRACT-CATALOG"
+    label: "Contract Catalog"
+    label_cs: "Katalog smluv"
+    description: >
+      Catalog of key contracts relevant to scoping.
+    format_hints:
+      - "Spreadsheet or contract management export"
+    referenced_by:
+      - "NIS2CZ-SCOPING-IN-SCOPE-DECISION"
 
-    '
-  format_hints:
-  - Signed contract copies (PDF) stored securely
-  - Index/register of signed contracts by supplier and date
-  referenced_by:
-  - NIS2CZ-SUP-CONTRACT-ANNEX5-HIGHER
-  - NIS2CZ-SUP-CONTRACT-ANNEX2-LOWER
-- artifact_id: SUPP-DEPENDENCY-MAP
-  label: Supplier Dependency Map
-  label_cs: Mapa závislostí na dodavatelích
-  description: 'Map of critical dependencies on significant suppliers, identifying which regulated services or assets depend
-    on which suppliers.
+  - artifact_id: "SCOPE-COMPANY-REGISTRY-EXTRACT"
+    label: "Company Registry Extract"
+    label_cs: "Výpis z obchodního rejstříku"
+    description: >
+      Extract from Czech company registry used for entity identification and size.
+    format_hints:
+      - "PDF from justice.cz or equivalent"
+    referenced_by:
+      - "NIS2CZ-SCOPING-IN-SCOPE-DECISION"
 
-    '
-  format_hints:
-  - Diagram or structured table
-  - Input to BCP/DRP and exit planning
-  referenced_by:
-  - NIS2CZ-SUP-EXIT-STRATEGY
-- artifact_id: SUPP-EXIT-PLANS
-  label: Supplier Exit / Transition Plans
-  label_cs: Plány exit strategie pro dodavatele
-  description: 'Documented exit and transition plans for significant suppliers, covering migration, data return/disposal,
-    and continuity during handover.
+  - artifact_id: "SCOPE-ENTITY-CLASSIFICATION"
+    label: "Entity Classification Record"
+    label_cs: "Záznam o klasifikaci entity"
+    description: >
+      Record documenting entity class (essential/important) with criteria and approval.
+    format_hints:
+      - "Decision record (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-SCOPING-ENTITY-CLASS-ESSENTIAL-IMPORTANT"
+      - "NIS2CZ-OVERSIGHT-DUTY-REGIME-TAG"
 
-    '
-  format_hints:
-  - One plan per critical/significant supplier
-  - Reviewed annually and tested for critical suppliers
-  referenced_by:
-  - NIS2CZ-SUP-EXIT-STRATEGY
-- artifact_id: SUPP-MGMT-POLICY
-  label: Supplier Management Policy
-  label_cs: Politika řízení dodavatelů
-  description: 'Documented policy defining how suppliers are identified, classified, engaged, monitored, and offboarded, linked
-    to the ISMS.
+  - artifact_id: "SCOPE-SECTOR-MAPPING"
+    label: "Sector Mapping"
+    label_cs: "Mapování sektorů"
+    description: >
+      Mapping of entity activities to NIS2/CZ sectors and subsectors.
+    format_hints:
+      - "Table or structured document"
+    referenced_by:
+      - "NIS2CZ-SCOPING-ENTITY-CLASS-ESSENTIAL-IMPORTANT"
 
-    '
-  format_hints:
-  - Policy document approved by management
-  - Version-controlled; annually reviewed
-  referenced_by:
-  - NIS2CZ-SUP-REGISTER-SIGNIFICANT-SUPPLIERS
-  - NIS2CZ-SUP-RULES-COMMUNICATION
-- artifact_id: SUPP-NOTIFY-RECORDS
-  label: Supplier Notification Records
-  label_cs: Záznamy o notifikaci dodavatelů
-  description: 'Evidence that significant suppliers have been notified of their status and associated obligations (written
-    form preferred).
+  - artifact_id: "SCOPE-DUTY-REGIME-DETERMINATION"
+    label: "Duty Regime Determination"
+    label_cs: "Určení režimu povinností"
+    description: >
+      Record determining whether higher or lower duty regime applies.
+    format_hints:
+      - "Decision record (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-SCOPING-DUTY-REGIME-HIGHER-LOWER"
+      - "NIS2CZ-OVERSIGHT-DUTY-REGIME-TAG"
 
-    '
-  format_hints:
-  - Copies of notification letters or emails
-  - Supplier acknowledgement receipts
-  referenced_by:
-  - NIS2CZ-SUP-REGISTER-SIGNIFICANT-SUPPLIERS
-- artifact_id: SUPP-REGISTER
-  label: Significant Suppliers Register
-  label_cs: Registr významných dodavatelů
-  description: 'A maintained register listing all suppliers classified as significant, including criteria used for classification
-    and date of last review.
+  - artifact_id: "SCOPE-CONTROL-APPLICABILITY-MATRIX"
+    label: "Control Applicability Matrix"
+    label_cs: "Matice použitelnosti kontrol"
+    description: >
+      Matrix mapping applicable controls/measures to the entity's duty regime.
+    format_hints:
+      - "Spreadsheet"
+    referenced_by:
+      - "NIS2CZ-SCOPING-DUTY-REGIME-HIGHER-LOWER"
 
-    '
-  format_hints:
-  - Spreadsheet or ISMS-integrated register
-  - 'Includes: supplier name, service scope, significance criteria met, classification date, review date'
-  referenced_by:
-  - NIS2CZ-SUP-REGISTER-SIGNIFICANT-SUPPLIERS
-- artifact_id: SUPP-REVIEW-RECORDS
-  label: Supplier Review Records
-  label_cs: Záznamy z přezkumů dodavatelů
-  description: 'Records of periodic reviews of supplier security performance and SLA compliance, including findings and remediation
-    actions.
+  - artifact_id: "SCOPE-REGULATED-SERVICES-REGISTER"
+    label: "Regulated Services Register"
+    label_cs: "Registr regulovaných služeb"
+    description: >
+      Register of regulated services with type, owner, description,
+      criticality, dependencies, and catalog links.
+    format_hints:
+      - "Spreadsheet or structured register"
+    referenced_by:
+      - "NIS2CZ-SCOPING-REGULATED-SERVICES-REGISTER"
 
-    '
-  format_hints:
-  - Meeting minutes, scorecards, or structured review reports
-  - At minimum annual for significant suppliers
-  referenced_by:
-  - NIS2CZ-SUP-MONITORING
-- artifact_id: SUPP-RISK-ASSESSMENTS
-  label: Supplier Risk Assessments
-  label_cs: Hodnocení rizik dodavatelů
-  description: 'Individual risk assessments performed for each significant supplier, documenting identified risks, scores,
-    and treatment decisions.
+  - artifact_id: "SCOPE-DEPENDENCY-MAP"
+    label: "Service Dependency Map"
+    label_cs: "Mapa závislostí služeb"
+    description: >
+      Map of dependencies between regulated services and ICT assets/providers.
+    format_hints:
+      - "Diagram or structured table"
+    referenced_by:
+      - "NIS2CZ-SCOPING-REGULATED-SERVICES-REGISTER"
 
-    '
-  format_hints:
-  - One assessment per significant supplier
-  - Dated and reviewed periodically (at least annually)
-  referenced_by:
-  - NIS2CZ-SUP-RISK-MGMT
-- artifact_id: SUPP-RISK-METHOD
-  label: Supplier Risk Assessment Methodology
-  label_cs: Metodika hodnocení rizik dodavatelů
-  description: 'Documented methodology for assessing risks associated with suppliers, covering criteria, scoring, and classification
-    of risk levels.
+  # ==================================================================
+  # 02 — Governance
+  # ==================================================================
+  - artifact_id: "GOV-BOARD-RESOLUTION-CYBER"
+    label: "Board/Management Resolution on Cybersecurity"
+    label_cs: "Usnesení vedení o kybernetické bezpečnosti"
+    description: >
+      Formal resolution assigning cybersecurity accountability and approving measures.
+    format_hints:
+      - "Signed resolution or board minutes (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-GOV-MGMT-ACCOUNTABILITY"
 
-    '
-  format_hints:
-  - Risk methodology document
-  - May be part of enterprise-wide risk management framework
-  referenced_by:
-  - NIS2CZ-SUP-RISK-MGMT
-- artifact_id: SUPP-SCORECARDS
-  label: Supplier Scorecards
-  label_cs: Hodnotící karty dodavatelů
-  description: 'Periodic performance scorecards for significant suppliers covering security, service levels, and compliance
-    metrics.
+  - artifact_id: "GOV-MGMT-REVIEW-MINUTES"
+    label: "Management Review Minutes (Cybersecurity)"
+    label_cs: "Zápis z přezkumu vedení (kybernetická bezpečnost)"
+    description: >
+      Minutes from periodic management reviews of cybersecurity status.
+    format_hints:
+      - "Meeting minutes (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-GOV-MGMT-ACCOUNTABILITY"
+      - "NIS2CZ-GOV-INTERNAL-AUDIT"
+      - "NIS2CZ-INC-POST-INCIDENT-REVIEW"
 
-    '
-  format_hints:
-  - Spreadsheet or GRC-tool output
-  referenced_by:
-  - NIS2CZ-SUP-MONITORING
+  - artifact_id: "GOV-GOVERNANCE-CHARTER"
+    label: "Cybersecurity Governance Charter"
+    label_cs: "Charta řízení kybernetické bezpečnosti"
+    description: >
+      Charter defining the cybersecurity governance structure, forum, and reporting.
+    format_hints:
+      - "Document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-GOV-MGMT-ACCOUNTABILITY"
+
+  - artifact_id: "GOV-RISK-REGISTER-SUMMARY"
+    label: "Risk Register Summary for Management"
+    label_cs: "Souhrn registru rizik pro vedení"
+    description: >
+      Summary of top cyber risks presented to management.
+    format_hints:
+      - "Report or dashboard export"
+    referenced_by:
+      - "NIS2CZ-GOV-MGMT-ACCOUNTABILITY"
+
+  - artifact_id: "GOV-BUDGET-RECORDS"
+    label: "Cybersecurity Budget Approval Records"
+    label_cs: "Záznamy o schválení rozpočtu kybernetické bezpečnosti"
+    description: >
+      Records of budget allocation and approval for cybersecurity.
+    format_hints:
+      - "Budget documents, approval emails"
+    referenced_by:
+      - "NIS2CZ-GOV-MGMT-ACCOUNTABILITY"
+
+  - artifact_id: "GOV-CYBERSECURITY-POLICY"
+    label: "Cybersecurity Policy"
+    label_cs: "Politika kybernetické bezpečnosti"
+    description: >
+      Top-level cybersecurity policy document.
+    format_hints:
+      - "Policy document (DOCX/PDF), version-controlled"
+    referenced_by:
+      - "NIS2CZ-GOV-POLICY-FRAMEWORK"
+
+  - artifact_id: "GOV-POLICY-REGISTER"
+    label: "Policy Register"
+    label_cs: "Registr politik"
+    description: >
+      Register of all cybersecurity policies, standards, and procedures.
+    format_hints:
+      - "Spreadsheet or DMS index"
+    referenced_by:
+      - "NIS2CZ-GOV-POLICY-FRAMEWORK"
+      - "NIS2CZ-RISK-ACCESS-CONTROL-POLICY"
+
+  - artifact_id: "GOV-DOCUMENT-CONTROL-PROCEDURE"
+    label: "Document Control Procedure"
+    label_cs: "Postup řízení dokumentů"
+    description: >
+      Procedure for version control and change management of policies.
+    format_hints:
+      - "Procedure document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-GOV-POLICY-FRAMEWORK"
+
+  - artifact_id: "GOV-EXCEPTIONS-REGISTER"
+    label: "Exceptions Register"
+    label_cs: "Registr výjimek"
+    description: >
+      Register of approved policy exceptions with justification and expiry.
+    format_hints:
+      - "Spreadsheet or GRC tool export"
+    referenced_by:
+      - "NIS2CZ-GOV-POLICY-FRAMEWORK"
+      - "NIS2CZ-RISK-ACCESS-REVIEWS"
+
+  - artifact_id: "GOV-ROLES-MATRIX"
+    label: "Cybersecurity Roles and Responsibilities Matrix"
+    label_cs: "Matice rolí a odpovědností kybernetické bezpečnosti"
+    description: >
+      RACI or equivalent matrix mapping cybersecurity processes to roles.
+    format_hints:
+      - "Spreadsheet or document"
+    referenced_by:
+      - "NIS2CZ-GOV-ROLES-RESPONSIBILITIES-MATRIX"
+
+  - artifact_id: "GOV-JOB-DESCRIPTIONS"
+    label: "Job Descriptions (Security Roles)"
+    label_cs: "Popisy pracovních pozic (bezpečnostní role)"
+    description: >
+      Job descriptions for key cybersecurity roles.
+    format_hints:
+      - "HR documents (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-GOV-ROLES-RESPONSIBILITIES-MATRIX"
+
+  - artifact_id: "GOV-ON-CALL-ROSTER"
+    label: "On-Call Roster"
+    label_cs: "Rozpis pohotovostí"
+    description: >
+      On-call schedule for cybersecurity incident response.
+    format_hints:
+      - "Schedule document or tool export"
+    referenced_by:
+      - "NIS2CZ-GOV-ROLES-RESPONSIBILITIES-MATRIX"
+
+  - artifact_id: "GOV-TRAINING-PLAN"
+    label: "Security Training Plan"
+    label_cs: "Plán bezpečnostních školení"
+    description: >
+      Plan defining training audiences, topics, cadence, and methods.
+    format_hints:
+      - "Document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-GOV-TRAINING-AWARENESS"
+
+  - artifact_id: "GOV-TRAINING-RECORDS"
+    label: "Security Training Records"
+    label_cs: "Záznamy o bezpečnostních školeních"
+    description: >
+      Records of training completion per employee/role group.
+    format_hints:
+      - "LMS export, spreadsheet, or signed attendance sheets"
+    referenced_by:
+      - "NIS2CZ-GOV-TRAINING-AWARENESS"
+
+  - artifact_id: "GOV-LMS-EXPORT"
+    label: "LMS Export"
+    label_cs: "Export z LMS"
+    description: >
+      Export from Learning Management System showing completion data.
+    format_hints:
+      - "CSV/Excel export"
+    referenced_by:
+      - "NIS2CZ-GOV-TRAINING-AWARENESS"
+
+  - artifact_id: "GOV-AWARENESS-MATERIALS"
+    label: "Awareness Campaign Materials"
+    label_cs: "Materiály kampaně zvyšování povědomí"
+    description: >
+      Materials used in awareness campaigns (posters, emails, simulations).
+    format_hints:
+      - "PDFs, screenshots, email samples"
+    referenced_by:
+      - "NIS2CZ-GOV-TRAINING-AWARENESS"
+
+  - artifact_id: "GOV-PHISHING-REPORT"
+    label: "Phishing Simulation Report"
+    label_cs: "Zpráva o simulaci phishingu"
+    description: >
+      Report from phishing simulations with click rates and trends.
+    format_hints:
+      - "Report (PDF or dashboard export)"
+    referenced_by:
+      - "NIS2CZ-GOV-TRAINING-AWARENESS"
+
+  - artifact_id: "GOV-MGMT-TRAINING-ATTENDANCE"
+    label: "Management Training Attendance"
+    label_cs: "Účast vedení na školení"
+    description: >
+      Evidence of management participation in cybersecurity training.
+    format_hints:
+      - "Attendance records, certificates"
+    referenced_by:
+      - "NIS2CZ-GOV-TRAINING-AWARENESS"
+
+  - artifact_id: "GOV-AUDIT-PLAN"
+    label: "Cybersecurity Audit Plan"
+    label_cs: "Plán auditu kybernetické bezpečnosti"
+    description: >
+      Plan or schedule for internal cybersecurity audits/self-assessments.
+    format_hints:
+      - "Document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-GOV-INTERNAL-AUDIT"
+
+  - artifact_id: "GOV-AUDIT-REPORT"
+    label: "Cybersecurity Audit Report"
+    label_cs: "Zpráva z auditu kybernetické bezpečnosti"
+    description: >
+      Report from internal audit with findings, ratings, and recommendations.
+    format_hints:
+      - "Report (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-GOV-INTERNAL-AUDIT"
+
+  - artifact_id: "GOV-CORRECTIVE-ACTIONS-REGISTER"
+    label: "Corrective Actions Register"
+    label_cs: "Registr nápravných opatření"
+    description: >
+      Register tracking corrective actions from audits and incidents.
+    format_hints:
+      - "Spreadsheet or GRC tool export"
+    referenced_by:
+      - "NIS2CZ-GOV-INTERNAL-AUDIT"
+      - "NIS2CZ-INC-POST-INCIDENT-REVIEW"
+      - "NIS2CZ-OVERSIGHT-SUPERVISORY-READINESS"
+
+  # ==================================================================
+  # 03 — Risk Measures
+  # ==================================================================
+  - artifact_id: "RISK-ASSET-INVENTORY"
+    label: "ICT Asset Inventory"
+    label_cs: "Inventář ICT aktiv"
+    description: >
+      Comprehensive inventory of ICT assets with required fields.
+    format_hints:
+      - "CMDB export, spreadsheet, or tool export"
+    referenced_by:
+      - "NIS2CZ-RISK-ASSET-INVENTORY"
+
+  - artifact_id: "RISK-CMDB-EXPORT"
+    label: "CMDB Export"
+    label_cs: "Export z CMDB"
+    description: "Export from Configuration Management Database."
+    format_hints:
+      - "CSV/Excel"
+    referenced_by:
+      - "NIS2CZ-RISK-ASSET-INVENTORY"
+
+  - artifact_id: "RISK-CLOUD-ACCOUNT-INVENTORY"
+    label: "Cloud Account Inventory"
+    label_cs: "Inventář cloudových účtů"
+    description: "Inventory of cloud subscriptions, accounts, and tenants."
+    format_hints:
+      - "Spreadsheet or cloud management console export"
+    referenced_by:
+      - "NIS2CZ-RISK-ASSET-INVENTORY"
+
+  - artifact_id: "RISK-NETWORK-DIAGRAMS"
+    label: "Network Diagrams"
+    label_cs: "Síťové diagramy"
+    description: "Current network topology diagrams."
+    format_hints:
+      - "Visio/PDF diagrams"
+    referenced_by:
+      - "NIS2CZ-RISK-ASSET-INVENTORY"
+
+  - artifact_id: "RISK-CLASSIFICATION-POLICY"
+    label: "Information and Asset Classification Policy"
+    label_cs: "Politika klasifikace informací a aktiv"
+    description: "Policy defining classification scheme, levels, criteria, and handling rules."
+    format_hints:
+      - "Policy document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-RISK-ASSET-CLASSIFICATION-SCHEME"
+
+  - artifact_id: "RISK-DATA-HANDLING-STANDARD"
+    label: "Data Handling Standard"
+    label_cs: "Standard nakládání s daty"
+    description: "Standard defining handling procedures per classification level."
+    format_hints:
+      - "Standard document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-RISK-ASSET-CLASSIFICATION-SCHEME"
+
+  - artifact_id: "RISK-ASSET-LIFECYCLE-PROCESS"
+    label: "ICT Asset Lifecycle Process"
+    label_cs: "Proces životního cyklu ICT aktiv"
+    description: "Documented process for asset acquisition, change, and decommissioning."
+    format_hints:
+      - "Procedure document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-RISK-ASSET-LIFECYCLE"
+
+  - artifact_id: "RISK-CHANGE-TICKETS"
+    label: "Change Tickets"
+    label_cs: "Tikety změn"
+    description: "Sample change tickets evidencing change management process."
+    format_hints:
+      - "ITSM export, screenshots"
+    referenced_by:
+      - "NIS2CZ-RISK-ASSET-LIFECYCLE"
+      - "NIS2CZ-RISK-PATCH-MGMT-COMPLIANCE"
+      - "NIS2CZ-RISK-CHANGE-MANAGEMENT"
+
+  - artifact_id: "RISK-DECOMMISSION-RECORDS"
+    label: "Decommission Records"
+    label_cs: "Záznamy o vyřazení"
+    description: "Records of asset decommissioning including data disposal evidence."
+    format_hints:
+      - "Signed decommission forms, destruction certificates"
+    referenced_by:
+      - "NIS2CZ-RISK-ASSET-LIFECYCLE"
+
+  - artifact_id: "RISK-ACCESS-CONTROL-POLICY"
+    label: "Access Control and Identity Management Policy"
+    label_cs: "Politika řízení přístupu a správy identit"
+    description: "Policy covering access principles, account types, authentication, and authorization."
+    format_hints:
+      - "Policy document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-RISK-ACCESS-CONTROL-POLICY"
+
+  - artifact_id: "RISK-REMOTE-ACCESS-STANDARD"
+    label: "Remote Access Standard"
+    label_cs: "Standard vzdáleného přístupu"
+    description: "Standard for remote access methods, authentication, and monitoring."
+    format_hints:
+      - "Standard document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-RISK-ACCESS-CONTROL-POLICY"
+
+  - artifact_id: "RISK-IDENTITY-LIFECYCLE-PROCEDURE"
+    label: "Identity Lifecycle Procedure"
+    label_cs: "Postup životního cyklu identit"
+    description: "Procedure for joiner-mover-leaver process."
+    format_hints:
+      - "Procedure document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-RISK-IDENTITY-JOINER-MOVER-LEAVER"
+
+  - artifact_id: "RISK-ACCESS-REQUEST-RECORDS"
+    label: "Access Request Records"
+    label_cs: "Záznamy žádostí o přístup"
+    description: "Sample access request and approval records."
+    format_hints:
+      - "ITSM export, email approvals"
+    referenced_by:
+      - "NIS2CZ-RISK-IDENTITY-JOINER-MOVER-LEAVER"
+
+  - artifact_id: "RISK-IDM-LOGS"
+    label: "Identity Management System Logs"
+    label_cs: "Logy systému správy identit"
+    description: "Logs from identity management systems."
+    format_hints:
+      - "System export"
+    referenced_by:
+      - "NIS2CZ-RISK-IDENTITY-JOINER-MOVER-LEAVER"
+
+  - artifact_id: "RISK-PAM-INVENTORY"
+    label: "Privileged Access Inventory"
+    label_cs: "Inventář privilegovaných přístupů"
+    description: "Inventory of privileged roles and accounts."
+    format_hints:
+      - "Spreadsheet or PAM tool export"
+    referenced_by:
+      - "NIS2CZ-RISK-ACCESS-PRIVILEGED"
+
+  - artifact_id: "RISK-PAM-CONTROLS"
+    label: "PAM Controls Evidence"
+    label_cs: "Důkazy o kontrolách PAM"
+    description: "Evidence of PAM controls (separate accounts, MFA, etc.)."
+    format_hints:
+      - "Configuration screenshots, tool exports"
+    referenced_by:
+      - "NIS2CZ-RISK-ACCESS-PRIVILEGED"
+
+  - artifact_id: "RISK-BREAK-GLASS-PROCEDURE"
+    label: "Break-Glass Procedure"
+    label_cs: "Postup pro nouzové účty"
+    description: "Documented procedure for break-glass account usage."
+    format_hints:
+      - "Procedure document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-RISK-ACCESS-PRIVILEGED"
+
+  - artifact_id: "RISK-PRIVILEGED-SESSION-LOGS"
+    label: "Privileged Session Logs"
+    label_cs: "Logy privilegovaných relací"
+    description: "Sample privileged session recordings or command logs."
+    format_hints:
+      - "PAM tool export, session recordings"
+    referenced_by:
+      - "NIS2CZ-RISK-ACCESS-PRIVILEGED"
+
+  - artifact_id: "RISK-ACCESS-REVIEW-RECORDS"
+    label: "Access Review Records"
+    label_cs: "Záznamy z přezkumů přístupů"
+    description: "Records from periodic access reviews."
+    format_hints:
+      - "Spreadsheet, tool export, signed attestation forms"
+    referenced_by:
+      - "NIS2CZ-RISK-ACCESS-REVIEWS"
+
+  - artifact_id: "RISK-IDM-ACCESS-REPORTS"
+    label: "IDM Access Reports"
+    label_cs: "Reporty přístupů z IDM"
+    description: "Access reports from identity management systems."
+    format_hints:
+      - "System export"
+    referenced_by:
+      - "NIS2CZ-RISK-ACCESS-REVIEWS"
+
+  - artifact_id: "RISK-LOGGING-BASELINE"
+    label: "Security Logging Baseline"
+    label_cs: "Baseline bezpečnostního logování"
+    description: "Document defining logging scope, event types, sources, retention, and monitoring."
+    format_hints:
+      - "Standard document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-RISK-LOGGING-BASELINE"
+
+  - artifact_id: "RISK-SIEM-CONFIG"
+    label: "SIEM Configuration Export"
+    label_cs: "Export konfigurace SIEM"
+    description: "Configuration export from SIEM system."
+    format_hints:
+      - "Tool export, screenshots"
+    referenced_by:
+      - "NIS2CZ-RISK-LOGGING-BASELINE"
+
+  - artifact_id: "RISK-LOGGING-ARCHITECTURE"
+    label: "Central Logging Architecture Diagram"
+    label_cs: "Diagram architektury centrálního logování"
+    description: "Architecture diagram of logging infrastructure."
+    format_hints:
+      - "Diagram (Visio/PDF)"
+    referenced_by:
+      - "NIS2CZ-RISK-LOGGING-BASELINE"
+
+  - artifact_id: "RISK-LOG-REVIEW-PROCEDURE"
+    label: "Log Review Procedure"
+    label_cs: "Postup přezkumu logů"
+    description: "Procedure for log review and alert handling."
+    format_hints:
+      - "Procedure document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-RISK-LOGGING-REVIEW"
+
+  - artifact_id: "RISK-LOG-REVIEW-RECORDS"
+    label: "Log Review Records"
+    label_cs: "Záznamy z přezkumu logů"
+    description: "Records evidencing log review activities."
+    format_hints:
+      - "SIEM exports, shift reports"
+    referenced_by:
+      - "NIS2CZ-RISK-LOGGING-REVIEW"
+
+  - artifact_id: "RISK-SIEM-ALERT-EXPORT"
+    label: "SIEM Alert Queue Export"
+    label_cs: "Export fronty výstrah SIEM"
+    description: "Export of SIEM alert queue showing triage status."
+    format_hints:
+      - "Tool export"
+    referenced_by:
+      - "NIS2CZ-RISK-LOGGING-REVIEW"
+
+  - artifact_id: "RISK-VULN-MGMT-POLICY"
+    label: "Vulnerability and Patch Management Policy"
+    label_cs: "Politika správy zranitelností a záplat"
+    description: "Policy covering vulnerability management lifecycle."
+    format_hints:
+      - "Policy document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-RISK-VULN-MGMT-POLICY"
+
+  - artifact_id: "RISK-PATCHING-SLA-MATRIX"
+    label: "Patching SLA Matrix"
+    label_cs: "Matice SLA pro záplatování"
+    description: "Matrix of remediation SLAs by severity and asset criticality."
+    format_hints:
+      - "Spreadsheet or table in policy document"
+    referenced_by:
+      - "NIS2CZ-RISK-VULN-MGMT-POLICY"
+
+  - artifact_id: "RISK-VULN-SCAN-SCHEDULE"
+    label: "Vulnerability Scan Schedule"
+    label_cs: "Rozvrh skenování zranitelností"
+    description: "Schedule defining scan cadence and coverage."
+    format_hints:
+      - "Document or scanner configuration"
+    referenced_by:
+      - "NIS2CZ-RISK-VULN-SCANNING-COVERAGE"
+
+  - artifact_id: "RISK-VULN-SCAN-REPORTS"
+    label: "Vulnerability Scan Reports"
+    label_cs: "Zprávy ze skenování zranitelností"
+    description: "Sample vulnerability scan reports."
+    format_hints:
+      - "Scanner output (PDF/HTML)"
+    referenced_by:
+      - "NIS2CZ-RISK-VULN-SCANNING-COVERAGE"
+
+  - artifact_id: "RISK-REMEDIATION-TICKETS"
+    label: "Remediation Ticket Export"
+    label_cs: "Export tiketů náprav"
+    description: "Export of vulnerability remediation tickets."
+    format_hints:
+      - "ITSM export"
+    referenced_by:
+      - "NIS2CZ-RISK-VULN-SCANNING-COVERAGE"
+
+  - artifact_id: "RISK-SCANNER-CONFIG"
+    label: "Scanner Configuration Export"
+    label_cs: "Export konfigurace skeneru"
+    description: "Configuration export from vulnerability scanner."
+    format_hints:
+      - "Tool export"
+    referenced_by:
+      - "NIS2CZ-RISK-VULN-SCANNING-COVERAGE"
+
+  - artifact_id: "RISK-PATCHING-RECORDS"
+    label: "Patching Records"
+    label_cs: "Záznamy o záplatování"
+    description: "Records of patch deployments."
+    format_hints:
+      - "WSUS/SCCM/endpoint tool export"
+    referenced_by:
+      - "NIS2CZ-RISK-PATCH-MGMT-COMPLIANCE"
+
+  - artifact_id: "RISK-PATCH-COMPLIANCE-REPORT"
+    label: "Patch Compliance Report"
+    label_cs: "Zpráva o souladu záplat"
+    description: "Report showing patch compliance metrics."
+    format_hints:
+      - "Dashboard export or report"
+    referenced_by:
+      - "NIS2CZ-RISK-PATCH-MGMT-COMPLIANCE"
+
+  - artifact_id: "RISK-ENDPOINT-MGMT-REPORTS"
+    label: "Endpoint Management Reports"
+    label_cs: "Reporty správy koncových bodů"
+    description: "Reports from endpoint management tools."
+    format_hints:
+      - "Tool export"
+    referenced_by:
+      - "NIS2CZ-RISK-PATCH-MGMT-COMPLIANCE"
+
+  - artifact_id: "RISK-EMERGENCY-CHANGE-RECORDS"
+    label: "Emergency Change Records"
+    label_cs: "Záznamy o nouzových změnách"
+    description: "Records of emergency changes with post-hoc review."
+    format_hints:
+      - "ITSM export"
+    referenced_by:
+      - "NIS2CZ-RISK-PATCH-MGMT-COMPLIANCE"
+      - "NIS2CZ-RISK-CHANGE-MANAGEMENT"
+
+  - artifact_id: "RISK-VULN-REPORTING-CHANNEL"
+    label: "Vulnerability Reporting Channel Evidence"
+    label_cs: "Důkaz o kanálu pro hlášení zranitelností"
+    description: "Evidence of publicly reachable vulnerability reporting channel."
+    format_hints:
+      - "Screenshot of security.txt, web form, or email address"
+    referenced_by:
+      - "NIS2CZ-RISK-VULN-DISCLOSURE-HANDLING"
+
+  - artifact_id: "RISK-VULN-CASE-REGISTER"
+    label: "Vulnerability Case Register"
+    label_cs: "Registr případů zranitelností"
+    description: "Register of externally reported vulnerabilities."
+    format_hints:
+      - "Spreadsheet or ticketing export"
+    referenced_by:
+      - "NIS2CZ-RISK-VULN-DISCLOSURE-HANDLING"
+
+  - artifact_id: "RISK-SECURITY-TXT"
+    label: "security.txt File"
+    label_cs: "Soubor security.txt"
+    description: "RFC 9116 security.txt file deployed on entity's web presence."
+    format_hints:
+      - "Text file at /.well-known/security.txt"
+    referenced_by:
+      - "NIS2CZ-RISK-VULN-DISCLOSURE-HANDLING"
+
+  - artifact_id: "RISK-BACKUP-POLICY"
+    label: "Backup Policy and Procedures"
+    label_cs: "Politika a postupy zálohování"
+    description: "Policy defining backup scope, frequency, retention, testing, and security."
+    format_hints:
+      - "Policy document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-RISK-BACKUP-POLICY"
+
+  - artifact_id: "RISK-BACKUP-TEST-RECORDS"
+    label: "Backup Test Records"
+    label_cs: "Záznamy o testování záloh"
+    description: "Records of backup restore tests."
+    format_hints:
+      - "Test reports, screenshots"
+    referenced_by:
+      - "NIS2CZ-RISK-BACKUP-POLICY"
+
+  - artifact_id: "RISK-BACKUP-CONFIG"
+    label: "Backup Configuration"
+    label_cs: "Konfigurace zálohování"
+    description: "Configuration of backup systems."
+    format_hints:
+      - "Tool screenshots, config exports"
+    referenced_by:
+      - "NIS2CZ-RISK-BACKUP-POLICY"
+
+  - artifact_id: "RISK-BIA"
+    label: "Business Impact Analysis"
+    label_cs: "Analýza dopadů na podnikání"
+    description: "BIA identifying critical services and RTO/RPO."
+    format_hints:
+      - "Document (DOCX/PDF) or structured spreadsheet"
+    referenced_by:
+      - "NIS2CZ-RISK-BCP-DRP"
+
+  - artifact_id: "RISK-BCP"
+    label: "Business Continuity Plan"
+    label_cs: "Plán kontinuity podnikání"
+    description: "BCP covering continuity of regulated services."
+    format_hints:
+      - "Document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-RISK-BCP-DRP"
+
+  - artifact_id: "RISK-DRP"
+    label: "Disaster Recovery Plan"
+    label_cs: "Plán obnovy po havárii"
+    description: "DRP with IT recovery procedures for critical systems."
+    format_hints:
+      - "Document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-RISK-BCP-DRP"
+
+  - artifact_id: "RISK-BCP-TEST-RECORDS"
+    label: "BCP/DRP Test Records"
+    label_cs: "Záznamy o testování BCP/DRP"
+    description: "Records of BCP/DRP testing."
+    format_hints:
+      - "Test reports, after-action reports"
+    referenced_by:
+      - "NIS2CZ-RISK-BCP-DRP"
+
+  - artifact_id: "RISK-CRISIS-COMMS-PLAN"
+    label: "Crisis Communications Plan"
+    label_cs: "Plán krizové komunikace"
+    description: "Communication plan for crisis situations."
+    format_hints:
+      - "Document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-RISK-BCP-DRP"
+
+  - artifact_id: "RISK-SDLC-POLICY"
+    label: "Secure Development Lifecycle Policy"
+    label_cs: "Politika bezpečného vývojového cyklu"
+    description: "Policy for secure software development lifecycle."
+    format_hints:
+      - "Policy document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-RISK-SECURE-DEVELOPMENT"
+
+  - artifact_id: "RISK-CODE-REVIEW-RECORDS"
+    label: "Code Review Records"
+    label_cs: "Záznamy z revize kódu"
+    description: "Evidence of code review or static analysis."
+    format_hints:
+      - "Tool exports, pull request reviews"
+    referenced_by:
+      - "NIS2CZ-RISK-SECURE-DEVELOPMENT"
+
+  - artifact_id: "RISK-PENTEST-REPORTS"
+    label: "Penetration Test Reports"
+    label_cs: "Zprávy z penetračních testů"
+    description: "Reports from penetration testing."
+    format_hints:
+      - "Report (PDF)"
+    referenced_by:
+      - "NIS2CZ-RISK-SECURE-DEVELOPMENT"
+
+  - artifact_id: "RISK-CHANGE-MGMT-POLICY"
+    label: "Change Management Policy"
+    label_cs: "Politika řízení změn"
+    description: "Policy defining change management process."
+    format_hints:
+      - "Policy document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-RISK-CHANGE-MANAGEMENT"
+
+  # ==================================================================
+  # 04 — Incidents
+  # ==================================================================
+  - artifact_id: "INC-CLASSIFICATION-SCHEME"
+    label: "Incident Classification Scheme"
+    label_cs: "Schéma klasifikace incidentů"
+    description: "Document defining incident classification categories, severity levels, and escalation triggers."
+    format_hints:
+      - "Document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-INC-CLASSIFICATION-SCHEME"
+
+  - artifact_id: "INC-RESPONSE-PLAN"
+    label: "Incident Response Plan"
+    label_cs: "Plán reakce na incidenty"
+    description: "Overall incident response plan."
+    format_hints:
+      - "Document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-INC-CLASSIFICATION-SCHEME"
+
+  - artifact_id: "INC-SOC-RUNBOOKS"
+    label: "SOC Runbooks / Playbooks"
+    label_cs: "Runbooky / playbook SOC"
+    description: "Operational runbooks for SOC incident handling."
+    format_hints:
+      - "Documents or wiki pages"
+    referenced_by:
+      - "NIS2CZ-INC-CLASSIFICATION-SCHEME"
+
+  - artifact_id: "INC-REGISTER"
+    label: "Incident Register"
+    label_cs: "Registr incidentů"
+    description: "Register of cybersecurity incidents with all required fields."
+    format_hints:
+      - "Spreadsheet, ITSM export, or SIEM case export"
+    referenced_by:
+      - "NIS2CZ-INC-REGISTER"
+
+  - artifact_id: "INC-TICKETING-EXPORT"
+    label: "Incident Ticketing Export"
+    label_cs: "Export ticketů incidentů"
+    description: "Export from incident ticketing system."
+    format_hints:
+      - "ITSM export"
+    referenced_by:
+      - "NIS2CZ-INC-REGISTER"
+
+  - artifact_id: "INC-POST-INCIDENT-REPORTS"
+    label: "Post-Incident Reports"
+    label_cs: "Zprávy po incidentu"
+    description: "Detailed post-incident review reports."
+    format_hints:
+      - "Report (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-INC-REGISTER"
+      - "NIS2CZ-INC-POST-INCIDENT-REVIEW"
+
+  - artifact_id: "INC-REPORTING-PROCEDURE"
+    label: "Incident Reporting Procedure"
+    label_cs: "Postup hlášení incidentů"
+    description: "Procedure for reporting incidents to NÚKIB including timelines and content."
+    format_hints:
+      - "Procedure document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-INC-REPORTING-WORKFLOW"
+
+  - artifact_id: "INC-REPORT-TEMPLATES"
+    label: "Incident Report Templates"
+    label_cs: "Šablony hlášení incidentů"
+    description: "Templates for early warning, notification, and final reports."
+    format_hints:
+      - "Template documents (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-INC-REPORTING-WORKFLOW"
+
+  - artifact_id: "INC-PORTAL-ACCESS-EVIDENCE"
+    label: "NÚKIB Portal Access Evidence"
+    label_cs: "Důkaz o přístupu k Portálu NÚKIB"
+    description: "Evidence that portal credentials are configured and tested."
+    format_hints:
+      - "Screenshot of portal login, access log"
+    referenced_by:
+      - "NIS2CZ-INC-REPORTING-WORKFLOW"
+
+  - artifact_id: "INC-SUBMITTED-REPORTS"
+    label: "Submitted Incident Reports"
+    label_cs: "Podaná hlášení incidentů"
+    description: "Copies of incident reports submitted to NÚKIB with reference numbers."
+    format_hints:
+      - "PDF copies, portal submission confirmations"
+    referenced_by:
+      - "NIS2CZ-INC-REPORTING-WORKFLOW"
+
+  - artifact_id: "INC-IMPROVEMENT-TRACKER"
+    label: "Post-Incident Improvement Tracker"
+    label_cs: "Sledovač zlepšení po incidentech"
+    description: "Tracker for improvement actions identified during post-incident reviews."
+    format_hints:
+      - "Spreadsheet or task management export"
+    referenced_by:
+      - "NIS2CZ-INC-POST-INCIDENT-REVIEW"
+
+  # ==================================================================
+  # 05 — Supply Chain (existing artifacts)
+  # ==================================================================
+  - artifact_id: "SUPP-REGISTER"
+    label: "Significant Suppliers Register"
+    label_cs: "Registr významných dodavatelů"
+    description: >
+      A maintained register listing all suppliers classified as significant,
+      including criteria used for classification and date of last review.
+    format_hints:
+      - "Spreadsheet or ISMS-integrated register"
+    referenced_by:
+      - "NIS2CZ-SUP-REGISTER-SIGNIFICANT-SUPPLIERS"
+
+  - artifact_id: "SUPP-NOTIFY-RECORDS"
+    label: "Supplier Notification Records"
+    label_cs: "Záznamy o notifikaci dodavatelů"
+    description: >
+      Evidence that significant suppliers have been notified of their status
+      and associated obligations.
+    format_hints:
+      - "Copies of notification letters or emails"
+    referenced_by:
+      - "NIS2CZ-SUP-REGISTER-SIGNIFICANT-SUPPLIERS"
+
+  - artifact_id: "SUPP-MGMT-POLICY"
+    label: "Supplier Management Policy"
+    label_cs: "Politika řízení dodavatelů"
+    description: >
+      Documented policy for supplier identification, classification,
+      engagement, monitoring, and offboarding.
+    format_hints:
+      - "Policy document approved by management"
+    referenced_by:
+      - "NIS2CZ-SUP-REGISTER-SIGNIFICANT-SUPPLIERS"
+      - "NIS2CZ-SUP-RULES-COMMUNICATION"
+
+  - artifact_id: "SUPP-ACK-EVIDENCE"
+    label: "Supplier Acknowledgement Evidence"
+    label_cs: "Doklady o akceptaci dodavatelů"
+    description: >
+      Evidence of supplier acknowledgement of security rules.
+    format_hints:
+      - "Signed supplier code of conduct"
+    referenced_by:
+      - "NIS2CZ-SUP-RULES-COMMUNICATION"
+
+  - artifact_id: "SUPP-CODE-OF-CONDUCT"
+    label: "Supplier Code of Conduct / Security Requirements"
+    label_cs: "Kodex chování dodavatele / bezpečnostní požadavky"
+    description: "Security requirements for suppliers."
+    format_hints:
+      - "Document or contract annex"
+    referenced_by:
+      - "NIS2CZ-SUP-RULES-COMMUNICATION"
+
+  - artifact_id: "SUPP-RISK-METHOD"
+    label: "Supplier Risk Assessment Methodology"
+    label_cs: "Metodika hodnocení rizik dodavatelů"
+    description: "Methodology for assessing supplier risks."
+    format_hints:
+      - "Risk methodology document"
+    referenced_by:
+      - "NIS2CZ-SUP-RISK-MGMT"
+
+  - artifact_id: "SUPP-RISK-ASSESSMENTS"
+    label: "Supplier Risk Assessments"
+    label_cs: "Hodnocení rizik dodavatelů"
+    description: "Individual risk assessments per significant supplier."
+    format_hints:
+      - "One assessment per significant supplier"
+    referenced_by:
+      - "NIS2CZ-SUP-RISK-MGMT"
+
+  - artifact_id: "RISK-REGISTER"
+    label: "Risk Register (Supplier Risks)"
+    label_cs: "Registr rizik (rizika dodavatelů)"
+    description: "Risk register with supplier-specific risks."
+    format_hints:
+      - "Risk register with supplier risk category"
+    referenced_by:
+      - "NIS2CZ-SUP-RISK-MGMT"
+
+  - artifact_id: "SUPP-REVIEW-RECORDS"
+    label: "Supplier Review Records"
+    label_cs: "Záznamy z přezkumů dodavatelů"
+    description: "Records of periodic supplier reviews."
+    format_hints:
+      - "Meeting minutes, scorecards, review reports"
+    referenced_by:
+      - "NIS2CZ-SUP-MONITORING"
+
+  - artifact_id: "SUPP-SCORECARDS"
+    label: "Supplier Scorecards"
+    label_cs: "Hodnotící karty dodavatelů"
+    description: "Performance scorecards for significant suppliers."
+    format_hints:
+      - "Spreadsheet or GRC-tool output"
+    referenced_by:
+      - "NIS2CZ-SUP-MONITORING"
+
+  - artifact_id: "AUDIT-REPORTS"
+    label: "Supplier Audit Reports"
+    label_cs: "Zprávy z auditů dodavatelů"
+    description: "Reports from supplier audits."
+    format_hints:
+      - "Formal audit report"
+    referenced_by:
+      - "NIS2CZ-SUP-MONITORING"
+
+  - artifact_id: "SUPP-CONTRACT-TEMPLATE"
+    label: "Supplier Contract Template / Security Redlines"
+    label_cs: "Vzor smlouvy s dodavatelem / bezpečnostní ustanovení"
+    description: "Standard contract template with security clauses."
+    format_hints:
+      - "Legal document (DOCX/PDF)"
+    referenced_by:
+      - "NIS2CZ-SUP-CONTRACT-ANNEX5-HIGHER"
+      - "NIS2CZ-SUP-CONTRACT-ANNEX2-LOWER"
+
+  - artifact_id: "SUPP-CONTRACTS-SIGNED"
+    label: "Signed Supplier Contracts"
+    label_cs: "Podepsané smlouvy s dodavateli"
+    description: "Executed contracts with security clauses."
+    format_hints:
+      - "Signed contract copies (PDF)"
+    referenced_by:
+      - "NIS2CZ-SUP-CONTRACT-ANNEX5-HIGHER"
+      - "NIS2CZ-SUP-CONTRACT-ANNEX2-LOWER"
+
+  - artifact_id: "SUPP-CLAUSE-CHECKLIST"
+    label: "Supplier Contract Clause Checklist"
+    label_cs: "Kontrolní seznam smluvních ustanovení dodavatele"
+    description: "Per-contract checklist confirming annex items."
+    format_hints:
+      - "Spreadsheet or structured YAML per contract"
+    referenced_by:
+      - "NIS2CZ-SUP-CONTRACT-ANNEX5-HIGHER"
+      - "NIS2CZ-SUP-CONTRACT-ANNEX2-LOWER"
+
+  - artifact_id: "SUPP-EXIT-PLANS"
+    label: "Supplier Exit / Transition Plans"
+    label_cs: "Plány exit strategie pro dodavatele"
+    description: "Exit and transition plans for significant suppliers."
+    format_hints:
+      - "One plan per critical/significant supplier"
+    referenced_by:
+      - "NIS2CZ-SUP-EXIT-STRATEGY"
+
+  - artifact_id: "SUPP-CONTRACT-EXIT-CLAUSES"
+    label: "Contract Exit / Termination Security Clauses"
+    label_cs: "Smluvní ustanovení o exit strategii"
+    description: "Contractual provisions for termination and data return."
+    format_hints:
+      - "Contract sections"
+    referenced_by:
+      - "NIS2CZ-SUP-EXIT-STRATEGY"
+
+  - artifact_id: "SUPP-DEPENDENCY-MAP"
+    label: "Supplier Dependency Map"
+    label_cs: "Mapa závislostí na dodavatelích"
+    description: "Map of critical dependencies on suppliers."
+    format_hints:
+      - "Diagram or table"
+    referenced_by:
+      - "NIS2CZ-SUP-EXIT-STRATEGY"
+
+  # ==================================================================
+  # 99 — Oversight
+  # ==================================================================
+  - artifact_id: "OVER-REGISTRATION-EVIDENCE"
+    label: "NÚKIB Registration/Notification Evidence"
+    label_cs: "Důkaz o registraci/notifikaci u NÚKIB"
+    description: "Evidence of registration or notification to NÚKIB."
+    format_hints:
+      - "Submission confirmation, receipt from NÚKIB"
+    referenced_by:
+      - "NIS2CZ-OVERSIGHT-REGISTRATION"
+
+  - artifact_id: "OVER-NUKIB-CORRESPONDENCE"
+    label: "NÚKIB Correspondence"
+    label_cs: "Korespondence s NÚKIB"
+    description: "Correspondence with NÚKIB (letters, emails, portal messages)."
+    format_hints:
+      - "Email copies, letter scans, portal exports"
+    referenced_by:
+      - "NIS2CZ-OVERSIGHT-REGISTRATION"
+      - "NIS2CZ-OVERSIGHT-SUPERVISORY-READINESS"

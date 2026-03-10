@@ -1,3 +1,6 @@
 .venv/
 __pycache__/
 *.pyc
+
+# cron lockdir
+.nis2cz-refactor.lock/

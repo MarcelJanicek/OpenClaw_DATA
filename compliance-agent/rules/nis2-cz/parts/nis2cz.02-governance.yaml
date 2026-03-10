@@ -1,174 +1,492 @@
 meta:
-  ruleset_id: nis2-cz
-  version: '0.1'
-  status: draft
-  jurisdiction:
-  - CZ
-  evaluation_profile_schema: rules/nis2-cz/entity_profile.schema.yaml
+  ruleset_id: "nis2-cz"
+  version: "2.0-audit"
+  status: "complete"
+  jurisdiction: ["CZ"]
+  evaluation_profile_schema: "rules/nis2-cz/entity_profile.schema.yaml"
+  changelog: |
+    v2.0 (2026-03-10): Refactored to audit-grade with structured checklists,
+    acceptance criteria, deterministic logic, bilingual anchors, and red flags.
+
 rules:
-- id: NIS2CZ-GOV-MGMT-ACCOUNTABILITY
-  title: Top management accountability and oversight for cybersecurity measures are established
-  scope:
-    applies_to:
-    - org
-    conditions:
-    - profile_field: in_scope_under_cz_law
-      equals: true
-  requirement:
-    type: governance_required
-    must_include:
-    - assignment_of_accountability (who in top management is accountable)
-    - governance_forum_or_reporting_line (how cyber risk is reported to management)
-    - approval_of_cybersecurity_measures_and_policies (formal approval evidence)
-    - periodic_management_review (cadence + agenda)
-    - resource_commitment (budget/staffing decision trail)
-  evidence_hints:
-    required:
-    - artifact_id: GOV-BOARD-OR-MANAGEMENT-RESOLUTION-CYBERSECUR
-    - artifact_id: GOV-MANAGEMENT-REVIEW-MINUTES-CYBER
-    optional:
-    - artifact_id: GOV-CYBERSECURITY-GOVERNANCE-CHARTER
-    - artifact_id: GOV-RISK-REGISTER-SUMMARY-FOR-MANAGEMENT
-    - artifact_id: GOV-BUDGET-APPROVAL-RECORDS
-  severity: high
-  sources:
-  - citation: CZ-Act-264-2025 (odpovědnost vedení za zavedení a udržování opatření kybernetické bezpečnosti)
-  - citation: CZ-Decree-409-2025 (organizační opatření – vyšší povinnosti; governance/odpovědnosti)
-  - citation: CZ-Decree-410-2025 (organizační opatření – nižší povinnosti; governance/odpovědnosti)
-  - citation: EU-NIS2-2022-2555 Art. 20 (management bodies responsibilities) [mapping]
-- id: NIS2CZ-GOV-POLICY-FRAMEWORK
-  title: Cybersecurity policy framework is documented, approved, and maintained
-  scope:
-    applies_to:
-    - org
-    conditions:
-    - profile_field: in_scope_under_cz_law
-      equals: true
-  requirement:
-    type: policy_framework_required
-    must_include:
-    - policy_register (list of policies/standards/procedures)
-    - ownership (policy owner for each document)
-    - versioning_and_change_control
-    - review_cycle (at least annual or trigger-based)
-    - communication_and_accessibility (how policies are published internally)
-    - alignment_to_applicable_duty_regime (higher|lower)
-    minimum_policy_topics:
-    - risk_management
-    - asset_management_and_classification
-    - access_control_and_identity
-    - logging_and_monitoring
-    - vulnerability_and_patch_management
-    - backup_and_resilience
-    - incident_handling_and_reporting
-    - supplier_and_third_party_management
-    - secure_change_management
-  evidence_hints:
-    required:
-    - artifact_id: GOV-CYBERSECURITY-POLICY
-    - artifact_id: GOV-POLICY-REGISTER
-    optional:
-    - artifact_id: GOV-DOCUMENT-CONTROL-PROCEDURE
-    - artifact_id: GOV-INTRANET-POLICY-PORTAL-SCREENSHOT
-    - artifact_id: GOV-EXCEPTIONS-REGISTER
-  severity: high
-  sources:
-  - citation: CZ-Act-264-2025 (povinnost zavést a dokumentovat opatření kybernetické bezpečnosti)
-  - citation: CZ-Decree-409-2025 (soubor opatření – vyšší povinnosti)
-  - citation: CZ-Decree-410-2025 (soubor opatření – nižší povinnosti)
-  - citation: EU-NIS2-2022-2555 Art. 21(2) (policies for risk analysis and information system security) [mapping]
-- id: NIS2CZ-GOV-ROLES-RESPONSIBILITIES-MATRIX
-  title: Cybersecurity roles and responsibilities are defined and traceable to key processes
-  scope:
-    applies_to:
-    - org
-    conditions:
-    - profile_field: in_scope_under_cz_law
-      equals: true
-  requirement:
-    type: document_required
-    document: cybersecurity_roles_responsibilities_matrix
-    must_include:
-    - process_list (e.g., incident handling, vuln mgmt, access reviews, backup, supplier onboarding)
-    - role_assignments (RACI or equivalent)
-    - approval_and_effective_date
-    - handover_or_backup_roles (coverage during absence)
-  evidence_hints:
-    required:
-    - artifact_id: GOV-CYBERSECURITY-ROLES-RESPONSIBILITIES-MATR
-    optional:
-    - artifact_id: GOV-JOB-DESCRIPTIONS-SECURITY
-    - artifact_id: GOV-ORG-CHART
-    - artifact_id: GOV-ON-CALL-ROSTER
-  severity: medium
-  sources:
-  - citation: CZ-Decree-409-2025 (organizační opatření – role/odpovědnosti)
-  - citation: CZ-Decree-410-2025 (organizační opatření – role/odpovědnosti)
-  - citation: EU-NIS2-2022-2555 Art. 21(2) (organizational measures) [mapping]
-- id: NIS2CZ-GOV-TRAINING-AWARENESS
-  title: Cybersecurity training and awareness program is implemented and evidenced
-  scope:
-    applies_to:
-    - org
-    conditions:
-    - profile_field: in_scope_under_cz_law
-      equals: true
-  requirement:
-    type: program_required
-    program: cybersecurity_training_and_awareness
-    must_include:
-    - audience_definition (roles/groups incl. privileged users and management)
-    - mandatory_training_topics (baseline cyber hygiene + role-based)
-    - onboarding_training
-    - periodic_refresh (cadence)
-    - awareness_activities (e.g., comms, campaigns, simulations)
-    - training_completion_tracking (records + reporting)
-    - effectiveness_check (e.g., quiz/phishing simulation metrics)
-  evidence_hints:
-    required:
-    - artifact_id: GOV-SECURITY-TRAINING-PLAN
-    - artifact_id: GOV-SECURITY-TRAINING-RECORDS
-    optional:
-    - artifact_id: GOV-LEARNING-MANAGEMENT-SYSTEM-EXPORT
-    - artifact_id: GOV-AWARENESS-CAMPAIGN-MATERIALS
-    - artifact_id: GOV-PHISHING-SIMULATION-REPORT
-    - artifact_id: GOV-MANAGEMENT-TRAINING-ATTENDANCE
-  severity: medium
-  sources:
-  - citation: CZ-Act-264-2025 (povinnost zavést a udržovat opatření kybernetické bezpečnosti; personální zajištění)
-  - citation: CZ-Decree-409-2025 (organizační/personální opatření – školení a zvyšování povědomí)
-  - citation: CZ-Decree-410-2025 (organizační/personální opatření – školení a zvyšování povědomí)
-  - citation: EU-NIS2-2022-2555 Art. 20 (management bodies training/awareness) [mapping]
-  - citation: EU-NIS2-2022-2555 Art. 21(2)(g) (basic cyber hygiene and training) [mapping]
-- id: NIS2CZ-GOV-INTERNAL-AUDIT
-  title: Internal audit / self-assessment of cybersecurity measures is performed and tracked
-  scope:
-    applies_to:
-    - org
-    conditions:
-    - profile_field: in_scope_under_cz_law
-      equals: true
-  requirement:
-    type: process_required
-    process: cybersecurity_internal_audit
-    must_include:
-    - audit_plan_or_schedule (at least annual or risk/incident-triggered)
-    - audit_scope_definition (controls/measures covered; higher/lower regime)
-    - independence_or_objectivity (who audits whom; external support if needed)
-    - findings_classification_and_risk_rating
-    - corrective_actions_tracking (owners, due dates, status)
-    - management_reporting_of_results
-  evidence_hints:
-    required:
-    - artifact_id: GOV-CYBERSECURITY-AUDIT-PLAN
-    - artifact_id: GOV-CYBERSECURITY-AUDIT-REPORT
-    optional:
-    - artifact_id: GOV-CORRECTIVE-ACTIONS-REGISTER
-    - artifact_id: GOV-MANAGEMENT-REVIEW-MINUTES-CYBER
-    - artifact_id: GOV-INTERNAL-CONTROL-TESTING-WORKPAPERS
-  severity: medium
-  sources:
-  - citation: CZ-Act-264-2025 (průběžné zajišťování a ověřování účinnosti opatření kybernetické bezpečnosti)
-  - citation: CZ-Decree-409-2025 (požadavky na ověřování/posuzování účinnosti opatření – vyšší povinnosti)
-  - citation: CZ-Decree-410-2025 (požadavky na ověřování/posuzování účinnosti opatření – nižší povinnosti)
-  - citation: EU-NIS2-2022-2555 Art. 21(2) (monitoring, testing and auditing) [mapping]
+  # ================================================================
+  # Milestone 1.1 — Management responsibility + policy set
+  # ================================================================
+
+  - id: "NIS2CZ-GOV-MGMT-ACCOUNTABILITY"
+    title: "Top management accountability and oversight for cybersecurity measures are established"
+    scope:
+      applies_to: ["org"]
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+    requirement:
+      type: "checklist"
+      logic: "ALL"
+      na_mechanism: "Not permitted — all items mandatory for in-scope entities."
+      checklist:
+        - id: "GOV-MGMT-01"
+          title_en: "Accountability for cybersecurity is assigned to a specific member of top management"
+          title_cs: "Odpovědnost za kybernetickou bezpečnost je přiřazena konkrétnímu členovi vedení"
+          required_by_default: true
+          acceptance_criteria:
+            - "Named person or role in top management is designated as accountable"
+            - "Designation is documented in a board resolution or equivalent"
+          keywords_cs: ["odpovědnost", "vedení", "představenstvo", "management", "kybernetická bezpečnost"]
+          keywords_en: ["accountability", "top management", "board", "cybersecurity"]
+          red_flags:
+            - "No named accountable person"
+            - "Accountability delegated below management without retention at top"
+
+        - id: "GOV-MGMT-02"
+          title_en: "Governance forum or reporting line for cyber risk exists"
+          title_cs: "Existuje řídící orgán nebo reportovací linie pro kybernetická rizika"
+          required_by_default: true
+          acceptance_criteria:
+            - "A governance body (board committee, risk committee, or equivalent) reviews cyber risk"
+            - "Reporting cadence (at least quarterly) is defined"
+          keywords_cs: ["řídící orgán", "reportování", "kybernetická rizika", "výbor"]
+          keywords_en: ["governance forum", "reporting line", "cyber risk", "committee"]
+          red_flags:
+            - "No governance body for cyber risk"
+            - "Reporting cadence undefined"
+
+        - id: "GOV-MGMT-03"
+          title_en: "Cybersecurity measures and policies are formally approved by management"
+          title_cs: "Opatření a politiky kybernetické bezpečnosti jsou formálně schváleny vedením"
+          required_by_default: true
+          acceptance_criteria:
+            - "Approval record (minutes, resolution, or sign-off) exists for the cybersecurity policy framework"
+            - "Approval is dated and signed by accountable management member"
+          keywords_cs: ["schválení", "politiky", "opatření", "vedení"]
+          keywords_en: ["approval", "policies", "measures", "management"]
+          red_flags:
+            - "No approval record for cybersecurity policies"
+
+        - id: "GOV-MGMT-04"
+          title_en: "Periodic management review of cybersecurity is conducted"
+          title_cs: "Periodický přezkum kybernetické bezpečnosti vedením je prováděn"
+          required_by_default: true
+          acceptance_criteria:
+            - "Management review is conducted at least annually"
+            - "Review agenda includes risk status, incidents, audit findings, and resource adequacy"
+            - "Minutes or records are retained"
+          keywords_cs: ["přezkum", "management review", "pravidelný", "zápis"]
+          keywords_en: ["management review", "periodic", "annual", "minutes"]
+          red_flags:
+            - "No management review conducted in last 12 months"
+            - "No records of review"
+
+        - id: "GOV-MGMT-05"
+          title_en: "Resource commitment (budget/staffing) decision trail exists"
+          title_cs: "Rozhodovací stopa pro přidělení zdrojů (rozpočet/personál) existuje"
+          required_by_default: true
+          acceptance_criteria:
+            - "Budget allocation for cybersecurity is documented"
+            - "Staffing decisions (headcount, outsourcing) are recorded"
+          keywords_cs: ["rozpočet", "personál", "zdroje", "přidělení"]
+          keywords_en: ["budget", "staffing", "resources", "allocation"]
+          red_flags:
+            - "No cybersecurity budget documented"
+            - "No staffing records"
+    evidence_hints:
+      required:
+        - artifact_id: "GOV-BOARD-RESOLUTION-CYBER"
+        - artifact_id: "GOV-MGMT-REVIEW-MINUTES"
+      optional:
+        - artifact_id: "GOV-GOVERNANCE-CHARTER"
+        - artifact_id: "GOV-RISK-REGISTER-SUMMARY"
+        - artifact_id: "GOV-BUDGET-RECORDS"
+    severity: "high"
+    sources:
+      - citation: "CZ-Act-264-2025 (odpovědnost vedení za zavedení a udržování opatření kybernetické bezpečnosti)"
+      - citation: "CZ-Decree-409-2025 (organizační opatření – vyšší povinnosti; governance/odpovědnosti)"
+      - citation: "CZ-Decree-410-2025 (organizační opatření – nižší povinnosti; governance/odpovědnosti)"
+      - citation: "EU-NIS2-2022-2555 Art. 20 (management bodies responsibilities) [mapping]"
+
+  - id: "NIS2CZ-GOV-POLICY-FRAMEWORK"
+    title: "Cybersecurity policy framework is documented, approved, and maintained"
+    scope:
+      applies_to: ["org"]
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+    requirement:
+      type: "checklist"
+      logic: "ALL"
+      na_mechanism: "Not permitted — complete policy framework is mandatory."
+      checklist:
+        - id: "GOV-POL-01"
+          title_en: "Policy register listing all cybersecurity policies, standards, and procedures exists"
+          title_cs: "Registr politik uvádějící všechny politiky, standardy a postupy kybernetické bezpečnosti existuje"
+          required_by_default: true
+          acceptance_criteria:
+            - "Register lists all documents with title, owner, version, review date, and status"
+          keywords_cs: ["registr politik", "seznam", "politiky", "postupy"]
+          keywords_en: ["policy register", "list", "policies", "procedures"]
+          red_flags:
+            - "No policy register exists"
+
+        - id: "GOV-POL-02"
+          title_en: "Each policy document has an assigned owner"
+          title_cs: "Každý dokument politiky má přiřazeného vlastníka"
+          required_by_default: true
+          acceptance_criteria:
+            - "Owner (role or named person) is designated for each policy"
+          keywords_cs: ["vlastník", "politika", "odpovědnost"]
+          keywords_en: ["owner", "policy", "responsibility"]
+          red_flags:
+            - "Policies without owners"
+
+        - id: "GOV-POL-03"
+          title_en: "Version control and change management for policies is in place"
+          title_cs: "Řízení verzí a změn politik je zavedeno"
+          required_by_default: true
+          acceptance_criteria:
+            - "All policies are version-controlled with change history"
+          keywords_cs: ["verze", "řízení změn", "historie"]
+          keywords_en: ["version control", "change management", "history"]
+          red_flags:
+            - "Policies without version numbers or change logs"
+
+        - id: "GOV-POL-04"
+          title_en: "Review cycle (at least annual or trigger-based) is defined and followed"
+          title_cs: "Cyklus přezkumu (alespoň roční nebo na základě triggeru) je definován a dodržován"
+          required_by_default: true
+          acceptance_criteria:
+            - "Review cadence is documented (annual minimum)"
+            - "Evidence of last review within cycle"
+          keywords_cs: ["přezkum", "cyklus", "roční", "revize"]
+          keywords_en: ["review", "cycle", "annual", "revision"]
+          red_flags:
+            - "No review cycle defined"
+            - "Last review overdue"
+
+        - id: "GOV-POL-05"
+          title_en: "Policies are communicated and accessible to relevant personnel"
+          title_cs: "Politiky jsou komunikovány a přístupné relevantnímu personálu"
+          required_by_default: true
+          acceptance_criteria:
+            - "Publication mechanism exists (intranet, portal, shared drive)"
+            - "Communication records (email, training acknowledgment) available"
+          keywords_cs: ["komunikace", "přístupnost", "intranet", "portál"]
+          keywords_en: ["communication", "accessibility", "intranet", "portal"]
+          red_flags:
+            - "Policies not accessible to staff"
+
+        - id: "GOV-POL-06"
+          title_en: "Policy framework is aligned to the applicable duty regime (higher/lower)"
+          title_cs: "Rámec politik je sladěn s příslušným režimem povinností (vyšší/nižší)"
+          required_by_default: true
+          acceptance_criteria:
+            - "Policies explicitly reference the applicable decree (409 or 410)"
+            - "Measures required by the regime are traceable to specific policies"
+          keywords_cs: ["režim", "sladění", "vyhláška 409", "vyhláška 410"]
+          keywords_en: ["regime", "alignment", "decree 409", "decree 410"]
+          red_flags:
+            - "No regime alignment documented"
+
+        - id: "GOV-POL-07"
+          title_en: "Minimum policy topics are covered"
+          title_cs: "Minimální témata politik jsou pokryta"
+          required_by_default: true
+          acceptance_criteria:
+            - "Policies exist covering: risk management, asset management & classification, access control & identity, logging & monitoring, vulnerability & patch management, backup & resilience, incident handling & reporting, supplier management, secure change management"
+            - "Each topic is traceable to a specific policy document"
+          keywords_cs: ["témata", "pokrytí", "řízení rizik", "aktiva", "přístupy", "logy", "zranitelnosti", "zálohy", "incidenty", "dodavatelé", "změny"]
+          keywords_en: ["topics", "coverage", "risk management", "assets", "access", "logging", "vulnerabilities", "backup", "incidents", "suppliers", "change management"]
+          red_flags:
+            - "Major topic areas not covered by any policy"
+    evidence_hints:
+      required:
+        - artifact_id: "GOV-CYBERSECURITY-POLICY"
+        - artifact_id: "GOV-POLICY-REGISTER"
+      optional:
+        - artifact_id: "GOV-DOCUMENT-CONTROL-PROCEDURE"
+        - artifact_id: "GOV-EXCEPTIONS-REGISTER"
+    severity: "high"
+    sources:
+      - citation: "CZ-Act-264-2025 (povinnost zavést a dokumentovat opatření kybernetické bezpečnosti)"
+      - citation: "CZ-Decree-409-2025 (soubor opatření – vyšší povinnosti)"
+      - citation: "CZ-Decree-410-2025 (soubor opatření – nižší povinnosti)"
+      - citation: "EU-NIS2-2022-2555 Art. 21(2) (policies for risk analysis and information system security) [mapping]"
+
+  - id: "NIS2CZ-GOV-ROLES-RESPONSIBILITIES-MATRIX"
+    title: "Cybersecurity roles and responsibilities are defined and traceable to key processes"
+    scope:
+      applies_to: ["org"]
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+    requirement:
+      type: "checklist"
+      logic: "ALL"
+      na_mechanism: "Not permitted — roles and responsibilities must be defined for all in-scope entities."
+      checklist:
+        - id: "GOV-ROLES-01"
+          title_en: "Key cybersecurity processes are listed"
+          title_cs: "Klíčové procesy kybernetické bezpečnosti jsou vyjmenovány"
+          required_by_default: true
+          acceptance_criteria:
+            - "Process list includes at minimum: incident handling, vulnerability management, access reviews, backup, supplier onboarding"
+          keywords_cs: ["procesy", "seznam", "incidenty", "zranitelnosti", "přístupy"]
+          keywords_en: ["processes", "list", "incidents", "vulnerabilities", "access"]
+          red_flags:
+            - "No process list"
+
+        - id: "GOV-ROLES-02"
+          title_en: "RACI or equivalent role assignment exists for each process"
+          title_cs: "RACI nebo ekvivalentní přiřazení rolí existuje pro každý proces"
+          required_by_default: true
+          acceptance_criteria:
+            - "Each process has Responsible, Accountable, Consulted, Informed (or equivalent) roles assigned"
+          keywords_cs: ["RACI", "role", "přiřazení", "odpovědnosti"]
+          keywords_en: ["RACI", "roles", "assignment", "responsibilities"]
+          red_flags:
+            - "Processes without role assignments"
+
+        - id: "GOV-ROLES-03"
+          title_en: "Document is approved with effective date"
+          title_cs: "Dokument je schválen s datem účinnosti"
+          required_by_default: true
+          acceptance_criteria:
+            - "Approval and effective date are present"
+          keywords_cs: ["schválení", "datum účinnosti"]
+          keywords_en: ["approval", "effective date"]
+          red_flags:
+            - "No approval or date"
+
+        - id: "GOV-ROLES-04"
+          title_en: "Backup/handover roles are defined for coverage during absence"
+          title_cs: "Zástupci/předávací role jsou definovány pro pokrytí v době nepřítomnosti"
+          required_by_default: true
+          acceptance_criteria:
+            - "Deputy or backup roles are documented for each critical cybersecurity role"
+          keywords_cs: ["zástupce", "předání", "nepřítomnost", "záloha"]
+          keywords_en: ["backup", "handover", "absence", "deputy"]
+          red_flags:
+            - "No backup roles defined"
+    evidence_hints:
+      required:
+        - artifact_id: "GOV-ROLES-MATRIX"
+      optional:
+        - artifact_id: "GOV-JOB-DESCRIPTIONS"
+        - artifact_id: "FOUND-ORG-CHART"
+        - artifact_id: "GOV-ON-CALL-ROSTER"
+    severity: "medium"
+    sources:
+      - citation: "CZ-Decree-409-2025 (organizační opatření – role/odpovědnosti)"
+      - citation: "CZ-Decree-410-2025 (organizační opatření – role/odpovědnosti)"
+      - citation: "EU-NIS2-2022-2555 Art. 21(2) (organizational measures) [mapping]"
+
+  # ================================================================
+  # Milestone 1.2 — Training, awareness, internal audit
+  # ================================================================
+
+  - id: "NIS2CZ-GOV-TRAINING-AWARENESS"
+    title: "Cybersecurity training and awareness program is implemented and evidenced"
+    scope:
+      applies_to: ["org"]
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+    requirement:
+      type: "checklist"
+      logic: "ALL"
+      na_mechanism: "Not permitted — training and awareness are mandatory for all in-scope entities."
+      checklist:
+        - id: "GOV-TRAIN-01"
+          title_en: "Target audiences are defined (roles/groups including privileged users and management)"
+          title_cs: "Cílové skupiny jsou definovány (role/skupiny včetně privilegovaných uživatelů a vedení)"
+          required_by_default: true
+          acceptance_criteria:
+            - "Audience groups are listed with their specific training requirements"
+            - "Management and privileged users are explicitly included"
+          keywords_cs: ["cílové skupiny", "role", "privilegovaní", "vedení"]
+          keywords_en: ["target audiences", "roles", "privileged users", "management"]
+          red_flags:
+            - "No audience definition"
+            - "Management or privileged users not included"
+
+        - id: "GOV-TRAIN-02"
+          title_en: "Mandatory training topics include baseline cyber hygiene and role-based content"
+          title_cs: "Povinná témata školení zahrnují základní kybernetickou hygienu a obsah podle rolí"
+          required_by_default: true
+          acceptance_criteria:
+            - "Baseline topics cover: phishing, password hygiene, device security, reporting obligations"
+            - "Role-specific topics are defined (e.g., admin security, developer secure coding)"
+          keywords_cs: ["témata školení", "kybernetická hygiena", "phishing", "hesla"]
+          keywords_en: ["training topics", "cyber hygiene", "phishing", "passwords"]
+          red_flags:
+            - "No baseline topics defined"
+
+        - id: "GOV-TRAIN-03"
+          title_en: "Onboarding training is provided to new employees"
+          title_cs: "Školení při nástupu je poskytnuto novým zaměstnancům"
+          required_by_default: true
+          acceptance_criteria:
+            - "Onboarding includes cybersecurity training before system access or within defined period"
+          keywords_cs: ["nástup", "onboarding", "noví zaměstnanci"]
+          keywords_en: ["onboarding", "new employees", "induction"]
+          red_flags:
+            - "No onboarding training requirement"
+
+        - id: "GOV-TRAIN-04"
+          title_en: "Periodic refresh training cadence is defined"
+          title_cs: "Kadence periodického obnovovacího školení je definována"
+          required_by_default: true
+          acceptance_criteria:
+            - "Refresh cadence documented (at least annual)"
+          keywords_cs: ["periodické", "obnovovací", "kadence", "roční"]
+          keywords_en: ["periodic", "refresh", "cadence", "annual"]
+          red_flags:
+            - "No refresh cadence defined"
+
+        - id: "GOV-TRAIN-05"
+          title_en: "Awareness activities (campaigns, simulations) are conducted"
+          title_cs: "Aktivity zvyšování povědomí (kampaně, simulace) jsou prováděny"
+          required_by_default: true
+          acceptance_criteria:
+            - "At least one awareness activity per year beyond formal training"
+            - "Activity type and participation records exist"
+          keywords_cs: ["povědomí", "kampaně", "simulace"]
+          keywords_en: ["awareness", "campaigns", "simulations"]
+          red_flags:
+            - "No awareness activities beyond training"
+
+        - id: "GOV-TRAIN-06"
+          title_en: "Training completion is tracked with records and reporting"
+          title_cs: "Dokončení školení je sledováno se záznamy a reportováním"
+          required_by_default: true
+          acceptance_criteria:
+            - "Completion records per employee/role group are maintained"
+            - "Non-completion is tracked and escalated"
+          keywords_cs: ["dokončení", "záznamy", "sledování", "reporting"]
+          keywords_en: ["completion", "records", "tracking", "reporting"]
+          red_flags:
+            - "No completion tracking"
+
+        - id: "GOV-TRAIN-07"
+          title_en: "Effectiveness is measured (quiz, phishing simulation metrics, etc.)"
+          title_cs: "Efektivita je měřena (kvízy, metriky phishingových simulací atd.)"
+          required_by_default: true
+          acceptance_criteria:
+            - "At least one effectiveness metric is defined and measured"
+            - "Results are reported to management"
+          keywords_cs: ["efektivita", "metriky", "kvíz", "měření"]
+          keywords_en: ["effectiveness", "metrics", "quiz", "measurement"]
+          red_flags:
+            - "No effectiveness measurement"
+    evidence_hints:
+      required:
+        - artifact_id: "GOV-TRAINING-PLAN"
+        - artifact_id: "GOV-TRAINING-RECORDS"
+      optional:
+        - artifact_id: "GOV-LMS-EXPORT"
+        - artifact_id: "GOV-AWARENESS-MATERIALS"
+        - artifact_id: "GOV-PHISHING-REPORT"
+        - artifact_id: "GOV-MGMT-TRAINING-ATTENDANCE"
+    severity: "medium"
+    sources:
+      - citation: "CZ-Act-264-2025 (povinnost zavést a udržovat opatření kybernetické bezpečnosti; personální zajištění)"
+      - citation: "CZ-Decree-409-2025 (organizační/personální opatření – školení a zvyšování povědomí)"
+      - citation: "CZ-Decree-410-2025 (organizační/personální opatření – školení a zvyšování povědomí)"
+      - citation: "EU-NIS2-2022-2555 Art. 20 (management bodies training/awareness) [mapping]"
+      - citation: "EU-NIS2-2022-2555 Art. 21(2)(g) (basic cyber hygiene and training) [mapping]"
+
+  - id: "NIS2CZ-GOV-INTERNAL-AUDIT"
+    title: "Internal audit / self-assessment of cybersecurity measures is performed and tracked"
+    scope:
+      applies_to: ["org"]
+      conditions:
+        - profile_field: "in_scope_under_cz_law"
+          equals: true
+    requirement:
+      type: "checklist"
+      logic: "ALL"
+      na_mechanism: "Not permitted — audit/self-assessment is mandatory."
+      checklist:
+        - id: "GOV-AUDIT-01"
+          title_en: "Audit plan or schedule exists (at least annual or risk/incident-triggered)"
+          title_cs: "Auditní plán nebo rozvrh existuje (alespoň roční nebo na základě rizika/incidentu)"
+          required_by_default: true
+          acceptance_criteria:
+            - "Plan covers next 12 months or is trigger-based with defined triggers"
+            - "Plan is approved by management"
+          keywords_cs: ["auditní plán", "rozvrh", "roční", "trigger"]
+          keywords_en: ["audit plan", "schedule", "annual", "trigger"]
+          red_flags:
+            - "No audit plan exists"
+
+        - id: "GOV-AUDIT-02"
+          title_en: "Audit scope covers controls/measures for the applicable regime"
+          title_cs: "Rozsah auditu pokrývá kontroly/opatření pro příslušný režim"
+          required_by_default: true
+          acceptance_criteria:
+            - "Scope document lists specific controls and measure areas to be audited"
+            - "Scope references the applicable decree (409 or 410)"
+          keywords_cs: ["rozsah", "kontroly", "opatření", "režim"]
+          keywords_en: ["scope", "controls", "measures", "regime"]
+          red_flags:
+            - "Audit scope undefined"
+
+        - id: "GOV-AUDIT-03"
+          title_en: "Independence or objectivity of auditors is ensured"
+          title_cs: "Nezávislost nebo objektivita auditorů je zajištěna"
+          required_by_default: true
+          acceptance_criteria:
+            - "Auditors are independent of the audited area, or external support is engaged"
+            - "Independence/objectivity is documented"
+          keywords_cs: ["nezávislost", "objektivita", "auditoři", "externí"]
+          keywords_en: ["independence", "objectivity", "auditors", "external"]
+          red_flags:
+            - "Auditor independence not addressed"
+
+        - id: "GOV-AUDIT-04"
+          title_en: "Findings are classified and risk-rated"
+          title_cs: "Nálezy jsou klasifikovány a hodnoceny podle rizika"
+          required_by_default: true
+          acceptance_criteria:
+            - "Findings have severity/risk rating"
+            - "Classification scheme is defined"
+          keywords_cs: ["nálezy", "klasifikace", "riziko", "hodnocení"]
+          keywords_en: ["findings", "classification", "risk", "rating"]
+          red_flags:
+            - "Findings without risk ratings"
+
+        - id: "GOV-AUDIT-05"
+          title_en: "Corrective actions are tracked with owners, due dates, and status"
+          title_cs: "Nápravná opatření jsou sledována s vlastníky, termíny a stavem"
+          required_by_default: true
+          acceptance_criteria:
+            - "Each finding has assigned corrective action(s)"
+            - "Owner, due date, and status are tracked"
+          keywords_cs: ["nápravná opatření", "vlastník", "termín", "stav"]
+          keywords_en: ["corrective actions", "owner", "due date", "status"]
+          red_flags:
+            - "Corrective actions not tracked"
+
+        - id: "GOV-AUDIT-06"
+          title_en: "Audit results are reported to management"
+          title_cs: "Výsledky auditu jsou reportovány vedení"
+          required_by_default: true
+          acceptance_criteria:
+            - "Management receives audit summary/report"
+            - "Reporting is documented (minutes, email, report distribution)"
+          keywords_cs: ["reportování", "vedení", "shrnutí", "výsledky"]
+          keywords_en: ["reporting", "management", "summary", "results"]
+          red_flags:
+            - "No management reporting of audit results"
+    evidence_hints:
+      required:
+        - artifact_id: "GOV-AUDIT-PLAN"
+        - artifact_id: "GOV-AUDIT-REPORT"
+      optional:
+        - artifact_id: "GOV-CORRECTIVE-ACTIONS-REGISTER"
+        - artifact_id: "GOV-MGMT-REVIEW-MINUTES"
+    severity: "medium"
+    sources:
+      - citation: "CZ-Act-264-2025 (průběžné zajišťování a ověřování účinnosti opatření kybernetické bezpečnosti)"
+      - citation: "CZ-Decree-409-2025 (požadavky na ověřování/posuzování účinnosti opatření – vyšší povinnosti)"
+      - citation: "CZ-Decree-410-2025 (požadavky na ověřování/posuzování účinnosti opatření – nižší povinnosti)"
+      - citation: "EU-NIS2-2022-2555 Art. 21(2) (monitoring, testing and auditing) [mapping]"

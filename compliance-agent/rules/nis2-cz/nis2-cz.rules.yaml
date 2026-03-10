@@ -1,25 +1,15 @@
 meta:
   ruleset_id: nis2-cz
-  version: 2.0-refactored
+  version: 2.0-audit
   status: complete
   jurisdiction:
   - CZ
   evaluation_profile_schema: rules/nis2-cz/entity_profile.schema.yaml
-  not_applicable_schema: rules/nis2-cz/not_applicable.schema.yaml
-  evidence_catalog: rules/nis2-cz/EVIDENCE_CATALOG.yaml
-  sources:
-  - name: Zákon č. 264/2025 Sb., o kybernetické bezpečnosti
-    ref: CZ-Act-264-2025
-  - name: Vyhláška č. 408/2025 Sb., o regulovaných službách
-    ref: CZ-Decree-408-2025
-  - name: Vyhláška č. 409/2025 Sb. (vyšší povinnosti)
-    ref: CZ-Decree-409-2025
-  - name: Vyhláška č. 410/2025 Sb. (nižší povinnosti)
-    ref: CZ-Decree-410-2025
-  - name: Vyhláška č. 334/2025 Sb. (Portál NÚKIB + úkony)
-    ref: CZ-Decree-334-2025
-  - name: NIS2 Directive (EU) 2022/2555 (reference only)
-    ref: EU-NIS2-2022-2555
+  changelog: 'v2.0 (2026-03-10): Refactored to audit-grade with structured checklists,
+
+    acceptance criteria, deterministic logic, bilingual anchors, and red flags.
+
+    '
 rules:
 - id: NIS2CZ-FOUNDATIONS-SCOPE
   title: Assessment scope and entity profile are documented
@@ -537,8 +527,7 @@ rules:
   requirement:
     type: checklist
     logic: ALL
-    na_mechanism: 'If entity has no regulated services, a documented justification artifact (SCOPE-NA-JUSTIFICATION) referencing
-      CZ-Decree-408-2025 analysis is required.
+    na_mechanism: 'If entity has no regulated services, a documented justification artifact (SCOPE-NA-JUSTIFICATION) referencing CZ-Decree-408-2025 analysis is required.
 
       '
     checklist:
@@ -640,21 +629,119 @@ rules:
     - profile_field: in_scope_under_cz_law
       equals: true
   requirement:
-    type: governance_required
-    must_include:
-    - assignment_of_accountability (who in top management is accountable)
-    - governance_forum_or_reporting_line (how cyber risk is reported to management)
-    - approval_of_cybersecurity_measures_and_policies (formal approval evidence)
-    - periodic_management_review (cadence + agenda)
-    - resource_commitment (budget/staffing decision trail)
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — all items mandatory for in-scope entities.
+    checklist:
+    - id: GOV-MGMT-01
+      title_en: Accountability for cybersecurity is assigned to a specific member of top management
+      title_cs: Odpovědnost za kybernetickou bezpečnost je přiřazena konkrétnímu členovi vedení
+      required_by_default: true
+      acceptance_criteria:
+      - Named person or role in top management is designated as accountable
+      - Designation is documented in a board resolution or equivalent
+      keywords_cs:
+      - odpovědnost
+      - vedení
+      - představenstvo
+      - management
+      - kybernetická bezpečnost
+      keywords_en:
+      - accountability
+      - top management
+      - board
+      - cybersecurity
+      red_flags:
+      - No named accountable person
+      - Accountability delegated below management without retention at top
+    - id: GOV-MGMT-02
+      title_en: Governance forum or reporting line for cyber risk exists
+      title_cs: Existuje řídící orgán nebo reportovací linie pro kybernetická rizika
+      required_by_default: true
+      acceptance_criteria:
+      - A governance body (board committee, risk committee, or equivalent) reviews cyber risk
+      - Reporting cadence (at least quarterly) is defined
+      keywords_cs:
+      - řídící orgán
+      - reportování
+      - kybernetická rizika
+      - výbor
+      keywords_en:
+      - governance forum
+      - reporting line
+      - cyber risk
+      - committee
+      red_flags:
+      - No governance body for cyber risk
+      - Reporting cadence undefined
+    - id: GOV-MGMT-03
+      title_en: Cybersecurity measures and policies are formally approved by management
+      title_cs: Opatření a politiky kybernetické bezpečnosti jsou formálně schváleny vedením
+      required_by_default: true
+      acceptance_criteria:
+      - Approval record (minutes, resolution, or sign-off) exists for the cybersecurity policy framework
+      - Approval is dated and signed by accountable management member
+      keywords_cs:
+      - schválení
+      - politiky
+      - opatření
+      - vedení
+      keywords_en:
+      - approval
+      - policies
+      - measures
+      - management
+      red_flags:
+      - No approval record for cybersecurity policies
+    - id: GOV-MGMT-04
+      title_en: Periodic management review of cybersecurity is conducted
+      title_cs: Periodický přezkum kybernetické bezpečnosti vedením je prováděn
+      required_by_default: true
+      acceptance_criteria:
+      - Management review is conducted at least annually
+      - Review agenda includes risk status, incidents, audit findings, and resource adequacy
+      - Minutes or records are retained
+      keywords_cs:
+      - přezkum
+      - management review
+      - pravidelný
+      - zápis
+      keywords_en:
+      - management review
+      - periodic
+      - annual
+      - minutes
+      red_flags:
+      - No management review conducted in last 12 months
+      - No records of review
+    - id: GOV-MGMT-05
+      title_en: Resource commitment (budget/staffing) decision trail exists
+      title_cs: Rozhodovací stopa pro přidělení zdrojů (rozpočet/personál) existuje
+      required_by_default: true
+      acceptance_criteria:
+      - Budget allocation for cybersecurity is documented
+      - Staffing decisions (headcount, outsourcing) are recorded
+      keywords_cs:
+      - rozpočet
+      - personál
+      - zdroje
+      - přidělení
+      keywords_en:
+      - budget
+      - staffing
+      - resources
+      - allocation
+      red_flags:
+      - No cybersecurity budget documented
+      - No staffing records
   evidence_hints:
     required:
-    - artifact_id: GOV-BOARD-OR-MANAGEMENT-RESOLUTION-CYBERSECUR
-    - artifact_id: GOV-MANAGEMENT-REVIEW-MINUTES-CYBER
+    - artifact_id: GOV-BOARD-RESOLUTION-CYBER
+    - artifact_id: GOV-MGMT-REVIEW-MINUTES
     optional:
-    - artifact_id: GOV-CYBERSECURITY-GOVERNANCE-CHARTER
-    - artifact_id: GOV-RISK-REGISTER-SUMMARY-FOR-MANAGEMENT
-    - artifact_id: GOV-BUDGET-APPROVAL-RECORDS
+    - artifact_id: GOV-GOVERNANCE-CHARTER
+    - artifact_id: GOV-RISK-REGISTER-SUMMARY
+    - artifact_id: GOV-BUDGET-RECORDS
   severity: high
   sources:
   - citation: CZ-Act-264-2025 (odpovědnost vedení za zavedení a udržování opatření kybernetické bezpečnosti)
@@ -670,31 +757,157 @@ rules:
     - profile_field: in_scope_under_cz_law
       equals: true
   requirement:
-    type: policy_framework_required
-    must_include:
-    - policy_register (list of policies/standards/procedures)
-    - ownership (policy owner for each document)
-    - versioning_and_change_control
-    - review_cycle (at least annual or trigger-based)
-    - communication_and_accessibility (how policies are published internally)
-    - alignment_to_applicable_duty_regime (higher|lower)
-    minimum_policy_topics:
-    - risk_management
-    - asset_management_and_classification
-    - access_control_and_identity
-    - logging_and_monitoring
-    - vulnerability_and_patch_management
-    - backup_and_resilience
-    - incident_handling_and_reporting
-    - supplier_and_third_party_management
-    - secure_change_management
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — complete policy framework is mandatory.
+    checklist:
+    - id: GOV-POL-01
+      title_en: Policy register listing all cybersecurity policies, standards, and procedures exists
+      title_cs: Registr politik uvádějící všechny politiky, standardy a postupy kybernetické bezpečnosti existuje
+      required_by_default: true
+      acceptance_criteria:
+      - Register lists all documents with title, owner, version, review date, and status
+      keywords_cs:
+      - registr politik
+      - seznam
+      - politiky
+      - postupy
+      keywords_en:
+      - policy register
+      - list
+      - policies
+      - procedures
+      red_flags:
+      - No policy register exists
+    - id: GOV-POL-02
+      title_en: Each policy document has an assigned owner
+      title_cs: Každý dokument politiky má přiřazeného vlastníka
+      required_by_default: true
+      acceptance_criteria:
+      - Owner (role or named person) is designated for each policy
+      keywords_cs:
+      - vlastník
+      - politika
+      - odpovědnost
+      keywords_en:
+      - owner
+      - policy
+      - responsibility
+      red_flags:
+      - Policies without owners
+    - id: GOV-POL-03
+      title_en: Version control and change management for policies is in place
+      title_cs: Řízení verzí a změn politik je zavedeno
+      required_by_default: true
+      acceptance_criteria:
+      - All policies are version-controlled with change history
+      keywords_cs:
+      - verze
+      - řízení změn
+      - historie
+      keywords_en:
+      - version control
+      - change management
+      - history
+      red_flags:
+      - Policies without version numbers or change logs
+    - id: GOV-POL-04
+      title_en: Review cycle (at least annual or trigger-based) is defined and followed
+      title_cs: Cyklus přezkumu (alespoň roční nebo na základě triggeru) je definován a dodržován
+      required_by_default: true
+      acceptance_criteria:
+      - Review cadence is documented (annual minimum)
+      - Evidence of last review within cycle
+      keywords_cs:
+      - přezkum
+      - cyklus
+      - roční
+      - revize
+      keywords_en:
+      - review
+      - cycle
+      - annual
+      - revision
+      red_flags:
+      - No review cycle defined
+      - Last review overdue
+    - id: GOV-POL-05
+      title_en: Policies are communicated and accessible to relevant personnel
+      title_cs: Politiky jsou komunikovány a přístupné relevantnímu personálu
+      required_by_default: true
+      acceptance_criteria:
+      - Publication mechanism exists (intranet, portal, shared drive)
+      - Communication records (email, training acknowledgment) available
+      keywords_cs:
+      - komunikace
+      - přístupnost
+      - intranet
+      - portál
+      keywords_en:
+      - communication
+      - accessibility
+      - intranet
+      - portal
+      red_flags:
+      - Policies not accessible to staff
+    - id: GOV-POL-06
+      title_en: Policy framework is aligned to the applicable duty regime (higher/lower)
+      title_cs: Rámec politik je sladěn s příslušným režimem povinností (vyšší/nižší)
+      required_by_default: true
+      acceptance_criteria:
+      - Policies explicitly reference the applicable decree (409 or 410)
+      - Measures required by the regime are traceable to specific policies
+      keywords_cs:
+      - režim
+      - sladění
+      - vyhláška 409
+      - vyhláška 410
+      keywords_en:
+      - regime
+      - alignment
+      - decree 409
+      - decree 410
+      red_flags:
+      - No regime alignment documented
+    - id: GOV-POL-07
+      title_en: Minimum policy topics are covered
+      title_cs: Minimální témata politik jsou pokryta
+      required_by_default: true
+      acceptance_criteria:
+      - 'Policies exist covering: risk management, asset management & classification, access control & identity, logging & monitoring, vulnerability & patch management, backup & resilience, incident handling & reporting, supplier management, secure change management'
+      - Each topic is traceable to a specific policy document
+      keywords_cs:
+      - témata
+      - pokrytí
+      - řízení rizik
+      - aktiva
+      - přístupy
+      - logy
+      - zranitelnosti
+      - zálohy
+      - incidenty
+      - dodavatelé
+      - změny
+      keywords_en:
+      - topics
+      - coverage
+      - risk management
+      - assets
+      - access
+      - logging
+      - vulnerabilities
+      - backup
+      - incidents
+      - suppliers
+      - change management
+      red_flags:
+      - Major topic areas not covered by any policy
   evidence_hints:
     required:
     - artifact_id: GOV-CYBERSECURITY-POLICY
     - artifact_id: GOV-POLICY-REGISTER
     optional:
     - artifact_id: GOV-DOCUMENT-CONTROL-PROCEDURE
-    - artifact_id: GOV-INTRANET-POLICY-PORTAL-SCREENSHOT
     - artifact_id: GOV-EXCEPTIONS-REGISTER
   severity: high
   sources:
@@ -711,19 +924,86 @@ rules:
     - profile_field: in_scope_under_cz_law
       equals: true
   requirement:
-    type: document_required
-    document: cybersecurity_roles_responsibilities_matrix
-    must_include:
-    - process_list (e.g., incident handling, vuln mgmt, access reviews, backup, supplier onboarding)
-    - role_assignments (RACI or equivalent)
-    - approval_and_effective_date
-    - handover_or_backup_roles (coverage during absence)
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — roles and responsibilities must be defined for all in-scope entities.
+    checklist:
+    - id: GOV-ROLES-01
+      title_en: Key cybersecurity processes are listed
+      title_cs: Klíčové procesy kybernetické bezpečnosti jsou vyjmenovány
+      required_by_default: true
+      acceptance_criteria:
+      - 'Process list includes at minimum: incident handling, vulnerability management, access reviews, backup, supplier onboarding'
+      keywords_cs:
+      - procesy
+      - seznam
+      - incidenty
+      - zranitelnosti
+      - přístupy
+      keywords_en:
+      - processes
+      - list
+      - incidents
+      - vulnerabilities
+      - access
+      red_flags:
+      - No process list
+    - id: GOV-ROLES-02
+      title_en: RACI or equivalent role assignment exists for each process
+      title_cs: RACI nebo ekvivalentní přiřazení rolí existuje pro každý proces
+      required_by_default: true
+      acceptance_criteria:
+      - Each process has Responsible, Accountable, Consulted, Informed (or equivalent) roles assigned
+      keywords_cs:
+      - RACI
+      - role
+      - přiřazení
+      - odpovědnosti
+      keywords_en:
+      - RACI
+      - roles
+      - assignment
+      - responsibilities
+      red_flags:
+      - Processes without role assignments
+    - id: GOV-ROLES-03
+      title_en: Document is approved with effective date
+      title_cs: Dokument je schválen s datem účinnosti
+      required_by_default: true
+      acceptance_criteria:
+      - Approval and effective date are present
+      keywords_cs:
+      - schválení
+      - datum účinnosti
+      keywords_en:
+      - approval
+      - effective date
+      red_flags:
+      - No approval or date
+    - id: GOV-ROLES-04
+      title_en: Backup/handover roles are defined for coverage during absence
+      title_cs: Zástupci/předávací role jsou definovány pro pokrytí v době nepřítomnosti
+      required_by_default: true
+      acceptance_criteria:
+      - Deputy or backup roles are documented for each critical cybersecurity role
+      keywords_cs:
+      - zástupce
+      - předání
+      - nepřítomnost
+      - záloha
+      keywords_en:
+      - backup
+      - handover
+      - absence
+      - deputy
+      red_flags:
+      - No backup roles defined
   evidence_hints:
     required:
-    - artifact_id: GOV-CYBERSECURITY-ROLES-RESPONSIBILITIES-MATR
+    - artifact_id: GOV-ROLES-MATRIX
     optional:
-    - artifact_id: GOV-JOB-DESCRIPTIONS-SECURITY
-    - artifact_id: GOV-ORG-CHART
+    - artifact_id: GOV-JOB-DESCRIPTIONS
+    - artifact_id: FOUND-ORG-CHART
     - artifact_id: GOV-ON-CALL-ROSTER
   severity: medium
   sources:
@@ -739,25 +1019,147 @@ rules:
     - profile_field: in_scope_under_cz_law
       equals: true
   requirement:
-    type: program_required
-    program: cybersecurity_training_and_awareness
-    must_include:
-    - audience_definition (roles/groups incl. privileged users and management)
-    - mandatory_training_topics (baseline cyber hygiene + role-based)
-    - onboarding_training
-    - periodic_refresh (cadence)
-    - awareness_activities (e.g., comms, campaigns, simulations)
-    - training_completion_tracking (records + reporting)
-    - effectiveness_check (e.g., quiz/phishing simulation metrics)
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — training and awareness are mandatory for all in-scope entities.
+    checklist:
+    - id: GOV-TRAIN-01
+      title_en: Target audiences are defined (roles/groups including privileged users and management)
+      title_cs: Cílové skupiny jsou definovány (role/skupiny včetně privilegovaných uživatelů a vedení)
+      required_by_default: true
+      acceptance_criteria:
+      - Audience groups are listed with their specific training requirements
+      - Management and privileged users are explicitly included
+      keywords_cs:
+      - cílové skupiny
+      - role
+      - privilegovaní
+      - vedení
+      keywords_en:
+      - target audiences
+      - roles
+      - privileged users
+      - management
+      red_flags:
+      - No audience definition
+      - Management or privileged users not included
+    - id: GOV-TRAIN-02
+      title_en: Mandatory training topics include baseline cyber hygiene and role-based content
+      title_cs: Povinná témata školení zahrnují základní kybernetickou hygienu a obsah podle rolí
+      required_by_default: true
+      acceptance_criteria:
+      - 'Baseline topics cover: phishing, password hygiene, device security, reporting obligations'
+      - Role-specific topics are defined (e.g., admin security, developer secure coding)
+      keywords_cs:
+      - témata školení
+      - kybernetická hygiena
+      - phishing
+      - hesla
+      keywords_en:
+      - training topics
+      - cyber hygiene
+      - phishing
+      - passwords
+      red_flags:
+      - No baseline topics defined
+    - id: GOV-TRAIN-03
+      title_en: Onboarding training is provided to new employees
+      title_cs: Školení při nástupu je poskytnuto novým zaměstnancům
+      required_by_default: true
+      acceptance_criteria:
+      - Onboarding includes cybersecurity training before system access or within defined period
+      keywords_cs:
+      - nástup
+      - onboarding
+      - noví zaměstnanci
+      keywords_en:
+      - onboarding
+      - new employees
+      - induction
+      red_flags:
+      - No onboarding training requirement
+    - id: GOV-TRAIN-04
+      title_en: Periodic refresh training cadence is defined
+      title_cs: Kadence periodického obnovovacího školení je definována
+      required_by_default: true
+      acceptance_criteria:
+      - Refresh cadence documented (at least annual)
+      keywords_cs:
+      - periodické
+      - obnovovací
+      - kadence
+      - roční
+      keywords_en:
+      - periodic
+      - refresh
+      - cadence
+      - annual
+      red_flags:
+      - No refresh cadence defined
+    - id: GOV-TRAIN-05
+      title_en: Awareness activities (campaigns, simulations) are conducted
+      title_cs: Aktivity zvyšování povědomí (kampaně, simulace) jsou prováděny
+      required_by_default: true
+      acceptance_criteria:
+      - At least one awareness activity per year beyond formal training
+      - Activity type and participation records exist
+      keywords_cs:
+      - povědomí
+      - kampaně
+      - simulace
+      keywords_en:
+      - awareness
+      - campaigns
+      - simulations
+      red_flags:
+      - No awareness activities beyond training
+    - id: GOV-TRAIN-06
+      title_en: Training completion is tracked with records and reporting
+      title_cs: Dokončení školení je sledováno se záznamy a reportováním
+      required_by_default: true
+      acceptance_criteria:
+      - Completion records per employee/role group are maintained
+      - Non-completion is tracked and escalated
+      keywords_cs:
+      - dokončení
+      - záznamy
+      - sledování
+      - reporting
+      keywords_en:
+      - completion
+      - records
+      - tracking
+      - reporting
+      red_flags:
+      - No completion tracking
+    - id: GOV-TRAIN-07
+      title_en: Effectiveness is measured (quiz, phishing simulation metrics, etc.)
+      title_cs: Efektivita je měřena (kvízy, metriky phishingových simulací atd.)
+      required_by_default: true
+      acceptance_criteria:
+      - At least one effectiveness metric is defined and measured
+      - Results are reported to management
+      keywords_cs:
+      - efektivita
+      - metriky
+      - kvíz
+      - měření
+      keywords_en:
+      - effectiveness
+      - metrics
+      - quiz
+      - measurement
+      red_flags:
+      - No effectiveness measurement
   evidence_hints:
     required:
-    - artifact_id: GOV-SECURITY-TRAINING-PLAN
-    - artifact_id: GOV-SECURITY-TRAINING-RECORDS
+    - artifact_id: GOV-TRAINING-PLAN
+    - artifact_id: GOV-TRAINING-RECORDS
     optional:
-    - artifact_id: GOV-LEARNING-MANAGEMENT-SYSTEM-EXPORT
-    - artifact_id: GOV-AWARENESS-CAMPAIGN-MATERIALS
-    - artifact_id: GOV-PHISHING-SIMULATION-REPORT
-    - artifact_id: GOV-MANAGEMENT-TRAINING-ATTENDANCE
+    - artifact_id: GOV-LMS-EXPORT
+    - artifact_id: GOV-AWARENESS-MATERIALS
+    - artifact_id: GOV-PHISHING-REPORT
+    - artifact_id: GOV-MGMT-TRAINING-ATTENDANCE
   severity: medium
   sources:
   - citation: CZ-Act-264-2025 (povinnost zavést a udržovat opatření kybernetické bezpečnosti; personální zajištění)
@@ -774,23 +1176,131 @@ rules:
     - profile_field: in_scope_under_cz_law
       equals: true
   requirement:
-    type: process_required
-    process: cybersecurity_internal_audit
-    must_include:
-    - audit_plan_or_schedule (at least annual or risk/incident-triggered)
-    - audit_scope_definition (controls/measures covered; higher/lower regime)
-    - independence_or_objectivity (who audits whom; external support if needed)
-    - findings_classification_and_risk_rating
-    - corrective_actions_tracking (owners, due dates, status)
-    - management_reporting_of_results
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — audit/self-assessment is mandatory.
+    checklist:
+    - id: GOV-AUDIT-01
+      title_en: Audit plan or schedule exists (at least annual or risk/incident-triggered)
+      title_cs: Auditní plán nebo rozvrh existuje (alespoň roční nebo na základě rizika/incidentu)
+      required_by_default: true
+      acceptance_criteria:
+      - Plan covers next 12 months or is trigger-based with defined triggers
+      - Plan is approved by management
+      keywords_cs:
+      - auditní plán
+      - rozvrh
+      - roční
+      - trigger
+      keywords_en:
+      - audit plan
+      - schedule
+      - annual
+      - trigger
+      red_flags:
+      - No audit plan exists
+    - id: GOV-AUDIT-02
+      title_en: Audit scope covers controls/measures for the applicable regime
+      title_cs: Rozsah auditu pokrývá kontroly/opatření pro příslušný režim
+      required_by_default: true
+      acceptance_criteria:
+      - Scope document lists specific controls and measure areas to be audited
+      - Scope references the applicable decree (409 or 410)
+      keywords_cs:
+      - rozsah
+      - kontroly
+      - opatření
+      - režim
+      keywords_en:
+      - scope
+      - controls
+      - measures
+      - regime
+      red_flags:
+      - Audit scope undefined
+    - id: GOV-AUDIT-03
+      title_en: Independence or objectivity of auditors is ensured
+      title_cs: Nezávislost nebo objektivita auditorů je zajištěna
+      required_by_default: true
+      acceptance_criteria:
+      - Auditors are independent of the audited area, or external support is engaged
+      - Independence/objectivity is documented
+      keywords_cs:
+      - nezávislost
+      - objektivita
+      - auditoři
+      - externí
+      keywords_en:
+      - independence
+      - objectivity
+      - auditors
+      - external
+      red_flags:
+      - Auditor independence not addressed
+    - id: GOV-AUDIT-04
+      title_en: Findings are classified and risk-rated
+      title_cs: Nálezy jsou klasifikovány a hodnoceny podle rizika
+      required_by_default: true
+      acceptance_criteria:
+      - Findings have severity/risk rating
+      - Classification scheme is defined
+      keywords_cs:
+      - nálezy
+      - klasifikace
+      - riziko
+      - hodnocení
+      keywords_en:
+      - findings
+      - classification
+      - risk
+      - rating
+      red_flags:
+      - Findings without risk ratings
+    - id: GOV-AUDIT-05
+      title_en: Corrective actions are tracked with owners, due dates, and status
+      title_cs: Nápravná opatření jsou sledována s vlastníky, termíny a stavem
+      required_by_default: true
+      acceptance_criteria:
+      - Each finding has assigned corrective action(s)
+      - Owner, due date, and status are tracked
+      keywords_cs:
+      - nápravná opatření
+      - vlastník
+      - termín
+      - stav
+      keywords_en:
+      - corrective actions
+      - owner
+      - due date
+      - status
+      red_flags:
+      - Corrective actions not tracked
+    - id: GOV-AUDIT-06
+      title_en: Audit results are reported to management
+      title_cs: Výsledky auditu jsou reportovány vedení
+      required_by_default: true
+      acceptance_criteria:
+      - Management receives audit summary/report
+      - Reporting is documented (minutes, email, report distribution)
+      keywords_cs:
+      - reportování
+      - vedení
+      - shrnutí
+      - výsledky
+      keywords_en:
+      - reporting
+      - management
+      - summary
+      - results
+      red_flags:
+      - No management reporting of audit results
   evidence_hints:
     required:
-    - artifact_id: GOV-CYBERSECURITY-AUDIT-PLAN
-    - artifact_id: GOV-CYBERSECURITY-AUDIT-REPORT
+    - artifact_id: GOV-AUDIT-PLAN
+    - artifact_id: GOV-AUDIT-REPORT
     optional:
     - artifact_id: GOV-CORRECTIVE-ACTIONS-REGISTER
-    - artifact_id: GOV-MANAGEMENT-REVIEW-MINUTES-CYBER
-    - artifact_id: GOV-INTERNAL-CONTROL-TESTING-WORKPAPERS
+    - artifact_id: GOV-MGMT-REVIEW-MINUTES
   severity: medium
   sources:
   - citation: CZ-Act-264-2025 (průběžné zajišťování a ověřování účinnosti opatření kybernetické bezpečnosti)
@@ -806,19 +1316,134 @@ rules:
     - profile_field: in_scope_under_cz_law
       equals: true
   requirement:
-    type: document_required
-    document: ict_asset_inventory
-    must_include:
-    - asset_identifier
-    - asset_type (hardware|software|service|cloud|network|data_store)
-    - asset_owner
-    - asset_location_or_environment (onprem|cloud|saas)
-    - asset_criticality
-    - links_to_regulated_services (if applicable)
-    - last_review_date
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — all items mandatory.
+    checklist:
+    - id: RISK-AINV-01
+      title_en: Each asset has a unique identifier
+      title_cs: Každé aktivum má jedinečný identifikátor
+      required_by_default: true
+      acceptance_criteria:
+      - Every asset record has a unique, persistent identifier
+      keywords_cs:
+      - identifikátor
+      - aktivum
+      - jedinečný
+      keywords_en:
+      - identifier
+      - asset
+      - unique
+      red_flags:
+      - Duplicate or missing identifiers
+    - id: RISK-AINV-02
+      title_en: Asset type is classified (hardware, software, service, cloud, network, data store)
+      title_cs: Typ aktiva je klasifikován (hardware, software, služba, cloud, síť, datové úložiště)
+      required_by_default: true
+      acceptance_criteria:
+      - Each asset has a type from a defined taxonomy
+      keywords_cs:
+      - typ
+      - hardware
+      - software
+      - cloud
+      - klasifikace
+      keywords_en:
+      - type
+      - hardware
+      - software
+      - cloud
+      - classification
+      red_flags:
+      - Assets without type classification
+    - id: RISK-AINV-03
+      title_en: Asset owner is assigned
+      title_cs: Vlastník aktiva je přiřazen
+      required_by_default: true
+      acceptance_criteria:
+      - Named owner or role for each asset
+      keywords_cs:
+      - vlastník
+      - přiřazení
+      keywords_en:
+      - owner
+      - assignment
+      red_flags:
+      - Assets without owners
+    - id: RISK-AINV-04
+      title_en: Asset location/environment is documented (on-prem, cloud, SaaS)
+      title_cs: Umístění/prostředí aktiva je zdokumentováno (on-prem, cloud, SaaS)
+      required_by_default: true
+      acceptance_criteria:
+      - Location or hosting environment is recorded per asset
+      keywords_cs:
+      - umístění
+      - prostředí
+      - on-prem
+      - cloud
+      - SaaS
+      keywords_en:
+      - location
+      - environment
+      - on-prem
+      - cloud
+      - SaaS
+      red_flags:
+      - Location unknown for assets
+    - id: RISK-AINV-05
+      title_en: Asset criticality is assessed
+      title_cs: Kritičnost aktiva je posouzena
+      required_by_default: true
+      acceptance_criteria:
+      - Criticality rating per asset based on impact to regulated services
+      keywords_cs:
+      - kritičnost
+      - posouzení
+      - dopad
+      keywords_en:
+      - criticality
+      - assessment
+      - impact
+      red_flags:
+      - No criticality assessment
+    - id: RISK-AINV-06
+      title_en: Links to regulated services are documented where applicable
+      title_cs: Vazby na regulované služby jsou zdokumentovány, pokud je to relevantní
+      required_by_default: true
+      acceptance_criteria:
+      - Assets supporting regulated services are tagged/linked
+      keywords_cs:
+      - vazby
+      - regulované služby
+      - propojení
+      keywords_en:
+      - links
+      - regulated services
+      - mapping
+      red_flags:
+      - No mapping to regulated services
+    - id: RISK-AINV-07
+      title_en: Last review date is recorded and inventory is current
+      title_cs: Datum poslední revize je zaznamenáno a inventář je aktuální
+      required_by_default: true
+      acceptance_criteria:
+      - Inventory has a last-reviewed date within 12 months
+      - Process for ongoing updates (adds/changes/removes) exists
+      keywords_cs:
+      - revize
+      - datum
+      - aktuální
+      - aktualizace
+      keywords_en:
+      - review
+      - date
+      - current
+      - updates
+      red_flags:
+      - Inventory not reviewed in >12 months
   evidence_hints:
     required:
-    - artifact_id: RISK-ICT-ASSET-INVENTORY
+    - artifact_id: RISK-ASSET-INVENTORY
     optional:
     - artifact_id: RISK-CMDB-EXPORT
     - artifact_id: RISK-CLOUD-ACCOUNT-INVENTORY
@@ -828,33 +1453,6 @@ rules:
   - citation: 'CZ-Decree-409-2025 (higher duties: asset management / evidence)'
   - citation: 'CZ-Decree-410-2025 (lower duties: asset management / evidence)'
   - citation: 'EU-NIS2-2022-2555 Art. 21 (mapping: risk-management measures)'
-- id: NIS2CZ-RISK-ASSET-OWNERSHIP
-  title: Asset ownership and responsibility is assigned for ICT assets
-  scope:
-    applies_to:
-    - org
-    conditions:
-    - profile_field: in_scope_under_cz_law
-      equals: true
-  requirement:
-    type: document_required
-    document: asset_ownership_model
-    must_include:
-    - roles_and_responsibilities (owner|custodian|administrator)
-    - assignment_method (how owners are set/updated)
-    - accountability_for_risk_acceptance
-    - linkage_to_inventory_fields
-  evidence_hints:
-    required:
-    - artifact_id: RISK-ASSET-OWNERSHIP-MODEL
-    optional:
-    - artifact_id: RISK-ICT-ASSET-INVENTORY
-    - artifact_id: RISK-RACI-MATRIX
-  severity: medium
-  sources:
-  - citation: CZ-Act-264-2025 (governance/accountability for cybersecurity measures)
-  - citation: CZ-Decree-409-2025 (organizational measures)
-  - citation: 'EU-NIS2-2022-2555 Art. 20–21 (mapping: governance + measures)'
 - id: NIS2CZ-RISK-ASSET-CLASSIFICATION-SCHEME
   title: Information and asset classification scheme is defined and approved
   scope:
@@ -864,53 +1462,86 @@ rules:
     - profile_field: in_scope_under_cz_law
       equals: true
   requirement:
-    type: document_required
-    document: information_and_asset_classification_policy
-    must_include:
-    - classification_levels
-    - classification_criteria (confidentiality|integrity|availability|legal)
-    - labeling_and_handling_rules
-    - review_cycle
-    - exceptions_process
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — classification scheme is mandatory.
+    checklist:
+    - id: RISK-ACLASS-01
+      title_en: Classification levels are defined
+      title_cs: Úrovně klasifikace jsou definovány
+      required_by_default: true
+      acceptance_criteria:
+      - At least 3 classification levels with clear definitions
+      keywords_cs:
+      - úrovně
+      - klasifikace
+      - definice
+      keywords_en:
+      - levels
+      - classification
+      - definitions
+      red_flags:
+      - No classification levels
+    - id: RISK-ACLASS-02
+      title_en: Classification criteria cover CIA and legal dimensions
+      title_cs: Klasifikační kritéria pokrývají rozměry CIA a právní rozměr
+      required_by_default: true
+      acceptance_criteria:
+      - Criteria include confidentiality, integrity, availability, and legal/regulatory impact
+      keywords_cs:
+      - důvěrnost
+      - integrita
+      - dostupnost
+      - právní
+      keywords_en:
+      - confidentiality
+      - integrity
+      - availability
+      - legal
+      red_flags:
+      - CIA dimensions missing from criteria
+    - id: RISK-ACLASS-03
+      title_en: Labeling and handling rules are defined per classification level
+      title_cs: Pravidla označování a nakládání jsou definována pro každou úroveň
+      required_by_default: true
+      acceptance_criteria:
+      - Each level has labeling requirements and handling procedures
+      keywords_cs:
+      - označování
+      - nakládání
+      - pravidla
+      keywords_en:
+      - labeling
+      - handling
+      - rules
+      red_flags:
+      - No handling rules per level
+    - id: RISK-ACLASS-04
+      title_en: Review cycle and exceptions process are defined
+      title_cs: Cyklus revize a proces výjimek jsou definovány
+      required_by_default: true
+      acceptance_criteria:
+      - Review cycle is documented (at least annual)
+      - Exception process for deviations exists
+      keywords_cs:
+      - revize
+      - výjimky
+      - proces
+      keywords_en:
+      - review
+      - exceptions
+      - process
+      red_flags:
+      - No review cycle or exceptions process
   evidence_hints:
     required:
-    - artifact_id: RISK-INFORMATION-AND-ASSET-CLASSIFICATION-POL
+    - artifact_id: RISK-CLASSIFICATION-POLICY
     optional:
     - artifact_id: RISK-DATA-HANDLING-STANDARD
-    - artifact_id: RISK-RECORDS-MANAGEMENT-POLICY
   severity: high
   sources:
   - citation: 'CZ-Decree-409-2025 (higher duties: classification/handling expectations)'
   - citation: 'CZ-Decree-410-2025 (lower duties: baseline classification/handling)'
-  - citation: 'EU-NIS2-2022-2555 Art. 21 (mapping: policies/procedures; asset mgmt)'
-- id: NIS2CZ-RISK-ASSET-CLASSIFICATION-REGISTER
-  title: Assets and key information types are classified according to the approved scheme
-  scope:
-    applies_to:
-    - org
-    conditions:
-    - profile_field: in_scope_under_cz_law
-      equals: true
-  requirement:
-    type: document_required
-    document: asset_and_information_classification_register
-    must_include:
-    - reference_to_classification_scheme
-    - classification_per_asset_or_information_type
-    - handling_requirements_per_class
-    - owner_approval_or_acknowledgement
-  evidence_hints:
-    required:
-    - artifact_id: RISK-ASSET-AND-INFORMATION-CLASSIFICATION-REG
-    optional:
-    - artifact_id: RISK-ICT-ASSET-INVENTORY
-    - artifact_id: RISK-DATA-INVENTORY
-    - artifact_id: RISK-DPA-OR-GDPR-RECORDS
-  severity: medium
-  sources:
-  - citation: 'CZ-Decree-409-2025 (higher duties: classification applied in practice)'
-  - citation: 'CZ-Decree-410-2025 (lower duties: classification applied in practice)'
-  - citation: 'EU-NIS2-2022-2555 Art. 21 (mapping: asset management and policies)'
 - id: NIS2CZ-RISK-ASSET-LIFECYCLE
   title: ICT asset lifecycle processes (acquire/change/decommission) are defined and followed
   scope:
@@ -920,26 +1551,106 @@ rules:
     - profile_field: in_scope_under_cz_law
       equals: true
   requirement:
-    type: document_required
-    document: ict_asset_lifecycle_process
-    must_include:
-    - procurement_or_onboarding_controls
-    - configuration_baseline_or_hardening_reference
-    - change_tracking_or_change_approval
-    - secure_decommissioning_and_data_disposal
-    - inventory_update_step
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — lifecycle controls are mandatory.
+    checklist:
+    - id: RISK-ALIFE-01
+      title_en: Procurement/onboarding controls for new assets exist
+      title_cs: Kontroly pro pořízení/onboarding nových aktiv existují
+      required_by_default: true
+      acceptance_criteria:
+      - Process ensures security review before provisioning new assets
+      keywords_cs:
+      - pořízení
+      - onboarding
+      - nové
+      - kontroly
+      keywords_en:
+      - procurement
+      - onboarding
+      - new
+      - controls
+      red_flags:
+      - Assets provisioned without security review
+    - id: RISK-ALIFE-02
+      title_en: Configuration baseline or hardening reference is applied
+      title_cs: Konfigurační baseline nebo hardening reference je aplikován
+      required_by_default: true
+      acceptance_criteria:
+      - Hardening standards are defined and applied to new assets
+      keywords_cs:
+      - konfigurace
+      - baseline
+      - hardening
+      - zatvrzení
+      keywords_en:
+      - configuration
+      - baseline
+      - hardening
+      red_flags:
+      - No hardening standards
+    - id: RISK-ALIFE-03
+      title_en: Change tracking and approval process exists
+      title_cs: Proces sledování a schvalování změn existuje
+      required_by_default: true
+      acceptance_criteria:
+      - Changes to assets are tracked via change management
+      keywords_cs:
+      - změny
+      - sledování
+      - schvalování
+      keywords_en:
+      - changes
+      - tracking
+      - approval
+      red_flags:
+      - No change tracking
+    - id: RISK-ALIFE-04
+      title_en: Secure decommissioning and data disposal process exists
+      title_cs: Proces bezpečného vyřazení a likvidace dat existuje
+      required_by_default: true
+      acceptance_criteria:
+      - Decommissioning procedure includes data wiping/destruction
+      - Records of decommissioned assets are maintained
+      keywords_cs:
+      - vyřazení
+      - likvidace
+      - data
+      - bezpečný
+      keywords_en:
+      - decommissioning
+      - disposal
+      - data
+      - secure
+      red_flags:
+      - No decommissioning procedure
+    - id: RISK-ALIFE-05
+      title_en: Inventory is updated as part of lifecycle events
+      title_cs: Inventář je aktualizován jako součást životního cyklu aktiv
+      required_by_default: true
+      acceptance_criteria:
+      - Process requires inventory update on add/change/decommission
+      keywords_cs:
+      - inventář
+      - aktualizace
+      - životní cyklus
+      keywords_en:
+      - inventory
+      - update
+      - lifecycle
+      red_flags:
+      - Inventory not updated on asset changes
   evidence_hints:
     required:
-    - artifact_id: RISK-ICT-ASSET-LIFECYCLE-PROCESS
+    - artifact_id: RISK-ASSET-LIFECYCLE-PROCESS
     optional:
-    - artifact_id: RISK-PROCUREMENT-POLICY
     - artifact_id: RISK-CHANGE-TICKETS
     - artifact_id: RISK-DECOMMISSION-RECORDS
   severity: medium
   sources:
   - citation: 'CZ-Decree-409-2025 (higher duties: lifecycle/change controls)'
   - citation: 'CZ-Decree-410-2025 (lower duties: lifecycle controls)'
-  - citation: 'EU-NIS2-2022-2555 Art. 21 (mapping: supply chain/change mgmt measures)'
 - id: NIS2CZ-RISK-ACCESS-CONTROL-POLICY
   title: Access control and identity management policy is defined, approved, and enforced
   scope:
@@ -949,27 +1660,157 @@ rules:
     - profile_field: in_scope_under_cz_law
       equals: true
   requirement:
-    type: document_required
-    document: access_control_and_identity_policy
-    must_include:
-    - principles (least_privilege, need_to_know, separation_of_duties)
-    - account_types (user|admin|service|shared) and handling rules
-    - authentication_requirements (password, mfa, sso where applicable)
-    - authorization_model (rbac/abac) and exception handling
-    - remote_access_requirements
-    - periodic_access_review_requirements
-    - logging_requirements_for_access_events
-    - review_cycle
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — access control policy is mandatory.
+    checklist:
+    - id: RISK-AC-01
+      title_en: Principles (least privilege, need-to-know, separation of duties) are stated
+      title_cs: Zásady (nejmenší oprávnění, potřeba znát, oddělení povinností) jsou uvedeny
+      required_by_default: true
+      acceptance_criteria:
+      - Policy explicitly states least privilege, need-to-know, and SoD principles
+      keywords_cs:
+      - nejmenší oprávnění
+      - potřeba znát
+      - oddělení povinností
+      keywords_en:
+      - least privilege
+      - need-to-know
+      - separation of duties
+      red_flags:
+      - Core principles not stated
+    - id: RISK-AC-02
+      title_en: Account types (user, admin, service, shared) and handling rules are defined
+      title_cs: Typy účtů (uživatel, admin, servisní, sdílený) a pravidla nakládání jsou definovány
+      required_by_default: true
+      acceptance_criteria:
+      - All account types are listed with specific handling rules
+      - Shared accounts are restricted with justification requirements
+      keywords_cs:
+      - účty
+      - typy
+      - admin
+      - servisní
+      - sdílený
+      keywords_en:
+      - accounts
+      - types
+      - admin
+      - service
+      - shared
+      red_flags:
+      - Account types not classified
+    - id: RISK-AC-03
+      title_en: Authentication requirements (password, MFA, SSO) are defined
+      title_cs: Požadavky na autentizaci (heslo, MFA, SSO) jsou definovány
+      required_by_default: true
+      acceptance_criteria:
+      - Password policy with complexity/length requirements exists
+      - MFA requirements are defined (at minimum for privileged and remote access)
+      keywords_cs:
+      - autentizace
+      - heslo
+      - MFA
+      - SSO
+      keywords_en:
+      - authentication
+      - password
+      - MFA
+      - SSO
+      red_flags:
+      - No MFA requirement for privileged access
+    - id: RISK-AC-04
+      title_en: Authorization model (RBAC/ABAC) and exception handling are defined
+      title_cs: Autorizační model (RBAC/ABAC) a řízení výjimek jsou definovány
+      required_by_default: true
+      acceptance_criteria:
+      - Authorization model is documented
+      - Exception process for deviations exists
+      keywords_cs:
+      - autorizace
+      - RBAC
+      - ABAC
+      - výjimky
+      keywords_en:
+      - authorization
+      - RBAC
+      - ABAC
+      - exceptions
+      red_flags:
+      - No authorization model documented
+    - id: RISK-AC-05
+      title_en: Remote access requirements are defined
+      title_cs: Požadavky na vzdálený přístup jsou definovány
+      required_by_default: true
+      acceptance_criteria:
+      - Remote access methods, authentication, and monitoring requirements are documented
+      keywords_cs:
+      - vzdálený přístup
+      - VPN
+      - vzdálené připojení
+      keywords_en:
+      - remote access
+      - VPN
+      - remote connection
+      red_flags:
+      - No remote access requirements
+    - id: RISK-AC-06
+      title_en: Periodic access review requirements are defined
+      title_cs: Požadavky na periodické přezkumy přístupů jsou definovány
+      required_by_default: true
+      acceptance_criteria:
+      - Review frequency is defined (at least annual, quarterly for privileged)
+      keywords_cs:
+      - přezkum
+      - periodický
+      - přístupy
+      keywords_en:
+      - review
+      - periodic
+      - access
+      red_flags:
+      - No periodic review requirement
+    - id: RISK-AC-07
+      title_en: Logging requirements for access events are defined
+      title_cs: Požadavky na logování přístupových událostí jsou definovány
+      required_by_default: true
+      acceptance_criteria:
+      - Authentication events, privilege changes, and access failures are logged
+      keywords_cs:
+      - logování
+      - přístup
+      - události
+      - autentizace
+      keywords_en:
+      - logging
+      - access
+      - events
+      - authentication
+      red_flags:
+      - Access events not logged
+    - id: RISK-AC-08
+      title_en: Policy review cycle is defined
+      title_cs: Cyklus revize politiky je definován
+      required_by_default: true
+      acceptance_criteria:
+      - Review cycle documented (at least annual)
+      keywords_cs:
+      - revize
+      - cyklus
+      keywords_en:
+      - review
+      - cycle
+      red_flags:
+      - No review cycle
   evidence_hints:
     required:
-    - artifact_id: RISK-ACCESS-CONTROL-AND-IDENTITY-POLICY
+    - artifact_id: RISK-ACCESS-CONTROL-POLICY
     optional:
     - artifact_id: GOV-POLICY-REGISTER
-    - artifact_id: RISK-ACCESS-CONTROL-STANDARD
     - artifact_id: RISK-REMOTE-ACCESS-STANDARD
   severity: high
   sources:
-  - citation: CZ-Act-264-2025 (povinnost zavést a dokumentovat opatření kybernetické bezpečnosti)
   - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: přístupová práva, autentizace, evidence)'
   - citation: 'CZ-Decree-410-2025 (nižší povinnosti: přístupová práva, autentizace, evidence)'
   - citation: EU-NIS2-2022-2555 Art. 21(2)(b)(d) (access control, authentication) [mapping]
@@ -982,26 +1823,110 @@ rules:
     - profile_field: in_scope_under_cz_law
       equals: true
   requirement:
-    type: process_required
-    process: identity_lifecycle_management
-    must_include:
-    - access_request_and_approval (manager + asset/application owner)
-    - role_change_handling (timeliness, approvals, documentation)
-    - termination_and_deprovisioning (defined SLA; immediate for high-risk roles)
-    - service_account_creation_controls
-    - recordkeeping (who approved what, when)
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — identity lifecycle is mandatory.
+    checklist:
+    - id: RISK-JML-01
+      title_en: Access request and approval process exists (manager + asset/app owner)
+      title_cs: Proces žádosti a schválení přístupu existuje (manažer + vlastník aktiva/aplikace)
+      required_by_default: true
+      acceptance_criteria:
+      - Formal request process with dual approval (line manager + system owner)
+      keywords_cs:
+      - žádost
+      - schválení
+      - přístup
+      - manažer
+      keywords_en:
+      - request
+      - approval
+      - access
+      - manager
+      red_flags:
+      - No formal request process
+    - id: RISK-JML-02
+      title_en: Role change handling with timeliness, approvals, and documentation
+      title_cs: Řízení změn rolí s včasností, schváleními a dokumentací
+      required_by_default: true
+      acceptance_criteria:
+      - Role changes trigger access review and re-approval
+      - Old access is revoked within defined SLA
+      keywords_cs:
+      - změna role
+      - přezkum
+      - odvolání
+      - SLA
+      keywords_en:
+      - role change
+      - review
+      - revocation
+      - SLA
+      red_flags:
+      - Role changes not triggering access review
+    - id: RISK-JML-03
+      title_en: Termination and deprovisioning with defined SLA
+      title_cs: Ukončení a deprovizionování s definovaným SLA
+      required_by_default: true
+      acceptance_criteria:
+      - Deprovisioning SLA defined (immediate for high-risk roles)
+      - Process integrated with HR termination workflow
+      keywords_cs:
+      - ukončení
+      - deprovizionování
+      - SLA
+      - HR
+      keywords_en:
+      - termination
+      - deprovisioning
+      - SLA
+      - HR
+      red_flags:
+      - No deprovisioning SLA
+      - Orphaned accounts found
+    - id: RISK-JML-04
+      title_en: Service account creation controls exist
+      title_cs: Kontroly vytváření servisních účtů existují
+      required_by_default: true
+      acceptance_criteria:
+      - Service account creation requires approval and justification
+      - Service accounts have assigned owners
+      keywords_cs:
+      - servisní účty
+      - vytváření
+      - schválení
+      keywords_en:
+      - service accounts
+      - creation
+      - approval
+      red_flags:
+      - Service accounts without owners
+    - id: RISK-JML-05
+      title_en: Recordkeeping (who approved what, when)
+      title_cs: Vedení záznamů (kdo co schválil, kdy)
+      required_by_default: true
+      acceptance_criteria:
+      - Audit trail of approvals is maintained
+      keywords_cs:
+      - záznamy
+      - auditní stopa
+      - schválení
+      keywords_en:
+      - records
+      - audit trail
+      - approvals
+      red_flags:
+      - No audit trail of access approvals
   evidence_hints:
     required:
     - artifact_id: RISK-IDENTITY-LIFECYCLE-PROCEDURE
     - artifact_id: RISK-ACCESS-REQUEST-RECORDS
     optional:
-    - artifact_id: RISK-HR-TERMINATION-RECORDS
-    - artifact_id: RISK-IDM-SYSTEM-LOGS-OR-EXPORTS
+    - artifact_id: RISK-IDM-LOGS
   severity: high
   sources:
   - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: řízení přístupů; zřizování/rušení účtů)'
   - citation: 'CZ-Decree-410-2025 (nižší povinnosti: řízení přístupů; zřizování/rušení účtů)'
-  - citation: EU-NIS2-2022-2555 Art. 21(2)(b) (access control) [mapping]
 - id: NIS2CZ-RISK-ACCESS-PRIVILEGED
   title: Privileged access is controlled, minimized, and monitored
   scope:
@@ -1011,27 +1936,110 @@ rules:
     - profile_field: in_scope_under_cz_law
       equals: true
   requirement:
-    type: process_required
-    process: privileged_access_management
-    must_include:
-    - privileged_role_definition_and_inventory
-    - separate_admin_accounts_or_elevation_mechanism
-    - mfa_for_privileged_access
-    - break_glass_accounts (controls + logging + periodic test)
-    - session_or_command_logging for privileged actions where feasible
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — privileged access management is mandatory.
+    checklist:
+    - id: RISK-PAM-01
+      title_en: Privileged roles are defined and inventoried
+      title_cs: Privilegované role jsou definovány a inventarizovány
+      required_by_default: true
+      acceptance_criteria:
+      - List of privileged roles and their scope exists
+      keywords_cs:
+      - privilegované role
+      - inventář
+      - seznam
+      keywords_en:
+      - privileged roles
+      - inventory
+      - list
+      red_flags:
+      - No privileged role inventory
+    - id: RISK-PAM-02
+      title_en: Separate admin accounts or elevation mechanism is used
+      title_cs: Samostatné administrátorské účty nebo mechanismus elevace je používán
+      required_by_default: true
+      acceptance_criteria:
+      - Admins use separate accounts for privileged work, or just-in-time elevation is in place
+      keywords_cs:
+      - administrátorské účty
+      - elevace
+      - oddělené
+      keywords_en:
+      - admin accounts
+      - elevation
+      - separate
+      red_flags:
+      - Admins use daily accounts for privileged tasks
+    - id: RISK-PAM-03
+      title_en: MFA is required for privileged access
+      title_cs: MFA je vyžadováno pro privilegovaný přístup
+      required_by_default: true
+      acceptance_criteria:
+      - MFA enforced for all privileged account authentication
+      keywords_cs:
+      - MFA
+      - privilegovaný
+      - autentizace
+      keywords_en:
+      - MFA
+      - privileged
+      - authentication
+      red_flags:
+      - MFA not enforced for privileged access
+    - id: RISK-PAM-04
+      title_en: Break-glass accounts have controls, logging, and periodic testing
+      title_cs: Nouzové účty mají kontroly, logování a pravidelné testování
+      required_by_default: true
+      acceptance_criteria:
+      - Break-glass procedure is documented
+      - Usage is logged and reviewed
+      - Periodic testing of break-glass process occurs
+      keywords_cs:
+      - nouzové účty
+      - break-glass
+      - logování
+      - testování
+      keywords_en:
+      - break-glass
+      - emergency accounts
+      - logging
+      - testing
+      red_flags:
+      - No break-glass procedure
+      - Break-glass usage not logged
+    - id: RISK-PAM-05
+      title_en: Session or command logging for privileged actions where feasible
+      title_cs: Logování relací nebo příkazů pro privilegované akce, pokud je to proveditelné
+      required_by_default: true
+      applicability: Required where technically feasible; document justification if not implemented
+      acceptance_criteria:
+      - Privileged sessions are recorded or commands logged
+      - Logs are tamper-protected
+      keywords_cs:
+      - logování relací
+      - příkazy
+      - privilegované
+      - záznam
+      keywords_en:
+      - session logging
+      - commands
+      - privileged
+      - recording
+      red_flags:
+      - No privileged session logging where technically feasible
   evidence_hints:
     required:
-    - artifact_id: RISK-PRIVILEGED-ACCESS-INVENTORY
-    - artifact_id: RISK-PAM-CONTROLS-EVIDENCE
+    - artifact_id: RISK-PAM-INVENTORY
+    - artifact_id: RISK-PAM-CONTROLS
     optional:
-    - artifact_id: RISK-ADMIN-ACCOUNT-LIST
     - artifact_id: RISK-BREAK-GLASS-PROCEDURE
     - artifact_id: RISK-PRIVILEGED-SESSION-LOGS
   severity: high
   sources:
   - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: řízení privilegovaných přístupů, evidence)'
   - citation: 'CZ-Decree-410-2025 (nižší povinnosti: řízení privilegovaných přístupů, evidence)'
-  - citation: EU-NIS2-2022-2555 Art. 21(2)(b)(d) (access control, MFA) [mapping]
 - id: NIS2CZ-RISK-ACCESS-REVIEWS
   title: Periodic access reviews are performed for critical systems and regulated services
   scope:
@@ -1041,26 +2049,106 @@ rules:
     - profile_field: in_scope_under_cz_law
       equals: true
   requirement:
-    type: process_required
-    process: access_review
-    must_include:
-    - review_scope (critical systems, privileged roles, regulated services)
-    - review_frequency (e.g., quarterly for privileged; at least annually otherwise)
-    - review_method (owner attestation + removal workflow)
-    - tracking_of_removals_and_exceptions
-    - evidence_retention
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted.
+    checklist:
+    - id: RISK-AREV-01
+      title_en: Review scope covers critical systems, privileged roles, and regulated services
+      title_cs: Rozsah přezkumu pokrývá kritické systémy, privilegované role a regulované služby
+      required_by_default: true
+      acceptance_criteria:
+      - Scope document lists systems and roles in review
+      keywords_cs:
+      - rozsah
+      - kritické systémy
+      - privilegované
+      - regulované
+      keywords_en:
+      - scope
+      - critical systems
+      - privileged
+      - regulated
+      red_flags:
+      - Review scope undefined
+    - id: RISK-AREV-02
+      title_en: Review frequency is defined (quarterly for privileged, at least annual otherwise)
+      title_cs: Frekvence přezkumu je definována (čtvrtletní pro privilegované, alespoň roční jinak)
+      required_by_default: true
+      acceptance_criteria:
+      - Frequency is documented and adherence is evidenced
+      keywords_cs:
+      - frekvence
+      - čtvrtletní
+      - roční
+      keywords_en:
+      - frequency
+      - quarterly
+      - annual
+      red_flags:
+      - No frequency defined
+      - Reviews overdue
+    - id: RISK-AREV-03
+      title_en: Review method (owner attestation + removal workflow) is defined
+      title_cs: Metoda přezkumu (atestace vlastníkem + workflow pro odebrání) je definována
+      required_by_default: true
+      acceptance_criteria:
+      - Owners attest to each access right
+      - Removal workflow for revoked access is documented
+      keywords_cs:
+      - atestace
+      - vlastník
+      - odebrání
+      - workflow
+      keywords_en:
+      - attestation
+      - owner
+      - removal
+      - workflow
+      red_flags:
+      - No attestation process
+    - id: RISK-AREV-04
+      title_en: Removals and exceptions are tracked
+      title_cs: Odebrání a výjimky jsou sledovány
+      required_by_default: true
+      acceptance_criteria:
+      - Removal actions are logged with dates
+      - Exceptions are documented with justification and expiry
+      keywords_cs:
+      - odebrání
+      - výjimky
+      - sledování
+      keywords_en:
+      - removals
+      - exceptions
+      - tracking
+      red_flags:
+      - No tracking of removals or exceptions
+    - id: RISK-AREV-05
+      title_en: Evidence is retained
+      title_cs: Důkazy jsou uchovávány
+      required_by_default: true
+      acceptance_criteria:
+      - Review records are retained per retention policy
+      keywords_cs:
+      - důkazy
+      - uchovávání
+      - retence
+      keywords_en:
+      - evidence
+      - retention
+      red_flags:
+      - Review records not retained
   evidence_hints:
     required:
     - artifact_id: RISK-ACCESS-REVIEW-RECORDS
     optional:
     - artifact_id: RISK-IDM-ACCESS-REPORTS
-    - artifact_id: RISK-APPLICATION-ACCESS-LISTS
     - artifact_id: GOV-EXCEPTIONS-REGISTER
   severity: medium
   sources:
   - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: pravidelné ověřování přístupových práv)'
   - citation: 'CZ-Decree-410-2025 (nižší povinnosti: ověřování přístupových práv)'
-  - citation: EU-NIS2-2022-2555 Art. 21(2)(b) (access control) [mapping]
 - id: NIS2CZ-RISK-LOGGING-BASELINE
   title: Security-relevant logging is enabled and a logging baseline is defined
   scope:
@@ -1070,27 +2158,119 @@ rules:
     - profile_field: in_scope_under_cz_law
       equals: true
   requirement:
-    type: document_required
-    document: security_logging_baseline
-    must_include:
-    - systems_in_scope (critical systems, regulated services, key infrastructure)
-    - event_types (auth events, privilege changes, admin actions, security alerts)
-    - log_sources_and_ownership
-    - time_synchronization_requirement
-    - log_retention_and_protection (tamper resistance, access control)
-    - alerting_or_monitoring_use (who reviews and when)
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — logging baseline is mandatory.
+    checklist:
+    - id: RISK-LOG-01
+      title_en: Systems in scope for logging are defined
+      title_cs: Systémy v rozsahu logování jsou definovány
+      required_by_default: true
+      acceptance_criteria:
+      - List of systems subject to security logging exists
+      - Includes critical systems, regulated services, key infrastructure
+      keywords_cs:
+      - systémy
+      - rozsah
+      - logování
+      keywords_en:
+      - systems
+      - scope
+      - logging
+      red_flags:
+      - No logging scope defined
+    - id: RISK-LOG-02
+      title_en: Event types to log are defined (auth, privilege changes, admin actions, alerts)
+      title_cs: Typy událostí k logování jsou definovány (autentizace, změny oprávnění, admin akce, výstrahy)
+      required_by_default: true
+      acceptance_criteria:
+      - Minimum event types are listed and justified
+      keywords_cs:
+      - typy událostí
+      - autentizace
+      - oprávnění
+      - výstrahy
+      keywords_en:
+      - event types
+      - authentication
+      - privileges
+      - alerts
+      red_flags:
+      - Event types not defined
+    - id: RISK-LOG-03
+      title_en: Log sources and ownership are documented
+      title_cs: Zdroje logů a vlastnictví jsou zdokumentovány
+      required_by_default: true
+      acceptance_criteria:
+      - Each log source has an identified owner
+      keywords_cs:
+      - zdroje logů
+      - vlastnictví
+      keywords_en:
+      - log sources
+      - ownership
+      red_flags:
+      - Log sources without owners
+    - id: RISK-LOG-04
+      title_en: Time synchronization requirement is defined
+      title_cs: Požadavek na synchronizaci času je definován
+      required_by_default: true
+      acceptance_criteria:
+      - NTP or equivalent synchronization is required for all log sources
+      keywords_cs:
+      - synchronizace času
+      - NTP
+      keywords_en:
+      - time synchronization
+      - NTP
+      red_flags:
+      - No time sync requirement
+    - id: RISK-LOG-05
+      title_en: Log retention and protection (tamper resistance, access control) are defined
+      title_cs: Retence a ochrana logů (odolnost proti manipulaci, řízení přístupu) jsou definovány
+      required_by_default: true
+      acceptance_criteria:
+      - Retention period is defined (regulatory minimum met)
+      - Logs are tamper-protected and access-controlled
+      keywords_cs:
+      - retence
+      - ochrana
+      - manipulace
+      - řízení přístupu
+      keywords_en:
+      - retention
+      - protection
+      - tamper
+      - access control
+      red_flags:
+      - No retention period
+      - Logs not tamper-protected
+    - id: RISK-LOG-06
+      title_en: Alerting or monitoring use is defined (who reviews and when)
+      title_cs: Využití pro výstrahy nebo monitoring je definováno (kdo kontroluje a kdy)
+      required_by_default: true
+      acceptance_criteria:
+      - Monitoring responsibility and review cadence are documented
+      keywords_cs:
+      - výstrahy
+      - monitoring
+      - kontrola
+      keywords_en:
+      - alerting
+      - monitoring
+      - review
+      red_flags:
+      - No monitoring responsibility defined
   evidence_hints:
     required:
-    - artifact_id: RISK-SECURITY-LOGGING-BASELINE
+    - artifact_id: RISK-LOGGING-BASELINE
     optional:
-    - artifact_id: RISK-SIEM-CONFIGURATION-EXPORT
-    - artifact_id: RISK-CENTRAL-LOGGING-ARCHITECTURE-DIAGRAM
-    - artifact_id: RISK-LOG-RETENTION-SETTINGS-SCREENSHOTS
+    - artifact_id: RISK-SIEM-CONFIG
+    - artifact_id: RISK-LOGGING-ARCHITECTURE
   severity: high
   sources:
   - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: záznamy/monitoring bezpečnostních událostí)'
   - citation: 'CZ-Decree-410-2025 (nižší povinnosti: záznamy/monitoring bezpečnostních událostí)'
-  - citation: EU-NIS2-2022-2555 Art. 21(2)(d)(f) (policies, monitoring, incident handling) [mapping]
 - id: NIS2CZ-RISK-LOGGING-REVIEW
   title: Log review and alert handling process is defined and evidenced
   scope:
@@ -1100,26 +2280,102 @@ rules:
     - profile_field: in_scope_under_cz_law
       equals: true
   requirement:
-    type: process_required
-    process: log_review_and_alert_handling
-    must_include:
-    - roles_and_responsibilities (SOC/IT/security)
-    - review_frequency (continuous/weekly/daily depending on criticality)
-    - alert_triage_and_escalation
-    - correlation_with_incident_process (ticketing/incident register linkage)
-    - metrics (e.g., MTTD/alert volume)
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted.
+    checklist:
+    - id: RISK-LOGREV-01
+      title_en: Roles and responsibilities for log review are assigned
+      title_cs: Role a odpovědnosti pro přezkum logů jsou přiřazeny
+      required_by_default: true
+      acceptance_criteria:
+      - SOC/IT/security roles assigned for log review
+      keywords_cs:
+      - role
+      - odpovědnosti
+      - SOC
+      - přezkum
+      keywords_en:
+      - roles
+      - responsibilities
+      - SOC
+      - review
+      red_flags:
+      - No assigned roles
+    - id: RISK-LOGREV-02
+      title_en: Review frequency is defined
+      title_cs: Frekvence přezkumu je definována
+      required_by_default: true
+      acceptance_criteria:
+      - Frequency appropriate to criticality (continuous/daily/weekly)
+      keywords_cs:
+      - frekvence
+      - denní
+      - průběžně
+      keywords_en:
+      - frequency
+      - daily
+      - continuous
+      red_flags:
+      - No review frequency
+    - id: RISK-LOGREV-03
+      title_en: Alert triage and escalation process exists
+      title_cs: Proces třídění a eskalace výstrah existuje
+      required_by_default: true
+      acceptance_criteria:
+      - Triage criteria and escalation paths are documented
+      keywords_cs:
+      - třídění
+      - eskalace
+      - výstrahy
+      keywords_en:
+      - triage
+      - escalation
+      - alerts
+      red_flags:
+      - No triage or escalation process
+    - id: RISK-LOGREV-04
+      title_en: Correlation with incident process (ticketing/incident register)
+      title_cs: Korelace s procesem řízení incidentů (ticketing/registr incidentů)
+      required_by_default: true
+      acceptance_criteria:
+      - Alerts feed into incident management process
+      keywords_cs:
+      - korelace
+      - incidenty
+      - ticketing
+      keywords_en:
+      - correlation
+      - incidents
+      - ticketing
+      red_flags:
+      - Alerts not linked to incident process
+    - id: RISK-LOGREV-05
+      title_en: Metrics are defined (e.g., MTTD, alert volume)
+      title_cs: Metriky jsou definovány (např. MTTD, objem výstrah)
+      required_by_default: true
+      acceptance_criteria:
+      - At least one detection/response metric is tracked
+      keywords_cs:
+      - metriky
+      - MTTD
+      - objem
+      keywords_en:
+      - metrics
+      - MTTD
+      - volume
+      red_flags:
+      - No metrics tracked
   evidence_hints:
     required:
     - artifact_id: RISK-LOG-REVIEW-PROCEDURE
-    - artifact_id: RISK-ALERT-OR-LOG-REVIEW-RECORDS
+    - artifact_id: RISK-LOG-REVIEW-RECORDS
     optional:
-    - artifact_id: RISK-SIEM-ALERT-QUEUE-EXPORT
-    - artifact_id: RISK-INCIDENT-TICKETS-LINKED-TO-ALERTS
+    - artifact_id: RISK-SIEM-ALERT-EXPORT
   severity: medium
   sources:
   - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: dohled/monitoring a vyhodnocování událostí)'
   - citation: 'CZ-Decree-410-2025 (nižší povinnosti: dohled/monitoring a vyhodnocování událostí)'
-  - citation: EU-NIS2-2022-2555 Art. 21(2)(f) (incident handling) [mapping]
 - id: NIS2CZ-RISK-VULN-MGMT-POLICY
   title: Vulnerability management and patching policy is defined and approved
   scope:
@@ -1129,28 +2385,171 @@ rules:
     - profile_field: in_scope_under_cz_law
       equals: true
   requirement:
-    type: document_required
-    document: vulnerability_and_patch_management_policy
-    must_include:
-    - scope (systems, applications, cloud, third-party components)
-    - vulnerability_sources (scans, advisories, pentests, bug reports)
-    - risk_rating_method (e.g., CVSS + asset criticality/context)
-    - remediation_slas (by severity and asset criticality)
-    - emergency_patch_process (out-of-cycle)
-    - exception_process (risk acceptance, compensating controls, expiry)
-    - verification_of_remediation (re-scan/retest)
-    - integration_with_change_management
-    - metrics_and_reporting (e.g., patch compliance, MTTR)
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — vulnerability management policy is mandatory.
+    checklist:
+    - id: RISK-VULN-01
+      title_en: Scope covers systems, applications, cloud, and third-party components
+      title_cs: Rozsah pokrývá systémy, aplikace, cloud a komponenty třetích stran
+      required_by_default: true
+      acceptance_criteria:
+      - All asset categories in scope for vulnerability management are listed
+      keywords_cs:
+      - rozsah
+      - systémy
+      - aplikace
+      - cloud
+      keywords_en:
+      - scope
+      - systems
+      - applications
+      - cloud
+      red_flags:
+      - Scope not defined
+    - id: RISK-VULN-02
+      title_en: Vulnerability sources are identified (scans, advisories, pentests, bug reports)
+      title_cs: Zdroje zranitelností jsou identifikovány (skeny, výstrahy, pentesty, hlášení)
+      required_by_default: true
+      acceptance_criteria:
+      - At least 3 vulnerability input sources are listed
+      keywords_cs:
+      - zdroje
+      - zranitelnosti
+      - skeny
+      - výstrahy
+      keywords_en:
+      - sources
+      - vulnerabilities
+      - scans
+      - advisories
+      red_flags:
+      - Only one vulnerability source
+    - id: RISK-VULN-03
+      title_en: Risk rating method is defined (CVSS + asset criticality/context)
+      title_cs: Metoda hodnocení rizik je definována (CVSS + kritičnost aktiva/kontext)
+      required_by_default: true
+      acceptance_criteria:
+      - Rating method combines vulnerability severity with asset context
+      keywords_cs:
+      - hodnocení
+      - CVSS
+      - kritičnost
+      - kontext
+      keywords_en:
+      - rating
+      - CVSS
+      - criticality
+      - context
+      red_flags:
+      - No risk rating method
+    - id: RISK-VULN-04
+      title_en: Remediation SLAs by severity and asset criticality are defined
+      title_cs: SLA pro nápravu podle závažnosti a kritičnosti aktiva jsou definovány
+      required_by_default: true
+      acceptance_criteria:
+      - 'SLAs exist per severity level (e.g., critical: 72h, high: 7d, medium: 30d)'
+      keywords_cs:
+      - SLA
+      - náprava
+      - závažnost
+      - kritičnost
+      keywords_en:
+      - SLA
+      - remediation
+      - severity
+      - criticality
+      red_flags:
+      - No remediation SLAs
+    - id: RISK-VULN-05
+      title_en: Emergency patch process (out-of-cycle) is defined
+      title_cs: Proces nouzových záplat (mimo cyklus) je definován
+      required_by_default: true
+      acceptance_criteria:
+      - Fast-track approval and deployment process for emergency patches exists
+      keywords_cs:
+      - nouzové záplaty
+      - mimo cyklus
+      - fast-track
+      keywords_en:
+      - emergency patches
+      - out-of-cycle
+      - fast-track
+      red_flags:
+      - No emergency patch process
+    - id: RISK-VULN-06
+      title_en: Exception process (risk acceptance, compensating controls, expiry) exists
+      title_cs: Proces výjimek (akceptace rizika, kompenzační kontroly, expirace) existuje
+      required_by_default: true
+      acceptance_criteria:
+      - Exceptions require documented risk acceptance with owner and expiry date
+      keywords_cs:
+      - výjimky
+      - akceptace rizika
+      - kompenzace
+      - expirace
+      keywords_en:
+      - exceptions
+      - risk acceptance
+      - compensating
+      - expiry
+      red_flags:
+      - No exception process
+    - id: RISK-VULN-07
+      title_en: Verification of remediation (re-scan/retest) is required
+      title_cs: Ověření nápravy (opakovaný sken/retest) je vyžadováno
+      required_by_default: true
+      acceptance_criteria:
+      - Re-scan or retest is performed after remediation
+      keywords_cs:
+      - ověření
+      - opakovaný sken
+      - retest
+      keywords_en:
+      - verification
+      - re-scan
+      - retest
+      red_flags:
+      - No verification step
+    - id: RISK-VULN-08
+      title_en: Integration with change management process
+      title_cs: Integrace s procesem řízení změn
+      required_by_default: true
+      acceptance_criteria:
+      - Patching follows change management procedures
+      keywords_cs:
+      - integrace
+      - řízení změn
+      keywords_en:
+      - integration
+      - change management
+      red_flags:
+      - Patches deployed without change management
+    - id: RISK-VULN-09
+      title_en: Metrics and reporting (patch compliance, MTTR) are defined
+      title_cs: Metriky a reportování (soulad záplat, MTTR) jsou definovány
+      required_by_default: true
+      acceptance_criteria:
+      - At least 2 metrics are tracked (e.g., patch compliance %, MTTR)
+      keywords_cs:
+      - metriky
+      - reportování
+      - soulad
+      - MTTR
+      keywords_en:
+      - metrics
+      - reporting
+      - compliance
+      - MTTR
+      red_flags:
+      - No metrics tracked
   evidence_hints:
     required:
-    - artifact_id: RISK-VULNERABILITY-AND-PATCH-MANAGEMENT-POLIC
+    - artifact_id: RISK-VULN-MGMT-POLICY
     optional:
-    - artifact_id: GOV-POLICY-REGISTER
-    - artifact_id: RISK-RATING-METHODOLOGY
     - artifact_id: RISK-PATCHING-SLA-MATRIX
   severity: high
   sources:
-  - citation: CZ-Act-264-2025 (povinnost zavést a udržovat opatření kybernetické bezpečnosti)
   - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: správa zranitelností / aktualizace)'
   - citation: 'CZ-Decree-410-2025 (nižší povinnosti: správa zranitelností / aktualizace)'
   - citation: EU-NIS2-2022-2555 Art. 21(2)(e) (vulnerability handling and disclosure) [mapping]
@@ -1163,28 +2562,122 @@ rules:
     - profile_field: in_scope_under_cz_law
       equals: true
   requirement:
-    type: process_required
-    process: vulnerability_scanning
-    must_include:
-    - asset_coverage_definition (internal, external, cloud, containers where used)
-    - scan_cadence (at least monthly for critical; risk-based otherwise)
-    - authenticated_scanning_where_feasible
-    - handling_of_scan_exceptions (documented, time-bounded)
-    - triage_and_ticketing_workflow
-    - tracking_to_closure (status, due dates, owners)
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted.
+    checklist:
+    - id: RISK-VSCAN-01
+      title_en: Asset coverage for scanning is defined
+      title_cs: Pokrytí aktiv pro skenování je definováno
+      required_by_default: true
+      acceptance_criteria:
+      - Coverage includes internal, external, cloud, and container assets where used
+      keywords_cs:
+      - pokrytí
+      - skenování
+      - interní
+      - externí
+      - cloud
+      keywords_en:
+      - coverage
+      - scanning
+      - internal
+      - external
+      - cloud
+      red_flags:
+      - Coverage not defined
+    - id: RISK-VSCAN-02
+      title_en: Scan cadence is defined (at least monthly for critical, risk-based otherwise)
+      title_cs: Kadence skenování je definována (alespoň měsíčně pro kritické, jinak na základě rizika)
+      required_by_default: true
+      acceptance_criteria:
+      - Cadence documented and adherence evidenced
+      keywords_cs:
+      - kadence
+      - měsíčně
+      - skenování
+      keywords_en:
+      - cadence
+      - monthly
+      - scanning
+      red_flags:
+      - No cadence defined
+    - id: RISK-VSCAN-03
+      title_en: Authenticated scanning is used where feasible
+      title_cs: Autentizované skenování je používáno, pokud je to proveditelné
+      required_by_default: true
+      applicability: Required where technically feasible; document justification if not
+      acceptance_criteria:
+      - Authenticated scanning enabled for in-scope systems
+      keywords_cs:
+      - autentizované
+      - skenování
+      keywords_en:
+      - authenticated
+      - scanning
+      red_flags:
+      - Only unauthenticated scanning without justification
+    - id: RISK-VSCAN-04
+      title_en: Scan exceptions are documented and time-bounded
+      title_cs: Výjimky ze skenování jsou zdokumentovány a časově omezeny
+      required_by_default: true
+      acceptance_criteria:
+      - Exceptions have justification and expiry dates
+      keywords_cs:
+      - výjimky
+      - zdokumentovány
+      - expirace
+      keywords_en:
+      - exceptions
+      - documented
+      - expiry
+      red_flags:
+      - Perpetual scan exceptions without review
+    - id: RISK-VSCAN-05
+      title_en: Triage and ticketing workflow exists
+      title_cs: Workflow pro třídění a ticketing existuje
+      required_by_default: true
+      acceptance_criteria:
+      - Vulnerabilities are triaged and tracked in ticketing system
+      keywords_cs:
+      - třídění
+      - ticketing
+      - workflow
+      keywords_en:
+      - triage
+      - ticketing
+      - workflow
+      red_flags:
+      - No triage process
+    - id: RISK-VSCAN-06
+      title_en: Tracking to closure (status, due dates, owners)
+      title_cs: Sledování do uzavření (stav, termíny, vlastníci)
+      required_by_default: true
+      acceptance_criteria:
+      - Each vulnerability is tracked to closure or documented exception
+      keywords_cs:
+      - sledování
+      - uzavření
+      - stav
+      - termíny
+      keywords_en:
+      - tracking
+      - closure
+      - status
+      - due dates
+      red_flags:
+      - Vulnerabilities not tracked to closure
   evidence_hints:
     required:
-    - artifact_id: RISK-VULNERABILITY-SCAN-SCHEDULE
-    - artifact_id: RISK-VULNERABILITY-SCAN-REPORTS
-    - artifact_id: RISK-REMEDIATION-TICKET-EXPORT
+    - artifact_id: RISK-VULN-SCAN-SCHEDULE
+    - artifact_id: RISK-VULN-SCAN-REPORTS
+    - artifact_id: RISK-REMEDIATION-TICKETS
     optional:
-    - artifact_id: RISK-ASSET-INVENTORY
-    - artifact_id: RISK-SCANNER-CONFIGURATION-EXPORT
+    - artifact_id: RISK-SCANNER-CONFIG
   severity: high
   sources:
   - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: pravidelné zjišťování zranitelností)'
   - citation: 'CZ-Decree-410-2025 (nižší povinnosti: zjišťování zranitelností)'
-  - citation: EU-NIS2-2022-2555 Art. 21(2)(d)(e) (policies; vulnerability handling) [mapping]
 - id: NIS2CZ-RISK-PATCH-MGMT-COMPLIANCE
   title: Patch management is executed, tracked, and verified for in-scope systems
   scope:
@@ -1194,29 +2687,142 @@ rules:
     - profile_field: in_scope_under_cz_law
       equals: true
   requirement:
-    type: process_required
-    process: patch_management
-    must_include:
-    - patch_intake_sources (vendor advisories, CERT/NÚKIB alerts, scanners)
-    - prioritization_criteria (severity + exploitability + asset criticality)
-    - testing_and_change_approval (where required)
-    - deployment_methods (automation where feasible)
-    - emergency_patching (fast-track approvals)
-    - verification_and_reporting (compliance %, exceptions)
-    - firmware_and_network_device_updates (where applicable)
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted.
+    checklist:
+    - id: RISK-PATCH-01
+      title_en: Patch intake sources are defined (vendor advisories, CERT/NÚKIB alerts, scanners)
+      title_cs: Zdroje záplat jsou definovány (výstrahy dodavatelů, CERT/NÚKIB, skenery)
+      required_by_default: true
+      acceptance_criteria:
+      - Multiple patch intake sources are listed
+      keywords_cs:
+      - zdroje záplat
+      - výstrahy
+      - CERT
+      - NÚKIB
+      keywords_en:
+      - patch sources
+      - advisories
+      - CERT
+      - NÚKIB
+      red_flags:
+      - Only one patch source
+    - id: RISK-PATCH-02
+      title_en: Prioritization criteria (severity + exploitability + asset criticality) are defined
+      title_cs: Kritéria prioritizace (závažnost + zneužitelnost + kritičnost aktiva) jsou definována
+      required_by_default: true
+      acceptance_criteria:
+      - Prioritization considers at least severity and asset criticality
+      keywords_cs:
+      - prioritizace
+      - závažnost
+      - zneužitelnost
+      - kritičnost
+      keywords_en:
+      - prioritization
+      - severity
+      - exploitability
+      - criticality
+      red_flags:
+      - No prioritization criteria
+    - id: RISK-PATCH-03
+      title_en: Testing and change approval process exists where required
+      title_cs: Proces testování a schvalování změn existuje, kde je vyžadován
+      required_by_default: true
+      acceptance_criteria:
+      - Patches are tested before production deployment (where applicable)
+      - Change approval records exist
+      keywords_cs:
+      - testování
+      - schvalování
+      - změny
+      keywords_en:
+      - testing
+      - approval
+      - changes
+      red_flags:
+      - Patches deployed without testing
+    - id: RISK-PATCH-04
+      title_en: Deployment methods include automation where feasible
+      title_cs: Metody nasazení zahrnují automatizaci, pokud je to proveditelné
+      required_by_default: true
+      acceptance_criteria:
+      - Automated deployment tools are used where feasible
+      keywords_cs:
+      - automatizace
+      - nasazení
+      - nástroje
+      keywords_en:
+      - automation
+      - deployment
+      - tools
+      red_flags:
+      - All patching manual without justification
+    - id: RISK-PATCH-05
+      title_en: Emergency patching fast-track process exists
+      title_cs: Proces fast-track pro nouzové záplaty existuje
+      required_by_default: true
+      acceptance_criteria:
+      - Emergency patch process with expedited approval
+      keywords_cs:
+      - nouzové záplaty
+      - fast-track
+      - zrychlený
+      keywords_en:
+      - emergency patches
+      - fast-track
+      - expedited
+      red_flags:
+      - No emergency patching process
+    - id: RISK-PATCH-06
+      title_en: Verification and reporting (compliance %, exceptions)
+      title_cs: Ověření a reportování (% souladu, výjimky)
+      required_by_default: true
+      acceptance_criteria:
+      - Patch compliance is measured and reported
+      - Exceptions are tracked
+      keywords_cs:
+      - ověření
+      - reportování
+      - soulad
+      - výjimky
+      keywords_en:
+      - verification
+      - reporting
+      - compliance
+      - exceptions
+      red_flags:
+      - No compliance reporting
+    - id: RISK-PATCH-07
+      title_en: Firmware and network device updates are included where applicable
+      title_cs: Aktualizace firmware a síťových zařízení jsou zahrnuty, pokud je to relevantní
+      required_by_default: true
+      applicability: Required where entity operates firmware-based or network devices
+      acceptance_criteria:
+      - Firmware and network devices are in patching scope
+      keywords_cs:
+      - firmware
+      - síťová zařízení
+      - aktualizace
+      keywords_en:
+      - firmware
+      - network devices
+      - updates
+      red_flags:
+      - Firmware/network devices excluded without justification
   evidence_hints:
     required:
     - artifact_id: RISK-PATCHING-RECORDS
     - artifact_id: RISK-PATCH-COMPLIANCE-REPORT
     optional:
     - artifact_id: RISK-CHANGE-TICKETS
-    - artifact_id: RISK-EMERGENCY-CHANGE-RECORDS
-    - artifact_id: RISK-ENDPOINT-MANAGEMENT-REPORTS
+    - artifact_id: RISK-ENDPOINT-MGMT-REPORTS
   severity: high
   sources:
   - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: aktualizace a odstraňování zranitelností)'
   - citation: 'CZ-Decree-410-2025 (nižší povinnosti: aktualizace a odstraňování zranitelností)'
-  - citation: EU-NIS2-2022-2555 Art. 21(2)(d)(e) (policies; vulnerability handling) [mapping]
 - id: NIS2CZ-RISK-VULN-DISCLOSURE-HANDLING
   title: A channel and process exist to receive and handle reported vulnerabilities
   scope:
@@ -1226,26 +2832,580 @@ rules:
     - profile_field: in_scope_under_cz_law
       equals: true
   requirement:
-    type: process_required
-    process: vulnerability_disclosure_handling
-    must_include:
-    - intake_channel (email/web form/security.txt or equivalent)
-    - triage_and_acknowledgement (timelines, roles)
-    - coordination_with_remediation_process
-    - communication_guidelines (internal/external; legal review where needed)
-    - recordkeeping (case register)
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted.
+    checklist:
+    - id: RISK-VDISC-01
+      title_en: Intake channel exists (email, web form, security.txt)
+      title_cs: Kanál pro příjem existuje (e-mail, web formulář, security.txt)
+      required_by_default: true
+      acceptance_criteria:
+      - At least one publicly reachable channel for vulnerability reports
+      keywords_cs:
+      - kanál
+      - příjem
+      - e-mail
+      - security.txt
+      keywords_en:
+      - channel
+      - intake
+      - email
+      - security.txt
+      red_flags:
+      - No intake channel
+    - id: RISK-VDISC-02
+      title_en: Triage and acknowledgement process with timelines and roles
+      title_cs: Proces třídění a potvrzení s časovými lhůtami a rolemi
+      required_by_default: true
+      acceptance_criteria:
+      - Acknowledgement timeline defined (e.g., within 5 business days)
+      - Triage roles assigned
+      keywords_cs:
+      - třídění
+      - potvrzení
+      - lhůty
+      - role
+      keywords_en:
+      - triage
+      - acknowledgement
+      - timelines
+      - roles
+      red_flags:
+      - No acknowledgement timeline
+    - id: RISK-VDISC-03
+      title_en: Coordination with remediation process
+      title_cs: Koordinace s procesem nápravy
+      required_by_default: true
+      acceptance_criteria:
+      - Reported vulnerabilities feed into vulnerability management workflow
+      keywords_cs:
+      - koordinace
+      - náprava
+      - workflow
+      keywords_en:
+      - coordination
+      - remediation
+      - workflow
+      red_flags:
+      - No link to remediation process
+    - id: RISK-VDISC-04
+      title_en: Communication guidelines (internal/external, legal review)
+      title_cs: Pokyny pro komunikaci (interní/externí, právní přezkum)
+      required_by_default: true
+      acceptance_criteria:
+      - Guidelines for communicating with reporter and internally are documented
+      keywords_cs:
+      - komunikace
+      - pokyny
+      - právní
+      keywords_en:
+      - communication
+      - guidelines
+      - legal
+      red_flags:
+      - No communication guidelines
+    - id: RISK-VDISC-05
+      title_en: Recordkeeping (case register)
+      title_cs: Vedení záznamů (registr případů)
+      required_by_default: true
+      acceptance_criteria:
+      - Register of reported vulnerabilities is maintained
+      keywords_cs:
+      - záznamy
+      - registr
+      - případy
+      keywords_en:
+      - records
+      - register
+      - cases
+      red_flags:
+      - No case register
   evidence_hints:
     required:
-    - artifact_id: RISK-VULNERABILITY-REPORTING-CHANNEL-EVIDENCE
-    - artifact_id: RISK-VULNERABILITY-CASE-REGISTER
+    - artifact_id: RISK-VULN-REPORTING-CHANNEL
+    - artifact_id: RISK-VULN-CASE-REGISTER
     optional:
-    - artifact_id: RISK-SECURITY-TXT-FILE
-    - artifact_id: RISK-SUPPORT-TICKET-SAMPLES
+    - artifact_id: RISK-SECURITY-TXT
   severity: medium
   sources:
   - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: nakládání se zranitelnostmi / hlášení)'
   - citation: 'CZ-Decree-410-2025 (nižší povinnosti: nakládání se zranitelnostmi / hlášení)'
   - citation: EU-NIS2-2022-2555 Art. 21(2)(e) (vulnerability handling and disclosure) [mapping]
+- id: NIS2CZ-RISK-BACKUP-POLICY
+  title: Backup policy and procedures are defined and tested
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — backup is mandatory.
+    checklist:
+    - id: RISK-BKP-01
+      title_en: Backup scope covers critical systems and data supporting regulated services
+      title_cs: Rozsah záloh pokrývá kritické systémy a data podporující regulované služby
+      required_by_default: true
+      acceptance_criteria:
+      - All critical systems and regulated-service data are in backup scope
+      keywords_cs:
+      - rozsah
+      - zálohy
+      - kritické
+      - regulované
+      keywords_en:
+      - scope
+      - backup
+      - critical
+      - regulated
+      red_flags:
+      - Critical systems not backed up
+    - id: RISK-BKP-02
+      title_en: Backup frequency and retention are defined per system/data class
+      title_cs: Frekvence a retence záloh jsou definovány pro každý systém/datovou třídu
+      required_by_default: true
+      acceptance_criteria:
+      - Frequency (daily/weekly/etc.) and retention periods per data class
+      keywords_cs:
+      - frekvence
+      - retence
+      - zálohy
+      - datová třída
+      keywords_en:
+      - frequency
+      - retention
+      - backup
+      - data class
+      red_flags:
+      - No frequency or retention defined
+    - id: RISK-BKP-03
+      title_en: Backup integrity and recoverability are tested regularly
+      title_cs: Integrita a obnovitelnost záloh jsou pravidelně testovány
+      required_by_default: true
+      acceptance_criteria:
+      - Restore tests are performed at least annually (quarterly for critical)
+      - Test results are documented
+      keywords_cs:
+      - integrita
+      - obnovitelnost
+      - testování
+      - obnova
+      keywords_en:
+      - integrity
+      - recoverability
+      - testing
+      - restore
+      red_flags:
+      - No restore testing
+    - id: RISK-BKP-04
+      title_en: Offsite or offline backup copy exists for ransomware resilience
+      title_cs: Záloha mimo pracoviště nebo offline záloha existuje pro odolnost proti ransomwaru
+      required_by_default: true
+      acceptance_criteria:
+      - At least one backup copy is stored offsite or offline (air-gapped)
+      keywords_cs:
+      - offsite
+      - offline
+      - ransomware
+      - odolnost
+      keywords_en:
+      - offsite
+      - offline
+      - ransomware
+      - resilience
+      red_flags:
+      - No offsite/offline backup
+    - id: RISK-BKP-05
+      title_en: Backup access controls and encryption are defined
+      title_cs: Řízení přístupu k zálohám a šifrování jsou definovány
+      required_by_default: true
+      acceptance_criteria:
+      - Backup access is restricted
+      - Encryption at rest is applied or justified as not needed
+      keywords_cs:
+      - přístup
+      - šifrování
+      - zálohy
+      keywords_en:
+      - access
+      - encryption
+      - backup
+      red_flags:
+      - No access controls on backups
+  evidence_hints:
+    required:
+    - artifact_id: RISK-BACKUP-POLICY
+    - artifact_id: RISK-BACKUP-TEST-RECORDS
+    optional:
+    - artifact_id: RISK-BACKUP-CONFIG
+  severity: high
+  sources:
+  - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: zálohování a obnova)'
+  - citation: 'CZ-Decree-410-2025 (nižší povinnosti: zálohování a obnova)'
+  - citation: EU-NIS2-2022-2555 Art. 21(2)(c) (business continuity, backup) [mapping]
+- id: NIS2CZ-RISK-BCP-DRP
+  title: Business continuity and disaster recovery plans are documented and tested
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — BCP/DRP is mandatory for in-scope entities.
+    checklist:
+    - id: RISK-BCP-01
+      title_en: BIA (Business Impact Analysis) identifies critical services and RTO/RPO
+      title_cs: BIA (Analýza dopadů na podnikání) identifikuje kritické služby a RTO/RPO
+      required_by_default: true
+      acceptance_criteria:
+      - BIA document exists with critical service identification
+      - RTO and RPO are defined per critical service
+      keywords_cs:
+      - BIA
+      - analýza dopadů
+      - kritické služby
+      - RTO
+      - RPO
+      keywords_en:
+      - BIA
+      - business impact analysis
+      - critical services
+      - RTO
+      - RPO
+      red_flags:
+      - No BIA
+      - RTO/RPO not defined
+    - id: RISK-BCP-02
+      title_en: BCP covers continuity of regulated services
+      title_cs: BCP pokrývá kontinuitu regulovaných služeb
+      required_by_default: true
+      acceptance_criteria:
+      - BCP explicitly addresses each regulated service
+      keywords_cs:
+      - BCP
+      - kontinuita
+      - regulované služby
+      keywords_en:
+      - BCP
+      - continuity
+      - regulated services
+      red_flags:
+      - Regulated services not in BCP
+    - id: RISK-BCP-03
+      title_en: DRP covers IT recovery procedures for critical systems
+      title_cs: DRP pokrývá postupy obnovy IT pro kritické systémy
+      required_by_default: true
+      acceptance_criteria:
+      - DRP has step-by-step recovery procedures per critical system
+      keywords_cs:
+      - DRP
+      - obnova
+      - postupy
+      - kritické systémy
+      keywords_en:
+      - DRP
+      - recovery
+      - procedures
+      - critical systems
+      red_flags:
+      - No DRP or recovery procedures
+    - id: RISK-BCP-04
+      title_en: BCP/DRP is tested at least annually
+      title_cs: BCP/DRP je testován alespoň ročně
+      required_by_default: true
+      acceptance_criteria:
+      - Test records exist within last 12 months
+      - Test scenarios cover realistic disruption scenarios
+      keywords_cs:
+      - testování
+      - roční
+      - scénáře
+      keywords_en:
+      - testing
+      - annual
+      - scenarios
+      red_flags:
+      - No testing in >12 months
+    - id: RISK-BCP-05
+      title_en: Roles and communication during crisis are defined
+      title_cs: Role a komunikace během krize jsou definovány
+      required_by_default: true
+      acceptance_criteria:
+      - Crisis management team with roles is defined
+      - Communication plan (internal + external) exists
+      keywords_cs:
+      - role
+      - komunikace
+      - krize
+      - krizový tým
+      keywords_en:
+      - roles
+      - communication
+      - crisis
+      - crisis team
+      red_flags:
+      - No crisis team defined
+    - id: RISK-BCP-06
+      title_en: Lessons learned from tests and incidents update BCP/DRP
+      title_cs: Poznatky z testů a incidentů aktualizují BCP/DRP
+      required_by_default: true
+      acceptance_criteria:
+      - Post-test/post-incident improvements are tracked and incorporated
+      keywords_cs:
+      - poznatky
+      - aktualizace
+      - zlepšení
+      keywords_en:
+      - lessons learned
+      - updates
+      - improvements
+      red_flags:
+      - No improvement cycle
+  evidence_hints:
+    required:
+    - artifact_id: RISK-BIA
+    - artifact_id: RISK-BCP
+    - artifact_id: RISK-DRP
+    - artifact_id: RISK-BCP-TEST-RECORDS
+    optional:
+    - artifact_id: RISK-CRISIS-COMMS-PLAN
+  severity: high
+  sources:
+  - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: kontinuita/krizové řízení/obnova)'
+  - citation: 'CZ-Decree-410-2025 (nižší povinnosti: kontinuita/obnova)'
+  - citation: EU-NIS2-2022-2555 Art. 21(2)(c) (business continuity, backup, DRP, crisis mgmt) [mapping]
+- id: NIS2CZ-RISK-SECURE-DEVELOPMENT
+  title: Secure development lifecycle practices are defined and followed
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: checklist
+    logic: ALL_RELEVANT
+    na_mechanism: 'If entity does not develop software, document N/A justification (artifact RISK-NA-SECURE-DEV) confirming no internal or outsourced software development exists.
+
+      '
+    checklist:
+    - id: RISK-SDEV-01
+      title_en: Secure SDLC policy or standard is documented
+      title_cs: Politika nebo standard bezpečného SDLC je zdokumentován
+      required_by_default: true
+      acceptance_criteria:
+      - SDLC policy references security requirements per phase
+      keywords_cs:
+      - SDLC
+      - bezpečný vývoj
+      - politika
+      keywords_en:
+      - SDLC
+      - secure development
+      - policy
+      red_flags:
+      - No SDLC policy
+    - id: RISK-SDEV-02
+      title_en: Security requirements are defined in design/planning phase
+      title_cs: Bezpečnostní požadavky jsou definovány ve fázi návrhu/plánování
+      required_by_default: true
+      acceptance_criteria:
+      - Security requirements are documented before development starts
+      keywords_cs:
+      - požadavky
+      - návrh
+      - plánování
+      keywords_en:
+      - requirements
+      - design
+      - planning
+      red_flags:
+      - No security requirements in design
+    - id: RISK-SDEV-03
+      title_en: Code review or static analysis is performed
+      title_cs: Revize kódu nebo statická analýza je prováděna
+      required_by_default: true
+      acceptance_criteria:
+      - Code review or SAST is part of the development process
+      keywords_cs:
+      - revize kódu
+      - statická analýza
+      - SAST
+      keywords_en:
+      - code review
+      - static analysis
+      - SAST
+      red_flags:
+      - No code review or SAST
+    - id: RISK-SDEV-04
+      title_en: Security testing (DAST, penetration testing) is performed before release
+      title_cs: Bezpečnostní testování (DAST, penetrační testování) je prováděno před vydáním
+      required_by_default: true
+      acceptance_criteria:
+      - Security testing is performed for each significant release
+      keywords_cs:
+      - DAST
+      - penetrační testování
+      - vydání
+      keywords_en:
+      - DAST
+      - penetration testing
+      - release
+      red_flags:
+      - No security testing before release
+    - id: RISK-SDEV-05
+      title_en: Separation of development, test, and production environments
+      title_cs: Oddělení vývojového, testovacího a produkčního prostředí
+      required_by_default: true
+      acceptance_criteria:
+      - Environments are logically or physically separated
+      keywords_cs:
+      - oddělení
+      - prostředí
+      - vývojové
+      - produkční
+      keywords_en:
+      - separation
+      - environments
+      - development
+      - production
+      red_flags:
+      - No environment separation
+  evidence_hints:
+    required:
+    - artifact_id: RISK-SDLC-POLICY
+    optional:
+    - artifact_id: RISK-CODE-REVIEW-RECORDS
+    - artifact_id: RISK-PENTEST-REPORTS
+  severity: medium
+  sources:
+  - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: bezpečný vývoj a řízení změn)'
+  - citation: 'CZ-Decree-410-2025 (nižší povinnosti: řízení změn)'
+  - citation: EU-NIS2-2022-2555 Art. 21(2)(e) (security in development) [mapping]
+- id: NIS2CZ-RISK-CHANGE-MANAGEMENT
+  title: Change management process for ICT systems is defined, approved, and followed
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — change management is mandatory.
+    checklist:
+    - id: RISK-CHG-01
+      title_en: Change management policy/procedure is documented
+      title_cs: Politika/postup řízení změn je zdokumentován
+      required_by_default: true
+      acceptance_criteria:
+      - Policy defines change types, approval requirements, and roles
+      keywords_cs:
+      - řízení změn
+      - politika
+      - postup
+      keywords_en:
+      - change management
+      - policy
+      - procedure
+      red_flags:
+      - No change management policy
+    - id: RISK-CHG-02
+      title_en: Security impact assessment is required for changes
+      title_cs: Posouzení bezpečnostního dopadu je vyžadováno pro změny
+      required_by_default: true
+      acceptance_criteria:
+      - Each change request includes security impact assessment
+      keywords_cs:
+      - bezpečnostní dopad
+      - posouzení
+      - změny
+      keywords_en:
+      - security impact
+      - assessment
+      - changes
+      red_flags:
+      - No security impact assessment
+    - id: RISK-CHG-03
+      title_en: Approval workflow with documented sign-off exists
+      title_cs: Schvalovací workflow se zdokumentovaným podpisem existuje
+      required_by_default: true
+      acceptance_criteria:
+      - Changes require documented approval before implementation
+      keywords_cs:
+      - schválení
+      - workflow
+      - podpis
+      keywords_en:
+      - approval
+      - workflow
+      - sign-off
+      red_flags:
+      - Changes implemented without approval
+    - id: RISK-CHG-04
+      title_en: Rollback procedures are defined
+      title_cs: Postupy pro vrácení změn jsou definovány
+      required_by_default: true
+      acceptance_criteria:
+      - Rollback plan is required for significant changes
+      keywords_cs:
+      - rollback
+      - vrácení změn
+      - postupy
+      keywords_en:
+      - rollback
+      - procedures
+      - revert
+      red_flags:
+      - No rollback procedures
+    - id: RISK-CHG-05
+      title_en: Emergency change process exists
+      title_cs: Proces nouzových změn existuje
+      required_by_default: true
+      acceptance_criteria:
+      - Emergency changes have expedited approval with post-hoc review
+      keywords_cs:
+      - nouzové změny
+      - zrychlené schválení
+      keywords_en:
+      - emergency changes
+      - expedited approval
+      red_flags:
+      - No emergency change process
+    - id: RISK-CHG-06
+      title_en: Change records are maintained and auditable
+      title_cs: Záznamy o změnách jsou udržovány a auditovatelné
+      required_by_default: true
+      acceptance_criteria:
+      - All changes are logged with requestor, approver, date, and outcome
+      keywords_cs:
+      - záznamy
+      - auditovatelné
+      - změny
+      keywords_en:
+      - records
+      - auditable
+      - changes
+      red_flags:
+      - No change records
+  evidence_hints:
+    required:
+    - artifact_id: RISK-CHANGE-MGMT-POLICY
+    - artifact_id: RISK-CHANGE-TICKETS
+    optional:
+    - artifact_id: RISK-EMERGENCY-CHANGE-RECORDS
+  severity: high
+  sources:
+  - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: řízení změn)'
+  - citation: 'CZ-Decree-410-2025 (nižší povinnosti: řízení změn)'
+  - citation: EU-NIS2-2022-2555 Art. 21(2) (security in acquisition/development/maintenance) [mapping]
 - id: NIS2CZ-INC-CLASSIFICATION-SCHEME
   title: Incident classification and severity scheme is defined and used
   scope:
@@ -1255,29 +3415,149 @@ rules:
     - profile_field: in_scope_under_cz_law
       equals: true
   requirement:
-    type: document_required
-    document: incident_classification_scheme
-    must_include:
-    - definitions (cybersecurity_event vs cybersecurity_incident)
-    - classification_categories (e.g., confidentiality|integrity|availability|legal|supply_chain)
-    - severity_levels (with criteria and escalation triggers)
-    - impact_assessment_fields (users/services affected, duration, data impact)
-    - decision_authority (who classifies/reclassifies)
-    - link_to_reporting_thresholds_and_timelines
-    - review_and_update_cycle
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — incident classification is mandatory.
+    checklist:
+    - id: INC-CLASS-01
+      title_en: Definitions of cybersecurity event vs cybersecurity incident are documented
+      title_cs: Definice kybernetické bezpečnostní události vs kybernetického bezpečnostního incidentu jsou zdokumentovány
+      required_by_default: true
+      acceptance_criteria:
+      - Clear written distinction between event and incident
+      keywords_cs:
+      - událost
+      - incident
+      - definice
+      - kybernetická bezpečnost
+      keywords_en:
+      - event
+      - incident
+      - definition
+      - cybersecurity
+      red_flags:
+      - No event/incident distinction
+    - id: INC-CLASS-02
+      title_en: Classification categories are defined (confidentiality, integrity, availability, legal, supply chain)
+      title_cs: Klasifikační kategorie jsou definovány (důvěrnost, integrita, dostupnost, právní, dodavatelský řetězec)
+      required_by_default: true
+      acceptance_criteria:
+      - At least CIA + legal dimensions are covered
+      keywords_cs:
+      - kategorie
+      - důvěrnost
+      - integrita
+      - dostupnost
+      - právní
+      keywords_en:
+      - categories
+      - confidentiality
+      - integrity
+      - availability
+      - legal
+      red_flags:
+      - Categories missing key dimensions
+    - id: INC-CLASS-03
+      title_en: Severity levels with criteria and escalation triggers are defined
+      title_cs: Úrovně závažnosti s kritérii a triggery eskalace jsou definovány
+      required_by_default: true
+      acceptance_criteria:
+      - At least 3 severity levels with objective criteria
+      - Escalation triggers per level are documented
+      keywords_cs:
+      - závažnost
+      - úrovně
+      - kritéria
+      - eskalace
+      keywords_en:
+      - severity
+      - levels
+      - criteria
+      - escalation
+      red_flags:
+      - Severity levels without objective criteria
+    - id: INC-CLASS-04
+      title_en: Impact assessment fields are defined (users/services affected, duration, data impact)
+      title_cs: Pole pro posouzení dopadu jsou definována (dotčení uživatelé/služby, doba trvání, dopad na data)
+      required_by_default: true
+      acceptance_criteria:
+      - Standard fields for impact assessment are documented
+      keywords_cs:
+      - dopad
+      - uživatelé
+      - služby
+      - doba trvání
+      - data
+      keywords_en:
+      - impact
+      - users
+      - services
+      - duration
+      - data
+      red_flags:
+      - No impact assessment fields
+    - id: INC-CLASS-05
+      title_en: Decision authority for classification and reclassification is assigned
+      title_cs: Rozhodovací autorita pro klasifikaci a reklasifikaci je přiřazena
+      required_by_default: true
+      acceptance_criteria:
+      - Named role or team authorized to classify and reclassify
+      keywords_cs:
+      - autorita
+      - klasifikace
+      - reklasifikace
+      keywords_en:
+      - authority
+      - classification
+      - reclassification
+      red_flags:
+      - No classification authority
+    - id: INC-CLASS-06
+      title_en: Link to reporting thresholds and timelines is established
+      title_cs: Vazba na prahové hodnoty a časové lhůty pro hlášení je stanovena
+      required_by_default: true
+      acceptance_criteria:
+      - Classification directly maps to CZ reporting thresholds per CZ-Decree-334-2025
+      keywords_cs:
+      - prahové hodnoty
+      - hlášení
+      - lhůty
+      - vyhláška 334
+      keywords_en:
+      - thresholds
+      - reporting
+      - timelines
+      - decree 334
+      red_flags:
+      - No link to reporting thresholds
+    - id: INC-CLASS-07
+      title_en: Review and update cycle for the scheme is defined
+      title_cs: Cyklus revize a aktualizace schématu je definován
+      required_by_default: true
+      acceptance_criteria:
+      - Review cycle documented (at least annual)
+      keywords_cs:
+      - revize
+      - aktualizace
+      - cyklus
+      keywords_en:
+      - review
+      - update
+      - cycle
+      red_flags:
+      - No review cycle
   evidence_hints:
     required:
-    - artifact_id: INC-INCIDENT-CLASSIFICATION-SCHEME
+    - artifact_id: INC-CLASSIFICATION-SCHEME
     optional:
-    - artifact_id: INC-INCIDENT-RESPONSE-PLAN
-    - artifact_id: INC-SOC-RUNBOOKS-OR-PLAYBOOKS
-    - artifact_id: INC-TICKETING-WORKFLOW-SCREENSHOTS
+    - artifact_id: INC-RESPONSE-PLAN
+    - artifact_id: INC-SOC-RUNBOOKS
   severity: high
   sources:
   - citation: CZ-Act-264-2025 (incident handling duties; governance responsibility)
-  - citation: 'CZ-Decree-409-2025 (higher duties: incident handling process + classification expectations)'
-  - citation: 'CZ-Decree-410-2025 (lower duties: incident handling process + classification expectations)'
-  - citation: CZ-Decree-334-2025 (incident reporting thresholds/timelines/content — used to drive classification)
+  - citation: 'CZ-Decree-409-2025 (higher duties: incident handling process + classification)'
+  - citation: 'CZ-Decree-410-2025 (lower duties: incident handling process + classification)'
+  - citation: CZ-Decree-334-2025 (incident reporting thresholds/timelines/content)
   - citation: 'EU-NIS2-2022-2555 Art. 23 (mapping: incident reporting)'
 - id: NIS2CZ-INC-REGISTER
   title: Incident register is maintained with required fields and retained
@@ -1288,34 +3568,527 @@ rules:
     - profile_field: in_scope_under_cz_law
       equals: true
   requirement:
-    type: document_required
-    document: incident_register
-    must_include:
-    - unique_incident_id
-    - date_time_detected_and_closed
-    - classification_and_severity (per approved scheme)
-    - affected_assets_and_services
-    - impact_summary (availability, integrity, confidentiality, legal/regulatory)
-    - actions_taken (containment/eradication/recovery)
-    - external_reporting_status (who/when/reference_numbers)
-    - evidence_and_logs_references
-    - root_cause_or_contributing_factors (when known)
-    - lessons_learned_and_followup_actions
-    - retention_period_and_access_controls
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — incident register is mandatory.
+    checklist:
+    - id: INC-REG-01
+      title_en: Each incident has a unique ID
+      title_cs: Každý incident má jedinečné ID
+      required_by_default: true
+      acceptance_criteria:
+      - Unique identifier assigned automatically or manually
+      keywords_cs:
+      - ID
+      - jedinečný
+      - incident
+      keywords_en:
+      - ID
+      - unique
+      - incident
+      red_flags:
+      - Duplicate or missing IDs
+    - id: INC-REG-02
+      title_en: Detection and closure timestamps are recorded
+      title_cs: Časová razítka detekce a uzavření jsou zaznamenána
+      required_by_default: true
+      acceptance_criteria:
+      - Date/time of detection and closure per incident
+      keywords_cs:
+      - detekce
+      - uzavření
+      - časové razítko
+      keywords_en:
+      - detection
+      - closure
+      - timestamp
+      red_flags:
+      - Missing timestamps
+    - id: INC-REG-03
+      title_en: Classification and severity per approved scheme are recorded
+      title_cs: Klasifikace a závažnost podle schváleného schématu jsou zaznamenány
+      required_by_default: true
+      acceptance_criteria:
+      - Each incident classified per the approved scheme
+      keywords_cs:
+      - klasifikace
+      - závažnost
+      - schéma
+      keywords_en:
+      - classification
+      - severity
+      - scheme
+      red_flags:
+      - Incidents without classification
+    - id: INC-REG-04
+      title_en: Affected assets and services are documented
+      title_cs: Dotčená aktiva a služby jsou zdokumentovány
+      required_by_default: true
+      acceptance_criteria:
+      - Affected assets/services listed per incident
+      keywords_cs:
+      - aktiva
+      - služby
+      - dotčená
+      keywords_en:
+      - assets
+      - services
+      - affected
+      red_flags:
+      - No affected assets documented
+    - id: INC-REG-05
+      title_en: Impact summary (availability, integrity, confidentiality, legal/regulatory) is recorded
+      title_cs: Shrnutí dopadu (dostupnost, integrita, důvěrnost, právní/regulatorní) je zaznamenáno
+      required_by_default: true
+      acceptance_criteria:
+      - Impact assessed across all relevant dimensions
+      keywords_cs:
+      - dopad
+      - dostupnost
+      - integrita
+      - důvěrnost
+      - právní
+      keywords_en:
+      - impact
+      - availability
+      - integrity
+      - confidentiality
+      - legal
+      red_flags:
+      - No impact summary
+    - id: INC-REG-06
+      title_en: Actions taken (containment, eradication, recovery) are documented
+      title_cs: Provedené akce (zamezení, eradikace, obnova) jsou zdokumentovány
+      required_by_default: true
+      acceptance_criteria:
+      - Actions at each phase are recorded
+      keywords_cs:
+      - akce
+      - zamezení
+      - eradikace
+      - obnova
+      keywords_en:
+      - actions
+      - containment
+      - eradication
+      - recovery
+      red_flags:
+      - No actions documented
+    - id: INC-REG-07
+      title_en: External reporting status (who/when/reference numbers) is tracked
+      title_cs: Stav externího hlášení (komu/kdy/referenční čísla) je sledován
+      required_by_default: true
+      acceptance_criteria:
+      - 'For reportable incidents: report recipient, date, and reference number'
+      keywords_cs:
+      - hlášení
+      - externí
+      - referenční číslo
+      keywords_en:
+      - reporting
+      - external
+      - reference number
+      red_flags:
+      - Reportable incident without external reporting record
+    - id: INC-REG-08
+      title_en: Evidence and logs references are linked
+      title_cs: Odkazy na důkazy a logy jsou propojeny
+      required_by_default: true
+      acceptance_criteria:
+      - Each incident links to relevant evidence/log artifacts
+      keywords_cs:
+      - důkazy
+      - logy
+      - odkazy
+      keywords_en:
+      - evidence
+      - logs
+      - references
+      red_flags:
+      - No evidence linked
+    - id: INC-REG-09
+      title_en: Root cause or contributing factors are recorded (when known)
+      title_cs: Příčina nebo přispívající faktory jsou zaznamenány (pokud jsou známy)
+      required_by_default: true
+      acceptance_criteria:
+      - Root cause analysis performed or explicitly marked as unknown with justification
+      keywords_cs:
+      - příčina
+      - přispívající faktory
+      - analýza
+      keywords_en:
+      - root cause
+      - contributing factors
+      - analysis
+      red_flags:
+      - No root cause analysis attempted
+    - id: INC-REG-10
+      title_en: Lessons learned and follow-up actions are recorded
+      title_cs: Ponaučení a následné akce jsou zaznamenány
+      required_by_default: true
+      acceptance_criteria:
+      - Post-incident lessons and actions are documented
+      keywords_cs:
+      - ponaučení
+      - následné akce
+      keywords_en:
+      - lessons learned
+      - follow-up actions
+      red_flags:
+      - No lessons learned
+    - id: INC-REG-11
+      title_en: Retention period and access controls for register are defined
+      title_cs: Doba uchovávání a řízení přístupu k registru jsou definovány
+      required_by_default: true
+      acceptance_criteria:
+      - Retention period meets regulatory minimum
+      - Access is restricted to authorized personnel
+      keywords_cs:
+      - uchovávání
+      - přístup
+      - retence
+      keywords_en:
+      - retention
+      - access
+      - period
+      red_flags:
+      - No retention period defined
   evidence_hints:
     required:
-    - artifact_id: INC-INCIDENT-REGISTER
+    - artifact_id: INC-REGISTER
     optional:
     - artifact_id: INC-TICKETING-EXPORT
-    - artifact_id: INC-SIEM-CASE-MANAGEMENT-EXPORT
     - artifact_id: INC-POST-INCIDENT-REPORTS
   severity: high
   sources:
   - citation: CZ-Act-264-2025 (incident documentation and accountability duties)
   - citation: 'CZ-Decree-409-2025 (higher duties: incident records/register + evidence retention)'
   - citation: 'CZ-Decree-410-2025 (lower duties: incident records/register + evidence retention)'
-  - citation: 'CZ-Decree-334-2025 (incident reporting recordkeeping: proofs of submission/communication)'
-  - citation: 'EU-NIS2-2022-2555 Art. 23 (mapping: reporting + documentation)'
+  - citation: CZ-Decree-334-2025 (incident reporting recordkeeping)
+- id: NIS2CZ-INC-REPORTING-WORKFLOW
+  title: Incident reporting workflow to NÚKIB via CZ portal complies with statutory timelines
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — reporting workflow is mandatory for in-scope entities.
+    checklist:
+    - id: INC-RPT-01
+      title_en: Reporting thresholds (what constitutes a reportable incident) are documented
+      title_cs: Prahové hodnoty pro hlášení (co je hlásitelný incident) jsou zdokumentovány
+      required_by_default: true
+      acceptance_criteria:
+      - Thresholds are derived from CZ-Decree-334-2025 and CZ-Act-264-2025
+      - Mapping from severity levels to reporting obligation exists
+      keywords_cs:
+      - prahové hodnoty
+      - hlásitelný
+      - incident
+      - povinnost
+      keywords_en:
+      - thresholds
+      - reportable
+      - incident
+      - obligation
+      red_flags:
+      - No reporting thresholds documented
+    - id: INC-RPT-02
+      title_en: Early warning notification timeline (within 24 hours) is defined and operationalized
+      title_cs: Lhůta pro včasné varování (do 24 hodin) je definována a provozována
+      required_by_default: true
+      acceptance_criteria:
+      - Process ensures early warning to NÚKIB within 24h of becoming aware of a significant incident
+      - Responsible role for submission is assigned
+      keywords_cs:
+      - včasné varování
+      - 24 hodin
+      - NÚKIB
+      - lhůta
+      keywords_en:
+      - early warning
+      - 24 hours
+      - NÚKIB
+      - timeline
+      red_flags:
+      - No early warning process
+      - No responsible role assigned
+    - id: INC-RPT-03
+      title_en: Incident notification timeline (within 72 hours) is defined and operationalized
+      title_cs: Lhůta pro oznámení incidentu (do 72 hodin) je definována a provozována
+      required_by_default: true
+      acceptance_criteria:
+      - Process ensures full incident notification to NÚKIB within 72h
+      - Content requirements per CZ-Decree-334-2025 are documented
+      keywords_cs:
+      - oznámení
+      - 72 hodin
+      - NÚKIB
+      - obsah
+      keywords_en:
+      - notification
+      - 72 hours
+      - NÚKIB
+      - content
+      red_flags:
+      - No 72h notification process
+    - id: INC-RPT-04
+      title_en: Intermediate report process (if requested by NÚKIB or on status change) exists
+      title_cs: Proces průběžné zprávy (na žádost NÚKIB nebo při změně stavu) existuje
+      required_by_default: true
+      acceptance_criteria:
+      - Process for intermediate updates is documented
+      keywords_cs:
+      - průběžná zpráva
+      - aktualizace
+      - NÚKIB
+      keywords_en:
+      - intermediate report
+      - update
+      - NÚKIB
+      red_flags:
+      - No intermediate reporting process
+    - id: INC-RPT-05
+      title_en: Final report timeline (within 1 month, or as specified) is defined
+      title_cs: Lhůta pro závěrečnou zprávu (do 1 měsíce, nebo dle specifikace) je definována
+      required_by_default: true
+      acceptance_criteria:
+      - Final report with root cause, impact, and remediation is due within specified timeframe
+      keywords_cs:
+      - závěrečná zpráva
+      - 1 měsíc
+      - příčina
+      - náprava
+      keywords_en:
+      - final report
+      - 1 month
+      - root cause
+      - remediation
+      red_flags:
+      - No final report timeline
+    - id: INC-RPT-06
+      title_en: CZ portal (Portál NÚKIB) access and submission process is operationally ready
+      title_cs: Přístup k Portálu NÚKIB a proces podání je provozně připraven
+      required_by_default: true
+      acceptance_criteria:
+      - Portal credentials are set up and tested
+      - At least 2 persons have portal access (primary + backup)
+      keywords_cs:
+      - portál
+      - NÚKIB
+      - přístup
+      - podání
+      keywords_en:
+      - portal
+      - NÚKIB
+      - access
+      - submission
+      red_flags:
+      - No portal access configured
+      - Single point of failure for portal access
+    - id: INC-RPT-07
+      title_en: Content requirements for each report type are documented
+      title_cs: Požadavky na obsah pro každý typ zprávy jsou zdokumentovány
+      required_by_default: true
+      acceptance_criteria:
+      - Templates or checklists exist for early warning, notification, and final report
+      - Content requirements align with CZ-Decree-334-2025
+      keywords_cs:
+      - obsah
+      - šablony
+      - požadavky
+      - vyhláška 334
+      keywords_en:
+      - content
+      - templates
+      - requirements
+      - decree 334
+      red_flags:
+      - No content templates
+    - id: INC-RPT-08
+      title_en: Internal escalation and approval process for external reports is defined
+      title_cs: Interní eskalační a schvalovací proces pro externí zprávy je definován
+      required_by_default: true
+      acceptance_criteria:
+      - Escalation path from SOC/CSIRT to management for report approval is documented
+      - Approval does not delay statutory timelines
+      keywords_cs:
+      - eskalace
+      - schválení
+      - interní
+      - zprávy
+      keywords_en:
+      - escalation
+      - approval
+      - internal
+      - reports
+      red_flags:
+      - No escalation process
+      - Approval process risks missing statutory deadlines
+  evidence_hints:
+    required:
+    - artifact_id: INC-REPORTING-PROCEDURE
+    - artifact_id: INC-REPORT-TEMPLATES
+    optional:
+    - artifact_id: INC-PORTAL-ACCESS-EVIDENCE
+    - artifact_id: INC-SUBMITTED-REPORTS
+  severity: high
+  sources:
+  - citation: CZ-Act-264-2025 (povinnost hlásit kybernetické bezpečnostní incidenty)
+  - citation: CZ-Decree-334-2025 (Portál NÚKIB; lhůty hlášení; obsah oznámení; úkony prostřednictvím portálu)
+  - citation: 'EU-NIS2-2022-2555 Art. 23 (mapping: incident reporting obligations)'
+- id: NIS2CZ-INC-POST-INCIDENT-REVIEW
+  title: Post-incident review is performed for significant incidents and improvements are tracked
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — post-incident review is mandatory.
+    checklist:
+    - id: INC-PIR-01
+      title_en: Trigger criteria for post-incident review are defined
+      title_cs: Spouštěcí kritéria pro post-incident review jsou definována
+      required_by_default: true
+      acceptance_criteria:
+      - Criteria define which incidents trigger a formal review (e.g., all significant/high-severity incidents)
+      keywords_cs:
+      - kritéria
+      - post-incident
+      - přezkum
+      - trigger
+      keywords_en:
+      - criteria
+      - post-incident
+      - review
+      - trigger
+      red_flags:
+      - No trigger criteria
+    - id: INC-PIR-02
+      title_en: Review is conducted within defined timeline after incident closure
+      title_cs: Přezkum je proveden v definované lhůtě po uzavření incidentu
+      required_by_default: true
+      acceptance_criteria:
+      - Timeline for review is defined (e.g., within 30 days of closure)
+      - Adherence is tracked
+      keywords_cs:
+      - lhůta
+      - uzavření
+      - přezkum
+      keywords_en:
+      - timeline
+      - closure
+      - review
+      red_flags:
+      - Reviews not conducted timely
+    - id: INC-PIR-03
+      title_en: Root cause analysis is performed
+      title_cs: Analýza příčin je provedena
+      required_by_default: true
+      acceptance_criteria:
+      - Structured root cause analysis method is used (5-Why, fishbone, etc.)
+      keywords_cs:
+      - analýza příčin
+      - root cause
+      - 5-Why
+      keywords_en:
+      - root cause analysis
+      - 5-Why
+      - fishbone
+      red_flags:
+      - No root cause analysis
+    - id: INC-PIR-04
+      title_en: Improvement actions are identified, assigned owners, and tracked
+      title_cs: Zlepšovací opatření jsou identifikována, přiřazena vlastníkům a sledována
+      required_by_default: true
+      acceptance_criteria:
+      - 'Actions have: description, owner, due date, status'
+      - Actions are tracked to completion
+      keywords_cs:
+      - zlepšení
+      - opatření
+      - vlastník
+      - sledování
+      keywords_en:
+      - improvements
+      - actions
+      - owner
+      - tracking
+      red_flags:
+      - No improvement actions tracked
+    - id: INC-PIR-05
+      title_en: Lessons learned are shared with relevant teams
+      title_cs: Poznatky jsou sdíleny s relevantními týmy
+      required_by_default: true
+      acceptance_criteria:
+      - Lessons learned are communicated to relevant stakeholders
+      - Distribution is documented
+      keywords_cs:
+      - poznatky
+      - sdílení
+      - týmy
+      keywords_en:
+      - lessons learned
+      - sharing
+      - teams
+      red_flags:
+      - Lessons not shared
+    - id: INC-PIR-06
+      title_en: Controls, policies, or procedures are updated based on findings
+      title_cs: Kontroly, politiky nebo postupy jsou aktualizovány na základě zjištění
+      required_by_default: true
+      acceptance_criteria:
+      - Relevant documents are updated and changes are version-controlled
+      keywords_cs:
+      - aktualizace
+      - politiky
+      - postupy
+      - zjištění
+      keywords_en:
+      - updates
+      - policies
+      - procedures
+      - findings
+      red_flags:
+      - No updates to controls after incidents
+    - id: INC-PIR-07
+      title_en: Review results feed into management review and risk register
+      title_cs: Výsledky přezkumu jsou vstupem do přezkumu vedení a registru rizik
+      required_by_default: true
+      acceptance_criteria:
+      - Post-incident findings are reported to management
+      - Risk register is updated where applicable
+      keywords_cs:
+      - vedení
+      - registr rizik
+      - výsledky
+      keywords_en:
+      - management
+      - risk register
+      - results
+      red_flags:
+      - Findings not reported to management
+  evidence_hints:
+    required:
+    - artifact_id: INC-POST-INCIDENT-REPORTS
+    - artifact_id: INC-IMPROVEMENT-TRACKER
+    optional:
+    - artifact_id: GOV-CORRECTIVE-ACTIONS-REGISTER
+    - artifact_id: GOV-MGMT-REVIEW-MINUTES
+  severity: high
+  sources:
+  - citation: CZ-Act-264-2025 (povinnost průběžně zajišťovat účinnost opatření; poučení z incidentů)
+  - citation: 'CZ-Decree-409-2025 (vyšší povinnosti: poučení z incidentů, zlepšování)'
+  - citation: 'CZ-Decree-410-2025 (nižší povinnosti: poučení z incidentů, zlepšování)'
+  - citation: 'EU-NIS2-2022-2555 Art. 23 (mapping: final report with lessons learned)'
 - id: NIS2CZ-SUP-REGISTER-SIGNIFICANT-SUPPLIERS
   title: Significant suppliers are identified, recorded, and notified (higher regime)
   scope:
@@ -1403,8 +4176,7 @@ rules:
   sources:
   - citation: CZ-Decree-409-2025 §9(1)(g), §9(2)(c)-(d)
 - id: NIS2CZ-SUP-CONTRACT-ANNEX5-HIGHER
-  title: 'Contracts with significant suppliers contain required security clauses per Příloha č. 5 of Vyhl. 409/2025 (higher
-    regime)
+  title: 'Contracts with significant suppliers contain required security clauses per Příloha č. 5 of Vyhl. 409/2025 (higher regime)
 
     '
   scope:
@@ -1416,8 +4188,7 @@ rules:
   requirement:
     type: annex_checklist
     logic: ALL_RELEVANT
-    note: 'Each item must be present in the contract unless marked not applicable (with documented justification). All items
-      are required_by_default unless applicability specifies a condition.
+    note: 'Each item must be present in the contract unless marked not applicable (with documented justification). All items are required_by_default unless applicability specifies a condition.
 
       '
     checklist:
@@ -1526,8 +4297,7 @@ rules:
       - Subcontracting permitted without restriction or notification
       - No obligation for subdodavatelé to comply with security requirements
     - id: ANN5-f
-      title_cs: Ustanovení o povinnosti dodavatele dodržovat bezpečnostní politiky povinné osoby nebo o odsouhlasení bezpečnostních
-        politik dodavatele
+      title_cs: Ustanovení o povinnosti dodavatele dodržovat bezpečnostní politiky povinné osoby nebo o odsouhlasení bezpečnostních politik dodavatele
       title_en: Security policy alignment clause – supplier must follow or agree to customer security policies
       required_by_default: true
       acceptance_criteria:
@@ -1590,8 +4360,7 @@ rules:
       - 'ANN5-i-2: Supplier reports on its own risk management and residual risks related to contract'
       - 'ANN5-i-3: Supplier notifies customer of significant change of control (ownership/assets used for contract)'
       - 'ANN5-i-4: Supplier notifies customer of foreign authority requests for data (unless prohibited by law)'
-      - 'ANN5-i-5: Supplier discloses natural persons with access to customer confidential information (security roles, pentesters,
-        admins)'
+      - 'ANN5-i-5: Supplier discloses natural persons with access to customer confidential information (security roles, pentesters, admins)'
       keywords_cs:
       - informovat
       - hlášení
@@ -1738,8 +4507,7 @@ rules:
       - No data disposal obligations
       - Supplier retains data indefinitely after contract end
     - id: ANN5-p
-      title_cs: Ustanovení o právu jednostranně odstoupit od smlouvy bez výpovědní doby při významné změně kontroly nad dodavatelem
-        nebo aktiv
+      title_cs: Ustanovení o právu jednostranně odstoupit od smlouvy bez výpovědní doby při významné změně kontroly nad dodavatelem nebo aktiv
       title_en: Unilateral termination right on significant ownership or asset control change
       required_by_default: true
       acceptance_criteria:
@@ -1823,8 +4591,7 @@ rules:
   requirement:
     type: annex_checklist
     logic: ALL_RELEVANT
-    note: 'Each item must be addressed in contracts where relevant. Applicability is determined per contract context. Document
-      justification for any item marked not applicable.
+    note: 'Each item must be addressed in contracts where relevant. Applicability is determined per contract context. Document justification for any item marked not applicable.
 
       '
     checklist:
@@ -1985,8 +4752,7 @@ rules:
       red_flags:
       - No contract confidentiality obligations
     - id: ANN2-i
-      title_cs: Ustanovení o povinnosti dodavatele dodržovat bezpečnostní politiky povinné osoby nebo o odsouhlasení bezpečnostních
-        politik dodavatele
+      title_cs: Ustanovení o povinnosti dodavatele dodržovat bezpečnostní politiky povinné osoby nebo o odsouhlasení bezpečnostních politik dodavatele
       title_en: Security policy compliance / alignment clause
       required_by_default: true
       acceptance_criteria:
@@ -2124,3 +4890,236 @@ rules:
   sources:
   - citation: CZ-Decree-409-2025 Příloha č. 5 item j (exit strategie)
   - citation: CZ-Decree-410-2025 Příloha č. 2 item d (exit strategie)
+- id: NIS2CZ-OVERSIGHT-REGISTRATION
+  title: Registration or notification to NÚKIB is completed (if required)
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: checklist
+    logic: ALL
+    na_mechanism: 'If registration is not required under CZ-Act-264-2025 for the entity type, document N/A justification with legal basis.
+
+      '
+    checklist:
+    - id: OVER-REG-01
+      title_en: Entity is registered/notified to NÚKIB per CZ-Act-264-2025
+      title_cs: Subjekt je registrován/notifikován u NÚKIB dle zákona č. 264/2025 Sb.
+      required_by_default: true
+      acceptance_criteria:
+      - Registration or notification submission evidence exists
+      - Confirmation or receipt from NÚKIB is on file
+      keywords_cs:
+      - registrace
+      - notifikace
+      - NÚKIB
+      - povinná osoba
+      keywords_en:
+      - registration
+      - notification
+      - NÚKIB
+      - regulated entity
+      red_flags:
+      - No registration/notification submitted
+      - No confirmation from NÚKIB
+    - id: OVER-REG-02
+      title_en: Contact details for NÚKIB communication are maintained and current
+      title_cs: Kontaktní údaje pro komunikaci s NÚKIB jsou udržovány a aktuální
+      required_by_default: true
+      acceptance_criteria:
+      - Designated contact person(s) for NÚKIB are documented
+      - Contact details are reviewed at least annually
+      keywords_cs:
+      - kontaktní osoba
+      - NÚKIB
+      - aktuální
+      keywords_en:
+      - contact person
+      - NÚKIB
+      - current
+      red_flags:
+      - No designated contact
+      - Contact details outdated
+    - id: OVER-REG-03
+      title_en: Changes to entity scope/services/classification are reported to NÚKIB timely
+      title_cs: Změny v rozsahu/službách/klasifikaci subjektu jsou hlášeny NÚKIB včas
+      required_by_default: true
+      acceptance_criteria:
+      - Process for notifying NÚKIB of material changes exists
+      - Timelines for notification are defined
+      keywords_cs:
+      - změny
+      - hlášení
+      - NÚKIB
+      - lhůty
+      keywords_en:
+      - changes
+      - notification
+      - NÚKIB
+      - timelines
+      red_flags:
+      - No change notification process
+  evidence_hints:
+    required:
+    - artifact_id: OVER-REGISTRATION-EVIDENCE
+    optional:
+    - artifact_id: OVER-NUKIB-CORRESPONDENCE
+  severity: high
+  sources:
+  - citation: CZ-Act-264-2025 (registrační/notifikační povinnosti regulovaných subjektů)
+  - citation: CZ-Decree-334-2025 (úkony prostřednictvím Portálu NÚKIB)
+- id: NIS2CZ-OVERSIGHT-SUPERVISORY-READINESS
+  title: Entity is prepared for supervisory activities by NÚKIB
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — supervisory readiness is mandatory.
+    checklist:
+    - id: OVER-SUP-01
+      title_en: Evidence package can be assembled on request
+      title_cs: Balíček důkazů může být sestaven na vyžádání
+      required_by_default: true
+      acceptance_criteria:
+      - Evidence register maps all required artifacts to storage locations
+      - Artifacts can be retrieved within a reasonable timeframe (e.g., 5 business days)
+      keywords_cs:
+      - důkazy
+      - balíček
+      - vyžádání
+      - NÚKIB
+      keywords_en:
+      - evidence
+      - package
+      - request
+      - NÚKIB
+      red_flags:
+      - No evidence register
+      - Artifacts not retrievable
+    - id: OVER-SUP-02
+      title_en: Entity understands NÚKIB supervisory powers and cooperation obligations
+      title_cs: Subjekt rozumí dohledovým pravomocím NÚKIB a povinnostem spolupráce
+      required_by_default: true
+      acceptance_criteria:
+      - Management is aware of NÚKIB supervisory powers per CZ-Act-264-2025
+      - Internal procedure for responding to NÚKIB requests exists
+      keywords_cs:
+      - dohled
+      - pravomoci
+      - spolupráce
+      - NÚKIB
+      keywords_en:
+      - supervision
+      - powers
+      - cooperation
+      - NÚKIB
+      red_flags:
+      - Management unaware of supervisory regime
+    - id: OVER-SUP-03
+      title_en: Remediation of findings from supervisory activities is tracked
+      title_cs: Náprava zjištění z dohledových aktivit je sledována
+      required_by_default: true
+      acceptance_criteria:
+      - Corrective action tracking for NÚKIB findings uses the same process as internal audit
+      keywords_cs:
+      - náprava
+      - zjištění
+      - dohled
+      - sledování
+      keywords_en:
+      - remediation
+      - findings
+      - supervision
+      - tracking
+      red_flags:
+      - No tracking of supervisory findings
+  evidence_hints:
+    required:
+    - artifact_id: FOUND-EVIDENCE-REGISTER
+    optional:
+    - artifact_id: OVER-NUKIB-CORRESPONDENCE
+    - artifact_id: GOV-CORRECTIVE-ACTIONS-REGISTER
+  severity: medium
+  sources:
+  - citation: CZ-Act-264-2025 (pravomoci NÚKIB; povinnosti regulovaných subjektů při dohledu)
+  - citation: 'EU-NIS2-2022-2555 Art. 32-33 (mapping: supervisory measures)'
+- id: NIS2CZ-OVERSIGHT-DUTY-REGIME-TAG
+  title: Entity assessment output is tagged with duty regime for downstream rule filtering
+  scope:
+    applies_to:
+    - org
+    conditions:
+    - profile_field: in_scope_under_cz_law
+      equals: true
+  requirement:
+    type: checklist
+    logic: ALL
+    na_mechanism: Not permitted — tagging is mandatory for assessments.
+    checklist:
+    - id: OVER-TAG-01
+      title_en: Assessment output includes entity_class tag (essential/important)
+      title_cs: Výstup hodnocení obsahuje tag entity_class (základní/důležitý)
+      required_by_default: true
+      acceptance_criteria:
+      - entity_class field is populated in entity profile
+      keywords_cs:
+      - tag
+      - entity_class
+      - základní
+      - důležitý
+      keywords_en:
+      - tag
+      - entity_class
+      - essential
+      - important
+      red_flags:
+      - entity_class not tagged
+    - id: OVER-TAG-02
+      title_en: Assessment output includes duty_regime tag (higher/lower)
+      title_cs: Výstup hodnocení obsahuje tag duty_regime (vyšší/nižší)
+      required_by_default: true
+      acceptance_criteria:
+      - duty_regime field is populated in entity profile
+      keywords_cs:
+      - tag
+      - duty_regime
+      - vyšší
+      - nižší
+      keywords_en:
+      - tag
+      - duty_regime
+      - higher
+      - lower
+      red_flags:
+      - duty_regime not tagged
+    - id: OVER-TAG-03
+      title_en: Assessment output includes regulated_services list
+      title_cs: Výstup hodnocení obsahuje seznam regulovaných služeb
+      required_by_default: true
+      acceptance_criteria:
+      - regulated_services field is populated or explicitly empty with justification
+      keywords_cs:
+      - regulované služby
+      - seznam
+      keywords_en:
+      - regulated services
+      - list
+      red_flags:
+      - regulated_services field missing
+  evidence_hints:
+    required:
+    - artifact_id: SCOPE-ENTITY-CLASSIFICATION
+    - artifact_id: SCOPE-DUTY-REGIME-DETERMINATION
+  severity: medium
+  sources:
+  - citation: CZ-Act-264-2025 (entity classification and duty regime)
+  - citation: CZ-Decree-409-2025 (higher duties)
+  - citation: CZ-Decree-410-2025 (lower duties)
