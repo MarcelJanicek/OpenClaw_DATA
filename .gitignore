@@ -30,3 +30,12 @@ wedding-assets/
 **/__pycache__/
 *.pyc
 
+
+# Compliance agent generated artifacts
+compliance-agent/docs/inbox/
+compliance-agent/docs/processed/
+compliance-agent/outputs/
+
+# Temporary source scraping artifacts
+compliance-agent/docs/sources/nis2-cz/*.ttl
+compliance-agent/docs/sources/nis2-cz/opendata_*_norma.*
