@@ -1,0 +1,23 @@
+# DORA Entity/Profile parameters (fill per assessment)
+# This schema is intentionally flexible and may grow.
+
+profile:
+  # Who is being assessed in this context
+  assessed_party_type: "financial_entity"  # financial_entity|ict_third_party_provider|other
+
+  # If financial_entity, specify category for scoping (non-exhaustive)
+  # e.g., credit_institution|payment_institution|investment_firm|insurance|reinsurance|crypto_asset_service_provider|trading_venue|benchmark_admin|crowdfunding|other
+  financial_entity_category: "other"
+
+  # If ICT third-party provider
+  is_critical_ict_third_party_provider: false
+
+  # Operational context
+  provides_critical_or_important_functions: false
+  relies_on_outsourced_ict_services: true
+
+  # Risk profile
+  complexity: "medium" # low|medium|high
+
+  # Notes
+  notes: ""

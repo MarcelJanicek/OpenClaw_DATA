@@ -1,0 +1,15 @@
+meta:
+  ruleset_id: "dora"
+  version: "0.1"
+  status: "draft"
+  jurisdiction: ["EU"]
+  evaluation_profile_schema: "rules/dora/entity_profile.schema.yaml"
+
+includes:
+  - "parts/dora.ch00-foundations.yaml"
+  - "parts/dora.ch01-ict-risk-mgmt.yaml"
+  - "parts/dora.ch02-incident-reporting.yaml"
+  - "parts/dora.ch03-testing.yaml"
+  - "parts/dora.ch04-third-party-risk.yaml"
+  - "parts/dora.ch05-info-sharing.yaml"
+  - "parts/dora.ch06-oversight-tagging.yaml"

@@ -1,0 +1,38 @@
+meta:
+  ruleset_id: dora
+  version: '0.1'
+  status: draft
+  jurisdiction:
+  - EU
+  evaluation_profile_schema: rules/dora/entity_profile.schema.yaml
+  source:
+  - name: DORA (Regulation (EU) 2022/2554)
+    url: https://eur-lex.europa.eu/eli/reg/2022/2554/oj
+  notes:
+  - Draft ruleset scaffold. Rules will be expanded milestone-by-milestone.
+rules:
+- id: DORA-SCOPE-APPLICABILITY
+  title: Applicability and assessed party type are documented
+  scope:
+    applies_to:
+    - org
+    parties:
+    - financial_entity
+    - ict_third_party_provider
+  requirement:
+    type: decision_and_documentation
+    must_include:
+    - assessed_party_type
+    - financial_entity_category (if applicable)
+    - critical_or_important_functions_context
+    - outsourced_ict_services_context
+  evidence_hints:
+    required:
+    - dora_scope_assessment
+    artifacts:
+    - dora_scope_assessment
+    - service_catalog
+    - outsourcing_register (if exists)
+  severity: high
+  sources:
+  - citation: DORA (EU) 2022/2554 — general applicability (tag)

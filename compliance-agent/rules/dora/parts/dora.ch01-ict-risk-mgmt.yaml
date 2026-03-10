@@ -1,0 +1,8 @@
+meta:
+  ruleset_id: "dora"
+  version: "0.1"
+  status: "draft"
+  jurisdiction: ["EU"]
+  evaluation_profile_schema: "rules/dora/entity_profile.schema.yaml"
+
+rules: []

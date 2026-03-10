@@ -16,7 +16,8 @@ Goal: build a **thorough, reviewable** GDPR ruleset for an AI compliance agent.
 2) Add/update rules in the appropriate **part file** under `rules/gdpr/parts/`.
 3) Update `rules/gdpr/gdpr.index.yaml` if a new part file is added.
 4) Run merge script to regenerate the single-file ruleset:
-   - `python3 scripts/gdpr_merge.py`
+   - `python3 scripts/ruleset_merge.py gdpr`
+   - `python3 scripts/ruleset_merge.py dora`
 5) Commit and push.
 
 ## Definition of “complete”
