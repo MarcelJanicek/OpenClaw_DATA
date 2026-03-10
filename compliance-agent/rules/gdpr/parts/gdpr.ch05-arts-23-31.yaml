@@ -20,6 +20,8 @@ rules:
     - system
     roles:
     - controller
+    - processor
+    - joint_controller
     condition: Only if entity_profile.relies_on_art23_restrictions is true (i.e., you rely on Union/Member State law to restrict GDPR obligations/rights under Art. 23)
   requirement:
     type: multi_obligation
