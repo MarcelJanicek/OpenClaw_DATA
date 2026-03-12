@@ -263,8 +263,8 @@ def validate_eval_output(doc: dict, expected_ruleset: str) -> None:
     if result.get("status") == "completed" and result.get("ruleset") != expected_ruleset:
         raise ValueError(f"expected ruleset={expected_ruleset} got {result.get('ruleset')}")
     if result.get("status") == "completed":
-        if "findings" not in doc or "annotations" not in doc:
-            raise ValueError("completed output must include findings and annotations")
+        if "findings" not in doc:
+            raise ValueError("completed output must include findings")
 
 
 def _extract_json_block(text: str) -> str:
@@ -372,6 +372,36 @@ def iter_checklist_items(rules: List[dict]) -> List[Tuple[dict, dict]]:
     return out
 
 
+def findings_to_annotations(findings: List[dict], regulation: str) -> List[dict]:
+    """Generate DOCX annotations from compact findings.
+
+    Because cron summaries truncate, we keep model outputs compact and generate
+    annotation text deterministically.
+    """
+    ann = []
+    for f in findings or []:
+        rid = f.get("rule_id")
+        cid = f.get("checklist_item_id")
+        status = f.get("status", "UNKNOWN")
+        notes = normalize_ws(f.get("notes", ""))
+        idxs = f.get("evidence_paragraph_indices") or []
+        pidx = int(idxs[0]) if idxs else 0
+
+        if regulation == "gdpr":
+            tag = f"[GDPR][{rid}][{status}]"
+        else:
+            tag = f"[NIS2-CZ][{rid}][{cid}][{status}]"
+
+        text = tag
+        if idxs:
+            text += f" evidence_paragraphs={idxs}."
+        if notes:
+            text += " " + notes
+
+        ann.append({"paragraph_index": pidx, "text": text})
+    return ann
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--docx", required=True)
@@ -425,7 +455,6 @@ def main() -> None:
     # Evaluate GDPR in batches
     gdpr_items = iter_checklist_items(gdpr_app)
     gdpr_findings = []
-    gdpr_annotations = []
     missing_inputs = set()
 
     for i in range(0, len(gdpr_items), args.batch_size):
@@ -450,16 +479,15 @@ def main() -> None:
             dump_yaml(parsed, outprefix.with_suffix(".gdpr.questions.yaml"))
             return
         gdpr_findings.extend(parsed.get("findings", []) or [])
-        gdpr_annotations.extend(parsed.get("annotations", []) or [])
         for x in (parsed.get("summary", {}) or {}).get("missing_inputs", []) or []:
             missing_inputs.add(str(x))
 
+    gdpr_annotations = findings_to_annotations(gdpr_findings, regulation="gdpr")
     dump_yaml({"result": {"status": "completed", "ruleset": "gdpr"}, "findings": gdpr_findings, "annotations": gdpr_annotations, "summary": {"missing_inputs": sorted(missing_inputs)}}, outprefix.with_suffix(".gdpr.eval.yaml"))
 
     # Evaluate NIS2 in batches
     nis2_items = iter_checklist_items(nis2_app)
     nis2_findings = []
-    nis2_annotations = []
     missing_inputs2 = set()
 
     for i in range(0, len(nis2_items), args.batch_size):
@@ -484,10 +512,10 @@ def main() -> None:
             dump_yaml(parsed, outprefix.with_suffix(".nis2.questions.yaml"))
             return
         nis2_findings.extend(parsed.get("findings", []) or [])
-        nis2_annotations.extend(parsed.get("annotations", []) or [])
         for x in (parsed.get("summary", {}) or {}).get("missing_inputs", []) or []:
             missing_inputs2.add(str(x))
 
+    nis2_annotations = findings_to_annotations(nis2_findings, regulation="nis2")
     dump_yaml({"result": {"status": "completed", "ruleset": "nis2-cz"}, "findings": nis2_findings, "annotations": nis2_annotations, "summary": {"missing_inputs": sorted(missing_inputs2)}}, outprefix.with_suffix(".nis2.eval.yaml"))
 
     # Merge annotations

@@ -32,11 +32,33 @@ If any is unknown, output `result.status: questions` with these:
 ## Output format (required)
 Return **raw JSON only** (no markdown fences, no ``` blocks, no prose outside JSON).
 
+IMPORTANT: Keep the output SMALL so it fits in OpenClaw cron summaries.
+- Do NOT include long quotes.
+- Do NOT include full paragraph text.
+- Evidence must be paragraph indices only.
+- notes must be a single-line string, max 300 characters.
+- Omit remediation / suggested clause text in this run.
+
 JSON rules:
 - Wrap all strings in double quotes.
 - Escape internal double quotes with `\"`.
-- Use `\n` for newlines in multiline text.
 - No trailing commas.
+
+Required JSON schema (top-level):
+{
+  "result": {"status": "completed", "ruleset": "nis2-cz"},
+  "questions": [],
+  "findings": [
+    {
+      "rule_id": "...",
+      "checklist_item_id": "...",
+      "status": "PASS|PARTIAL|FAIL|UNKNOWN",
+      "evidence_paragraph_indices": [0,1,2],
+      "notes": "<=300 chars"
+    }
+  ]
+}
+
 
 ```yaml
 result:
