@@ -10,19 +10,18 @@ cd /root/.openclaw/workspace/compliance-agent
 .venv/bin/python scripts/nis2cz_docx_extract.py --in <doc.docx> --out docs/processed/<doc>.yaml
 ```
 
-## 2) Run evaluator (LLM)
-- Send to Regulus-Eval (Opus) with:
-  - extracted paragraphs
-  - entity_profile
-  - relevant ruleset parts
+## 2) Run evaluator (LLM, Opus)
+This runs end-to-end (GDPR + NIS2-CZ) and produces a commented DOCX.
+
+```bash
+.venv/bin/python scripts/evaluate_docx_llm.py \
+  --docx <doc.docx> \
+  --profile <entity_profile.yaml> \
+  --outprefix outputs/<doc>
+```
 
 ## 3) If questions returned
-- Answer questions and re-run evaluation.
-
-## 4) Render commented DOCX
-```bash
-.venv/bin/python scripts/nis2cz_docx_annotate.py --in <doc.docx> --annotations outputs/<doc>.annotations.yaml --out outputs/<doc>.commented.docx
-```
+If `outputs/<doc>.questions.yaml` is produced, answer those questions by updating the profile YAML (or provide answers in chat), then rerun.
 
 ## Outputs
 - `outputs/<doc>.results.yaml`
