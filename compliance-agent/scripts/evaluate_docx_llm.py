@@ -213,8 +213,8 @@ def validate_eval_output(doc: dict, expected_ruleset: str) -> None:
             raise ValueError("completed output must include findings and annotations")
 
 
-def _extract_yaml_block(text: str) -> str:
-    """Extract a YAML mapping from a model response.
+def _extract_json_block(text: str) -> str:
+    """Extract JSON from a model response.
 
     Handles cases where the model returns markdown fences or preamble.
     """
@@ -225,22 +225,26 @@ def _extract_yaml_block(text: str) -> str:
         cleaned = re.sub(r"\n```\s*$", "", cleaned)
         cleaned = cleaned.strip()
 
-    # If there is preamble, try to start from first 'result:' key
-    m = re.search(r"^result:\s*$", cleaned, flags=re.M)
-    if m:
-        cleaned = cleaned[m.start():].lstrip()
-
-    return cleaned
+    # Find the first '{' and last '}' to extract JSON
+    start = cleaned.find("{")
+    if start == -1:
+        raise ValueError("No JSON object found in response")
+    
+    end = cleaned.rfind("}")
+    if end == -1 or end < start:
+        raise ValueError("Incomplete JSON object in response")
+    
+    return cleaned[start:end+1]
 
 
 def call_regulus(client: AnthropicClient, *, system_prompt: str, user_payload: str, model: str) -> dict:
     text = client.messages(model=model, system=system_prompt, user=user_payload, max_tokens=4000)
-    cleaned = _extract_yaml_block(text)
+    json_str = _extract_json_block(text)
 
     try:
-        parsed = yaml.safe_load(cleaned)
+        parsed = json.loads(json_str)
     except Exception as e:
-        raise ValueError(f"Failed to parse YAML from model: {e}\nRaw:\n{cleaned[:2000]}")
+        raise ValueError(f"Failed to parse JSON from model: {e}\nRaw:\n{json_str[:2000]}")
     return parsed
 
 

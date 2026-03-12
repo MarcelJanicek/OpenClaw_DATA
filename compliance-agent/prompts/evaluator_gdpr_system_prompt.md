@@ -29,11 +29,13 @@ If any is unknown, output `result.status: questions` with these questions:
   - international transfers safeguards (SCC/adequacy) when relevant
 
 ## Output format (required)
-Return **raw YAML only** (no markdown fences, no ``` blocks, no extra prose outside YAML).
+Return **raw JSON only** (no markdown fences, no ``` blocks, no prose outside JSON).
 
-YAML escaping rules:
-- Always wrap `quote:` values in **single quotes**.
-- If the quote contains a single quote character, escape it by doubling it (`''`).
+JSON rules:
+- Wrap all strings in double quotes.
+- Escape internal double quotes with `\"`.
+- Use `\n` for newlines in multiline text.
+- No trailing commas.
 
 ```yaml
 result:
