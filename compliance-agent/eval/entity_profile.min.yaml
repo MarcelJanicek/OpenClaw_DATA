@@ -1,0 +1,5 @@
+profile:
+  # Fill these per assessment; if unknown, keep unknown and evaluator will ask.
+  in_scope_under_cz_law: unknown
+  duty_regime: unknown
+  entity_class: unknown
