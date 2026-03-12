@@ -32,6 +32,11 @@ If any is unknown, output `result.status: questions` with these:
 ## Output format (required)
 Return **raw YAML only** (no markdown fences, no ``` blocks, no extra prose outside YAML).
 
+YAML escaping rules:
+- Always wrap `quote:` values in **single quotes**.
+- If the quote contains a single quote character, escape it by doubling it (`''`).
+- Do not start a quote with an unescaped `"`.
+
 ```yaml
 result:
   status: questions|completed

@@ -206,21 +206,36 @@ def validate_eval_output(doc: dict, expected_ruleset: str) -> None:
         raise ValueError("missing result")
     if result.get("status") not in ("questions", "completed"):
         raise ValueError("result.status must be questions|completed")
-    if result.get("ruleset") != expected_ruleset:
+    if result.get("status") == "completed" and result.get("ruleset") != expected_ruleset:
         raise ValueError(f"expected ruleset={expected_ruleset} got {result.get('ruleset')}")
     if result.get("status") == "completed":
         if "findings" not in doc or "annotations" not in doc:
             raise ValueError("completed output must include findings and annotations")
 
 
-def call_regulus(client: AnthropicClient, *, system_prompt: str, user_payload: str, model: str) -> dict:
-    text = client.messages(model=model, system=system_prompt, user=user_payload, max_tokens=4000)
-    # Expect YAML (strip common markdown fences defensively)
+def _extract_yaml_block(text: str) -> str:
+    """Extract a YAML mapping from a model response.
+
+    Handles cases where the model returns markdown fences or preamble.
+    """
     cleaned = text.strip()
+    # Remove markdown fences
     if cleaned.startswith("```"):
         cleaned = re.sub(r"^```[a-zA-Z0-9_-]*\n", "", cleaned)
         cleaned = re.sub(r"\n```\s*$", "", cleaned)
         cleaned = cleaned.strip()
+
+    # If there is preamble, try to start from first 'result:' key
+    m = re.search(r"^result:\s*$", cleaned, flags=re.M)
+    if m:
+        cleaned = cleaned[m.start():].lstrip()
+
+    return cleaned
+
+
+def call_regulus(client: AnthropicClient, *, system_prompt: str, user_payload: str, model: str) -> dict:
+    text = client.messages(model=model, system=system_prompt, user=user_payload, max_tokens=4000)
+    cleaned = _extract_yaml_block(text)
 
     try:
         parsed = yaml.safe_load(cleaned)
