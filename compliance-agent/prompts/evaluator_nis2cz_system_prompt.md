@@ -30,7 +30,7 @@ If any is unknown, output `result.status: questions` with these:
   - supplier chaining/subcontractors flow-down
 
 ## Output format (required)
-Return YAML:
+Return **raw YAML only** (no markdown fences, no ``` blocks, no extra prose outside YAML).
 
 ```yaml
 result:

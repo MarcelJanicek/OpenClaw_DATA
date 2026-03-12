@@ -114,17 +114,25 @@ def expand_window(indices: List[int], radius: int, max_total: int) -> List[int]:
 def load_auth_token(provider: str) -> str:
     """Load provider API key from OpenClaw auth profiles.
 
+    OpenClaw stores auth profiles in a dict keyed by `<provider>:<profile>`.
+    We select the first matching provider entry that has a token-like field.
+
     This reads local state. Token is never printed.
     """
     auth_path = Path("/root/.openclaw/agents/main/agent/auth-profiles.json")
     data = json.loads(auth_path.read_text("utf-8"))
-    # structure: { profiles: [{id, provider, token, ...}, ...] } (varies)
-    profiles = data.get("profiles") or data.get("authProfiles") or []
-    for p in profiles:
-        if p.get("provider") == provider:
-            tok = p.get("token") or p.get("apiKey")
-            if tok:
-                return tok
+
+    profiles = data.get("profiles") or data.get("authProfiles") or {}
+    if isinstance(profiles, dict):
+        for key, p in profiles.items():
+            # key example: anthropic:default
+            if not str(key).startswith(provider + ":"):
+                continue
+            if isinstance(p, dict):
+                tok = p.get("token") or p.get("apiKey") or p.get("accessToken")
+                if tok:
+                    return tok
+
     raise RuntimeError(f"No token found for provider={provider} in {auth_path}")
 
 
@@ -207,11 +215,17 @@ def validate_eval_output(doc: dict, expected_ruleset: str) -> None:
 
 def call_regulus(client: AnthropicClient, *, system_prompt: str, user_payload: str, model: str) -> dict:
     text = client.messages(model=model, system=system_prompt, user=user_payload, max_tokens=4000)
-    # Expect YAML
+    # Expect YAML (strip common markdown fences defensively)
+    cleaned = text.strip()
+    if cleaned.startswith("```"):
+        cleaned = re.sub(r"^```[a-zA-Z0-9_-]*\n", "", cleaned)
+        cleaned = re.sub(r"\n```\s*$", "", cleaned)
+        cleaned = cleaned.strip()
+
     try:
-        parsed = yaml.safe_load(text)
+        parsed = yaml.safe_load(cleaned)
     except Exception as e:
-        raise ValueError(f"Failed to parse YAML from model: {e}\nRaw:\n{text[:2000]}")
+        raise ValueError(f"Failed to parse YAML from model: {e}\nRaw:\n{cleaned[:2000]}")
     return parsed
 
 

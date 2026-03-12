@@ -29,7 +29,7 @@ If any is unknown, output `result.status: questions` with these questions:
   - international transfers safeguards (SCC/adequacy) when relevant
 
 ## Output format (required)
-Return YAML:
+Return **raw YAML only** (no markdown fences, no ``` blocks, no extra prose outside YAML).
 
 ```yaml
 result:
