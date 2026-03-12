@@ -237,8 +237,8 @@ def _extract_json_block(text: str) -> str:
     return cleaned[start:end+1]
 
 
-def call_regulus(client: AnthropicClient, *, system_prompt: str, user_payload: str, model: str) -> dict:
-    text = client.messages(model=model, system=system_prompt, user=user_payload, max_tokens=4000)
+def call_regulus(client: AnthropicClient, *, system_prompt: str, user_payload: str, model: str, max_tokens: int = 8000) -> dict:
+    text = client.messages(model=model, system=system_prompt, user=user_payload, max_tokens=max_tokens)
     json_str = _extract_json_block(text)
 
     try:
@@ -324,7 +324,7 @@ def main() -> None:
     ap.add_argument("--profile", required=True)
     ap.add_argument("--outprefix", required=True)
     ap.add_argument("--model", default="anthropic/claude-opus-4-6")
-    ap.add_argument("--batch-size", type=int, default=10)
+    ap.add_argument("--batch-size", type=int, default=3)
     args = ap.parse_args()
 
     docx = Path(args.docx)
@@ -378,7 +378,20 @@ def main() -> None:
     for i in range(0, len(gdpr_items), args.batch_size):
         batch = gdpr_items[i : i + args.batch_size]
         user_payload = make_user_payload(paragraphs, profile, gdpr_app, doc_type, batch)
-        parsed = call_regulus(client, system_prompt=sys_gdpr, user_payload=user_payload, model=args.model)
+        try:
+            parsed = call_regulus(client, system_prompt=sys_gdpr, user_payload=user_payload, model=args.model)
+        except ValueError as e:
+            # If JSON parsing fails, log and skip (return UNKNOWN for items in this batch)
+            print(f"Warning: GDPR batch {i//args.batch_size} failed to parse: {str(e)[:200]}", file=sys.stderr)
+            for rule, item in batch:
+                gdpr_findings.append({
+                    "rule_id": rule.get("id"),
+                    "checklist_item_id": item.get("id"),
+                    "status": "UNKNOWN",
+                    "evidence": [],
+                    "notes": "Evaluation failed due to LLM output parsing error (response too long or malformed)",
+                })
+            continue
         validate_eval_output(parsed, "gdpr")
         if parsed.get("result", {}).get("status") == "questions":
             dump_yaml(parsed, outprefix.with_suffix(".gdpr.questions.yaml"))
@@ -399,7 +412,20 @@ def main() -> None:
     for i in range(0, len(nis2_items), args.batch_size):
         batch = nis2_items[i : i + args.batch_size]
         user_payload = make_user_payload(paragraphs, profile, nis2_app, doc_type, batch)
-        parsed = call_regulus(client, system_prompt=sys_nis2, user_payload=user_payload, model=args.model)
+        try:
+            parsed = call_regulus(client, system_prompt=sys_nis2, user_payload=user_payload, model=args.model)
+        except ValueError as e:
+            # If JSON parsing fails, log and skip (return UNKNOWN for items in this batch)
+            print(f"Warning: NIS2-CZ batch {i//args.batch_size} failed to parse: {str(e)[:200]}", file=sys.stderr)
+            for rule, item in batch:
+                nis2_findings.append({
+                    "rule_id": rule.get("id"),
+                    "checklist_item_id": item.get("id"),
+                    "status": "UNKNOWN",
+                    "evidence": [],
+                    "notes": "Evaluation failed due to LLM output parsing error (response too long or malformed)",
+                })
+            continue
         validate_eval_output(parsed, "nis2-cz")
         if parsed.get("result", {}).get("status") == "questions":
             dump_yaml(parsed, outprefix.with_suffix(".nis2.questions.yaml"))
