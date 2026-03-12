@@ -43,6 +43,8 @@ import os
 import re
 import subprocess
 import sys
+import time
+import uuid
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
@@ -136,14 +138,42 @@ def load_auth_token(provider: str) -> str:
 class OpenClawCronClient:
     """LLM client that routes calls through OpenClaw cron (isolated run).
 
-    This avoids direct provider HTTP auth issues and uses the Gateway's configured
-    auth profiles.
-
-    We create a one-shot cron job (scheduled far in the future) and `cron run`
-    it immediately, then fetch the latest run summary.
+    Critical: we do NOT use the cron `summary` as the model output, because summary
+    can be truncated. Instead we read the full assistant message from the cron run's
+    persisted session JSONL file (sessionId is returned by `openclaw cron runs`).
     """
 
     openclaw_repo_dir: Path = Path("/opt/openclaw")
+    session_store_dir: Path = Path("/root/.openclaw/agents/main/sessions")
+
+    def _read_assistant_text_from_session(self, session_id: str, wait_s: float = 3.0) -> str:
+        path = self.session_store_dir / f"{session_id}.jsonl"
+        t0 = time.time()
+        while not path.exists() and time.time() - t0 < wait_s:
+            time.sleep(0.05)
+        if not path.exists():
+            raise RuntimeError(f"Session JSONL not found: {path}")
+
+        last_text = None
+        for line in path.read_text("utf-8").splitlines():
+            try:
+                rec = json.loads(line)
+            except Exception:
+                continue
+            if rec.get("type") != "message":
+                continue
+            msg = rec.get("message") or {}
+            if msg.get("role") != "assistant":
+                continue
+            parts = []
+            for block in (msg.get("content") or []):
+                if block.get("type") == "text":
+                    parts.append(block.get("text") or "")
+            last_text = "".join(parts).strip()
+
+        if not last_text:
+            raise RuntimeError("No assistant message text found in session JSONL")
+        return last_text
 
     def messages(self, *, model: str, system: str, user: str, max_tokens: int = 8000) -> str:
         # Note: max_tokens cannot be enforced via cron directly; we keep it for
@@ -157,6 +187,8 @@ class OpenClawCronClient:
             + "# OUTPUT\nReturn raw JSON only."
         )
 
+        job_name = f"doc-eval-llm-call-{uuid.uuid4().hex[:8]}"
+
         add_cmd = [
             "pnpm",
             "-s",
@@ -165,7 +197,7 @@ class OpenClawCronClient:
             "add",
             "--json",
             "--name",
-            "doc-eval-llm-call",
+            job_name,
             "--at",
             "1h",
             "--session",
@@ -214,10 +246,11 @@ class OpenClawCronClient:
         entries = runs.get("entries") or []
         if not entries:
             raise RuntimeError("cron run produced no entries")
-        summary = entries[0].get("summary")
-        if not isinstance(summary, str) or not summary.strip():
-            raise RuntimeError("cron run summary missing/empty")
-        return summary.strip()
+        session_id = entries[0].get("sessionId")
+        if not session_id:
+            raise RuntimeError("cron run entry missing sessionId")
+
+        return self._read_assistant_text_from_session(session_id)
 
 
 def build_questions(profile: dict) -> List[dict]:
@@ -291,7 +324,7 @@ def _extract_json_block(text: str) -> str:
     return cleaned[start:end+1]
 
 
-def call_regulus(client: AnthropicClient, *, system_prompt: str, user_payload: str, model: str, max_tokens: int = 8000) -> dict:
+def call_regulus(client: OpenClawCronClient, *, system_prompt: str, user_payload: str, model: str, max_tokens: int = 8000) -> dict:
     text = client.messages(model=model, system=system_prompt, user=user_payload, max_tokens=max_tokens)
     json_str = _extract_json_block(text)
 
