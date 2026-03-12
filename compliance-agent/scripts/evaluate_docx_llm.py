@@ -112,12 +112,9 @@ def expand_window(indices: List[int], radius: int, max_total: int) -> List[int]:
 
 
 def load_auth_token(provider: str) -> str:
-    """Load provider API key from OpenClaw auth profiles.
+    """Deprecated in Option (1) cron-routed mode.
 
-    OpenClaw stores auth profiles in a dict keyed by `<provider>:<profile>`.
-    We select the first matching provider entry that has a token-like field.
-
-    This reads local state. Token is never printed.
+    Kept for backwards compatibility if we later re-enable direct SDK calls.
     """
     auth_path = Path("/root/.openclaw/agents/main/agent/auth-profiles.json")
     data = json.loads(auth_path.read_text("utf-8"))
@@ -125,7 +122,6 @@ def load_auth_token(provider: str) -> str:
     profiles = data.get("profiles") or data.get("authProfiles") or {}
     if isinstance(profiles, dict):
         for key, p in profiles.items():
-            # key example: anthropic:default
             if not str(key).startswith(provider + ":"):
                 continue
             if isinstance(p, dict):
@@ -137,33 +133,91 @@ def load_auth_token(provider: str) -> str:
 
 
 @dataclass
-class AnthropicClient:
-    api_key: str
+class OpenClawCronClient:
+    """LLM client that routes calls through OpenClaw cron (isolated run).
 
-    def messages(self, *, model: str, system: str, user: str, max_tokens: int = 4000) -> str:
-        import urllib.request
+    This avoids direct provider HTTP auth issues and uses the Gateway's configured
+    auth profiles.
 
-        url = "https://api.anthropic.com/v1/messages"
-        payload = {
-            "model": model.replace("anthropic/", ""),
-            "max_tokens": max_tokens,
-            "system": system,
-            "messages": [{"role": "user", "content": user}],
-        }
-        data = json.dumps(payload).encode("utf-8")
-        req = urllib.request.Request(url, data=data, method="POST")
-        req.add_header("Content-Type", "application/json")
-        req.add_header("x-api-key", self.api_key)
-        req.add_header("anthropic-version", "2023-06-01")
-        with urllib.request.urlopen(req, timeout=120) as resp:
-            body = resp.read().decode("utf-8")
-        j = json.loads(body)
-        # content is list of blocks
-        parts = []
-        for b in j.get("content", []):
-            if b.get("type") == "text":
-                parts.append(b.get("text", ""))
-        return "".join(parts).strip()
+    We create a one-shot cron job (scheduled far in the future) and `cron run`
+    it immediately, then fetch the latest run summary.
+    """
+
+    openclaw_repo_dir: Path = Path("/opt/openclaw")
+
+    def messages(self, *, model: str, system: str, user: str, max_tokens: int = 8000) -> str:
+        # Note: max_tokens cannot be enforced via cron directly; we keep it for
+        # interface parity and prompt discipline.
+        prompt = (
+            system.strip()
+            + "\n\n"
+            + "# INPUT (machine-readable JSON)\n"
+            + user.strip()
+            + "\n\n"
+            + "# OUTPUT\nReturn raw JSON only."
+        )
+
+        add_cmd = [
+            "pnpm",
+            "-s",
+            "openclaw",
+            "cron",
+            "add",
+            "--json",
+            "--name",
+            "doc-eval-llm-call",
+            "--at",
+            "1h",
+            "--session",
+            "isolated",
+            "--no-deliver",
+            "--delete-after-run",
+            "--model",
+            model,
+            "--thinking",
+            "low",
+            "--timeout-seconds",
+            "2400",
+            "--message",
+            prompt,
+        ]
+        job_raw = subprocess.check_output(add_cmd, cwd=str(self.openclaw_repo_dir))
+        job = json.loads(job_raw.decode("utf-8"))
+        job_id = job["id"]
+
+        run_cmd = [
+            "pnpm",
+            "-s",
+            "openclaw",
+            "cron",
+            "run",
+            "--expect-final",
+            "--timeout",
+            "2400000",
+            job_id,
+        ]
+        subprocess.check_call(run_cmd, cwd=str(self.openclaw_repo_dir))
+
+        runs_cmd = [
+            "pnpm",
+            "-s",
+            "openclaw",
+            "cron",
+            "runs",
+            "--id",
+            job_id,
+            "--limit",
+            "1",
+        ]
+        runs_raw = subprocess.check_output(runs_cmd, cwd=str(self.openclaw_repo_dir))
+        runs = json.loads(runs_raw.decode("utf-8"))
+        entries = runs.get("entries") or []
+        if not entries:
+            raise RuntimeError("cron run produced no entries")
+        summary = entries[0].get("summary")
+        if not isinstance(summary, str) or not summary.strip():
+            raise RuntimeError("cron run summary missing/empty")
+        return summary.strip()
 
 
 def build_questions(profile: dict) -> List[dict]:
@@ -361,9 +415,8 @@ def main() -> None:
     gdpr_app = [r for r in gdpr_rules if apply_contract_filter(r)]
     nis2_app = [r for r in nis2_rules if apply_contract_filter(r)]
 
-    # Setup LLM client
-    api_key = load_auth_token("anthropic")
-    client = AnthropicClient(api_key)
+    # Setup LLM client (route via OpenClaw cron to use Gateway auth)
+    client = OpenClawCronClient()
 
     # Load system prompts
     sys_gdpr = (ROOT / "prompts/evaluator_gdpr_system_prompt.md").read_text("utf-8")
