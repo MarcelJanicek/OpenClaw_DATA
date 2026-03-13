@@ -459,7 +459,17 @@ def findings_to_annotations(findings: List[dict], regulation: str) -> List[dict]
         if status == "UNKNOWN" and missing_inputs:
             text += f" MISSING: {', '.join(map(str, missing_inputs))}"
 
-        ann.append({"paragraph_index": pidx, "author": "ComplianceAgent", "text": text, "quote": quote})
+        ann.append({
+            "paragraph_index": pidx,
+            "author": "ComplianceAgent",
+            "text": text,
+            "quote": quote,
+            "status": status,
+            "rule_id": rid,
+            "checklist_item_id": cid,
+            "regulation": regulation,
+            "missing_inputs": missing_inputs,
+        })
 
     return ann
 
