@@ -52,7 +52,9 @@ from typing import Any, Dict, List, Tuple
 import yaml
 
 # Allow running as a script (no package install)
-sys.path.insert(0, str(ROOT))
+# (ROOT is defined just below; we temporarily compute it here too)
+_THIS_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(_THIS_ROOT))
 from scripts.citation_validate import validate_citations
 
 # --- Paths ---
