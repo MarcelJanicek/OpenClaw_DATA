@@ -87,9 +87,9 @@ def main() -> None:
     ann_doc = load_yaml(Path(args.in_path)) or {}
     annotations = ann_doc.get("annotations", ann_doc) or []
 
-    # Build quick access arrays
     texts = [p.get("text", "") for p in paras]
     styles = [p.get("style") for p in paras]
+    is_heading_flags = [bool(p.get("is_heading")) for p in paras]
 
     def next_valid_index(start: int) -> int:
         for j in range(max(0, start), len(paras)):
@@ -97,19 +97,62 @@ def main() -> None:
                 return j
         return start
 
+    def heading_anchor(idx: int) -> int:
+        j = min(max(idx, 0), len(paras) - 1)
+        for k in range(j, -1, -1):
+            if is_heading_flags[k] and not is_excluded(styles[k], texts[k]):
+                return k
+        return idx
+
+    def find_schedule_ref_anchor(missing_inputs: List[str]) -> int | None:
+        needles = [str(x).strip() for x in (missing_inputs or []) if str(x).strip()]
+        for i, t in enumerate(texts):
+            tl = (t or "").lower()
+            for n in needles:
+                if n and n.lower() in tl:
+                    return i
+        for i, t in enumerate(texts):
+            tl = (t or "").lower()
+            if any(w in tl for w in ["schedule", "annex", "appendix", "příloha", "priloha"]):
+                return i
+        return None
+
     sanitized = []
     moved = 0
+    reanchored_unknown = 0
+    reanchored_to_heading = 0
+
     for a in annotations:
         try:
             pidx = int(a.get("paragraph_index"))
         except Exception:
             continue
 
+        status = str(a.get("status") or "").upper()
+        missing_inputs = a.get("missing_inputs") or []
+
         pidx2 = pidx
-        if pidx < 0 or pidx >= len(paras) or is_excluded(styles[pidx], texts[pidx]):
-            pidx2 = next_valid_index(pidx + 1)
-            if pidx2 != pidx:
+
+        # Step 3: UNKNOWN → anchor to schedule/annex reference (if possible)
+        if status == "UNKNOWN" and missing_inputs:
+            ref = find_schedule_ref_anchor(missing_inputs)
+            if ref is not None:
+                pidx2 = ref
+                reanchored_unknown += 1
+
+        # PASS/PARTIAL/FAIL → anchor to nearest heading above
+        if status in ("PASS", "PARTIAL", "FAIL"):
+            h = heading_anchor(pidx2)
+            if h != pidx2:
+                pidx2 = h
+                reanchored_to_heading += 1
+
+        # Exclusions / empty paragraphs
+        if pidx2 < 0 or pidx2 >= len(paras) or is_excluded(styles[pidx2], texts[pidx2]):
+            pidx3 = next_valid_index(pidx2 + 1)
+            if pidx3 != pidx2:
                 moved += 1
+            pidx2 = pidx3
 
         text = strip_debug(str(a.get("text", "")).strip())
         if not text:
@@ -127,6 +170,8 @@ def main() -> None:
             **(ann_doc.get("meta") or {}),
             "sanitized": {
                 "moved_annotations": moved,
+                "reanchored_unknown": reanchored_unknown,
+                "reanchored_to_heading": reanchored_to_heading,
                 "excluded_styles": sorted(list(EXCLUDED_STYLE_EXACT)),
                 "excluded_style_prefixes": list(EXCLUDED_STYLE_PREFIXES),
             },
