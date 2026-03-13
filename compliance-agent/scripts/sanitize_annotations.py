@@ -121,6 +121,8 @@ def main() -> None:
     moved = 0
     reanchored_unknown = 0
     reanchored_to_heading = 0
+    dedup_dropped = 0
+    seen = set()
 
     for a in annotations:
         try:
@@ -158,6 +160,17 @@ def main() -> None:
         if not text:
             continue
 
+        # Deduplicate: same rule/checklist/status + same normalized text/missing_inputs
+        rid = str(a.get("rule_id") or "")
+        cid = str(a.get("checklist_item_id") or "")
+        status2 = str(a.get("status") or "")
+        miss2 = ",".join(sorted([str(x).strip() for x in (a.get("missing_inputs") or []) if str(x).strip()]))
+        key = (rid, cid, status2, miss2, text)
+        if key in seen:
+            dedup_dropped += 1
+            continue
+        seen.add(key)
+
         sanitized.append({
             **{k: v for k, v in a.items() if k not in ("paragraph_index", "text")},
             "paragraph_index": pidx2,
@@ -172,6 +185,7 @@ def main() -> None:
                 "moved_annotations": moved,
                 "reanchored_unknown": reanchored_unknown,
                 "reanchored_to_heading": reanchored_to_heading,
+                "dedup_dropped": dedup_dropped,
                 "excluded_styles": sorted(list(EXCLUDED_STYLE_EXACT)),
                 "excluded_style_prefixes": list(EXCLUDED_STYLE_PREFIXES),
             },

@@ -139,44 +139,111 @@ def match_heading(p: dict, needles: List[str]) -> bool:
     return any(n in t for n in needles if n)
 
 
-def retrieve_candidate_indices(paragraphs: List[dict], item: dict, *, max_total: int = 80) -> List[int]:
-    """Step 4 (no embeddings): structure-aware retrieval.
+REF_CLAUSE_RE = re.compile(r"\b(?:clause|section)\s+(\d+(?:\.\d+)*)\b", re.I)
+REF_SCHEDULE_RE = re.compile(r"\bSchedule\s+([0-9]+(?:\.[0-9]+)*)\b", re.I)
+REF_ANNEX_RE = re.compile(r"\bAnnex\s+([A-Z0-9]+)\b", re.I)
 
-    Sources of candidates:
-    - keyword hits (full text)
-    - headings that match keywords/title
-    - schedule/annex reference paragraphs when missing inputs likely
+
+def extract_references(text: str) -> dict:
+    t = text or ""
+    return {
+        "clauses": sorted(set(REF_CLAUSE_RE.findall(t))),
+        "schedules": sorted(set(REF_SCHEDULE_RE.findall(t))),
+        "annexes": sorted(set(REF_ANNEX_RE.findall(t))),
+    }
+
+
+def build_clause_index(paragraphs: List[dict]) -> dict:
+    """Map clause numbers to heading paragraph indices (best-effort)."""
+    m = {}
+    for i, p in enumerate(paragraphs):
+        if not p.get("is_heading"):
+            continue
+        cno = p.get("clause_number")
+        if isinstance(cno, str) and cno.strip():
+            m[cno.strip()] = i
+    return m
+
+
+def retrieve_candidate_indices(
+    paragraphs: List[dict],
+    item: dict,
+    *,
+    clause_index: dict | None = None,
+    max_total: int = 80,
+) -> List[int]:
+    """Step 4 (no embeddings): clause-span + reference-aware retrieval.
+
+    Strategy:
+    1) Prefer matching headings (by keywords/title) and include the whole clause span.
+    2) Expand one level of cross-references from that span (clause X.Y / Schedule N.N / Annex X).
+    3) Fallback to keyword hits (filtered by non-TOC styles) + small window.
+
+    Never include TOC/Title/empty paragraphs.
     """
+    clause_index = clause_index or build_clause_index(paragraphs)
+
     needles = []
     for x in (item.get("keywords_cs") or []) + (item.get("keywords_en") or []):
         if x and len(x) >= 3:
             needles.append(x.lower())
-    for x in [item.get("title_en"), item.get("title_cs")] :
+    for x in [item.get("title_en"), item.get("title_cs")]:
         if x:
             needles.extend([w.lower() for w in re.findall(r"[A-Za-zÁ-ž]{4,}", x)])
     needles = sorted(set(needles))
 
-    # 1) keyword hits in body
-    hits = keyword_hits(paragraphs, needles, max_hits=30)
-    cand = set(expand_window(hits, radius=1, max_total=max_total))
+    cand = set()
 
-    # 2) heading matches → include their section spans
+    # 1) heading match → clause span
+    matched_heading_idxs = []
     for i, p in enumerate(paragraphs):
         if match_heading(p, needles):
-            for idx in section_span(paragraphs, i, max_len=60):
+            matched_heading_idxs.append(i)
+            for idx in section_span(paragraphs, i, max_len=80):
                 cand.add(idx)
 
-    # 3) schedule/annex references
-    sched_needles = ["schedule", "annex", "appendix", "příloha", "priloha"]
-    if any(n in needles for n in ["schedule", "annex", "appendix", "příloha", "priloha"]):
+    # 2) one-hop reference expansion from candidate texts
+    refs = {"clauses": set(), "schedules": set(), "annexes": set()}
+    for idx in list(cand):
+        r = extract_references(paragraphs[idx].get("text") or "")
+        refs["clauses"].update(r["clauses"])
+        refs["schedules"].update(r["schedules"])
+        refs["annexes"].update(r["annexes"])
+
+    # include referenced clauses (span)
+    for cno in sorted(refs["clauses"]):
+        hi = clause_index.get(cno)
+        if hi is not None:
+            for idx in section_span(paragraphs, hi, max_len=60):
+                cand.add(idx)
+
+    # include paragraphs mentioning referenced schedules/annexes
+    sched_needles = [f"schedule {s}".lower() for s in sorted(refs["schedules"])]
+    annex_needles = [f"annex {a}".lower() for a in sorted(refs["annexes"])]
+    if sched_needles or annex_needles:
         for i, p in enumerate(paragraphs):
             tl = (p.get("text") or "").lower()
-            if any(s in tl for s in sched_needles):
+            if any(n in tl for n in sched_needles + annex_needles):
                 cand.add(i)
 
-    out = sorted(cand)
-    if len(out) > max_total:
-        out = out[:max_total]
+    # 3) fallback keyword hits
+    if not cand:
+        hits = keyword_hits(paragraphs, needles, max_hits=30)
+        cand.update(expand_window(hits, radius=1, max_total=max_total))
+
+    # filter out excluded paragraphs (TOC/title/empty)
+    out = []
+    for idx in sorted(cand):
+        p = paragraphs[idx]
+        style = p.get("style")
+        text = p.get("text")
+        # reuse sanitizer's exclusion logic (simple local check)
+        if not text or (style in ("Title", "Subtitle")) or (isinstance(style, str) and style.startswith("TOC")):
+            continue
+        out.append(idx)
+        if len(out) >= max_total:
+            break
+
     return out
 
 
@@ -428,7 +495,7 @@ def call_regulus(
     raise ValueError(f"All models failed. Last error: {last_err}")
 
 
-def make_user_payload(paragraphs: List[dict], profile: dict, ruleset_rules: List[dict], doc_type: str, batch_items: List[Tuple[dict, dict]]) -> tuple[str, list[dict]]:
+def make_user_payload(paragraphs: List[dict], profile: dict, ruleset_rules: List[dict], doc_type: str, batch_items: List[Tuple[dict, dict]], *, definitions: dict | None = None) -> tuple[str, list[dict]]:
     """Create a user payload for a batch of checklist items.
 
     Returns (payload_json, paragraphs_block) so we can validate citations against
@@ -438,8 +505,9 @@ def make_user_payload(paragraphs: List[dict], profile: dict, ruleset_rules: List
 
     item_blocks = []
     used_indices = set()
+    clause_index = build_clause_index(paragraphs)
     for rule, item in batch_items:
-        expanded = retrieve_candidate_indices(paragraphs, item, max_total=80)
+        expanded = retrieve_candidate_indices(paragraphs, item, clause_index=clause_index, max_total=80)
         for idx in expanded:
             used_indices.add(idx)
         item_blocks.append({
@@ -459,15 +527,33 @@ def make_user_payload(paragraphs: List[dict], profile: dict, ruleset_rules: List
         if txt:
             paragraphs_block.append({"paragraph_index": idx, "text": txt})
 
+    # Include only relevant definitions (selective):
+    # - pick terms that appear in the candidate paragraphs and exist in definitions map
+    defs_map = definitions or {}
+    relevant_defs = {}
+    if defs_map:
+        blob = " ".join([p["text"] for p in paragraphs_block if p.get("text")])
+        # quoted terms
+        for term in re.findall(r"\"([^\"]{2,60})\"", blob):
+            t = term.strip()
+            if t in defs_map:
+                relevant_defs[t] = defs_map[t]
+        # ALLCAPS-ish terms
+        for term in re.findall(r"\b[A-Z][A-Z0-9_]{3,}\b", blob):
+            if term in defs_map:
+                relevant_defs[term] = defs_map[term]
+
     payload = {
         "doc_type": doc_type,
         "entity_profile": profile,
         "checklist_items": item_blocks,
         "paragraphs": paragraphs_block,
+        "definitions": relevant_defs,
         "instructions": [
             "Evaluate ONLY the provided checklist_items.",
+            "NEVER comment the Table of Contents (TOC) or navigation text.",
             "CITATION RULE: any quote MUST be copied verbatim from the provided paragraphs.",
-            "If required inputs are missing, set status UNKNOWN and populate missing_inputs[].",
+            "If required inputs are missing, set status FAIL and populate missing_inputs[].",
             "Return RAW JSON only in the required schema.",
         ],
     }
@@ -572,6 +658,7 @@ def main() -> None:
     extract_docx(docx, extracted_path)
     extracted = load_yaml(extracted_path)
     paragraphs = extracted.get("paragraphs", [])
+    definitions = extracted.get("definitions", {}) or {}
     paragraphs = [{**p, "text": normalize_ws(p.get("text", ""))} for p in paragraphs]
     doc_type = detect_doc_type(paragraphs)
 
@@ -616,7 +703,7 @@ def main() -> None:
 
     for i in range(0, len(gdpr_items), args.batch_size):
         batch = gdpr_items[i : i + args.batch_size]
-        user_payload, payload_paras = make_user_payload(paragraphs, profile, gdpr_app, doc_type, batch)
+        user_payload, payload_paras = make_user_payload(paragraphs, profile, gdpr_app, doc_type, batch, definitions=definitions)
         try:
             parsed = call_regulus(client, system_prompt=sys_gdpr, user_payload=user_payload, models=model_chain)
         except ValueError as e:
@@ -665,7 +752,7 @@ def main() -> None:
 
     for i in range(0, len(nis2_items), args.batch_size):
         batch = nis2_items[i : i + args.batch_size]
-        user_payload, payload_paras = make_user_payload(paragraphs, profile, nis2_app, doc_type, batch)
+        user_payload, payload_paras = make_user_payload(paragraphs, profile, nis2_app, doc_type, batch, definitions=definitions)
         try:
             parsed = call_regulus(client, system_prompt=sys_nis2, user_payload=user_payload, models=model_chain)
         except ValueError as e:
