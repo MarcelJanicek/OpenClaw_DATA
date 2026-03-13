@@ -122,7 +122,8 @@ def main() -> None:
     reanchored_unknown = 0
     reanchored_to_heading = 0
     dedup_dropped = 0
-    seen = set()
+    dedup_referenced = 0
+    primary_map = {}  # key -> primary paragraph_index
 
     for a in annotations:
         try:
@@ -166,15 +167,25 @@ def main() -> None:
         status2 = str(a.get("status") or "")
         miss2 = ",".join(sorted([str(x).strip() for x in (a.get("missing_inputs") or []) if str(x).strip()]))
         key = (rid, cid, status2, miss2, text)
-        if key in seen:
-            dedup_dropped += 1
+        if key in primary_map:
+            # Keep a reference comment instead of duplicating the full text
+            primary_idx = primary_map[key]
+            ref_text = f"{text} (duplicate; see primary at paragraph_index={primary_idx})"
+            dedup_referenced += 1
+            sanitized.append({
+                **{k: v for k, v in a.items() if k not in ("paragraph_index", "text")},
+                "paragraph_index": pidx2,
+                "text": ref_text,
+                "primary_paragraph_index": primary_idx,
+            })
             continue
-        seen.add(key)
 
+        primary_map[key] = pidx2
         sanitized.append({
             **{k: v for k, v in a.items() if k not in ("paragraph_index", "text")},
             "paragraph_index": pidx2,
             "text": text,
+            "primary_paragraph_index": pidx2,
         })
 
     out = {
@@ -186,6 +197,8 @@ def main() -> None:
                 "reanchored_unknown": reanchored_unknown,
                 "reanchored_to_heading": reanchored_to_heading,
                 "dedup_dropped": dedup_dropped,
+                "dedup_referenced": dedup_referenced,
+                "dedup_primary": len(primary_map),
                 "excluded_styles": sorted(list(EXCLUDED_STYLE_EXACT)),
                 "excluded_style_prefixes": list(EXCLUDED_STYLE_PREFIXES),
             },
