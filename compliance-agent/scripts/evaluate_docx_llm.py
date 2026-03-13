@@ -51,6 +51,8 @@ from typing import Any, Dict, List, Tuple
 
 import yaml
 
+# Allow running as a script (no package install)
+sys.path.insert(0, str(ROOT))
 from scripts.citation_validate import validate_citations
 
 # --- Paths ---
