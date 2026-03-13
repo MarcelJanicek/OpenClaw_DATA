@@ -88,7 +88,10 @@ def add_comment(comments_tree: etree._ElementTree, cid: int, author: str, text: 
 
 
 def anchor_comment_to_paragraph(doc_tree: etree._ElementTree, paragraph_index: int, cid: int) -> bool:
-    paras = doc_tree.getroot().xpath(".//w:body/w:p", namespaces=NS)
+    # NOTE: Must match paragraph ordering used by extraction (python-docx includes
+    # paragraphs nested in tables). Use descendant search to include all body
+    # paragraphs, not only direct children of w:body.
+    paras = doc_tree.getroot().xpath(".//w:body//w:p", namespaces=NS)
     if paragraph_index < 0 or paragraph_index >= len(paras):
         return False
 
