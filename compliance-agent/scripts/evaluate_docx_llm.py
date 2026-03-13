@@ -324,15 +324,29 @@ def _extract_json_block(text: str) -> str:
     return cleaned[start:end+1]
 
 
-def call_regulus(client: OpenClawCronClient, *, system_prompt: str, user_payload: str, model: str, max_tokens: int = 8000) -> dict:
-    text = client.messages(model=model, system=system_prompt, user=user_payload, max_tokens=max_tokens)
-    json_str = _extract_json_block(text)
+def call_regulus(
+    client: OpenClawCronClient,
+    *,
+    system_prompt: str,
+    user_payload: str,
+    models: List[str],
+    max_tokens: int = 8000,
+) -> dict:
+    """Call evaluator with model fallback chain.
 
-    try:
-        parsed = json.loads(json_str)
-    except Exception as e:
-        raise ValueError(f"Failed to parse JSON from model: {e}\nRaw:\n{json_str[:2000]}")
-    return parsed
+    `models` is tried in order until one returns parseable JSON.
+    """
+    last_err: Exception | None = None
+    for m in models:
+        try:
+            text = client.messages(model=m, system=system_prompt, user=user_payload, max_tokens=max_tokens)
+            json_str = _extract_json_block(text)
+            return json.loads(json_str)
+        except Exception as e:
+            last_err = e
+            print(f"Warning: model {m} failed ({type(e).__name__}): {str(e)[:200]}", file=sys.stderr)
+            continue
+    raise ValueError(f"All models failed. Last error: {last_err}")
 
 
 def make_user_payload(paragraphs: List[dict], profile: dict, ruleset_rules: List[dict], doc_type: str, batch_items: List[Tuple[dict, dict]]) -> str:
@@ -440,7 +454,17 @@ def main() -> None:
     ap.add_argument("--docx", required=True)
     ap.add_argument("--profile", required=True)
     ap.add_argument("--outprefix", required=True)
-    ap.add_argument("--model", default="anthropic/claude-opus-4-6")
+    ap.add_argument(
+        "--model",
+        default="anthropic/claude-opus-4-6",
+        help="Primary model for evaluation calls (will fall back if configured)",
+    )
+    ap.add_argument(
+        "--model-fallback",
+        action="append",
+        default=[],
+        help="Fallback model (repeatable). Default chain: sonnet then openai-codex/gpt-5.2",
+    )
     ap.add_argument("--batch-size", type=int, default=3)
     args = ap.parse_args()
 
@@ -485,6 +509,10 @@ def main() -> None:
     sys_gdpr = (ROOT / "prompts/evaluator_gdpr_system_prompt.md").read_text("utf-8")
     sys_nis2 = (ROOT / "prompts/evaluator_nis2cz_system_prompt.md").read_text("utf-8")
 
+    # Model chain
+    fallbacks = args.model_fallback or ["anthropic/claude-sonnet-4-6", "openai-codex/gpt-5.2"]
+    model_chain = [args.model, *fallbacks]
+
     # Evaluate GDPR in batches
     gdpr_items = iter_checklist_items(gdpr_app)
     gdpr_findings = []
@@ -494,7 +522,7 @@ def main() -> None:
         batch = gdpr_items[i : i + args.batch_size]
         user_payload = make_user_payload(paragraphs, profile, gdpr_app, doc_type, batch)
         try:
-            parsed = call_regulus(client, system_prompt=sys_gdpr, user_payload=user_payload, model=args.model)
+            parsed = call_regulus(client, system_prompt=sys_gdpr, user_payload=user_payload, models=model_chain)
         except ValueError as e:
             # If JSON parsing fails, log and skip (return UNKNOWN for items in this batch)
             print(f"Warning: GDPR batch {i//args.batch_size} failed to parse: {str(e)[:200]}", file=sys.stderr)
@@ -527,7 +555,7 @@ def main() -> None:
         batch = nis2_items[i : i + args.batch_size]
         user_payload = make_user_payload(paragraphs, profile, nis2_app, doc_type, batch)
         try:
-            parsed = call_regulus(client, system_prompt=sys_nis2, user_payload=user_payload, model=args.model)
+            parsed = call_regulus(client, system_prompt=sys_nis2, user_payload=user_payload, models=model_chain)
         except ValueError as e:
             # If JSON parsing fails, log and skip (return UNKNOWN for items in this batch)
             print(f"Warning: NIS2-CZ batch {i//args.batch_size} failed to parse: {str(e)[:200]}", file=sys.stderr)
