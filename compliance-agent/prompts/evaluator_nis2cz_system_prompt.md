@@ -32,12 +32,13 @@ If any is unknown, output `result.status: questions` with these:
 ## Output format (required)
 Return **raw JSON only** (no markdown fences, no ``` blocks, no prose outside JSON).
 
-IMPORTANT: Keep the output SMALL so it fits in OpenClaw cron summaries.
-- Do NOT include long quotes.
-- Do NOT include full paragraph text.
-- Evidence must be paragraph indices only.
-- notes must be a single-line string, max 300 characters.
-- Omit remediation / suggested clause text in this run.
+IMPORTANT: Output must be VALID JSON and CITATION-GROUNDED.
+- For PASS/PARTIAL/FAIL: include `evidence` with at least 1 item `{paragraph_index, quote}`.
+  - `quote` MUST be an exact substring of the provided paragraph text (verbatim, keep it short <= 240 chars).
+- For UNKNOWN: set `missing_inputs` (non-empty list) describing what is missing (e.g., "Schedule 2.2.1", "DPA annex", "Security Measures schedule").
+- `notes` should be concise (<= 600 chars).
+- You MAY include remediation text, but keep it concise.
+
 
 JSON rules:
 - Wrap all strings in double quotes.
@@ -46,39 +47,26 @@ JSON rules:
 
 Required JSON schema (top-level):
 {
-  "result": {"status": "completed", "ruleset": "nis2-cz"},
+  "result": {"status": "questions|completed", "ruleset": "nis2-cz"},
   "questions": [],
   "findings": [
     {
-      "rule_id": "...",
-      "checklist_item_id": "...",
+      "rule_id": "NIS2CZ-...",
+      "checklist_item_id": "ANN5-d|ANN2-a|...",
       "status": "PASS|PARTIAL|FAIL|UNKNOWN",
-      "evidence_paragraph_indices": [0,1,2],
-      "notes": "<=300 chars"
+      "evidence": [{"paragraph_index": 123, "quote": "..."}],
+      "missing_inputs": ["Schedule X"],
+      "notes": "...",
+      "remediation": "..."
     }
-  ]
+  ],
+  "annotations": [
+    {
+      "paragraph_index": 123,
+      "author": "Regulus-Eval-NIS2CZ",
+      "text": "[NIS2-CZ][<rule_id>][<checklist_item_id>][<status>] QUOTE: ... ISSUE: ...",
+      "quote": "..."
+    }
+  ],
+  "summary": {"missing_inputs": []}
 }
-
-
-```yaml
-result:
-  status: questions|completed
-  ruleset: nis2-cz
-questions: []
-findings:
-  - rule_id: "NIS2CZ-..."
-    checklist_item_id: "ANN5-d" # etc
-    status: PASS|FAIL|PARTIAL|UNKNOWN|NOT_APPLICABLE
-    evidence:
-      - paragraph_index: 198
-        quote: "..."
-    notes: "..."
-    remediation: "..." # include clause wording when FAIL/PARTIAL
-annotations:
-  - paragraph_index: 198
-    author: "Regulus-Eval-NIS2CZ"
-    text: "[NIS2-CZ][<rule_id>][<checklist_item_id>][<status>] QUOTE: ...\nISSUE: ...\nSUGGESTED TEXT: ..."
-summary:
-  totals: {pass: 0, fail: 0, partial: 0, unknown: 0, not_applicable: 0}
-  missing_inputs: []
-```

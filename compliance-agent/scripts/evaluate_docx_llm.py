@@ -51,6 +51,8 @@ from typing import Any, Dict, List, Tuple
 
 import yaml
 
+from scripts.citation_validate import validate_citations
+
 # --- Paths ---
 ROOT = Path(__file__).resolve().parents[1]
 VENV_PY = ROOT / ".venv/bin/python"
@@ -349,22 +351,20 @@ def call_regulus(
     raise ValueError(f"All models failed. Last error: {last_err}")
 
 
-def make_user_payload(paragraphs: List[dict], profile: dict, ruleset_rules: List[dict], doc_type: str, batch_items: List[Tuple[dict, dict]]) -> str:
+def make_user_payload(paragraphs: List[dict], profile: dict, ruleset_rules: List[dict], doc_type: str, batch_items: List[Tuple[dict, dict]]) -> tuple[str, list[dict]]:
     """Create a user payload for a batch of checklist items.
 
-    batch_items: list of (rule, item)
+    Returns (payload_json, paragraphs_block) so we can validate citations against
+    the exact text sent to the model.
     """
-    # Build a compact paragraph map
     para_map = {int(p["paragraph_index"]): p.get("text", "") for p in paragraphs}
 
-    # Pre-retrieve candidate paragraphs per item
     item_blocks = []
     used_indices = set()
     for rule, item in batch_items:
         kw = (item.get("keywords_cs", []) or []) + (item.get("keywords_en", []) or [])
         hits = keyword_hits(paragraphs, kw, max_hits=20)
         expanded = expand_window(hits, radius=1, max_total=40)
-        # If none, fallback: empty; evaluator should mark FAIL/UNKNOWN accordingly
         for idx in expanded:
             used_indices.add(idx)
         item_blocks.append({
@@ -387,25 +387,17 @@ def make_user_payload(paragraphs: List[dict], profile: dict, ruleset_rules: List
     payload = {
         "doc_type": doc_type,
         "entity_profile": profile,
-        "rules": [
-            {
-                "rule_id": r.get("id"),
-                "title": r.get("title"),
-                "severity": r.get("severity"),
-                "sources": r.get("sources", []),
-            }
-            for r, _ in batch_items
-        ],
         "checklist_items": item_blocks,
         "paragraphs": paragraphs_block,
         "instructions": [
             "Evaluate ONLY the provided checklist_items.",
-            "Use provided paragraphs; if required evidence is missing (e.g., schedules), return UNKNOWN and list missing inputs.",
-            "Return YAML in the required schema with findings+annotations for these items.",
+            "CITATION RULE: any quote MUST be copied verbatim from the provided paragraphs.",
+            "If required inputs are missing, set status UNKNOWN and populate missing_inputs[].",
+            "Return RAW JSON only in the required schema.",
         ],
     }
 
-    return json.dumps(payload, ensure_ascii=False)
+    return json.dumps(payload, ensure_ascii=False), paragraphs_block
 
 
 def iter_checklist_items(rules: List[dict]) -> List[Tuple[dict, dict]]:
@@ -520,7 +512,7 @@ def main() -> None:
 
     for i in range(0, len(gdpr_items), args.batch_size):
         batch = gdpr_items[i : i + args.batch_size]
-        user_payload = make_user_payload(paragraphs, profile, gdpr_app, doc_type, batch)
+        user_payload, payload_paras = make_user_payload(paragraphs, profile, gdpr_app, doc_type, batch)
         try:
             parsed = call_regulus(client, system_prompt=sys_gdpr, user_payload=user_payload, models=model_chain)
         except ValueError as e:
@@ -539,6 +531,22 @@ def main() -> None:
         if parsed.get("result", {}).get("status") == "questions":
             dump_yaml(parsed, outprefix.with_suffix(".gdpr.questions.yaml"))
             return
+
+        cit_errs = validate_citations(parsed, payload_paras)
+        if cit_errs:
+            retry_payload = json.loads(user_payload)
+            retry_payload["validation_errors"] = cit_errs[:20]
+            retry_payload["instructions"].append(
+                "VALIDATION FAILED: Fix evidence quotes so each quote is a verbatim substring of the referenced paragraph."
+            )
+            parsed = call_regulus(
+                client,
+                system_prompt=sys_gdpr,
+                user_payload=json.dumps(retry_payload, ensure_ascii=False),
+                models=model_chain,
+            )
+            validate_eval_output(parsed, "gdpr")
+
         gdpr_findings.extend(parsed.get("findings", []) or [])
         for x in (parsed.get("summary", {}) or {}).get("missing_inputs", []) or []:
             missing_inputs.add(str(x))
@@ -553,7 +561,7 @@ def main() -> None:
 
     for i in range(0, len(nis2_items), args.batch_size):
         batch = nis2_items[i : i + args.batch_size]
-        user_payload = make_user_payload(paragraphs, profile, nis2_app, doc_type, batch)
+        user_payload, payload_paras = make_user_payload(paragraphs, profile, nis2_app, doc_type, batch)
         try:
             parsed = call_regulus(client, system_prompt=sys_nis2, user_payload=user_payload, models=model_chain)
         except ValueError as e:
@@ -572,6 +580,22 @@ def main() -> None:
         if parsed.get("result", {}).get("status") == "questions":
             dump_yaml(parsed, outprefix.with_suffix(".nis2.questions.yaml"))
             return
+
+        cit_errs = validate_citations(parsed, payload_paras)
+        if cit_errs:
+            retry_payload = json.loads(user_payload)
+            retry_payload["validation_errors"] = cit_errs[:20]
+            retry_payload["instructions"].append(
+                "VALIDATION FAILED: Fix evidence quotes so each quote is a verbatim substring of the referenced paragraph."
+            )
+            parsed = call_regulus(
+                client,
+                system_prompt=sys_nis2,
+                user_payload=json.dumps(retry_payload, ensure_ascii=False),
+                models=model_chain,
+            )
+            validate_eval_output(parsed, "nis2-cz")
+
         nis2_findings.extend(parsed.get("findings", []) or [])
         for x in (parsed.get("summary", {}) or {}).get("missing_inputs", []) or []:
             missing_inputs2.add(str(x))
