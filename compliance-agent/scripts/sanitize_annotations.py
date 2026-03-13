@@ -133,8 +133,8 @@ def main() -> None:
 
         pidx2 = pidx
 
-        # Step 3: UNKNOWN → anchor to schedule/annex reference (if possible)
-        if status == "UNKNOWN" and missing_inputs:
+        # Step 3: missing_inputs (often missing schedules/annexes) → anchor to schedule/annex reference
+        if missing_inputs:
             ref = find_schedule_ref_anchor(missing_inputs)
             if ref is not None:
                 pidx2 = ref

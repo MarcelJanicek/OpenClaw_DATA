@@ -54,8 +54,14 @@ def validate_citations(model_out: Dict[str, Any], paragraphs: List[Dict[str, Any
                     errs.append(f"finding[{i}].evidence[{j}] quote not found in paragraph {pidx}")
 
         if status == "UNKNOWN":
+            # UNKNOWN is allowed only for true ambiguity (not for missing annexes). Still require missing_inputs.
             if not isinstance(miss, list) or not miss or not all(str(x).strip() for x in miss):
                 errs.append(f"finding[{i}] status=UNKNOWN missing missing_inputs[]")
+
+        # If there is no evidence for a negative outcome, require missing_inputs to explain what is absent.
+        if status in ("FAIL", "PARTIAL"):
+            if (not ev) and (not isinstance(miss, list) or not miss):
+                errs.append(f"finding[{i}] status={status} missing evidence and missing_inputs")
 
     # annotations: if quote provided, validate too
     anns = model_out.get("annotations") or []
