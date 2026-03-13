@@ -416,10 +416,14 @@ def iter_checklist_items(rules: List[dict]) -> List[Tuple[dict, dict]]:
 
 
 def findings_to_annotations(findings: List[dict], regulation: str) -> List[dict]:
-    """Generate DOCX annotations from compact findings.
+    """Generate DOCX annotations from findings.
 
-    Because cron summaries truncate, we keep model outputs compact and generate
-    annotation text deterministically.
+    Step 2 changed the finding schema to be citation-grounded:
+      evidence: [{paragraph_index, quote}]
+
+    Anchoring policy (v1):
+    - If evidence exists: anchor to the first evidence paragraph.
+    - Else: anchor to paragraph 1 (avoid title/TOC 0); sanitizer may further move.
     """
     ann = []
     for f in findings or []:
@@ -427,8 +431,20 @@ def findings_to_annotations(findings: List[dict], regulation: str) -> List[dict]
         cid = f.get("checklist_item_id")
         status = f.get("status", "UNKNOWN")
         notes = normalize_ws(f.get("notes", ""))
-        idxs = f.get("evidence_paragraph_indices") or []
-        pidx = int(idxs[0]) if idxs else 0
+        missing_inputs = f.get("missing_inputs") or []
+
+        evidence = f.get("evidence") or []
+        pidx = 1
+        quote = None
+        if isinstance(evidence, list) and evidence:
+            e0 = evidence[0] or {}
+            try:
+                pidx = int(e0.get("paragraph_index"))
+            except Exception:
+                pidx = 1
+            q = e0.get("quote")
+            if isinstance(q, str) and q.strip():
+                quote = q.strip()
 
         if regulation == "gdpr":
             tag = f"[GDPR][{rid}][{status}]"
@@ -436,12 +452,15 @@ def findings_to_annotations(findings: List[dict], regulation: str) -> List[dict]
             tag = f"[NIS2-CZ][{rid}][{cid}][{status}]"
 
         text = tag
-        if idxs:
-            text += f" evidence_paragraphs={idxs}."
+        if quote:
+            text += f" QUOTE: {normalize_ws(quote)}"
         if notes:
-            text += " " + notes
+            text += f" ISSUE: {notes}"
+        if status == "UNKNOWN" and missing_inputs:
+            text += f" MISSING: {', '.join(map(str, missing_inputs))}"
 
-        ann.append({"paragraph_index": pidx, "text": text})
+        ann.append({"paragraph_index": pidx, "author": "ComplianceAgent", "text": text, "quote": quote})
+
     return ann
 
 
