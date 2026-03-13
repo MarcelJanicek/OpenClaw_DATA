@@ -107,6 +107,79 @@ def keyword_hits(paragraphs: List[dict], keywords: List[str], max_hits: int = 30
     return hits
 
 
+def heading_indices(paragraphs: List[dict]) -> List[int]:
+    return [int(p["paragraph_index"]) for p in paragraphs if p.get("is_heading")]
+
+
+def section_span(paragraphs: List[dict], heading_idx: int, max_len: int = 80) -> List[int]:
+    """Return indices from heading until next heading of same/higher level."""
+    n = len(paragraphs)
+    if heading_idx < 0 or heading_idx >= n:
+        return []
+    lvl = paragraphs[heading_idx].get("heading_level")
+    if lvl is None:
+        lvl = 9
+    out = [heading_idx]
+    for j in range(heading_idx + 1, n):
+        if len(out) >= max_len:
+            break
+        if paragraphs[j].get("is_heading"):
+            lvl2 = paragraphs[j].get("heading_level")
+            lvl2 = lvl2 if lvl2 is not None else 9
+            if lvl2 <= lvl:
+                break
+        out.append(j)
+    return out
+
+
+def match_heading(p: dict, needles: List[str]) -> bool:
+    if not p.get("is_heading"):
+        return False
+    t = (p.get("text") or "").lower()
+    return any(n in t for n in needles if n)
+
+
+def retrieve_candidate_indices(paragraphs: List[dict], item: dict, *, max_total: int = 80) -> List[int]:
+    """Step 4 (no embeddings): structure-aware retrieval.
+
+    Sources of candidates:
+    - keyword hits (full text)
+    - headings that match keywords/title
+    - schedule/annex reference paragraphs when missing inputs likely
+    """
+    needles = []
+    for x in (item.get("keywords_cs") or []) + (item.get("keywords_en") or []):
+        if x and len(x) >= 3:
+            needles.append(x.lower())
+    for x in [item.get("title_en"), item.get("title_cs")] :
+        if x:
+            needles.extend([w.lower() for w in re.findall(r"[A-Za-zÁ-ž]{4,}", x)])
+    needles = sorted(set(needles))
+
+    # 1) keyword hits in body
+    hits = keyword_hits(paragraphs, needles, max_hits=30)
+    cand = set(expand_window(hits, radius=1, max_total=max_total))
+
+    # 2) heading matches → include their section spans
+    for i, p in enumerate(paragraphs):
+        if match_heading(p, needles):
+            for idx in section_span(paragraphs, i, max_len=60):
+                cand.add(idx)
+
+    # 3) schedule/annex references
+    sched_needles = ["schedule", "annex", "appendix", "příloha", "priloha"]
+    if any(n in needles for n in ["schedule", "annex", "appendix", "příloha", "priloha"]):
+        for i, p in enumerate(paragraphs):
+            tl = (p.get("text") or "").lower()
+            if any(s in tl for s in sched_needles):
+                cand.add(i)
+
+    out = sorted(cand)
+    if len(out) > max_total:
+        out = out[:max_total]
+    return out
+
+
 def expand_window(indices: List[int], radius: int, max_total: int) -> List[int]:
     s = set()
     for i in indices:
@@ -366,9 +439,7 @@ def make_user_payload(paragraphs: List[dict], profile: dict, ruleset_rules: List
     item_blocks = []
     used_indices = set()
     for rule, item in batch_items:
-        kw = (item.get("keywords_cs", []) or []) + (item.get("keywords_en", []) or [])
-        hits = keyword_hits(paragraphs, kw, max_hits=20)
-        expanded = expand_window(hits, radius=1, max_total=40)
+        expanded = retrieve_candidate_indices(paragraphs, item, max_total=80)
         for idx in expanded:
             used_indices.add(idx)
         item_blocks.append({
