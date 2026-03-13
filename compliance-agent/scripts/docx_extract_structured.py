@@ -10,7 +10,11 @@ Output includes:
 - style_id, style_name
 - is_in_table, table_depth
 - numbering: numId/ilvl + rendered label if available
-- heading_level (heuristic from style name)
+- heading_level
+- is_heading (derived)
+- section_path (derived heading stack)
+- clause_number / clause_title (heuristic)
+- definitions map (best-effort from Definitions section)
 
 Usage:
   .venv/bin/python scripts/docx_extract_structured.py --in input.docx --out out.yaml
@@ -23,7 +27,7 @@ import re
 import zipfile
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from lxml import etree
 import yaml
@@ -184,6 +188,74 @@ def heading_level(style_name: Optional[str]) -> Optional[int]:
     return None
 
 
+def looks_like_clause_heading(text: str, num_label: Optional[str]) -> bool:
+    t = (text or "").strip()
+    if not t:
+        return False
+    # Headings should be relatively short.
+    if len(t) > 120:
+        return False
+    # If Word numbering exists, treat as heading-ish.
+    if num_label and re.match(r"^\d+(\.\d+)*", num_label):
+        return True
+    # Regex numbered headings like "7.2 Validity" or "1 Definitions"
+    if re.match(r"^\d+(\.\d+)*\s+\S+", t):
+        return True
+    return False
+
+
+def parse_clause_number_and_title(text: str, num_label: Optional[str]) -> Tuple[Optional[str], Optional[str]]:
+    t = (text or "").strip()
+    if not t:
+        return None, None
+
+    # Prefer computed numbering label
+    if num_label and re.match(r"^\d+(\.\d+)*", num_label):
+        # If the text already begins with a number, strip it.
+        title = re.sub(r"^\d+(\.\d+)*\s+", "", t).strip()
+        return num_label, title or None
+
+    m = re.match(r"^(\d+(?:\.\d+)*)\s+(.*)$", t)
+    if m:
+        return m.group(1), (m.group(2).strip() or None)
+
+    return None, None
+
+
+def is_definitions_heading(text: str) -> bool:
+    t = (text or "").strip().lower()
+    return t in {"definitions", "definice"} or t.startswith("definitions") or t.startswith("definice")
+
+
+def extract_definition_pair(text: str) -> Optional[Tuple[str, str]]:
+    """Best-effort extraction of a single definition line.
+
+    Handles:
+    - "\"Term\" means ..."
+    - "“Term” means ..."
+    - "Term: ..."
+    """
+    t = (text or "").strip()
+    if not t:
+        return None
+
+    # Quoted term
+    m = re.match(r"^[\"“”']?([^\"“”']{2,60})[\"”']\s+(means|shall mean|is|refers to)\s+(.*)$", t, flags=re.I)
+    if m:
+        term = m.group(1).strip()
+        defin = m.group(3).strip()
+        return term, defin
+
+    # Term: definition
+    m = re.match(r"^([^:]{2,60}):\s+(.*)$", t)
+    if m:
+        term = m.group(1).strip()
+        defin = m.group(2).strip()
+        return term, defin
+
+    return None
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--in", dest="in_path", required=True)
@@ -202,19 +274,75 @@ def main() -> None:
     num_model = NumberingModel.from_xml(numbering_xml)
     num_renderer = NumberingRenderer(num_model)
 
-    paragraphs = []
+    paragraphs: List[Dict[str, Any]] = []
     ps = doc_root.xpath(".//w:body//w:p", namespaces=NS)
+
+    # heading stack: list of {level:int, title:str}
+    heading_stack: List[Dict[str, Any]] = []
+
+    # Definitions section tracking
+    in_definitions = False
+    definitions_level: Optional[int] = None
+    definitions: Dict[str, Dict[str, Any]] = {}
 
     for idx, p in enumerate(ps):
         text = gettext_p(p)
         sid, _ = get_p_style(p)
         sname = styles.get(sid, {}).get("name") if sid else None
+        hlevel = heading_level(sname)
         numid, ilvl = get_num_pr(p)
         num_label = num_renderer.render(numid, ilvl)
 
         tbl_anc = p.xpath("ancestor::w:tbl", namespaces=NS)
         is_in_table = bool(tbl_anc)
         table_depth = len(tbl_anc)
+
+        # derive heading
+        is_heading = False
+        if hlevel is not None:
+            is_heading = True
+        elif looks_like_clause_heading(text, num_label):
+            # Guard: avoid treating list items / long sentences as headings
+            if ":" in text or text.endswith(":"):
+                is_heading = False
+            elif len(text.split()) > 8:
+                is_heading = False
+            else:
+                is_heading = True
+
+        clause_no, clause_title = (None, None)
+        if is_heading:
+            clause_no, clause_title = parse_clause_number_and_title(text, num_label)
+
+        # Maintain heading stack
+        if is_heading:
+            lvl = hlevel if hlevel is not None else (ilvl + 1 if ilvl is not None else 1)
+            # pop to this level
+            while heading_stack and heading_stack[-1]["level"] >= lvl:
+                heading_stack.pop()
+            heading_stack.append({"level": lvl, "title": text})
+
+            # definitions section start
+            if is_definitions_heading(text):
+                in_definitions = True
+                definitions_level = lvl
+            else:
+                # if we encounter another heading at same/higher level, exit definitions
+                if in_definitions and definitions_level is not None and lvl <= definitions_level:
+                    in_definitions = False
+                    definitions_level = None
+
+        # If we're inside definitions section, try extract term
+        if in_definitions and text:
+            pair = extract_definition_pair(text)
+            if pair:
+                term, defin = pair
+                # basic cleanup
+                term = term.strip().strip("\"“”'")
+                if term and defin and term not in definitions:
+                    definitions[term] = {"definition": defin, "paragraph_index": idx}
+
+        section_path = [h["title"] for h in heading_stack]
 
         paragraphs.append({
             "paragraph_index": idx,
@@ -224,13 +352,18 @@ def main() -> None:
             "is_in_table": is_in_table,
             "table_depth": table_depth,
             "num": {"numId": numid, "ilvl": ilvl, "label": num_label} if numid is not None else None,
-            "heading_level": heading_level(sname),
+            "heading_level": hlevel,
+            "is_heading": is_heading,
+            "section_path": section_path,
+            "clause_number": clause_no,
+            "clause_title": clause_title,
         })
 
     out = {
         "source_file": in_path.name,
         "extraction": {"mode": "ooxml", "paragraph_xpath": ".//w:body//w:p"},
         "paragraphs": paragraphs,
+        "definitions": definitions,
     }
 
     Path(args.out).write_text(yaml.safe_dump(out, sort_keys=False, allow_unicode=True, width=1000), "utf-8")
