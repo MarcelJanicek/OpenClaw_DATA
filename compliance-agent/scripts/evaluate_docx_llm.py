@@ -555,8 +555,31 @@ def main() -> None:
     merge_cmd = [sys.executable, str(ROOT / "scripts/merge_annotations.py"), "--gdpr", str(outprefix.with_suffix(".gdpr.eval.yaml")), "--nis2", str(outprefix.with_suffix(".nis2.eval.yaml")), "--out", str(outprefix.with_suffix(".annotations.yaml"))]
     subprocess.check_call(merge_cmd)
 
+    # Sanitize + re-anchor annotations (avoid title/TOC noise)
+    sanitized_path = outprefix.with_suffix(".annotations.sanitized.yaml")
+    sanitize_cmd = [
+        sys.executable,
+        str(ROOT / "scripts/sanitize_annotations.py"),
+        "--extracted",
+        str(extracted_path),
+        "--in",
+        str(outprefix.with_suffix(".annotations.yaml")),
+        "--out",
+        str(sanitized_path),
+    ]
+    subprocess.check_call(sanitize_cmd)
+
     # Render commented docx
-    annotate_cmd = [str(VENV_PY), str(ROOT / "scripts/nis2cz_docx_annotate.py"), "--in", str(docx), "--annotations", str(outprefix.with_suffix(".annotations.yaml")), "--out", str(outprefix.with_suffix(".commented.docx"))]
+    annotate_cmd = [
+        str(VENV_PY),
+        str(ROOT / "scripts/nis2cz_docx_annotate.py"),
+        "--in",
+        str(docx),
+        "--annotations",
+        str(sanitized_path),
+        "--out",
+        str(outprefix.with_suffix(".commented.docx")),
+    ]
     subprocess.check_call(annotate_cmd)
 
 
