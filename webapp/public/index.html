@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Compliance Document Review</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:        #080c18;
+      --surface:   #0e1428;
+      --surface2:  #141c35;
+      --border:    rgba(255,255,255,0.08);
+      --gold:      #d4a84b;
+      --gold-lt:   #f0c76a;
+      --text:      #f0f4ff;
+      --muted:     #8892b0;
+      --success:   #4ade80;
+      --error:     #f87171;
+      --r:         12px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px 48px;
+      background-image:
+        radial-gradient(ellipse at 15% 60%, rgba(212,168,75,0.05) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 15%, rgba(99,102,241,0.06) 0%, transparent 50%);
+    }
+
+    /* ── Header ── */
+    header {
+      text-align: center;
+      margin-bottom: 44px;
+    }
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.85rem;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .logo span { color: var(--gold); }
+    .tagline {
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 40px 36px;
+      width: 100%;
+      max-width: 520px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.03);
+    }
+
+    /* ── Upload zone ── */
+    .upload-zone {
+      border: 2px dashed rgba(212,168,75,0.28);
+      border-radius: 10px;
+      padding: 44px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+    .upload-zone:hover,
+    .upload-zone.drag-over {
+      border-color: var(--gold);
+      background: rgba(212,168,75,0.04);
+    }
+    .upload-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+    .upload-icon {
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 14px;
+      color: var(--gold);
+      opacity: 0.65;
+    }
+    .upload-zone h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .upload-zone p {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    /* ── File chip ── */
+    .file-chip {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--surface2);
+      border: 1px solid rgba(212,168,75,0.18);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-top: 16px;
+    }
+    .file-chip-icon {
+      width: 34px;
+      height: 34px;
+      background: rgba(212,168,75,0.12);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--gold);
+    }
+    .file-chip-name {
+      font-size: 0.875rem;
+      font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* ── Primary button ── */
+    .btn-primary {
+      display: block;
+      width: 100%;
+      padding: 14px 24px;
+      background: var(--gold);
+      color: #080c18;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      margin-top: 20px;
+      letter-spacing: 0.02em;
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--gold-lt);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 28px rgba(212,168,75,0.28);
+    }
+    .btn-primary:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* ── Error inline ── */
+    .inline-error {
+      background: rgba(248,113,113,0.08);
+      border: 1px solid rgba(248,113,113,0.28);
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: var(--error);
+      font-size: 0.85rem;
+      margin-top: 14px;
+      line-height: 1.5;
+    }
+
+    /* ── Divider ── */
+    .divider { height: 1px; background: var(--border); margin: 28px 0; }
+
+    /* ── Spinner / processing ── */
+    .processing-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 22px;
+      padding: 8px 0 4px;
+    }
+    .spinner {
+      width: 54px;
+      height: 54px;
+      border: 3px solid rgba(212,168,75,0.14);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.85s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .proc-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+    .proc-sub {
+      color: var(--muted);
+      font-size: 0.875rem;
+      line-height: 1.65;
+      max-width: 340px;
+    }
+
+    /* Steps */
+    .steps {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      text-align: left;
+    }
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.875rem;
+      color: var(--muted);
+      transition: color 0.3s;
+    }
+    .step.active { color: var(--text); }
+    .step.done   { color: var(--muted); }
+    .step-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      flex-shrink: 0;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    .step.active .step-dot {
+      background: var(--gold);
+      box-shadow: 0 0 8px rgba(212,168,75,0.55);
+      animation: pdot 1.4s ease-in-out infinite;
+    }
+    .step.done .step-dot { background: var(--success); }
+    @keyframes pdot {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.55; transform: scale(0.75); }
+    }
+
+    /* ── Done ── */
+    .done-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 6px;
+    }
+    .check-ring {
+      width: 64px;
+      height: 64px;
+      border: 2px solid rgba(74,222,128,0.3);
+      background: rgba(74,222,128,0.07);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--success);
+      margin-bottom: 8px;
+      animation: popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+    }
+    @keyframes popIn {
+      from { transform: scale(0.5); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+    .done-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .done-sub {
+      color: var(--muted);
+      font-size: 0.875rem;
+      line-height: 1.6;
+      max-width: 320px;
+    }
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 28px;
+      border: 1.5px solid var(--gold);
+      background: transparent;
+      color: var(--gold);
+      border-radius: 8px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      margin-top: 20px;
+      letter-spacing: 0.02em;
+    }
+    .btn-download:hover {
+      background: rgba(212,168,75,0.1);
+      transform: translateY(-1px);
+    }
+
+    /* ── Reset link ── */
+    .reset-link {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 0.82rem;
+      cursor: pointer;
+      margin-top: 18px;
+      text-decoration: underline;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .reset-link:hover { color: var(--text); }
+
+    /* ── Error phase ── */
+    .error-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--error);
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .btn-secondary {
+      display: block;
+      width: 100%;
+      padding: 13px 24px;
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.2s;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.07); }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 28px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-align: center;
+      opacity: 0.7;
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">AI Compliance <span>Document Review</span></div>
+</header>
+
+<div class="card">
+
+  <!-- ═══ PHASE: UPLOAD ═══ -->
+  <div id="phase-upload">
+    <div class="upload-zone" id="dropzone">
+      <input type="file" id="fileInput" accept=".docx" />
+      <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775
+             5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"/>
+      </svg>
+      <h3>Vložte dokument ke kontrole</h3>
+      <p>Přetáhněte .docx soubor nebo klikněte pro výběr</p>
+    </div>
+
+    <div class="file-chip hidden" id="fileChip">
+      <div class="file-chip-icon">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+        </svg>
+      </div>
+      <span class="file-chip-name" id="chipName">—</span>
+    </div>
+
+    <div class="inline-error hidden" id="uploadError"></div>
+
+    <button class="btn-primary" id="submitBtn" disabled onclick="startUpload()">
+      Spustit analýzu →
+    </button>
+  </div>
+
+  <!-- ═══ PHASE: PROCESSING ═══ -->
+  <div id="phase-processing" class="hidden">
+    <div class="processing-wrap">
+      <div class="spinner"></div>
+      <div>
+        <div class="proc-title">AI agent zpracovává dokument</div>
+        <div class="proc-sub" style="margin-top:6px;">
+          Prosím čekejte — analýza může trvat několik minut
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="steps">
+      <div class="step done" id="step1">
+        <div class="step-dot"></div>
+        <span>Dokument úspěšně nahrán</span>
+      </div>
+      <div class="step active" id="step2">
+        <div class="step-dot"></div>
+        <span>Extrakce struktury dokumentu...</span>
+      </div>
+      <div class="step" id="step3">
+        <div class="step-dot"></div>
+        <span>GDPR &amp; NIS2-CZ compliance analýza...</span>
+      </div>
+      <div class="step" id="step4">
+        <div class="step-dot"></div>
+        <span>Generování komentářů a výstupního dokumentu</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PHASE: DONE ═══ -->
+  <div id="phase-done" class="hidden">
+    <div class="done-wrap">
+      <div class="check-ring">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <div class="done-title">Analýza dokončena</div>
+      <div class="done-sub">
+        Dokument byl úspěšně zkontrolován a okomentován AI agentem.
+        Klikněte níže pro stažení výsledku.
+      </div>
+      <a id="downloadLink" href="#" class="btn-download">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Stáhnout okomentovaný dokument
+      </a>
+      <button class="reset-link" onclick="resetApp()">← Analyzovat další dokument</button>
+    </div>
+  </div>
+
+  <!-- ═══ PHASE: ERROR ═══ -->
+  <div id="phase-error" class="hidden">
+    <div class="error-title">Chyba zpracování</div>
+    <div class="inline-error" id="errorDetail">Neznámá chyba</div>
+    <button class="btn-secondary" onclick="resetApp()">← Zkusit znovu</button>
+  </div>
+
+</div>
+
+<footer>Compliance Review Engine</footer>
+
+<script>
+  let jobId = null;
+  let pollTimer = null;
+
+  const fileInput  = document.getElementById('fileInput');
+  const dropzone   = document.getElementById('dropzone');
+  const submitBtn  = document.getElementById('submitBtn');
+  const fileChip   = document.getElementById('fileChip');
+  const chipName   = document.getElementById('chipName');
+
+  // ── File selection ──────────────────────────────────────
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) applyFile(fileInput.files[0]);
+  });
+
+  function applyFile(file) {
+    if (!file.name.toLowerCase().endsWith('.docx')) {
+      showError('uploadError', 'Pouze soubory ve formátu .docx jsou podporovány.');
+      return;
+    }
+    hideEl('uploadError');
+    chipName.textContent = file.name;
+    fileChip.classList.remove('hidden');
+    submitBtn.disabled = false;
+  }
+
+  // ── Drag & Drop ─────────────────────────────────────────
+  dropzone.addEventListener('dragover',  e => { e.preventDefault(); dropzone.classList.add('drag-over'); });
+  dropzone.addEventListener('dragleave', ()  => dropzone.classList.remove('drag-over'));
+  dropzone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropzone.classList.remove('drag-over');
+    const f = e.dataTransfer.files[0];
+    if (f) { fileInput.files = e.dataTransfer.files; applyFile(f); }
+  });
+
+  // ── Upload & start job ──────────────────────────────────
+  async function startUpload() {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Nahrávám...';
+    hideEl('uploadError');
+
+    const fd = new FormData();
+    fd.append('file', file);
+
+    try {
+      const res  = await fetch('/upload', { method: 'POST', body: fd });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Chyba při nahrávání souboru');
+
+      jobId = data.jobId;
+      showPhase('processing');
+      startPolling();
+      animateSteps();
+    } catch (err) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Spustit analýzu →';
+      showError('uploadError', err.message);
+    }
+  }
+
+  // ── Poll status ─────────────────────────────────────────
+  function startPolling() {
+    pollTimer = setInterval(async () => {
+      try {
+        const res  = await fetch(`/status/${jobId}`);
+        const data = await res.json();
+
+        if (data.status === 'complete') {
+          clearInterval(pollTimer);
+          document.getElementById('downloadLink').href = data.outputUrl;
+          showPhase('done');
+        } else if (data.status === 'error') {
+          clearInterval(pollTimer);
+          showError('errorDetail', data.error || 'Neznámá chyba');
+          showPhase('error');
+        }
+      } catch { /* transient network glitch — keep polling */ }
+    }, 3000);
+  }
+
+  // ── Fake step animation (visual only, real state = polling) ─
+  function animateSteps() {
+    const schedule = [
+      { from: 'step2', to: 'step3', delay: 15000 },
+      { from: 'step3', to: 'step4', delay: 50000 },
+    ];
+    schedule.forEach(({ from, to, delay }) => {
+      setTimeout(() => {
+        markDone(from);
+        markActive(to);
+      }, delay);
+    });
+  }
+
+  function markDone(id) {
+    const el = document.getElementById(id);
+    el.classList.remove('active');
+    el.classList.add('done');
+  }
+  function markActive(id) {
+    const el = document.getElementById(id);
+    el.classList.remove('done');
+    el.classList.add('active');
+  }
+
+  // ── Helpers ─────────────────────────────────────────────
+  function showPhase(name) {
+    ['upload', 'processing', 'done', 'error'].forEach(p =>
+      document.getElementById(`phase-${p}`).classList.add('hidden')
+    );
+    document.getElementById(`phase-${name}`).classList.remove('hidden');
+  }
+
+  function showError(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.classList.remove('hidden');
+  }
+
+  function hideEl(id) {
+    document.getElementById(id).classList.add('hidden');
+  }
+
+  function resetApp() {
+    clearInterval(pollTimer);
+    jobId = null;
+    fileInput.value     = '';
+    chipName.textContent = '—';
+    fileChip.classList.add('hidden');
+    submitBtn.disabled      = true;
+    submitBtn.textContent   = 'Spustit analýzu →';
+    hideEl('uploadError');
+
+    // Reset step states
+    ['step1','step2','step3','step4'].forEach(id => {
+      const el = document.getElementById(id);
+      el.classList.remove('active', 'done');
+    });
+    document.getElementById('step1').classList.add('done');
+    document.getElementById('step2').classList.add('active');
+
+    showPhase('upload');
+  }
+</script>
+</body>
+</html>

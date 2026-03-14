@@ -12,7 +12,7 @@ PROFILE="$2"
 OUTPREFIX="$3"  # e.g., outputs/tsa1
 MODEL_OPUS="anthropic/claude-opus-4-6"
 
-BASE_DIR="/root/.openclaw/workspace/compliance-agent"
+BASE_DIR="${COMPLIANCE_AGENT_DIR:-/root/.openclaw/workspace/compliance-agent}"
 cd "$BASE_DIR"
 
 # 1) Extract (OOXML-based; preserves exact paragraph order used by annotator)
@@ -24,7 +24,7 @@ MSG_FILE=$(mktemp)
 cat > "$MSG_FILE" <<EOF
 You are running an on-demand DOCX compliance evaluation job.
 
-Inputs (paths are relative to /root/.openclaw/workspace/compliance-agent):
+Inputs (paths are relative to $BASE_DIR):
 - DOCX: $DOCX
 - Extracted paragraphs: $EXTRACTED
 - Entity profile: $PROFILE

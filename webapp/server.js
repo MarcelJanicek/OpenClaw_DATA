@@ -10,17 +10,23 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Directories
-const TMP_DIR = path.join(__dirname, 'tmp');
-const OUTPUT_DIR = path.join(__dirname, '..', 'compliance-agent', 'outputs');
+// COMPLIANCE_AGENT_DIR env var lets you point to the agent on any machine.
+// Default: the compliance-agent folder sitting next to webapp/ in the repo.
+const AGENT_DIR = process.env.COMPLIANCE_AGENT_DIR
+  || path.join(__dirname, '..', 'compliance-agent');
+
+const TMP_DIR    = path.join(__dirname, 'tmp');
+const OUTPUT_DIR = path.join(AGENT_DIR, 'outputs');
 fs.mkdirSync(OUTPUT_DIR, { recursive: true });
-const SCRIPT_PATH = path.join(__dirname, '..', 'compliance-agent', 'scripts', 'run_doc_review.sh');
-const RULES_PATH = path.join(__dirname, '..', 'rules', 'entity_profile.min.yaml');
+const SCRIPT_PATH = path.join(AGENT_DIR, 'scripts', 'run_doc_review.sh');
+const RULES_PATH  = path.join(AGENT_DIR, 'eval', 'entity_profile.min.yaml');
 
 // Ensure tmp directory exists
 fs.mkdirSync(TMP_DIR, { recursive: true });
 
 const app = express();
 app.use(morgan('dev'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // In-memory job tracking
 const jobs = new Map();
@@ -64,8 +70,13 @@ app.post('/upload', (req, res) => {
     const uploadedPath = req.file.path; // absolute path in tmp/
     const basename = path.parse(req.file.originalname).name; // without extension
 
-    // Spawn the compliance script
-    const child = spawn(SCRIPT_PATH, [uploadedPath, RULES_PATH, `outputs/${basename}`]);
+    // Spawn the compliance script, forwarding COMPLIANCE_AGENT_DIR so the
+    // shell script resolves BASE_DIR correctly on any machine.
+    const child = spawn(
+      SCRIPT_PATH,
+      [uploadedPath, RULES_PATH, `outputs/${basename}`],
+      { env: { ...process.env, COMPLIANCE_AGENT_DIR: AGENT_DIR } }
+    );
 
     const jobId = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
     jobs.set(jobId, {
@@ -74,11 +85,11 @@ app.post('/upload', (req, res) => {
       outputFile: `${basename}.commented.docx`
     });
 
-    // Capture stdout to extract job id if script outputs one
+    // Capture stdout and stderr so we can show real errors to the user
     let stdoutData = '';
-    child.stdout.on('data', chunk => {
-      stdoutData += chunk.toString();
-    });
+    let stderrData = '';
+    child.stdout.on('data', chunk => { stdoutData += chunk.toString(); });
+    child.stderr.on('data', chunk => { stderrData += chunk.toString(); });
 
     child.on('close', code => {
       const job = jobs.get(jobId);
@@ -88,9 +99,11 @@ app.post('/upload', (req, res) => {
         job.status = 'complete';
       } else {
         job.status = 'error';
-        job.error = `Process exited with code ${code}`;
+        const stderrTrim = stderrData.trim();
+        job.error = stderrTrim
+          ? `Process exited with code ${code}. ${stderrTrim.slice(-800)}`
+          : `Process exited with code ${code}`;
       }
-      // Try to overwrite jobId if script provided one (first token in stdout)
       const scriptJobId = stdoutData.trim().split(/\s+/)[0];
       if (scriptJobId) {
         job.scriptJobId = scriptJobId;
