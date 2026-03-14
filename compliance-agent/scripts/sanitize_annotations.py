@@ -52,8 +52,11 @@ def is_excluded(style: str | None, text: str | None) -> bool:
     for pref in EXCLUDED_STYLE_PREFIXES:
         if style.startswith(pref):
             return True
-    # Heuristic: pure TOC-like dot leaders or page numbers
-    if re.fullmatch(r"[\.\s0-9ivxlcdmIVXLCDM]+", t) and len(t) < 40:
+    # Heuristic: TOC-like dot leaders / page numbers
+    if re.fullmatch(r"[\.\s0-9ivxlcdmIVXLCDM]+", t) and len(t) < 60:
+        return True
+    # Typical TOC entry: lots of dots ending with a page number
+    if re.search(r"\.{4,}\s*\d+\s*$", t):
         return True
     return False
 
@@ -105,12 +108,34 @@ def main() -> None:
         return idx
 
     def find_schedule_ref_anchor(missing_inputs: List[str]) -> int | None:
-        needles = [str(x).strip() for x in (missing_inputs or []) if str(x).strip()]
+        raws = [str(x).strip() for x in (missing_inputs or []) if str(x).strip()]
+
+        # 1) Extract explicit references like "Schedule 2.2.1", "Annex A", "Appendix 3"
+        ref_needles: List[str] = []
+        for r in raws:
+            m = re.search(r"\bSchedule\s+([0-9]+(?:\.[0-9]+)*)\b", r, re.I)
+            if m:
+                ref_needles.append(f"schedule {m.group(1)}")
+            m = re.search(r"\bAnnex\s+([A-Z0-9]+)\b", r, re.I)
+            if m:
+                ref_needles.append(f"annex {m.group(1)}")
+            m = re.search(r"\bAppendix\s+([A-Z0-9]+)\b", r, re.I)
+            if m:
+                ref_needles.append(f"appendix {m.group(1)}")
+            m = re.search(r"\bP(?:ří|ri)loha\s+([A-Z0-9]+)\b", r, re.I)
+            if m:
+                ref_needles.append(f"příloha {m.group(1)}")
+
+        needles = [n.lower() for n in ref_needles] + [r.lower() for r in raws]
+
+        # Prefer exact ref matches first
         for i, t in enumerate(texts):
             tl = (t or "").lower()
             for n in needles:
-                if n and n.lower() in tl:
+                if n and n in tl:
                     return i
+
+        # Fallback: any schedule/annex mention
         for i, t in enumerate(texts):
             tl = (t or "").lower()
             if any(w in tl for w in ["schedule", "annex", "appendix", "příloha", "priloha"]):
