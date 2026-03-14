@@ -328,7 +328,15 @@ class OpenClawCronClient:
             raise RuntimeError("No assistant message text found in session JSONL")
         return last_text
 
-    def messages(self, *, model: str, system: str, user: str, max_tokens: int = 8000) -> str:
+    def messages(
+        self,
+        *,
+        model: str,
+        system: str,
+        user: str,
+        max_tokens: int = 8000,
+        wait_timeout_ms: int = 2400000,
+    ) -> str:
         # Note: max_tokens cannot be enforced via cron directly; we keep it for
         # interface parity and prompt discipline.
         prompt = (
@@ -378,7 +386,7 @@ class OpenClawCronClient:
             "run",
             "--expect-final",
             "--timeout",
-            "2400000",
+            str(int(wait_timeout_ms)),
             job_id,
         ]
         subprocess.check_call(run_cmd, cwd=str(self.openclaw_repo_dir))
@@ -484,6 +492,7 @@ def call_regulus(
     user_payload: str,
     models: List[str],
     max_tokens: int = 8000,
+    per_model_wait_timeout_ms: int = 900_000,
 ) -> dict:
     """Call evaluator with model fallback chain.
 
@@ -492,7 +501,19 @@ def call_regulus(
     last_err: Exception | None = None
     for m in models:
         try:
-            text = client.messages(model=m, system=system_prompt, user=user_payload, max_tokens=max_tokens)
+            # If a provider is in cooldown, calls may hang instead of erroring.
+            # Enforce a per-model wait timeout so fallback can activate.
+            wait_ms = per_model_wait_timeout_ms
+            # Give the final fallback (often OpenAI) longer.
+            if m.startswith("openai"):
+                wait_ms = max(wait_ms, 2_400_000)
+            text = client.messages(
+                model=m,
+                system=system_prompt,
+                user=user_payload,
+                max_tokens=max_tokens,
+                wait_timeout_ms=wait_ms,
+            )
             json_str = _extract_json_block(text)
             return json.loads(json_str)
         except Exception as e:
