@@ -9,7 +9,7 @@ A local venv is located at:
 ## Extract
 ```bash
 cd /root/.openclaw/workspace/compliance-agent
-.venv/bin/python scripts/nis2cz_docx_extract.py --in <input.docx> --out docs/processed/<name>.yaml
+.venv/bin/python scripts/docx_extract_structured.py --in <input.docx> --out docs/processed/<name>.yaml
 ```
 
 ## Annotate (add Word comments)

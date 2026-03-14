@@ -7,7 +7,7 @@
 ## 1) Extract
 ```bash
 cd /root/.openclaw/workspace/compliance-agent
-.venv/bin/python scripts/nis2cz_docx_extract.py --in <doc.docx> --out docs/processed/<doc>.yaml
+.venv/bin/python scripts/docx_extract_structured.py --in <doc.docx> --out docs/processed/<doc>.yaml
 ```
 
 ## 2) Run evaluator (LLM, Opus)

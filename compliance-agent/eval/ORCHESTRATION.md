@@ -8,7 +8,7 @@
 
 1) Extract DOCX
 ```bash
-.venv/bin/python scripts/nis2cz_docx_extract.py --in <doc.docx> --out docs/processed/<doc>.yaml
+.venv/bin/python scripts/docx_extract_structured.py --in <doc.docx> --out docs/processed/<doc>.yaml
 ```
 
 2) Run bundler (questions-first)

@@ -14,10 +14,10 @@ No RAG for pilot.
 ### 1) Extractor
 - Input: `.docx`
 - Output: `docs/processed/<doc>.yaml`
-  - `paragraph_index`, `text`, `style`
+  - `paragraph_index`, `text`, `style`, `is_heading`, `heading_level`, `section_path`, etc.
 
 Implemented:
-- `scripts/nis2cz_docx_extract.py`
+- `scripts/docx_extract_structured.py` (OOXML; paragraph order matches annotator: `.//w:body//w:p`)
 
 ### 2) Ruleset loader
 - Loads merged rules YAML or index+parts.

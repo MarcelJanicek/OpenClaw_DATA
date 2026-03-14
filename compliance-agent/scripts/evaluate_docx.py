@@ -30,10 +30,9 @@ import re
 from pathlib import Path
 from typing import Any
 
-import yaml
+import subprocess
 
-# Import local extractor
-from nis2cz_docx_extract import main as _extract_main  # type: ignore
+import yaml
 
 
 def load_yaml(path: Path) -> Any:
@@ -180,9 +179,13 @@ def build_bundle(doc_name: str, doc_type: str, paragraphs: list[dict], profile: 
 
 
 def extract_docx(docx: Path, out_yaml: Path) -> None:
-    # Call extractor script as a module-like function is messy; invoke directly.
-    import subprocess
-    cmd = [str(Path(__file__).resolve().parents[1] / ".venv/bin/python"), str(Path(__file__).resolve().parent / "nis2cz_docx_extract.py"), "--in", str(docx), "--out", str(out_yaml)]
+    """OOXML extractor — paragraph order matches nis2cz_docx_annotate.py (.//w:body//w:p)."""
+    cmd = [
+        str(Path(__file__).resolve().parents[1] / ".venv/bin/python"),
+        str(Path(__file__).resolve().parent / "docx_extract_structured.py"),
+        "--in", str(docx),
+        "--out", str(out_yaml),
+    ]
     subprocess.check_call(cmd)
 
 

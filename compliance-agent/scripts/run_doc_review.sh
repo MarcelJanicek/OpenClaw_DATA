@@ -15,9 +15,9 @@ MODEL_OPUS="anthropic/claude-opus-4-6"
 BASE_DIR="/root/.openclaw/workspace/compliance-agent"
 cd "$BASE_DIR"
 
-# 1) Extract
+# 1) Extract (OOXML-based; preserves exact paragraph order used by annotator)
 EXTRACTED="docs/processed/$(basename "${DOCX%.*}").yaml"
-.venv/bin/python scripts/nis2cz_docx_extract.py --in "$DOCX" --out "$EXTRACTED"
+.venv/bin/python scripts/docx_extract_structured.py --in "$DOCX" --out "$EXTRACTED"
 
 # 2) Build job message (the isolated agent will read files directly)
 MSG_FILE=$(mktemp)
