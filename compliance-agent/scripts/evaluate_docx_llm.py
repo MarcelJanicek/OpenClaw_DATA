@@ -799,6 +799,12 @@ def main() -> None:
 
         gdpr_annotations = findings_to_annotations(gdpr_findings, regulation="gdpr")
         dump_yaml({"result": {"status": "completed", "ruleset": "gdpr"}, "findings": gdpr_findings, "annotations": gdpr_annotations, "summary": {"missing_inputs": sorted(missing_inputs)}}, outprefix.with_suffix(".gdpr.eval.yaml"))
+        # Cleanup checkpoint only after final file exists
+        try:
+            if outprefix.with_suffix(".gdpr.eval.yaml").exists() and gdpr_partial_path.exists():
+                gdpr_partial_path.unlink()
+        except Exception:
+            pass
 
     nis2_findings = []
     missing_inputs2 = set()
@@ -859,6 +865,12 @@ def main() -> None:
 
         nis2_annotations = findings_to_annotations(nis2_findings, regulation="nis2")
         dump_yaml({"result": {"status": "completed", "ruleset": "nis2-cz"}, "findings": nis2_findings, "annotations": nis2_annotations, "summary": {"missing_inputs": sorted(missing_inputs2)}}, outprefix.with_suffix(".nis2.eval.yaml"))
+        # Cleanup checkpoint only after final file exists
+        try:
+            if outprefix.with_suffix(".nis2.eval.yaml").exists() and nis2_partial_path.exists():
+                nis2_partial_path.unlink()
+        except Exception:
+            pass
 
     # Merge annotations
     if args.framework == "both":
