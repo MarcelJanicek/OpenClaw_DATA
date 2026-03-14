@@ -737,7 +737,7 @@ def main() -> None:
     gdpr_app = [r for r in gdpr_rules if apply_contract_filter(r)]
     nis2_app = [r for r in nis2_rules if apply_contract_filter(r)]
 
-    def build_rule_citations(rules: List[dict]) -> dict:
+    def build_rule_citations(rules: List[dict], *, prefer_cz: bool = False) -> dict:
         out = {}
         for r in rules or []:
             rid = r.get("id")
@@ -747,12 +747,22 @@ def main() -> None:
                     cites.append(str(s.get("citation")).strip())
                 elif isinstance(s, str) and s.strip():
                     cites.append(s.strip())
+
+            if prefer_cz:
+                # For NIS2 review, cite Czech legal instruments only (Act/Decree), not the EU Directive.
+                cz = [c for c in cites if c.startswith("CZ-")]
+                if cz:
+                    cites = cz
+                else:
+                    # As a fallback, drop directive-like references.
+                    cites = [c for c in cites if "directive" not in c.lower() and "směrnic" not in c.lower()]
+
             if rid:
                 out[rid] = cites
         return out
 
     gdpr_citations = build_rule_citations(gdpr_app)
-    nis2_citations = build_rule_citations(nis2_app)
+    nis2_citations = build_rule_citations(nis2_app, prefer_cz=True)
 
     # Setup LLM client (route via OpenClaw cron to use Gateway auth)
     client = OpenClawCronClient()
