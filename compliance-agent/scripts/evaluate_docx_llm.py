@@ -47,6 +47,8 @@ import time
 import uuid
 from dataclasses import dataclass
 from pathlib import Path
+
+from scripts.job_runner import run_planned_job
 from typing import Any, Dict, List, Tuple
 
 import yaml
@@ -716,6 +718,11 @@ def main() -> None:
     gdpr_partial_path = outprefix.with_suffix(".gdpr.eval.partial.yaml")
     nis2_partial_path = outprefix.with_suffix(".nis2.eval.partial.yaml")
 
+    # Generic job-runner state (per outprefix + framework)
+    state_dir = ROOT / "state" / "jobs"
+    gdpr_state_path = state_dir / f"{outprefix.name}.gdpr.eval.state.yaml"
+    nis2_state_path = state_dir / f"{outprefix.name}.nis2.eval.state.yaml"
+
     qs = build_questions(profile)
     if qs:
         dump_yaml({"result": {"status": "questions"}, "questions": qs}, outprefix.with_suffix(".questions.yaml"))
@@ -785,16 +792,40 @@ def main() -> None:
         done_ids = {(f.get("rule_id"), f.get("checklist_item_id")) for f in gdpr_findings}
         missing_inputs.update([str(x) for x in (partial.get("summary", {}) or {}).get("missing_inputs", []) or []])
 
-        # Evaluate GDPR in batches
-        gdpr_items = [x for x in iter_checklist_items(gdpr_app) if (x[0].get("id"), x[1].get("id")) not in done_ids]
+        # Evaluate GDPR using generic job runner (atomic work items = checklist items)
+        gdpr_items = [x for x in iter_checklist_items(gdpr_app)]
 
-        for i in range(0, len(gdpr_items), args.batch_size):
-            batch = gdpr_items[i : i + args.batch_size]
+        # Work item = a single checklist item (rule_id + checklist_item_id)
+        gdpr_work_items = [
+            {
+                "rule_id": (r or {}).get("id"),
+                "checklist_item_id": (it or {}).get("id"),
+            }
+            for (r, it) in gdpr_items
+            if (r or {}).get("id") and (it or {}).get("id")
+        ]
+
+        # done_ids still sourced from partial findings for backward compatibility
+        def gdpr_item_id(wi: dict) -> str:
+            return f"{wi['rule_id']}::{wi['checklist_item_id']}"
+
+        def gdpr_exec_batch(batch_work_items: list[dict]) -> list[str]:
+            nonlocal gdpr_findings, missing_inputs
+
+            # Rebuild batch as (rule, item) tuples
+            lookup = {(r.get("id"), i.get("id")): (r, i) for (r, i) in iter_checklist_items(gdpr_app)}
+            batch = [lookup[(wi["rule_id"], wi["checklist_item_id"])] for wi in batch_work_items if (wi["rule_id"], wi["checklist_item_id"]) in lookup]
+
+            # Skip items already completed (from partial output)
+            batch = [x for x in batch if (x[0].get("id"), x[1].get("id")) not in done_ids]
+            if not batch:
+                return []
+
             user_payload, payload_paras = make_user_payload(paragraphs, profile, gdpr_app, doc_type, batch, definitions=definitions)
             try:
                 parsed = call_regulus(client, system_prompt=sys_gdpr, user_payload=user_payload, models=model_chain)
             except ValueError as e:
-                print(f"Warning: GDPR batch {i//args.batch_size} failed to parse: {str(e)[:200]}", file=sys.stderr)
+                print(f"Warning: GDPR batch failed to parse: {str(e)[:200]}", file=sys.stderr)
                 for rule, item in batch:
                     gdpr_findings.append({
                         "rule_id": rule.get("id"),
@@ -803,11 +834,15 @@ def main() -> None:
                         "evidence": [],
                         "notes": "Evaluation failed due to LLM output parsing error (response too long or malformed)",
                     })
-                continue
+                # checkpoint even on failure
+                gdpr_annotations_partial = findings_to_annotations(gdpr_findings, regulation="gdpr", rule_citations=gdpr_citations)
+                dump_yaml({"result": {"status": "partial", "ruleset": "gdpr"}, "findings": gdpr_findings, "annotations": gdpr_annotations_partial, "summary": {"missing_inputs": sorted(missing_inputs)}}, gdpr_partial_path)
+                return [str(gdpr_partial_path)]
+
             validate_eval_output(parsed, "gdpr")
             if parsed.get("result", {}).get("status") == "questions":
                 dump_yaml(parsed, outprefix.with_suffix(".gdpr.questions.yaml"))
-                return
+                raise SystemExit(0)
 
             cit_errs = validate_citations(parsed, payload_paras)
             if cit_errs:
@@ -831,6 +866,20 @@ def main() -> None:
             # checkpoint after each batch
             gdpr_annotations_partial = findings_to_annotations(gdpr_findings, regulation="gdpr", rule_citations=gdpr_citations)
             dump_yaml({"result": {"status": "partial", "ruleset": "gdpr"}, "findings": gdpr_findings, "annotations": gdpr_annotations_partial, "summary": {"missing_inputs": sorted(missing_inputs)}}, gdpr_partial_path)
+            return [str(gdpr_partial_path)]
+
+        # Run with generic runner state (resume independent of partial findings)
+        run_planned_job(
+            state_path=gdpr_state_path,
+            job_id=f"eval:{outprefix.name}:gdpr",
+            pipeline_id="eval-docx",
+            work_items=gdpr_work_items,
+            item_id_fn=gdpr_item_id,
+            batch_size=args.batch_size,
+            execute_batch_fn=gdpr_exec_batch,
+            load_yaml=load_yaml_safe,
+            dump_yaml=dump_yaml,
+        )
 
         gdpr_annotations = findings_to_annotations(gdpr_findings, regulation="gdpr", rule_citations=gdpr_citations)
         dump_yaml({"result": {"status": "completed", "ruleset": "gdpr"}, "findings": gdpr_findings, "annotations": gdpr_annotations, "summary": {"missing_inputs": sorted(missing_inputs)}}, outprefix.with_suffix(".gdpr.eval.yaml"))
@@ -851,16 +900,36 @@ def main() -> None:
         done_ids = {(f.get("rule_id"), f.get("checklist_item_id")) for f in nis2_findings}
         missing_inputs2.update([str(x) for x in (partial.get("summary", {}) or {}).get("missing_inputs", []) or []])
 
-        # Evaluate NIS2 in batches
-        nis2_items = [x for x in iter_checklist_items(nis2_app) if (x[0].get("id"), x[1].get("id")) not in done_ids]
+        # Evaluate NIS2-CZ using generic job runner (atomic work items = checklist items)
+        nis2_items = [x for x in iter_checklist_items(nis2_app)]
 
-        for i in range(0, len(nis2_items), args.batch_size):
-            batch = nis2_items[i : i + args.batch_size]
+        nis2_work_items = [
+            {
+                "rule_id": (r or {}).get("id"),
+                "checklist_item_id": (it or {}).get("id"),
+            }
+            for (r, it) in nis2_items
+            if (r or {}).get("id") and (it or {}).get("id")
+        ]
+
+        def nis2_item_id(wi: dict) -> str:
+            return f"{wi['rule_id']}::{wi['checklist_item_id']}"
+
+        def nis2_exec_batch(batch_work_items: list[dict]) -> list[str]:
+            nonlocal nis2_findings, missing_inputs2
+
+            lookup = {(r.get("id"), i.get("id")): (r, i) for (r, i) in iter_checklist_items(nis2_app)}
+            batch = [lookup[(wi["rule_id"], wi["checklist_item_id"])] for wi in batch_work_items if (wi["rule_id"], wi["checklist_item_id"]) in lookup]
+
+            batch = [x for x in batch if (x[0].get("id"), x[1].get("id")) not in done_ids]
+            if not batch:
+                return []
+
             user_payload, payload_paras = make_user_payload(paragraphs, profile, nis2_app, doc_type, batch, definitions=definitions)
             try:
                 parsed = call_regulus(client, system_prompt=sys_nis2, user_payload=user_payload, models=model_chain)
             except ValueError as e:
-                print(f"Warning: NIS2-CZ batch {i//args.batch_size} failed to parse: {str(e)[:200]}", file=sys.stderr)
+                print(f"Warning: NIS2-CZ batch failed to parse: {str(e)[:200]}", file=sys.stderr)
                 for rule, item in batch:
                     nis2_findings.append({
                         "rule_id": rule.get("id"),
@@ -869,11 +938,14 @@ def main() -> None:
                         "evidence": [],
                         "notes": "Evaluation failed due to LLM output parsing error (response too long or malformed)",
                     })
-                continue
+                nis2_annotations_partial = findings_to_annotations(nis2_findings, regulation="nis2", rule_citations=nis2_citations)
+                dump_yaml({"result": {"status": "partial", "ruleset": "nis2-cz"}, "findings": nis2_findings, "annotations": nis2_annotations_partial, "summary": {"missing_inputs": sorted(missing_inputs2)}}, nis2_partial_path)
+                return [str(nis2_partial_path)]
+
             validate_eval_output(parsed, "nis2-cz")
             if parsed.get("result", {}).get("status") == "questions":
                 dump_yaml(parsed, outprefix.with_suffix(".nis2.questions.yaml"))
-                return
+                raise SystemExit(0)
 
             cit_errs = validate_citations(parsed, payload_paras)
             if cit_errs:
@@ -894,9 +966,21 @@ def main() -> None:
             for x in (parsed.get("summary", {}) or {}).get("missing_inputs", []) or []:
                 missing_inputs2.add(str(x))
 
-            # checkpoint after each batch
             nis2_annotations_partial = findings_to_annotations(nis2_findings, regulation="nis2", rule_citations=nis2_citations)
             dump_yaml({"result": {"status": "partial", "ruleset": "nis2-cz"}, "findings": nis2_findings, "annotations": nis2_annotations_partial, "summary": {"missing_inputs": sorted(missing_inputs2)}}, nis2_partial_path)
+            return [str(nis2_partial_path)]
+
+        run_planned_job(
+            state_path=nis2_state_path,
+            job_id=f"eval:{outprefix.name}:nis2-cz",
+            pipeline_id="eval-docx",
+            work_items=nis2_work_items,
+            item_id_fn=nis2_item_id,
+            batch_size=args.batch_size,
+            execute_batch_fn=nis2_exec_batch,
+            load_yaml=load_yaml_safe,
+            dump_yaml=dump_yaml,
+        )
 
         nis2_annotations = findings_to_annotations(nis2_findings, regulation="nis2", rule_citations=nis2_citations)
         dump_yaml({"result": {"status": "completed", "ruleset": "nis2-cz"}, "findings": nis2_findings, "annotations": nis2_annotations, "summary": {"missing_inputs": sorted(missing_inputs2)}}, outprefix.with_suffix(".nis2.eval.yaml"))
