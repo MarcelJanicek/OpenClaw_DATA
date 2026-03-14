@@ -1,10 +1,19 @@
 meta:
   ruleset_id: gdpr
-  version: '0.1'
-  status: draft
+  version: '0.2-audit'
+  status: audit-grade-partial
   jurisdiction:
   - EU
   evaluation_profile_schema: rules/gdpr/entity_profile.schema.yaml
+  changelog: |
+    v0.2-audit (2026-03-14): Audit-grade refactor (partial). Created EVIDENCE_CATALOG.yaml
+    with canonical artifact IDs. Refactored GDPR-ART5-PRINCIPLES and GDPR-ART32-SECURITY
+    to NIS2-CZ-style checklist structure (logic, na_mechanism, checklist item IDs,
+    acceptance_criteria, red_flags). Updated evidence_hints to reference catalog
+    artifact IDs. Bumped version/status in ch02 and ch06 part files.
+    Remaining rules (Arts. 6–31, 33–99) retain v0.1 multi_obligation/document_required
+    style — see MILESTONES.md for roadmap.
+    v0.1 (2026-03-08 to 2026-03-09): Initial GDPR coverage Arts. 1–99 (draft).
 includes:
 - parts/gdpr.ch01-arts-01-04.yaml
 - parts/gdpr.ch02-arts-05-11.yaml

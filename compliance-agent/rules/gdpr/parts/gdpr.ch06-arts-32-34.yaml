@@ -1,7 +1,7 @@
 meta:
   ruleset_id: gdpr
-  version: '0.1'
-  status: draft
+  version: '0.2-audit'
+  status: audit-grade
   evaluation_profile_schema: rules/gdpr/entity_profile.schema.yaml
   jurisdiction:
   - EU
@@ -10,9 +10,10 @@ meta:
     url: https://eur-lex.europa.eu/eli/reg/2016/679/oj
   notes:
   - This ruleset is designed for SaaS/AI products. Some obligations vary depending on whether you are controller/processor/joint controller.
+  - "v0.2-audit: GDPR-ART32-SECURITY refactored to audit-grade checklist structure with acceptance_criteria, red_flags, and EVIDENCE_CATALOG artifact IDs."
 rules:
 - id: GDPR-ART32-SECURITY
-  title: Appropriate technical and organisational measures (TOMs) are implemented and kept effective (risk-based)
+  title: Appropriate technical and organisational measures (TOMs) are implemented and kept effective — risk-based security for personal data processing
   scope:
     applies_to:
     - org
@@ -23,59 +24,120 @@ rules:
     - controller
     - processor
   requirement:
-    type: multi_obligation
-    obligations:
-    - key: risk_based_security_program
-      description: Security measures are selected and maintained based on the risks to the rights and freedoms of natural persons, taking into account the state of the art, implementation costs, and the nature/scope/context/purposes of processing.
-    - key: confidentiality_integrity_availability_resilience
-      description: Measures exist to ensure ongoing confidentiality, integrity, availability, and resilience of processing systems and services (including hardening, secure configuration, and change control).
-    - key: access_control_and_least_privilege
-      description: Access to personal data and production systems is restricted to authorized personnel using least privilege (RBAC/ABAC), with joiner/mover/leaver controls, MFA where appropriate, and periodic access reviews.
-    - key: encryption_and_pseudonymisation_where_appropriate
-      description: Encryption and/or pseudonymisation are implemented where appropriate to the risks (e.g., TLS in transit; encryption at rest for sensitive/high-risk datasets; tokenisation/pseudonymisation for analytics).
-    - key: restore_availability_and_access
-      description: The organisation can restore availability and access to personal data in a timely manner after an incident (e.g., backups, tested restore procedures, disaster recovery/business continuity plans).
-    - key: regular_testing_assessment_evaluation
-      description: There is an ongoing process for regularly testing, assessing, and evaluating the effectiveness of TOMs (e.g., vulnerability management, security testing, audits, penetration tests, control monitoring), and findings are tracked to remediation.
-    - key: processor_controller_alignment
-      description: Where acting as a processor, security obligations and TOMs are aligned with controller instructions and contractual requirements (e.g., DPA security annex), and evidence can be provided to controllers.
+    type: checklist
+    logic: "ALL"
+    na_mechanism: >
+      Processors: all items apply. Items ART32-06 (regular testing) and ART32-07
+      (processor alignment) must be addressed for every in-scope entity. Individual
+      sub-controls (e.g., pseudonymisation) may be marked N/A only where documented
+      risk assessment concludes the control is not appropriate — justification must
+      appear in the TOM register.
+    checklist:
+      - id: "ART32-01"
+        title: "Risk-based TOM selection: security measures are chosen and documented based on assessed risks to data subjects' rights and freedoms"
+        required_by_default: true
+        acceptance_criteria:
+          - "A risk assessment or threat model covering personal data processing exists and is current (reviewed within last 12 months)"
+          - "TOM register or control matrix maps each control to the corresponding risk(s) it addresses"
+          - "State of the art, implementation costs, and nature/scope/context/purposes are considered and documented"
+        red_flags:
+          - "No documented risk assessment for personal data processing"
+          - "TOM register exists but lacks risk-to-control mapping"
+          - "Risk assessment last reviewed more than 2 years ago with no significant change trigger"
+
+      - id: "ART32-02"
+        title: "Confidentiality, integrity, availability and resilience of processing systems are ensured through implemented controls"
+        required_by_default: true
+        acceptance_criteria:
+          - "Controls for confidentiality (access restriction, encryption), integrity (change control, audit logs), availability (redundancy, capacity), and resilience (failover, recovery) are documented in the TOM register"
+          - "Hardening and secure configuration baselines are applied to personal data systems"
+        red_flags:
+          - "No controls documented for one or more of: confidentiality, integrity, availability, resilience"
+          - "No secure configuration baseline for personal data processing systems"
+
+      - id: "ART32-03"
+        title: "Access to personal data is restricted to authorised personnel on a least-privilege basis with joiner/mover/leaver controls"
+        required_by_default: true
+        acceptance_criteria:
+          - "RBAC or ABAC is implemented on systems holding personal data"
+          - "MFA is enabled for all privileged or remote access to personal data systems"
+          - "Joiner/mover/leaver process removes or modifies access within defined SLA (typically 1 business day for leavers)"
+          - "Periodic access reviews are conducted (at least annually) with documented outcomes"
+        red_flags:
+          - "Shared accounts used for personal data access"
+          - "No MFA on production personal data systems"
+          - "Leaver accounts not disabled within 30 days"
+          - "No access review records for personal data systems"
+
+      - id: "ART32-04"
+        title: "Encryption and/or pseudonymisation are applied where appropriate to the processing risks"
+        required_by_default: true
+        acceptance_criteria:
+          - "Personal data is encrypted in transit (TLS 1.2+ minimum)"
+          - "Personal data at rest is encrypted for high-risk datasets (special categories, financial data, health data)"
+          - "Pseudonymisation or tokenisation is applied for analytics/testing where full identifiability is not required"
+          - "Key management procedures exist and are documented"
+        red_flags:
+          - "Personal data transmitted over unencrypted channels"
+          - "Special-category data stored unencrypted at rest"
+          - "No key management documentation"
+
+      - id: "ART32-05"
+        title: "Availability and access to personal data can be restored in a timely manner after an incident"
+        required_by_default: true
+        acceptance_criteria:
+          - "Backup procedures for personal data systems are documented with RPO/RTO targets"
+          - "Restore tests are conducted at least annually and results are documented"
+          - "Business continuity or disaster recovery plan covers personal data processing systems"
+        red_flags:
+          - "No backup procedures for personal data systems"
+          - "No documented restore test results"
+          - "RTO/RPO not defined for critical personal data systems"
+
+      - id: "ART32-06"
+        title: "Regular testing, assessing, and evaluating the effectiveness of TOMs is conducted and findings are tracked to remediation"
+        required_by_default: true
+        acceptance_criteria:
+          - "Vulnerability scanning covers personal data systems with at minimum quarterly cadence"
+          - "Penetration test or equivalent security assessment conducted at least annually (or after significant changes)"
+          - "Audit or control effectiveness review is conducted periodically"
+          - "All findings are tracked in a remediation register with SLA-based closure"
+        red_flags:
+          - "No vulnerability scanning evidence for personal data systems"
+          - "No penetration test or security assessment in last 24 months"
+          - "Findings tracked but not remediated; significant overdue items"
+
+      - id: "ART32-07"
+        title: "Where acting as a processor, security obligations and TOMs are aligned with controller instructions and DPA security annex; evidence can be provided to controllers"
+        required_by_default: true
+        acceptance_criteria:
+          - "Signed DPA(s) with controllers include or reference security requirements"
+          - "TOM documentation is available in a form that can be shared with controllers on request"
+          - "Changes to TOMs that may affect security of controller data are communicated per DPA requirements"
+        red_flags:
+          - "Processor operating without signed DPA"
+          - "Security annex in DPA contradicts actual TOMs without documented exception"
+          - "No process for communicating material security changes to controllers"
   evidence_hints:
     required:
-    - information_security_policy_and_standards (including access control, cryptography, vulnerability management)
-    - risk_assessment_or_threat_model_covering_personal_data_processing
-    - technical_and_organisational_measures_register_or_security_control_matrix
-    - access_control_design_and_mfa_configuration_evidence
-    - periodic_access_review_records (redacted)
-    - encryption_configuration_evidence (e.g., TLS settings, KMS usage, database/storage encryption)
-    - backup_and_restore_procedures_and_restore_test_results (redacted)
-    - vulnerability_management_and_patch_process_evidence (e.g., scans, SLAs, tickets) (redacted)
-    - security_testing_reports (e.g., pen tests, audits) and remediation tracker (redacted)
-    artifacts:
-    - information_security_policy_and_standards (including access control, cryptography, vulnerability management)
-    - risk_assessment_or_threat_model_covering_personal_data_processing
-    - technical_and_organisational_measures_register_or_security_control_matrix
-    - access_control_design_and_mfa_configuration_evidence
-    - periodic_access_review_records (redacted)
-    - encryption_configuration_evidence (e.g., TLS settings, KMS usage, database/storage encryption)
-    - backup_and_restore_procedures_and_restore_test_results (redacted)
-    - business_continuity_or_disaster_recovery_plan (as applicable)
-    - vulnerability_management_and_patch_process_evidence (e.g., scans, SLAs, tickets) (redacted)
-    - security_testing_reports (e.g., pen tests, audits) and remediation tracker (redacted)
-    questions:
-    - How did you determine which TOMs are “appropriate” for your processing and risk profile (state of the art, costs, and risks)?
-    - What controls exist for access restriction and authentication to personal data systems (RBAC/MFA/access reviews)?
-    - How do you ensure you can restore availability/access after incidents, and how often do you test restores?
-    - What is your cadence for testing/evaluating controls (vuln scanning, pen tests, audits), and how are findings remediated?
-    checks:
-    - Confirm the organisation has a documented, risk-based TOMs baseline and can map key controls to the risks of its processing.
-    - Confirm regular testing/assessment is evidenced and remediation is tracked to closure.
+      - artifact_id: "GDPR-TOM-REGISTER"
+      - artifact_id: "GDPR-RISK-ASSESSMENT"
+      - artifact_id: "GDPR-INFOSEC-POLICY"
+      - artifact_id: "GDPR-ACCESS-CONTROL-EVIDENCE"
+    optional:
+      - artifact_id: "GDPR-ACCESS-REVIEW-RECORDS"
+      - artifact_id: "GDPR-ENCRYPTION-EVIDENCE"
+      - artifact_id: "GDPR-BACKUP-RESTORE-EVIDENCE"
+      - artifact_id: "GDPR-VULN-MGMT-EVIDENCE"
+      - artifact_id: "GDPR-SECURITY-TESTING-REPORTS"
+      - artifact_id: "GDPR-DPA-TEMPLATE"
   severity: high
   sources:
-  - citation: GDPR Art. 32(1)
-  - citation: GDPR Art. 32(2)
-  - citation: GDPR Art. 32(3)
-  - citation: GDPR Recital 83
-  - citation: GDPR Recital 84
+  - citation: GDPR Art. 32(1)(a)–(d) (TOMs including encryption, pseudonymisation, resilience, restore, testing)
+  - citation: GDPR Art. 32(2) (risk assessment factors)
+  - citation: GDPR Art. 32(3) (approved codes of conduct / certification as evidence)
+  - citation: GDPR Recital 83 (risk-based security measures)
+  - citation: GDPR Recital 84 (DPO and DPIA context)
 - id: GDPR-ART33-BREACH-SUPERVISORY
   title: Breach notification to supervisory authority within 72 hours (when required)
   scope:
@@ -104,12 +166,12 @@ rules:
     - evidence_of_72h_notification_timer_and_escalation (e.g., ticket workflow/SLAs) (redacted)
     - tabletop_or_simulation_exercise_results_for_breach_notification (redacted)
     questions:
-    - How do you determine when a personal data breach is “unlikely to result in a risk” (and thus not notified) and how is that decision documented?
+    - How do you determine when a personal data breach is "unlikely to result in a risk" (and thus not notified) and how is that decision documented?
     - How do you ensure you can notify the supervisory authority within 72 hours of becoming aware?
     - What information do you include in the notification and how do you update it if not all details are known initially?
     checks:
     - Confirm there is a breach register and evidence of decisions/timelines (including cases where notification was not made).
-    - Confirm the notification template covers Art. 33(3)(a)–(d) items.
+    - Confirm the notification template covers Art. 33(3)(a)-(d) items.
   severity: high
   sources:
   - citation: GDPR Art. 33(1)
@@ -144,11 +206,11 @@ rules:
     - evidence_of_exceptions_analysis (e.g., encryption/mitigation/public_communication) (redacted)
     - sample_breach_communications_or_dry_run_outputs (redacted)
     questions:
-    - How do you assess whether a breach is likely to result in a “high risk” to individuals, and who signs off?
+    - How do you assess whether a breach is likely to result in a "high risk" to individuals, and who signs off?
     - How do you draft and deliver communications without undue delay (channels, localization, customer coordination)?
     - When do you rely on Art. 34(3) exceptions and how is that documented?
     checks:
-    - Confirm the communication template includes Art. 34(2)(a)–(c) items and is understandable.
+    - Confirm the communication template includes Art. 34(2)(a)-(c) items and is understandable.
     - Confirm exceptions (Art. 34(3)) are documented where communications are not sent.
   severity: high
   sources:

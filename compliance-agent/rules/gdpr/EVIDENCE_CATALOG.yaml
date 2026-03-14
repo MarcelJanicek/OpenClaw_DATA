@@ -1,0 +1,321 @@
+meta:
+  ruleset_id: "gdpr"
+  version: "1.0"
+  description: >
+    Evidence Artifact Catalog for the GDPR ruleset.
+    Defines canonical artifact IDs referenced in evidence_hints across all rule parts.
+    Each artifact has a human-readable label, description, and the rule IDs that require it.
+    Modelled after the NIS2-CZ EVIDENCE_CATALOG.yaml schema.
+  last_updated: "2026-03-14"
+
+artifacts:
+  # ==================================================================
+  # CORE GOVERNANCE & ACCOUNTABILITY
+  # ==================================================================
+  - artifact_id: "GDPR-ROPA"
+    label: "Records of Processing Activities (Art. 30)"
+    description: >
+      Controller/processor register listing all processing activities with
+      purposes, categories, recipients, transfers, retention, and security measures.
+    format_hints:
+      - "Spreadsheet, GRC tool export, or structured document (DOCX/PDF)"
+    referenced_by:
+      - "GDPR-ART5-PRINCIPLES"
+      - "GDPR-ART30-RECORDS"
+
+  - artifact_id: "GDPR-PRIVACY-POLICY"
+    label: "External Privacy Policy / Privacy Notice"
+    description: >
+      Publicly accessible privacy notice describing who processes data, purposes,
+      legal basis, retention, rights, and contact details.
+    format_hints:
+      - "Web page (URL) or published document (PDF)"
+    referenced_by:
+      - "GDPR-ART5-PRINCIPLES"
+      - "GDPR-ART13-NOTICE-DIRECT"
+      - "GDPR-ART14-NOTICE-INDIRECT"
+
+  - artifact_id: "GDPR-RETENTION-SCHEDULE"
+    label: "Retention and Deletion Schedule"
+    description: >
+      Schedule specifying retention periods per data category and processing purpose,
+      including deletion/archiving workflows and scheduled review.
+    format_hints:
+      - "Spreadsheet or document (DOCX/PDF)"
+    referenced_by:
+      - "GDPR-ART5-PRINCIPLES"
+      - "GDPR-ART30-RECORDS"
+
+  - artifact_id: "GDPR-DATA-INVENTORY"
+    label: "Data Inventory / Data Map"
+    description: >
+      Inventory mapping data flows: what personal data is collected, where it is stored,
+      who processes it, and how it moves between systems and third parties.
+    format_hints:
+      - "Spreadsheet, data-flow diagram, or tool export"
+    referenced_by:
+      - "GDPR-ART5-PRINCIPLES"
+      - "GDPR-ART32-SECURITY"
+      - "GDPR-ART30-RECORDS"
+
+  - artifact_id: "GDPR-PRIVACY-GOVERNANCE-DOC"
+    label: "Privacy Governance Framework / Internal Privacy Policy"
+    description: >
+      Internal document establishing the privacy governance structure: DPO or
+      privacy lead appointment, roles, review cadence, and accountability chain.
+    format_hints:
+      - "Policy document (DOCX/PDF)"
+    referenced_by:
+      - "GDPR-ART5-PRINCIPLES"
+      - "GDPR-ART37-DPO"
+
+  - artifact_id: "GDPR-DPO-APPOINTMENT"
+    label: "DPO Appointment Record"
+    description: >
+      Formal appointment record for the Data Protection Officer (or documented
+      determination that a DPO is not required and reasons).
+    format_hints:
+      - "Signed appointment letter or internal decision record (DOCX/PDF)"
+    referenced_by:
+      - "GDPR-ART37-DPO"
+
+  # ==================================================================
+  # LAWFUL BASIS & CONSENT
+  # ==================================================================
+  - artifact_id: "GDPR-LAWFUL-BASIS-REGISTER"
+    label: "Lawful Basis Register"
+    description: >
+      Per-purpose register mapping each processing activity to its lawful basis
+      under Art. 6 (and Art. 9 for special-category data), with justification.
+    format_hints:
+      - "Spreadsheet or section of ROPA"
+    referenced_by:
+      - "GDPR-ART6-LAWFUL-BASIS"
+      - "GDPR-ART5-PRINCIPLES"
+
+  - artifact_id: "GDPR-LIA"
+    label: "Legitimate Interests Assessment (LIA)"
+    description: >
+      Documented balancing test for processing activities relying on legitimate
+      interests (Art. 6(1)(f)), covering interest pursued, necessity, and data
+      subject impact.
+    format_hints:
+      - "Structured document (DOCX/PDF)"
+    referenced_by:
+      - "GDPR-ART6-LI-TEST"
+
+  - artifact_id: "GDPR-CONSENT-RECORDS"
+    label: "Consent Records / Consent Management Platform Export"
+    description: >
+      Records evidencing that consent was freely given, specific, informed, and
+      unambiguous, including timestamp, granularity, and withdrawal mechanism.
+    format_hints:
+      - "CMP export (CSV/JSON), database records, or signed consent forms"
+    referenced_by:
+      - "GDPR-ART7-CONSENT-CONDITIONS"
+
+  # ==================================================================
+  # TRANSPARENCY & DATA SUBJECT RIGHTS
+  # ==================================================================
+  - artifact_id: "GDPR-DSR-PROCEDURE"
+    label: "Data Subject Rights Procedure"
+    description: >
+      Internal procedure defining intake, verification, response timelines,
+      escalation, and logging for all data subject requests (access, erasure,
+      rectification, restriction, portability, objection, ADM).
+    format_hints:
+      - "Procedure document (DOCX/PDF)"
+    referenced_by:
+      - "GDPR-ART12-TRANSPARENT-COMMUNICATION"
+      - "GDPR-ART15-ACCESS"
+      - "GDPR-ART17-ERASURE"
+
+  - artifact_id: "GDPR-DSR-REGISTER"
+    label: "Data Subject Request Register"
+    description: >
+      Log of all data subject requests received, with dates received, status,
+      outcome, and response timeline. May be redacted.
+    format_hints:
+      - "Spreadsheet, ITSM export, or privacy tool export (redacted)"
+    referenced_by:
+      - "GDPR-ART12-TRANSPARENT-COMMUNICATION"
+      - "GDPR-ART15-ACCESS"
+
+  # ==================================================================
+  # SECURITY (Art. 32)
+  # ==================================================================
+  - artifact_id: "GDPR-TOM-REGISTER"
+    label: "Technical and Organisational Measures (TOM) Register"
+    description: >
+      Register or control matrix mapping implemented security measures to the
+      risks of personal data processing (encryption, access control, availability,
+      resilience, testing). The risk-based justification should be visible.
+    format_hints:
+      - "Spreadsheet, GRC tool export, or document section (DOCX/PDF)"
+    referenced_by:
+      - "GDPR-ART32-SECURITY"
+
+  - artifact_id: "GDPR-INFOSEC-POLICY"
+    label: "Information Security Policy and Standards"
+    description: >
+      Top-level information security policy and associated standards covering
+      access control, cryptography, vulnerability management, and incident response.
+    format_hints:
+      - "Policy document (DOCX/PDF), version-controlled"
+    referenced_by:
+      - "GDPR-ART32-SECURITY"
+
+  - artifact_id: "GDPR-RISK-ASSESSMENT"
+    label: "Privacy Risk Assessment / Threat Model for Personal Data Processing"
+    description: >
+      Risk assessment or threat model identifying risks to the rights and freedoms
+      of data subjects and mapping them to controls implemented as TOMs.
+    format_hints:
+      - "Document (DOCX/PDF) or structured risk register"
+    referenced_by:
+      - "GDPR-ART32-SECURITY"
+      - "GDPR-ART35-DPIA"
+
+  - artifact_id: "GDPR-ACCESS-CONTROL-EVIDENCE"
+    label: "Access Control Design and Configuration Evidence"
+    description: >
+      Evidence that access to personal data systems is restricted to authorized
+      personnel via RBAC/ABAC, with MFA configured where appropriate.
+    format_hints:
+      - "System configuration screenshots, IAM policy export, IdP config"
+    referenced_by:
+      - "GDPR-ART32-SECURITY"
+
+  - artifact_id: "GDPR-ACCESS-REVIEW-RECORDS"
+    label: "Periodic Access Review Records"
+    description: >
+      Records from periodic reviews of who has access to personal data systems,
+      with evidence of removals/corrections. May be redacted.
+    format_hints:
+      - "Spreadsheet, tool export, or signed attestation (redacted)"
+    referenced_by:
+      - "GDPR-ART32-SECURITY"
+
+  - artifact_id: "GDPR-ENCRYPTION-EVIDENCE"
+    label: "Encryption Configuration Evidence"
+    description: >
+      Evidence that personal data is encrypted in transit (TLS) and at rest where
+      appropriate. Includes KMS/key management configuration and storage encryption.
+    format_hints:
+      - "TLS scan reports, storage encryption config, KMS policy (redacted)"
+    referenced_by:
+      - "GDPR-ART32-SECURITY"
+
+  - artifact_id: "GDPR-BACKUP-RESTORE-EVIDENCE"
+    label: "Backup and Restore Procedures and Test Results"
+    description: >
+      Backup procedures, tested restore evidence, and RPO/RTO targets for
+      personal data systems. May be redacted.
+    format_hints:
+      - "Procedure document + test report (DOCX/PDF, redacted)"
+    referenced_by:
+      - "GDPR-ART32-SECURITY"
+
+  - artifact_id: "GDPR-VULN-MGMT-EVIDENCE"
+    label: "Vulnerability Management and Patch Process Evidence"
+    description: >
+      Vulnerability scan reports, patching SLA evidence, and remediation tickets
+      for personal data systems. May be redacted.
+    format_hints:
+      - "Scanner reports (PDF/HTML), patch compliance report, ticket export (redacted)"
+    referenced_by:
+      - "GDPR-ART32-SECURITY"
+
+  - artifact_id: "GDPR-SECURITY-TESTING-REPORTS"
+    label: "Security Testing Reports and Remediation Tracker"
+    description: >
+      Penetration test or security audit reports covering personal data systems,
+      with remediation tracker showing findings closed or risk-accepted.
+    format_hints:
+      - "Report (PDF), remediation spreadsheet or ticket export (redacted)"
+    referenced_by:
+      - "GDPR-ART32-SECURITY"
+
+  # ==================================================================
+  # BREACH NOTIFICATION (Arts. 33–34)
+  # ==================================================================
+  - artifact_id: "GDPR-BREACH-RESPONSE-PLAN"
+    label: "Incident Response Plan / Breach Response Playbook"
+    description: >
+      Plan or playbook covering breach detection, triage, containment, 72-hour
+      notification timer, supervisory authority notification, and data subject
+      notification workflow.
+    format_hints:
+      - "Document (DOCX/PDF) or runbook"
+    referenced_by:
+      - "GDPR-ART33-BREACH-SUPERVISORY"
+      - "GDPR-ART34-BREACH-DATA-SUBJECT"
+
+  - artifact_id: "GDPR-BREACH-REGISTER"
+    label: "Breach Register"
+    description: >
+      Log of all personal data breaches (including near misses) with timestamps
+      for awareness, assessment, containment, and notification decisions.
+      Includes cases where notification was not made (with reasoning).
+    format_hints:
+      - "Spreadsheet or privacy tool export"
+    referenced_by:
+      - "GDPR-ART33-BREACH-SUPERVISORY"
+
+  - artifact_id: "GDPR-SA-NOTIFICATION-TEMPLATE"
+    label: "Supervisory Authority Notification Template"
+    description: >
+      Template covering Art. 33(3)(a)–(d) fields: nature of breach, categories
+      and approximate number of data subjects and records, DPO contact,
+      consequences, and measures taken.
+    format_hints:
+      - "Template document (DOCX/PDF)"
+    referenced_by:
+      - "GDPR-ART33-BREACH-SUPERVISORY"
+
+  # ==================================================================
+  # DPIA (Art. 35)
+  # ==================================================================
+  - artifact_id: "GDPR-DPIA-SCREENING"
+    label: "DPIA Screening / Threshold Assessment"
+    description: >
+      Documented screening process determining which processing activities require
+      a DPIA, referencing supervisory authority lists and Art. 35(3) criteria.
+    format_hints:
+      - "Spreadsheet or structured document"
+    referenced_by:
+      - "GDPR-ART35-DPIA"
+
+  - artifact_id: "GDPR-DPIA-REPORTS"
+    label: "DPIA Reports"
+    description: >
+      Completed DPIA reports for high-risk processing activities, covering
+      description, necessity/proportionality, risk assessment, and measures.
+    format_hints:
+      - "Document (DOCX/PDF) per processing activity"
+    referenced_by:
+      - "GDPR-ART35-DPIA"
+
+  # ==================================================================
+  # DATA PROCESSOR / TRANSFERS
+  # ==================================================================
+  - artifact_id: "GDPR-DPA-TEMPLATE"
+    label: "Data Processing Agreement Template / Signed DPAs"
+    description: >
+      Template DPA and/or signed DPAs with processors covering Art. 28(3)
+      required clauses. List of processors and status of DPA execution.
+    format_hints:
+      - "Template document (DOCX/PDF) + signed DPA copies or processor register"
+    referenced_by:
+      - "GDPR-ART28-PROCESSOR"
+
+  - artifact_id: "GDPR-TRANSFER-MECHANISMS"
+    label: "International Transfer Mechanisms Register"
+    description: >
+      Register of third-country transfers (Art. 44+) with the transfer mechanism
+      used (adequacy, SCCs, BCRs, derogations) and TIA where required.
+    format_hints:
+      - "Spreadsheet or section of ROPA"
+    referenced_by:
+      - "GDPR-ART46-TRANSFER-MECHANISMS"
+      - "GDPR-ART44-TRANSFER-GENERAL"

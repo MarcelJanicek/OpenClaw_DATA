@@ -1,7 +1,7 @@
 meta:
   ruleset_id: gdpr
-  version: '0.1'
-  status: draft
+  version: '0.2-audit'
+  status: audit-grade
   evaluation_profile_schema: rules/gdpr/entity_profile.schema.yaml
   jurisdiction:
   - EU
@@ -10,9 +10,10 @@ meta:
     url: https://eur-lex.europa.eu/eli/reg/2016/679/oj
   notes:
   - This ruleset is designed for SaaS/AI products. Some obligations vary depending on whether you are controller/processor/joint controller.
+  - "v0.2-audit: GDPR-ART5-PRINCIPLES refactored to audit-grade checklist structure with acceptance_criteria, red_flags, and EVIDENCE_CATALOG artifact IDs."
 rules:
 - id: GDPR-ART5-PRINCIPLES
-  title: Processing aligns with GDPR Art. 5 principles
+  title: Processing aligns with GDPR Art. 5 principles (lawfulness, purpose limitation, minimisation, accuracy, storage limitation, integrity/confidentiality, accountability)
   scope:
     applies_to:
     - product
@@ -21,39 +22,108 @@ rules:
     - controller
     - processor
   requirement:
-    type: multi_obligation
-    obligations:
-    - key: lawfulness_fairness_transparency
-      description: Demonstrate lawful, fair and transparent processing.
-    - key: purpose_limitation
-      description: Define purposes and avoid incompatible reuse.
-    - key: data_minimisation
-      description: Collect/process only what is necessary.
-    - key: accuracy
-      description: Keep personal data accurate and up to date.
-    - key: storage_limitation
-      description: Retention periods defined; no indefinite storage.
-    - key: integrity_confidentiality
-      description: Appropriate security measures for confidentiality/integrity.
-    - key: accountability
-      description: Ability to demonstrate compliance.
+    type: checklist
+    logic: "ALL"
+    na_mechanism: >
+      Processors: items ART5-01 through ART5-06 apply as relevant to their processing
+      activities under controller instructions; ART5-07 (accountability) applies fully.
+      Items may be marked N/A only with documented justification (e.g., no retention
+      discretion for a pure processor — reference controller's schedule).
+    checklist:
+      - id: "ART5-01"
+        title: "Lawfulness, fairness and transparency are demonstrated for all processing activities"
+        required_by_default: true
+        acceptance_criteria:
+          - "Each processing activity maps to at least one lawful basis in Art. 6 (and Art. 9 for special categories)"
+          - "Data subjects can access a privacy notice describing the processing in plain language"
+          - "Processing does not involve deception or undisclosed secondary purposes"
+        red_flags:
+          - "Processing purposes not documented or unmapped to a lawful basis"
+          - "No privacy notice or notice does not cover actual processing"
+          - "Special-category data processed without Art. 9(2) condition"
+
+      - id: "ART5-02"
+        title: "Purpose limitation: personal data is collected for specified, explicit and legitimate purposes and not further processed incompatibly"
+        required_by_default: true
+        acceptance_criteria:
+          - "ROPA lists specific purposes for each processing activity"
+          - "Any further processing is assessed for compatibility (Art. 6(4) factors documented)"
+          - "No secondary use without fresh lawful basis or compatibility assessment on record"
+        red_flags:
+          - "Purposes described generically (e.g., 'business operations') without specificity"
+          - "Data repurposed for analytics, model training, or marketing without compatibility assessment"
+          - "ROPA missing or not covering all significant processing activities"
+
+      - id: "ART5-03"
+        title: "Data minimisation: only personal data adequate, relevant, and limited to what is necessary is processed"
+        required_by_default: true
+        acceptance_criteria:
+          - "Data fields collected for each purpose are reviewed and justified"
+          - "Unnecessary data fields are not collected or are promptly deleted/anonymised"
+          - "Access controls limit data access to roles that need it for the stated purpose"
+        red_flags:
+          - "Bulk collection of personal data without documented necessity per purpose"
+          - "Data collected 'just in case' without documented justification"
+
+      - id: "ART5-04"
+        title: "Accuracy: personal data is kept accurate and up to date; inaccurate data is erased or rectified without delay"
+        required_by_default: true
+        acceptance_criteria:
+          - "Process exists for data subjects to request rectification (Art. 16) and for controller to act"
+          - "Automated or periodic accuracy checks are defined where high-risk decisions depend on data"
+        red_flags:
+          - "No mechanism for data subjects to correct inaccurate data"
+          - "Stale or outdated records used for consequential decisions without refresh process"
+
+      - id: "ART5-05"
+        title: "Storage limitation: personal data is not kept longer than necessary; retention periods are defined and enforced"
+        required_by_default: true
+        acceptance_criteria:
+          - "Retention schedule exists per data category and processing purpose"
+          - "Automated deletion or archiving process is implemented and evidenced"
+          - "Retention periods are reviewed at least annually or when purposes change"
+        red_flags:
+          - "No documented retention schedule"
+          - "Data retained indefinitely with no deletion process"
+          - "Retention schedule exists but is not implemented in systems"
+
+      - id: "ART5-06"
+        title: "Integrity and confidentiality: appropriate security measures (TOMs) protect personal data against unauthorised access, loss, destruction, or damage"
+        required_by_default: true
+        acceptance_criteria:
+          - "TOMs are documented and risk-justified (see GDPR-ART32-SECURITY)"
+          - "Security incidents affecting personal data trigger breach assessment process"
+        red_flags:
+          - "No TOM documentation referencing personal data processing"
+          - "No breach detection or response capability"
+
+      - id: "ART5-07"
+        title: "Accountability: the controller can demonstrate compliance with Art. 5 principles"
+        required_by_default: true
+        acceptance_criteria:
+          - "ROPA is maintained and up to date (Art. 30)"
+          - "Privacy governance structure with named owner/DPO is documented"
+          - "Policies, assessments, and evidence are retained and producible to the supervisory authority"
+        red_flags:
+          - "No ROPA or ROPA significantly out of date"
+          - "No named privacy owner or DPO where required"
+          - "Inability to produce evidence of compliance on request"
   evidence_hints:
     required:
-    - data_inventory
-    - retention_schedule
-    artifacts:
-    - data_inventory
-    - retention_schedule
-    - security_policy
-    - privacy_policy
-    - records_of_processing (ROPA)
-    checks:
-    - Is there a written retention schedule per data category and purpose?
-    - Is there an owner accountable for privacy compliance?
+      - artifact_id: "GDPR-ROPA"
+      - artifact_id: "GDPR-RETENTION-SCHEDULE"
+      - artifact_id: "GDPR-DATA-INVENTORY"
+    optional:
+      - artifact_id: "GDPR-PRIVACY-POLICY"
+      - artifact_id: "GDPR-PRIVACY-GOVERNANCE-DOC"
+      - artifact_id: "GDPR-LAWFUL-BASIS-REGISTER"
+      - artifact_id: "GDPR-TOM-REGISTER"
   severity: high
   sources:
-  - citation: GDPR Art. 5
-  - citation: GDPR Recitals 39, 74
+  - citation: GDPR Art. 5(1)(a)–(f) (principles of processing)
+  - citation: GDPR Art. 5(2) (accountability principle)
+  - citation: GDPR Recital 39 (transparency, purpose limitation)
+  - citation: GDPR Recital 74 (accountability, demonstrating compliance)
 - id: GDPR-ART6-LAWFUL-BASIS
   title: Each processing purpose has a lawful basis
   scope:
