@@ -71,6 +71,12 @@ def dump_yaml(obj: Any, path: Path) -> None:
     path.write_text(yaml.safe_dump(obj, sort_keys=False, allow_unicode=True, width=1000), "utf-8")
 
 
+def load_yaml_safe(path: Path) -> dict:
+    if not path.exists():
+        return {}
+    return yaml.safe_load(path.read_text("utf-8")) or {}
+
+
 def normalize_ws(s: str) -> str:
     return re.sub(r"\s+", " ", (s or "").strip())
 
@@ -698,6 +704,10 @@ def main() -> None:
 
     outprefix = Path(args.outprefix)
 
+    # Checkpointing files (per framework)
+    gdpr_partial_path = outprefix.with_suffix(".gdpr.eval.partial.yaml")
+    nis2_partial_path = outprefix.with_suffix(".nis2.eval.partial.yaml")
+
     qs = build_questions(profile)
     if qs:
         dump_yaml({"result": {"status": "questions"}, "questions": qs}, outprefix.with_suffix(".questions.yaml"))
@@ -734,8 +744,14 @@ def main() -> None:
     missing_inputs = set()
 
     if args.framework in ("gdpr", "both"):
+        # Resume from partial if present
+        partial = load_yaml_safe(gdpr_partial_path)
+        gdpr_findings = partial.get("findings", []) or []
+        done_ids = {(f.get("rule_id"), f.get("checklist_item_id")) for f in gdpr_findings}
+        missing_inputs.update([str(x) for x in (partial.get("summary", {}) or {}).get("missing_inputs", []) or []])
+
         # Evaluate GDPR in batches
-        gdpr_items = iter_checklist_items(gdpr_app)
+        gdpr_items = [x for x in iter_checklist_items(gdpr_app) if (x[0].get("id"), x[1].get("id")) not in done_ids]
 
         for i in range(0, len(gdpr_items), args.batch_size):
             batch = gdpr_items[i : i + args.batch_size]
@@ -777,6 +793,10 @@ def main() -> None:
             for x in (parsed.get("summary", {}) or {}).get("missing_inputs", []) or []:
                 missing_inputs.add(str(x))
 
+            # checkpoint after each batch
+            gdpr_annotations_partial = findings_to_annotations(gdpr_findings, regulation="gdpr")
+            dump_yaml({"result": {"status": "partial", "ruleset": "gdpr"}, "findings": gdpr_findings, "annotations": gdpr_annotations_partial, "summary": {"missing_inputs": sorted(missing_inputs)}}, gdpr_partial_path)
+
         gdpr_annotations = findings_to_annotations(gdpr_findings, regulation="gdpr")
         dump_yaml({"result": {"status": "completed", "ruleset": "gdpr"}, "findings": gdpr_findings, "annotations": gdpr_annotations, "summary": {"missing_inputs": sorted(missing_inputs)}}, outprefix.with_suffix(".gdpr.eval.yaml"))
 
@@ -784,8 +804,14 @@ def main() -> None:
     missing_inputs2 = set()
 
     if args.framework in ("nis2", "both"):
+        # Resume from partial if present
+        partial = load_yaml_safe(nis2_partial_path)
+        nis2_findings = partial.get("findings", []) or []
+        done_ids = {(f.get("rule_id"), f.get("checklist_item_id")) for f in nis2_findings}
+        missing_inputs2.update([str(x) for x in (partial.get("summary", {}) or {}).get("missing_inputs", []) or []])
+
         # Evaluate NIS2 in batches
-        nis2_items = iter_checklist_items(nis2_app)
+        nis2_items = [x for x in iter_checklist_items(nis2_app) if (x[0].get("id"), x[1].get("id")) not in done_ids]
 
         for i in range(0, len(nis2_items), args.batch_size):
             batch = nis2_items[i : i + args.batch_size]
@@ -826,6 +852,10 @@ def main() -> None:
             nis2_findings.extend(parsed.get("findings", []) or [])
             for x in (parsed.get("summary", {}) or {}).get("missing_inputs", []) or []:
                 missing_inputs2.add(str(x))
+
+            # checkpoint after each batch
+            nis2_annotations_partial = findings_to_annotations(nis2_findings, regulation="nis2")
+            dump_yaml({"result": {"status": "partial", "ruleset": "nis2-cz"}, "findings": nis2_findings, "annotations": nis2_annotations_partial, "summary": {"missing_inputs": sorted(missing_inputs2)}}, nis2_partial_path)
 
         nis2_annotations = findings_to_annotations(nis2_findings, regulation="nis2")
         dump_yaml({"result": {"status": "completed", "ruleset": "nis2-cz"}, "findings": nis2_findings, "annotations": nis2_annotations, "summary": {"missing_inputs": sorted(missing_inputs2)}}, outprefix.with_suffix(".nis2.eval.yaml"))
