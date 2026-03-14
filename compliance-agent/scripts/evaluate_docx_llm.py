@@ -76,7 +76,14 @@ def normalize_ws(s: str) -> str:
 
 
 def extract_docx(docx: Path, out_yaml: Path) -> None:
-    cmd = [str(VENV_PY), str(ROOT / "scripts/nis2cz_docx_extract.py"), "--in", str(docx), "--out", str(out_yaml)]
+    """OOXML Path B extractor.
+
+    DO NOT use python-docx for paragraph_index: it drops/merges paragraphs (tables,
+    empty paras), causing paragraph_index drift and misplaced comments.
+
+    The annotator anchors by XML paragraph order: .//w:body//w:p
+    """
+    cmd = [str(VENV_PY), str(ROOT / "scripts/docx_extract_structured.py"), "--in", str(docx), "--out", str(out_yaml)]
     subprocess.check_call(cmd)
 
 
