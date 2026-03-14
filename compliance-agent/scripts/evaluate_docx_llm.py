@@ -655,6 +655,12 @@ def main() -> None:
         help="Fallback model (repeatable). Default chain: sonnet then openai-codex/gpt-5.2",
     )
     ap.add_argument("--batch-size", type=int, default=3)
+    ap.add_argument(
+        "--framework",
+        choices=["nis2", "gdpr", "both"],
+        default="both",
+        help="Which ruleset(s) to run.",
+    )
     args = ap.parse_args()
 
     docx = Path(args.docx)
@@ -703,107 +709,115 @@ def main() -> None:
     fallbacks = args.model_fallback or ["anthropic/claude-sonnet-4-6", "openai-codex/gpt-5.2"]
     model_chain = [args.model, *fallbacks]
 
-    # Evaluate GDPR in batches
-    gdpr_items = iter_checklist_items(gdpr_app)
     gdpr_findings = []
     missing_inputs = set()
 
-    for i in range(0, len(gdpr_items), args.batch_size):
-        batch = gdpr_items[i : i + args.batch_size]
-        user_payload, payload_paras = make_user_payload(paragraphs, profile, gdpr_app, doc_type, batch, definitions=definitions)
-        try:
-            parsed = call_regulus(client, system_prompt=sys_gdpr, user_payload=user_payload, models=model_chain)
-        except ValueError as e:
-            # If JSON parsing fails, log and skip (return UNKNOWN for items in this batch)
-            print(f"Warning: GDPR batch {i//args.batch_size} failed to parse: {str(e)[:200]}", file=sys.stderr)
-            for rule, item in batch:
-                gdpr_findings.append({
-                    "rule_id": rule.get("id"),
-                    "checklist_item_id": item.get("id"),
-                    "status": "UNKNOWN",
-                    "evidence": [],
-                    "notes": "Evaluation failed due to LLM output parsing error (response too long or malformed)",
-                })
-            continue
-        validate_eval_output(parsed, "gdpr")
-        if parsed.get("result", {}).get("status") == "questions":
-            dump_yaml(parsed, outprefix.with_suffix(".gdpr.questions.yaml"))
-            return
+    if args.framework in ("gdpr", "both"):
+        # Evaluate GDPR in batches
+        gdpr_items = iter_checklist_items(gdpr_app)
 
-        cit_errs = validate_citations(parsed, payload_paras)
-        if cit_errs:
-            retry_payload = json.loads(user_payload)
-            retry_payload["validation_errors"] = cit_errs[:20]
-            retry_payload["instructions"].append(
-                "VALIDATION FAILED: Fix evidence quotes so each quote is a verbatim substring of the referenced paragraph."
-            )
-            parsed = call_regulus(
-                client,
-                system_prompt=sys_gdpr,
-                user_payload=json.dumps(retry_payload, ensure_ascii=False),
-                models=model_chain,
-            )
+        for i in range(0, len(gdpr_items), args.batch_size):
+            batch = gdpr_items[i : i + args.batch_size]
+            user_payload, payload_paras = make_user_payload(paragraphs, profile, gdpr_app, doc_type, batch, definitions=definitions)
+            try:
+                parsed = call_regulus(client, system_prompt=sys_gdpr, user_payload=user_payload, models=model_chain)
+            except ValueError as e:
+                print(f"Warning: GDPR batch {i//args.batch_size} failed to parse: {str(e)[:200]}", file=sys.stderr)
+                for rule, item in batch:
+                    gdpr_findings.append({
+                        "rule_id": rule.get("id"),
+                        "checklist_item_id": item.get("id"),
+                        "status": "UNKNOWN",
+                        "evidence": [],
+                        "notes": "Evaluation failed due to LLM output parsing error (response too long or malformed)",
+                    })
+                continue
             validate_eval_output(parsed, "gdpr")
+            if parsed.get("result", {}).get("status") == "questions":
+                dump_yaml(parsed, outprefix.with_suffix(".gdpr.questions.yaml"))
+                return
 
-        gdpr_findings.extend(parsed.get("findings", []) or [])
-        for x in (parsed.get("summary", {}) or {}).get("missing_inputs", []) or []:
-            missing_inputs.add(str(x))
+            cit_errs = validate_citations(parsed, payload_paras)
+            if cit_errs:
+                retry_payload = json.loads(user_payload)
+                retry_payload["validation_errors"] = cit_errs[:20]
+                retry_payload["instructions"].append(
+                    "VALIDATION FAILED: Fix evidence quotes so each quote is a verbatim substring of the referenced paragraph."
+                )
+                parsed = call_regulus(
+                    client,
+                    system_prompt=sys_gdpr,
+                    user_payload=json.dumps(retry_payload, ensure_ascii=False),
+                    models=model_chain,
+                )
+                validate_eval_output(parsed, "gdpr")
 
-    gdpr_annotations = findings_to_annotations(gdpr_findings, regulation="gdpr")
-    dump_yaml({"result": {"status": "completed", "ruleset": "gdpr"}, "findings": gdpr_findings, "annotations": gdpr_annotations, "summary": {"missing_inputs": sorted(missing_inputs)}}, outprefix.with_suffix(".gdpr.eval.yaml"))
+            gdpr_findings.extend(parsed.get("findings", []) or [])
+            for x in (parsed.get("summary", {}) or {}).get("missing_inputs", []) or []:
+                missing_inputs.add(str(x))
 
-    # Evaluate NIS2 in batches
-    nis2_items = iter_checklist_items(nis2_app)
+        gdpr_annotations = findings_to_annotations(gdpr_findings, regulation="gdpr")
+        dump_yaml({"result": {"status": "completed", "ruleset": "gdpr"}, "findings": gdpr_findings, "annotations": gdpr_annotations, "summary": {"missing_inputs": sorted(missing_inputs)}}, outprefix.with_suffix(".gdpr.eval.yaml"))
+
     nis2_findings = []
     missing_inputs2 = set()
 
-    for i in range(0, len(nis2_items), args.batch_size):
-        batch = nis2_items[i : i + args.batch_size]
-        user_payload, payload_paras = make_user_payload(paragraphs, profile, nis2_app, doc_type, batch, definitions=definitions)
-        try:
-            parsed = call_regulus(client, system_prompt=sys_nis2, user_payload=user_payload, models=model_chain)
-        except ValueError as e:
-            # If JSON parsing fails, log and skip (return UNKNOWN for items in this batch)
-            print(f"Warning: NIS2-CZ batch {i//args.batch_size} failed to parse: {str(e)[:200]}", file=sys.stderr)
-            for rule, item in batch:
-                nis2_findings.append({
-                    "rule_id": rule.get("id"),
-                    "checklist_item_id": item.get("id"),
-                    "status": "UNKNOWN",
-                    "evidence": [],
-                    "notes": "Evaluation failed due to LLM output parsing error (response too long or malformed)",
-                })
-            continue
-        validate_eval_output(parsed, "nis2-cz")
-        if parsed.get("result", {}).get("status") == "questions":
-            dump_yaml(parsed, outprefix.with_suffix(".nis2.questions.yaml"))
-            return
+    if args.framework in ("nis2", "both"):
+        # Evaluate NIS2 in batches
+        nis2_items = iter_checklist_items(nis2_app)
 
-        cit_errs = validate_citations(parsed, payload_paras)
-        if cit_errs:
-            retry_payload = json.loads(user_payload)
-            retry_payload["validation_errors"] = cit_errs[:20]
-            retry_payload["instructions"].append(
-                "VALIDATION FAILED: Fix evidence quotes so each quote is a verbatim substring of the referenced paragraph."
-            )
-            parsed = call_regulus(
-                client,
-                system_prompt=sys_nis2,
-                user_payload=json.dumps(retry_payload, ensure_ascii=False),
-                models=model_chain,
-            )
+        for i in range(0, len(nis2_items), args.batch_size):
+            batch = nis2_items[i : i + args.batch_size]
+            user_payload, payload_paras = make_user_payload(paragraphs, profile, nis2_app, doc_type, batch, definitions=definitions)
+            try:
+                parsed = call_regulus(client, system_prompt=sys_nis2, user_payload=user_payload, models=model_chain)
+            except ValueError as e:
+                print(f"Warning: NIS2-CZ batch {i//args.batch_size} failed to parse: {str(e)[:200]}", file=sys.stderr)
+                for rule, item in batch:
+                    nis2_findings.append({
+                        "rule_id": rule.get("id"),
+                        "checklist_item_id": item.get("id"),
+                        "status": "UNKNOWN",
+                        "evidence": [],
+                        "notes": "Evaluation failed due to LLM output parsing error (response too long or malformed)",
+                    })
+                continue
             validate_eval_output(parsed, "nis2-cz")
+            if parsed.get("result", {}).get("status") == "questions":
+                dump_yaml(parsed, outprefix.with_suffix(".nis2.questions.yaml"))
+                return
 
-        nis2_findings.extend(parsed.get("findings", []) or [])
-        for x in (parsed.get("summary", {}) or {}).get("missing_inputs", []) or []:
-            missing_inputs2.add(str(x))
+            cit_errs = validate_citations(parsed, payload_paras)
+            if cit_errs:
+                retry_payload = json.loads(user_payload)
+                retry_payload["validation_errors"] = cit_errs[:20]
+                retry_payload["instructions"].append(
+                    "VALIDATION FAILED: Fix evidence quotes so each quote is a verbatim substring of the referenced paragraph."
+                )
+                parsed = call_regulus(
+                    client,
+                    system_prompt=sys_nis2,
+                    user_payload=json.dumps(retry_payload, ensure_ascii=False),
+                    models=model_chain,
+                )
+                validate_eval_output(parsed, "nis2-cz")
 
-    nis2_annotations = findings_to_annotations(nis2_findings, regulation="nis2")
-    dump_yaml({"result": {"status": "completed", "ruleset": "nis2-cz"}, "findings": nis2_findings, "annotations": nis2_annotations, "summary": {"missing_inputs": sorted(missing_inputs2)}}, outprefix.with_suffix(".nis2.eval.yaml"))
+            nis2_findings.extend(parsed.get("findings", []) or [])
+            for x in (parsed.get("summary", {}) or {}).get("missing_inputs", []) or []:
+                missing_inputs2.add(str(x))
+
+        nis2_annotations = findings_to_annotations(nis2_findings, regulation="nis2")
+        dump_yaml({"result": {"status": "completed", "ruleset": "nis2-cz"}, "findings": nis2_findings, "annotations": nis2_annotations, "summary": {"missing_inputs": sorted(missing_inputs2)}}, outprefix.with_suffix(".nis2.eval.yaml"))
 
     # Merge annotations
-    merge_cmd = [sys.executable, str(ROOT / "scripts/merge_annotations.py"), "--gdpr", str(outprefix.with_suffix(".gdpr.eval.yaml")), "--nis2", str(outprefix.with_suffix(".nis2.eval.yaml")), "--out", str(outprefix.with_suffix(".annotations.yaml"))]
-    subprocess.check_call(merge_cmd)
+    if args.framework == "both":
+        merge_cmd = [sys.executable, str(ROOT / "scripts/merge_annotations.py"), "--gdpr", str(outprefix.with_suffix(".gdpr.eval.yaml")), "--nis2", str(outprefix.with_suffix(".nis2.eval.yaml")), "--out", str(outprefix.with_suffix(".annotations.yaml"))]
+        subprocess.check_call(merge_cmd)
+    elif args.framework == "gdpr":
+        # normalize to annotations.yaml for downstream steps
+        subprocess.check_call([sys.executable, str(ROOT / "scripts/merge_annotations.py"), "--gdpr", str(outprefix.with_suffix(".gdpr.eval.yaml")), "--out", str(outprefix.with_suffix(".annotations.yaml"))])
+    elif args.framework == "nis2":
+        subprocess.check_call([sys.executable, str(ROOT / "scripts/merge_annotations.py"), "--nis2", str(outprefix.with_suffix(".nis2.eval.yaml")), "--out", str(outprefix.with_suffix(".annotations.yaml"))])
 
     # Sanitize + re-anchor annotations (avoid title/TOC noise)
     sanitized_path = outprefix.with_suffix(".annotations.sanitized.yaml")

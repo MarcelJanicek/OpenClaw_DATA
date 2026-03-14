@@ -25,17 +25,21 @@ def load(p: Path) -> dict:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument('--gdpr', required=True)
-    ap.add_argument('--nis2', required=True)
+    ap.add_argument('--gdpr', required=False)
+    ap.add_argument('--nis2', required=False)
     ap.add_argument('--out', required=True)
     args = ap.parse_args()
 
-    gdpr = load(Path(args.gdpr))
-    nis2 = load(Path(args.nis2))
-
     ann = []
-    ann.extend(gdpr.get('annotations', []) or [])
-    ann.extend(nis2.get('annotations', []) or [])
+    sources = []
+    if args.gdpr:
+        gdpr = load(Path(args.gdpr))
+        ann.extend(gdpr.get('annotations', []) or [])
+        sources.append({'ruleset': 'gdpr', 'file': Path(args.gdpr).name})
+    if args.nis2:
+        nis2 = load(Path(args.nis2))
+        ann.extend(nis2.get('annotations', []) or [])
+        sources.append({'ruleset': 'nis2-cz', 'file': Path(args.nis2).name})
 
     # sort by paragraph_index then author
     def key(a: dict):
@@ -46,10 +50,7 @@ def main() -> None:
     out = {
         'annotations': ann_sorted,
         'meta': {
-            'sources': [
-                {'ruleset': 'gdpr', 'file': Path(args.gdpr).name},
-                {'ruleset': 'nis2-cz', 'file': Path(args.nis2).name},
-            ]
+            'sources': sources
         }
     }
 
