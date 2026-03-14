@@ -5,6 +5,7 @@ Merges parts listed in a ruleset index into a single <ruleset>.rules.yaml file.
 
 Usage:
   python3 scripts/ruleset_merge.py gdpr
+  python3 scripts/ruleset_merge.py nis2-cz
   python3 scripts/ruleset_merge.py dora
 
 Index path convention:
@@ -25,7 +26,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main() -> None:
     if len(sys.argv) != 2:
-        raise SystemExit("Usage: ruleset_merge.py <ruleset> (e.g., gdpr, dora)")
+        raise SystemExit("Usage: ruleset_merge.py <ruleset> (e.g., gdpr, nis2-cz, dora)")
 
     ruleset = sys.argv[1].strip()
     index_path = ROOT / f"rules/{ruleset}/{ruleset}.index.yaml"

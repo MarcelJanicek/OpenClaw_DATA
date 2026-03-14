@@ -14,8 +14,11 @@ If a filter key is missing on the rule, it does not constrain applicability.
 
 Usage:
   python3 scripts/nis2cz_filter.py \
-    --profile rules/nis2-cz/entity_profile.schema.yaml \
+    --profile eval/entity_profile.min.yaml \
     --rules rules/nis2-cz/nis2-cz.rules.yaml
+
+  (--profile expects a populated profile instance, not the schema file.
+   See rules/nis2-cz/entity_profile.schema.yaml for the field definitions.)
 """
 
 from __future__ import annotations

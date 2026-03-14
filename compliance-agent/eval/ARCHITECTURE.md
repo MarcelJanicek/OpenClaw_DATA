@@ -54,9 +54,13 @@ For each checklist item:
 ---
 
 ## Files
-- Prompt: `prompts/evaluator_system_prompt.md`
-- Results schema: YAML returned by evaluator
+- Prompts (used by `evaluate_docx_llm.py`):
+  - `prompts/evaluator_gdpr_system_prompt.md` — GDPR evaluator
+  - `prompts/evaluator_nis2cz_system_prompt.md` — NIS2-CZ evaluator
+- Results schema: YAML returned by evaluator (see `eval/RESULT_SCHEMA.md`)
 - Outputs:
-  - `outputs/<doc>.results.yaml`
+  - `outputs/<doc>.gdpr.eval.yaml`
+  - `outputs/<doc>.nis2.eval.yaml`
   - `outputs/<doc>.annotations.yaml`
+  - `outputs/<doc>.annotations.sanitized.yaml`
   - `outputs/<doc>.commented.docx`
