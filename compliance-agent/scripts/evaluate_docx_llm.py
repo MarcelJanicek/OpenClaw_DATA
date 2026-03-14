@@ -424,35 +424,46 @@ class OpenClawCronClient:
         return self._read_assistant_text_from_session(session_id)
 
 
-def build_questions(profile: dict) -> List[dict]:
+def build_questions(profile: dict, *, framework: str) -> List[dict]:
+    """Return applicability questions required to run the requested framework.
+
+    framework: "nis2" | "gdpr" | "both"
+    """
     qs = []
+
+    want_nis2 = framework in ("nis2", "both")
+    want_gdpr = framework in ("gdpr", "both")
+
     # NIS2
-    if profile.get("in_scope_under_cz_law") in (None, "unknown"):
-        qs.append({
-            "id": "in_scope_under_cz_law",
-            "question": "Is the assessed entity in scope under CZ-Act-264-2025 (yes/no/unknown)?",
-            "choices": ["yes", "no", "unknown"],
-        })
-    if profile.get("duty_regime") in (None, "unknown"):
-        qs.append({
-            "id": "duty_regime",
-            "question": "Which duty regime applies (higher=409/2025, lower=410/2025, unknown)?",
-            "choices": ["higher", "lower", "unknown"],
-        })
-    if profile.get("entity_class") in (None, "unknown"):
-        qs.append({
-            "id": "entity_class",
-            "question": "Is the entity essential or important (or unknown)?",
-            "choices": ["essential", "important", "unknown"],
-        })
+    if want_nis2:
+        if profile.get("in_scope_under_cz_law") in (None, "unknown"):
+            qs.append({
+                "id": "in_scope_under_cz_law",
+                "question": "Is the assessed entity in scope under CZ-Act-264-2025 (yes/no/unknown)?",
+                "choices": ["yes", "no", "unknown"],
+            })
+        if profile.get("duty_regime") in (None, "unknown"):
+            qs.append({
+                "id": "duty_regime",
+                "question": "Which duty regime applies (higher=409/2025, lower=410/2025, unknown)?",
+                "choices": ["higher", "lower", "unknown"],
+            })
+        if profile.get("entity_class") in (None, "unknown"):
+            qs.append({
+                "id": "entity_class",
+                "question": "Is the entity essential or important (or unknown)?",
+                "choices": ["essential", "important", "unknown"],
+            })
 
     # GDPR
-    if profile.get("gdpr_role") in (None, "unknown"):
-        qs.append({
-            "id": "gdpr_role",
-            "question": "In this TSA context, is the service provider a GDPR processor, controller, or both?",
-            "choices": ["processor", "controller", "both", "unknown"],
-        })
+    if want_gdpr:
+        if profile.get("gdpr_role") in (None, "unknown"):
+            qs.append({
+                "id": "gdpr_role",
+                "question": "In this TSA context, is the service provider a GDPR processor, controller, or both?",
+                "choices": ["processor", "controller", "both", "unknown"],
+            })
+
     return qs
 
 
@@ -725,7 +736,7 @@ def main() -> None:
     gdpr_state_path = state_dir / f"{outprefix.name}.gdpr.eval.state.yaml"
     nis2_state_path = state_dir / f"{outprefix.name}.nis2.eval.state.yaml"
 
-    qs = build_questions(profile)
+    qs = build_questions(profile, framework=args.framework)
     if qs:
         dump_yaml({"result": {"status": "questions"}, "questions": qs}, outprefix.with_suffix(".questions.yaml"))
         return
