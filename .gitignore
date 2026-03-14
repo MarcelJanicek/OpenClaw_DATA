@@ -39,3 +39,5 @@ compliance-agent/outputs/
 # Temporary source scraping artifacts
 compliance-agent/docs/sources/nis2-cz/*.ttl
 compliance-agent/docs/sources/nis2-cz/opendata_*_norma.*
+# local clone of the general repo (do not commit into OpenClaw_DATA)
+openclaw_general/
