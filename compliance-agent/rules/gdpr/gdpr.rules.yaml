@@ -143,7 +143,7 @@ rules:
   - citation: GDPR Art. 4
   - citation: GDPR Recitals 26, 30
 - id: GDPR-ART5-PRINCIPLES
-  title: Processing aligns with GDPR Art. 5 principles
+  title: Processing aligns with GDPR Art. 5 principles (lawfulness, purpose limitation, minimisation, accuracy, storage limitation, integrity/confidentiality, accountability)
   scope:
     applies_to:
     - product
@@ -152,39 +152,100 @@ rules:
     - controller
     - processor
   requirement:
-    type: multi_obligation
-    obligations:
-    - key: lawfulness_fairness_transparency
-      description: Demonstrate lawful, fair and transparent processing.
-    - key: purpose_limitation
-      description: Define purposes and avoid incompatible reuse.
-    - key: data_minimisation
-      description: Collect/process only what is necessary.
-    - key: accuracy
-      description: Keep personal data accurate and up to date.
-    - key: storage_limitation
-      description: Retention periods defined; no indefinite storage.
-    - key: integrity_confidentiality
-      description: Appropriate security measures for confidentiality/integrity.
-    - key: accountability
-      description: Ability to demonstrate compliance.
+    type: checklist
+    logic: ALL
+    na_mechanism: 'Processors: items ART5-01 through ART5-06 apply as relevant to their processing activities under controller instructions; ART5-07 (accountability) applies fully. Items may be marked N/A only with documented justification (e.g., no retention discretion for a pure processor — reference controller''s schedule).
+
+      '
+    checklist:
+    - id: ART5-01
+      title: Lawfulness, fairness and transparency are demonstrated for all processing activities
+      required_by_default: true
+      acceptance_criteria:
+      - Each processing activity maps to at least one lawful basis in Art. 6 (and Art. 9 for special categories)
+      - Data subjects can access a privacy notice describing the processing in plain language
+      - Processing does not involve deception or undisclosed secondary purposes
+      red_flags:
+      - Processing purposes not documented or unmapped to a lawful basis
+      - No privacy notice or notice does not cover actual processing
+      - Special-category data processed without Art. 9(2) condition
+    - id: ART5-02
+      title: 'Purpose limitation: personal data is collected for specified, explicit and legitimate purposes and not further processed incompatibly'
+      required_by_default: true
+      acceptance_criteria:
+      - ROPA lists specific purposes for each processing activity
+      - Any further processing is assessed for compatibility (Art. 6(4) factors documented)
+      - No secondary use without fresh lawful basis or compatibility assessment on record
+      red_flags:
+      - Purposes described generically (e.g., 'business operations') without specificity
+      - Data repurposed for analytics, model training, or marketing without compatibility assessment
+      - ROPA missing or not covering all significant processing activities
+    - id: ART5-03
+      title: 'Data minimisation: only personal data adequate, relevant, and limited to what is necessary is processed'
+      required_by_default: true
+      acceptance_criteria:
+      - Data fields collected for each purpose are reviewed and justified
+      - Unnecessary data fields are not collected or are promptly deleted/anonymised
+      - Access controls limit data access to roles that need it for the stated purpose
+      red_flags:
+      - Bulk collection of personal data without documented necessity per purpose
+      - Data collected 'just in case' without documented justification
+    - id: ART5-04
+      title: 'Accuracy: personal data is kept accurate and up to date; inaccurate data is erased or rectified without delay'
+      required_by_default: true
+      acceptance_criteria:
+      - Process exists for data subjects to request rectification (Art. 16) and for controller to act
+      - Automated or periodic accuracy checks are defined where high-risk decisions depend on data
+      red_flags:
+      - No mechanism for data subjects to correct inaccurate data
+      - Stale or outdated records used for consequential decisions without refresh process
+    - id: ART5-05
+      title: 'Storage limitation: personal data is not kept longer than necessary; retention periods are defined and enforced'
+      required_by_default: true
+      acceptance_criteria:
+      - Retention schedule exists per data category and processing purpose
+      - Automated deletion or archiving process is implemented and evidenced
+      - Retention periods are reviewed at least annually or when purposes change
+      red_flags:
+      - No documented retention schedule
+      - Data retained indefinitely with no deletion process
+      - Retention schedule exists but is not implemented in systems
+    - id: ART5-06
+      title: 'Integrity and confidentiality: appropriate security measures (TOMs) protect personal data against unauthorised access, loss, destruction, or damage'
+      required_by_default: true
+      acceptance_criteria:
+      - TOMs are documented and risk-justified (see GDPR-ART32-SECURITY)
+      - Security incidents affecting personal data trigger breach assessment process
+      red_flags:
+      - No TOM documentation referencing personal data processing
+      - No breach detection or response capability
+    - id: ART5-07
+      title: 'Accountability: the controller can demonstrate compliance with Art. 5 principles'
+      required_by_default: true
+      acceptance_criteria:
+      - ROPA is maintained and up to date (Art. 30)
+      - Privacy governance structure with named owner/DPO is documented
+      - Policies, assessments, and evidence are retained and producible to the supervisory authority
+      red_flags:
+      - No ROPA or ROPA significantly out of date
+      - No named privacy owner or DPO where required
+      - Inability to produce evidence of compliance on request
   evidence_hints:
     required:
-    - data_inventory
-    - retention_schedule
-    artifacts:
-    - data_inventory
-    - retention_schedule
-    - security_policy
-    - privacy_policy
-    - records_of_processing (ROPA)
-    checks:
-    - Is there a written retention schedule per data category and purpose?
-    - Is there an owner accountable for privacy compliance?
+    - artifact_id: GDPR-ROPA
+    - artifact_id: GDPR-RETENTION-SCHEDULE
+    - artifact_id: GDPR-DATA-INVENTORY
+    optional:
+    - artifact_id: GDPR-PRIVACY-POLICY
+    - artifact_id: GDPR-PRIVACY-GOVERNANCE-DOC
+    - artifact_id: GDPR-LAWFUL-BASIS-REGISTER
+    - artifact_id: GDPR-TOM-REGISTER
   severity: high
   sources:
-  - citation: GDPR Art. 5
-  - citation: GDPR Recitals 39, 74
+  - citation: GDPR Art. 5(1)(a)–(f) (principles of processing)
+  - citation: GDPR Art. 5(2) (accountability principle)
+  - citation: GDPR Recital 39 (transparency, purpose limitation)
+  - citation: GDPR Recital 74 (accountability, demonstrating compliance)
 - id: GDPR-ART6-LAWFUL-BASIS
   title: Each processing purpose has a lawful basis
   scope:
@@ -1531,7 +1592,7 @@ rules:
   - citation: GDPR Art. 31
   - citation: GDPR Recital 82
 - id: GDPR-ART32-SECURITY
-  title: Appropriate technical and organisational measures (TOMs) are implemented and kept effective (risk-based)
+  title: Appropriate technical and organisational measures (TOMs) are implemented and kept effective — risk-based security for personal data processing
   scope:
     applies_to:
     - org
@@ -1542,59 +1603,111 @@ rules:
     - controller
     - processor
   requirement:
-    type: multi_obligation
-    obligations:
-    - key: risk_based_security_program
-      description: Security measures are selected and maintained based on the risks to the rights and freedoms of natural persons, taking into account the state of the art, implementation costs, and the nature/scope/context/purposes of processing.
-    - key: confidentiality_integrity_availability_resilience
-      description: Measures exist to ensure ongoing confidentiality, integrity, availability, and resilience of processing systems and services (including hardening, secure configuration, and change control).
-    - key: access_control_and_least_privilege
-      description: Access to personal data and production systems is restricted to authorized personnel using least privilege (RBAC/ABAC), with joiner/mover/leaver controls, MFA where appropriate, and periodic access reviews.
-    - key: encryption_and_pseudonymisation_where_appropriate
-      description: Encryption and/or pseudonymisation are implemented where appropriate to the risks (e.g., TLS in transit; encryption at rest for sensitive/high-risk datasets; tokenisation/pseudonymisation for analytics).
-    - key: restore_availability_and_access
-      description: The organisation can restore availability and access to personal data in a timely manner after an incident (e.g., backups, tested restore procedures, disaster recovery/business continuity plans).
-    - key: regular_testing_assessment_evaluation
-      description: There is an ongoing process for regularly testing, assessing, and evaluating the effectiveness of TOMs (e.g., vulnerability management, security testing, audits, penetration tests, control monitoring), and findings are tracked to remediation.
-    - key: processor_controller_alignment
-      description: Where acting as a processor, security obligations and TOMs are aligned with controller instructions and contractual requirements (e.g., DPA security annex), and evidence can be provided to controllers.
+    type: checklist
+    logic: ALL
+    na_mechanism: 'Processors: all items apply. Items ART32-06 (regular testing) and ART32-07 (processor alignment) must be addressed for every in-scope entity. Individual sub-controls (e.g., pseudonymisation) may be marked N/A only where documented risk assessment concludes the control is not appropriate — justification must appear in the TOM register.
+
+      '
+    checklist:
+    - id: ART32-01
+      title: 'Risk-based TOM selection: security measures are chosen and documented based on assessed risks to data subjects'' rights and freedoms'
+      required_by_default: true
+      acceptance_criteria:
+      - A risk assessment or threat model covering personal data processing exists and is current (reviewed within last 12 months)
+      - TOM register or control matrix maps each control to the corresponding risk(s) it addresses
+      - State of the art, implementation costs, and nature/scope/context/purposes are considered and documented
+      red_flags:
+      - No documented risk assessment for personal data processing
+      - TOM register exists but lacks risk-to-control mapping
+      - Risk assessment last reviewed more than 2 years ago with no significant change trigger
+    - id: ART32-02
+      title: Confidentiality, integrity, availability and resilience of processing systems are ensured through implemented controls
+      required_by_default: true
+      acceptance_criteria:
+      - Controls for confidentiality (access restriction, encryption), integrity (change control, audit logs), availability (redundancy, capacity), and resilience (failover, recovery) are documented in the TOM register
+      - Hardening and secure configuration baselines are applied to personal data systems
+      red_flags:
+      - 'No controls documented for one or more of: confidentiality, integrity, availability, resilience'
+      - No secure configuration baseline for personal data processing systems
+    - id: ART32-03
+      title: Access to personal data is restricted to authorised personnel on a least-privilege basis with joiner/mover/leaver controls
+      required_by_default: true
+      acceptance_criteria:
+      - RBAC or ABAC is implemented on systems holding personal data
+      - MFA is enabled for all privileged or remote access to personal data systems
+      - Joiner/mover/leaver process removes or modifies access within defined SLA (typically 1 business day for leavers)
+      - Periodic access reviews are conducted (at least annually) with documented outcomes
+      red_flags:
+      - Shared accounts used for personal data access
+      - No MFA on production personal data systems
+      - Leaver accounts not disabled within 30 days
+      - No access review records for personal data systems
+    - id: ART32-04
+      title: Encryption and/or pseudonymisation are applied where appropriate to the processing risks
+      required_by_default: true
+      acceptance_criteria:
+      - Personal data is encrypted in transit (TLS 1.2+ minimum)
+      - Personal data at rest is encrypted for high-risk datasets (special categories, financial data, health data)
+      - Pseudonymisation or tokenisation is applied for analytics/testing where full identifiability is not required
+      - Key management procedures exist and are documented
+      red_flags:
+      - Personal data transmitted over unencrypted channels
+      - Special-category data stored unencrypted at rest
+      - No key management documentation
+    - id: ART32-05
+      title: Availability and access to personal data can be restored in a timely manner after an incident
+      required_by_default: true
+      acceptance_criteria:
+      - Backup procedures for personal data systems are documented with RPO/RTO targets
+      - Restore tests are conducted at least annually and results are documented
+      - Business continuity or disaster recovery plan covers personal data processing systems
+      red_flags:
+      - No backup procedures for personal data systems
+      - No documented restore test results
+      - RTO/RPO not defined for critical personal data systems
+    - id: ART32-06
+      title: Regular testing, assessing, and evaluating the effectiveness of TOMs is conducted and findings are tracked to remediation
+      required_by_default: true
+      acceptance_criteria:
+      - Vulnerability scanning covers personal data systems with at minimum quarterly cadence
+      - Penetration test or equivalent security assessment conducted at least annually (or after significant changes)
+      - Audit or control effectiveness review is conducted periodically
+      - All findings are tracked in a remediation register with SLA-based closure
+      red_flags:
+      - No vulnerability scanning evidence for personal data systems
+      - No penetration test or security assessment in last 24 months
+      - Findings tracked but not remediated; significant overdue items
+    - id: ART32-07
+      title: Where acting as a processor, security obligations and TOMs are aligned with controller instructions and DPA security annex; evidence can be provided to controllers
+      required_by_default: true
+      acceptance_criteria:
+      - Signed DPA(s) with controllers include or reference security requirements
+      - TOM documentation is available in a form that can be shared with controllers on request
+      - Changes to TOMs that may affect security of controller data are communicated per DPA requirements
+      red_flags:
+      - Processor operating without signed DPA
+      - Security annex in DPA contradicts actual TOMs without documented exception
+      - No process for communicating material security changes to controllers
   evidence_hints:
     required:
-    - information_security_policy_and_standards (including access control, cryptography, vulnerability management)
-    - risk_assessment_or_threat_model_covering_personal_data_processing
-    - technical_and_organisational_measures_register_or_security_control_matrix
-    - access_control_design_and_mfa_configuration_evidence
-    - periodic_access_review_records (redacted)
-    - encryption_configuration_evidence (e.g., TLS settings, KMS usage, database/storage encryption)
-    - backup_and_restore_procedures_and_restore_test_results (redacted)
-    - vulnerability_management_and_patch_process_evidence (e.g., scans, SLAs, tickets) (redacted)
-    - security_testing_reports (e.g., pen tests, audits) and remediation tracker (redacted)
-    artifacts:
-    - information_security_policy_and_standards (including access control, cryptography, vulnerability management)
-    - risk_assessment_or_threat_model_covering_personal_data_processing
-    - technical_and_organisational_measures_register_or_security_control_matrix
-    - access_control_design_and_mfa_configuration_evidence
-    - periodic_access_review_records (redacted)
-    - encryption_configuration_evidence (e.g., TLS settings, KMS usage, database/storage encryption)
-    - backup_and_restore_procedures_and_restore_test_results (redacted)
-    - business_continuity_or_disaster_recovery_plan (as applicable)
-    - vulnerability_management_and_patch_process_evidence (e.g., scans, SLAs, tickets) (redacted)
-    - security_testing_reports (e.g., pen tests, audits) and remediation tracker (redacted)
-    questions:
-    - How did you determine which TOMs are “appropriate” for your processing and risk profile (state of the art, costs, and risks)?
-    - What controls exist for access restriction and authentication to personal data systems (RBAC/MFA/access reviews)?
-    - How do you ensure you can restore availability/access after incidents, and how often do you test restores?
-    - What is your cadence for testing/evaluating controls (vuln scanning, pen tests, audits), and how are findings remediated?
-    checks:
-    - Confirm the organisation has a documented, risk-based TOMs baseline and can map key controls to the risks of its processing.
-    - Confirm regular testing/assessment is evidenced and remediation is tracked to closure.
+    - artifact_id: GDPR-TOM-REGISTER
+    - artifact_id: GDPR-RISK-ASSESSMENT
+    - artifact_id: GDPR-INFOSEC-POLICY
+    - artifact_id: GDPR-ACCESS-CONTROL-EVIDENCE
+    optional:
+    - artifact_id: GDPR-ACCESS-REVIEW-RECORDS
+    - artifact_id: GDPR-ENCRYPTION-EVIDENCE
+    - artifact_id: GDPR-BACKUP-RESTORE-EVIDENCE
+    - artifact_id: GDPR-VULN-MGMT-EVIDENCE
+    - artifact_id: GDPR-SECURITY-TESTING-REPORTS
+    - artifact_id: GDPR-DPA-TEMPLATE
   severity: high
   sources:
-  - citation: GDPR Art. 32(1)
-  - citation: GDPR Art. 32(2)
-  - citation: GDPR Art. 32(3)
-  - citation: GDPR Recital 83
-  - citation: GDPR Recital 84
+  - citation: GDPR Art. 32(1)(a)–(d) (TOMs including encryption, pseudonymisation, resilience, restore, testing)
+  - citation: GDPR Art. 32(2) (risk assessment factors)
+  - citation: GDPR Art. 32(3) (approved codes of conduct / certification as evidence)
+  - citation: GDPR Recital 83 (risk-based security measures)
+  - citation: GDPR Recital 84 (DPO and DPIA context)
 - id: GDPR-ART33-BREACH-SUPERVISORY
   title: Breach notification to supervisory authority within 72 hours (when required)
   scope:
@@ -1623,12 +1736,12 @@ rules:
     - evidence_of_72h_notification_timer_and_escalation (e.g., ticket workflow/SLAs) (redacted)
     - tabletop_or_simulation_exercise_results_for_breach_notification (redacted)
     questions:
-    - How do you determine when a personal data breach is “unlikely to result in a risk” (and thus not notified) and how is that decision documented?
+    - How do you determine when a personal data breach is "unlikely to result in a risk" (and thus not notified) and how is that decision documented?
     - How do you ensure you can notify the supervisory authority within 72 hours of becoming aware?
     - What information do you include in the notification and how do you update it if not all details are known initially?
     checks:
     - Confirm there is a breach register and evidence of decisions/timelines (including cases where notification was not made).
-    - Confirm the notification template covers Art. 33(3)(a)–(d) items.
+    - Confirm the notification template covers Art. 33(3)(a)-(d) items.
   severity: high
   sources:
   - citation: GDPR Art. 33(1)
@@ -1663,11 +1776,11 @@ rules:
     - evidence_of_exceptions_analysis (e.g., encryption/mitigation/public_communication) (redacted)
     - sample_breach_communications_or_dry_run_outputs (redacted)
     questions:
-    - How do you assess whether a breach is likely to result in a “high risk” to individuals, and who signs off?
+    - How do you assess whether a breach is likely to result in a "high risk" to individuals, and who signs off?
     - How do you draft and deliver communications without undue delay (channels, localization, customer coordination)?
     - When do you rely on Art. 34(3) exceptions and how is that documented?
     checks:
-    - Confirm the communication template includes Art. 34(2)(a)–(c) items and is understandable.
+    - Confirm the communication template includes Art. 34(2)(a)-(c) items and is understandable.
     - Confirm exceptions (Art. 34(3)) are documented where communications are not sent.
   severity: high
   sources:
