@@ -48,7 +48,6 @@ import uuid
 from dataclasses import dataclass
 from pathlib import Path
 
-from scripts.job_runner import run_planned_job
 from typing import Any, Dict, List, Tuple
 
 import yaml
@@ -57,7 +56,10 @@ import yaml
 # (ROOT is defined just below; we temporarily compute it here too)
 _THIS_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(_THIS_ROOT))
+
+# Local modules
 from scripts.citation_validate import validate_citations
+from scripts.job_runner import run_planned_job
 
 # --- Paths ---
 ROOT = Path(__file__).resolve().parents[1]
