@@ -492,7 +492,7 @@ def call_regulus(
     user_payload: str,
     models: List[str],
     max_tokens: int = 8000,
-    per_model_wait_timeout_ms: int = 900_000,
+    per_model_wait_timeout_ms: int = 300_000,
 ) -> dict:
     """Call evaluator with model fallback chain.
 
