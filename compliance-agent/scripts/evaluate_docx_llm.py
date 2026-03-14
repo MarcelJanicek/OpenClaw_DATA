@@ -606,7 +606,7 @@ def iter_checklist_items(rules: List[dict]) -> List[Tuple[dict, dict]]:
     return out
 
 
-def findings_to_annotations(findings: List[dict], regulation: str) -> List[dict]:
+def findings_to_annotations(findings: List[dict], regulation: str, rule_citations: dict | None = None) -> List[dict]:
     """Generate DOCX annotations from findings.
 
     Step 2 changed the finding schema to be citation-grounded:
@@ -616,6 +616,7 @@ def findings_to_annotations(findings: List[dict], regulation: str) -> List[dict]
     - If evidence exists: anchor to the first evidence paragraph.
     - Else: anchor to paragraph 1 (avoid title/TOC 0); sanitizer may further move.
     """
+    rule_citations = rule_citations or {}
     ann = []
     for f in findings or []:
         rid = f.get("rule_id")
@@ -623,6 +624,7 @@ def findings_to_annotations(findings: List[dict], regulation: str) -> List[dict]
         status = f.get("status", "UNKNOWN")
         notes = normalize_ws(f.get("notes", ""))
         missing_inputs = f.get("missing_inputs") or []
+        citations = rule_citations.get(rid) or []
 
         evidence = f.get("evidence") or []
         pidx = 1
@@ -643,11 +645,17 @@ def findings_to_annotations(findings: List[dict], regulation: str) -> List[dict]
             tag = f"[NIS2-CZ][{rid}][{cid}][{status}]"
 
         text = tag
+        if citations:
+            # Keep short but explicit legal basis per rule.
+            ref = "; ".join([normalize_ws(str(x)) for x in citations if str(x).strip()])
+            if len(ref) > 280:
+                ref = ref[:277] + "…"
+            text += f" REF: {ref}"
         if quote:
             text += f" QUOTE: {normalize_ws(quote)}"
         if notes:
             text += f" ISSUE: {notes}"
-        if status == "UNKNOWN" and missing_inputs:
+        if missing_inputs:
             text += f" MISSING: {', '.join(map(str, missing_inputs))}"
 
         ann.append({
@@ -729,6 +737,23 @@ def main() -> None:
     gdpr_app = [r for r in gdpr_rules if apply_contract_filter(r)]
     nis2_app = [r for r in nis2_rules if apply_contract_filter(r)]
 
+    def build_rule_citations(rules: List[dict]) -> dict:
+        out = {}
+        for r in rules or []:
+            rid = r.get("id")
+            cites = []
+            for s in (r.get("sources") or []):
+                if isinstance(s, dict) and s.get("citation"):
+                    cites.append(str(s.get("citation")).strip())
+                elif isinstance(s, str) and s.strip():
+                    cites.append(s.strip())
+            if rid:
+                out[rid] = cites
+        return out
+
+    gdpr_citations = build_rule_citations(gdpr_app)
+    nis2_citations = build_rule_citations(nis2_app)
+
     # Setup LLM client (route via OpenClaw cron to use Gateway auth)
     client = OpenClawCronClient()
 
@@ -794,10 +819,10 @@ def main() -> None:
                 missing_inputs.add(str(x))
 
             # checkpoint after each batch
-            gdpr_annotations_partial = findings_to_annotations(gdpr_findings, regulation="gdpr")
+            gdpr_annotations_partial = findings_to_annotations(gdpr_findings, regulation="gdpr", rule_citations=gdpr_citations)
             dump_yaml({"result": {"status": "partial", "ruleset": "gdpr"}, "findings": gdpr_findings, "annotations": gdpr_annotations_partial, "summary": {"missing_inputs": sorted(missing_inputs)}}, gdpr_partial_path)
 
-        gdpr_annotations = findings_to_annotations(gdpr_findings, regulation="gdpr")
+        gdpr_annotations = findings_to_annotations(gdpr_findings, regulation="gdpr", rule_citations=gdpr_citations)
         dump_yaml({"result": {"status": "completed", "ruleset": "gdpr"}, "findings": gdpr_findings, "annotations": gdpr_annotations, "summary": {"missing_inputs": sorted(missing_inputs)}}, outprefix.with_suffix(".gdpr.eval.yaml"))
         # Cleanup checkpoint only after final file exists
         try:
@@ -860,10 +885,10 @@ def main() -> None:
                 missing_inputs2.add(str(x))
 
             # checkpoint after each batch
-            nis2_annotations_partial = findings_to_annotations(nis2_findings, regulation="nis2")
+            nis2_annotations_partial = findings_to_annotations(nis2_findings, regulation="nis2", rule_citations=nis2_citations)
             dump_yaml({"result": {"status": "partial", "ruleset": "nis2-cz"}, "findings": nis2_findings, "annotations": nis2_annotations_partial, "summary": {"missing_inputs": sorted(missing_inputs2)}}, nis2_partial_path)
 
-        nis2_annotations = findings_to_annotations(nis2_findings, regulation="nis2")
+        nis2_annotations = findings_to_annotations(nis2_findings, regulation="nis2", rule_citations=nis2_citations)
         dump_yaml({"result": {"status": "completed", "ruleset": "nis2-cz"}, "findings": nis2_findings, "annotations": nis2_annotations, "summary": {"missing_inputs": sorted(missing_inputs2)}}, outprefix.with_suffix(".nis2.eval.yaml"))
         # Cleanup checkpoint only after final file exists
         try:
